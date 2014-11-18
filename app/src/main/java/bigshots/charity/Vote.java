@@ -10,6 +10,7 @@ public class Vote extends Activity {
     //Our Own voting system
     //Google plus
     //Facebook
+    //Show current stats (total of all votes)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
