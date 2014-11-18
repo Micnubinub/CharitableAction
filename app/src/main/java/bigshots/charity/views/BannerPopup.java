@@ -1,9 +1,7 @@
 package bigshots.charity.views;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.util.TypedValue;
@@ -39,46 +37,12 @@ public class BannerPopup extends ViewGroup {
     private BannerPopup popup;
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
-    private int rippleR;
-    private int width;
-    private int height;
-    private float animated_value = 0;
-    private float scaleTo = 1.065f;
-    private int clickedX, clickedY;
-    private boolean touchDown = false, animateRipple;
-    private float ripple_animated_value = 0;
+    private float animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());
-            ripple_animated_value = animated_value;
             invalidatePoster();
-        }
-    };
-    private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            if (!touchDown)
-                ripple_animated_value = 0;
-
-            animateRipple = false;
-            invalidatePoster();
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
         }
     };
 
@@ -155,40 +119,6 @@ public class BannerPopup extends ViewGroup {
         });
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                clickedX = (int) event.getX();
-                clickedY = (int) event.getY();
-                rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
-
-                animator.start();
-
-                touchDown = true;
-                animateRipple = true;
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                touchDown = false;
-
-                if (!animator.isRunning()) {
-                    ripple_animated_value = 0;
-                    invalidatePoster();
-                }
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
-        if (animateRipple) {
-            paint.setColor(rippleColor);
-            canvas.drawCircle(clickedX, clickedY, rippleR * ripple_animated_value, paint);
-        }
-    }
 
     private void initView() {
         windowManager = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
