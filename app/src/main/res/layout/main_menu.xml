@@ -5,45 +5,67 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/contribute"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:maxLines="1"
         android:padding="10dp"
-        android:text="Email us"
+        android:text="Contribute"
         android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/gplus"
+        android:id="@+id/vote"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:maxLines="1"
         android:padding="10dp"
-        android:text="Find us on Google+"
+        android:text="Your vote counts"
         android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/fb"
+        android:id="@+id/stats"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:maxLines="1"
         android:padding="10dp"
-        android:text="Find us on Facebook page"
+        android:text="Statistics"
         android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/direct"
+        android:id="@+id/feedback"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:maxLines="1"
         android:padding="10dp"
-        android:text="Send a message through the app"
+        android:text="Feedback"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/prefs"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:text="Preferences"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/about"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:text="About"
         android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />

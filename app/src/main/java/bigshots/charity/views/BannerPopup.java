@@ -2,7 +2,6 @@ package bigshots.charity.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -15,7 +14,6 @@ import android.view.animation.AccelerateInterpolator;
  * Created by root on 18/11/14.
  */
 public class BannerPopup extends ViewGroup {
-    private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static int duration = 750;
     private final OnLongClickListener longClickListener = new OnLongClickListener() {
@@ -32,7 +30,6 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private final int rippleColor = 0x25000000;
     private View closeBanner, openApp, minimiseBanner, hideMenu;
     private BannerPopup popup;
     private WindowManager windowManager;

@@ -5,45 +5,44 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/popup"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:text="Popup banner"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/full_screen"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:text="Full screen ad"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/video_ad"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:text="Watch video"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/email"
         android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:maxLines="1"
+        android:layout_height="wrap_content"
         android:padding="10dp"
-        android:text="Email us"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/gplus"
-        android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:text="Find us on Google+"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/fb"
-        android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:text="Find us on Facebook page"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/direct"
-        android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:text="Send a message through the app"
+        android:text="Link to this months charity (website)"
         android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />
