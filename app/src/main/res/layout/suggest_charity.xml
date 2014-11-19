@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_rect"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+
+        android:padding="8dp"
+        android:text="Suggest a charity"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:padding="8dp"
+        android:text="Please enter the link to the HOME page of the charity you want to be considered for next month's charity run below :"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#09000000"
+        android:hint="Enter charity website here"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textColor="@color/dark_grey"
+        android:textSize="18sp" />
+
+    <include
+        android:id="@+id/submit_cancel"
+        layout="@layout/submit_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right" />
+</LinearLayout>
