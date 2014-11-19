@@ -7,8 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,7 +31,7 @@ public class MaterialTwoLineText extends ViewGroup {
     private String primaryText, secondaryText;
     private int width;
     private int height;
-    private float animated_value = 0;
+    private float animated_value;
     private float scaleTo = 1.065f;
     private int clickedX, clickedY;
     private boolean scaleOnTouch = true;
@@ -44,7 +42,6 @@ public class MaterialTwoLineText extends ViewGroup {
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());
             ripple_animated_value = animated_value;
-            Log.e("ripple val", String.format("%f", ripple_animated_value));
             invalidatePoster();
         }
     };
@@ -82,36 +79,6 @@ public class MaterialTwoLineText extends ViewGroup {
         init();
     }
 
-    public MaterialTwoLineText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-
-        if (secondaryText == null)
-            secondaryText = "";
-
-        if (primaryText == null)
-            primaryText = "";
-
-        init();
-
-        setPrimaryText(primaryText);
-        setSecondaryText(secondaryText);
-    }
-
-
-    public MaterialTwoLineText(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-
-        if (secondaryText == null)
-            secondaryText = "";
-
-        if (primaryText == null)
-            primaryText = "";
-
-        init();
-
-        setPrimaryText(primaryText);
-        setSecondaryText(secondaryText);
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -186,7 +153,6 @@ public class MaterialTwoLineText extends ViewGroup {
         animator.addListener(animatorListener);
         animator.setDuration(duration);
         paint.setColor(0x25000000);
-
 
         addView(primaryTextView);
         addView(secondaryTextView);

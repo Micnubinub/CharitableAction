@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <bigshots.charity.views.PlusButton
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
+
     <TextView
         android:id="@+id/contribute"
         android:layout_width="fill_parent"

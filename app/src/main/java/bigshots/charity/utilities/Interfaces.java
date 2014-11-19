@@ -4,11 +4,12 @@ package bigshots.charity.utilities;
  * Created by root on 19/11/14.
  */
 public class Interfaces {
+
     public interface sendDirectMessage {
         void sendMessage(String message);
     }
 
-    public interface charity {
+    public interface Charity {
         String getLink();
 
         String getName();

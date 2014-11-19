@@ -4,22 +4,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
+
 /**
  * Created by root on 19/11/14.
  */
 public class VoteCharityAdapter extends BaseAdapter {
-    public VoteCharityAdapter() {
+    private ArrayList<Charity> charities;
+
+    public VoteCharityAdapter(ArrayList<Charity> charities) {
+        this.charities = charities;
 
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return charities == null ? 0 : charities.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return charities == null ? null : charities.get(position);
     }
 
     @Override
@@ -31,4 +36,5 @@ public class VoteCharityAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
     }
+
 }

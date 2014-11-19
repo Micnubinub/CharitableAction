@@ -3,7 +3,7 @@ package bigshots.charity.utilities;
 /**
  * Created by root on 19/11/14.
  */
-public class Charity implements Interfaces.charity {
+public class Charity implements Interfaces.Charity {
     private int votes;
     private String link;
     private String name;
