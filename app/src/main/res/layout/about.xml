@@ -13,4 +13,8 @@
         android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />
+
+    <bigshots.charity.views.ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="22dp" />
 </LinearLayout>
