@@ -3,13 +3,15 @@ package bigshots.charity.io;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.google.android.gms.ads.AdListener;
+
 public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Connector con = new Connector();
+        final Connector con = new Connector();
         // con.getMessageManager().sendMessage("You are Gods");
         // con.getMessageManager().sendMessage("You are Awesome");
         // con.getCharityManager().getCharities();
@@ -18,12 +20,12 @@ public class MainActivity extends Activity {
         // con.getUserManager().insertUser("Steve@gmail.com");
         // con.getVoteManager().castVote("www.charity.com", "Steve@gmail.com");
         // con.getVoteManager().removeVote("Sidney");
-        AdManager adManager = new AdManager(this);
-        // adManager.getBannerAd();
-        // adManager.getFullscreenAd();
-        // adManager.getVideoAd();
-        // if (adManager.getFullscreenAd().isLoaded()) {
-        // // Show Ad
-        // }
+        final AdManager adManager = new AdManager(this);
+        adManager.loadVideoAd();
+        adManager.getVideoAd().setAdListener(new AdListener() {
+            public void onAdLoaded() {
+                adManager.getVideoAd().show();
+            }
+        });
     }
 }

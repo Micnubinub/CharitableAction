@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 
+import bigshots.charity.io.AdManager;
+
 /**
  * Created by root on 18/11/14.
  */
@@ -32,6 +34,7 @@ public class BannerPopup extends ViewGroup {
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private View closeBanner, openApp, minimiseBanner, hideMenu;
     private BannerPopup popup;
+    private AdManager adManager;
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
     private float animated_value;
@@ -49,7 +52,11 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void click(View view) {
-
+//        adManager.getFullscreenAd().setAdListener(new AdListener() {
+//            public void onAdLoaded() {
+//                adManager.getVideoAd().show();
+//            }
+//        });
     }
 
     private void longClick(View view) {

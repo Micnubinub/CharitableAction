@@ -24,22 +24,31 @@ public class AdManager {
         videoAd.setAdUnitId(VIDEO_ID);
     }
 
-    public AdView getBannerAd() { // Get And Load Banner Ad
+    public void loadBannerAd() { // Get And Load Banner Ad
         AdRequest adRequest = new AdRequest.Builder().build();
         bannerAd.setAdSize(AdSize.BANNER);
         bannerAd.loadAd(adRequest);
+    }
+
+    public void loadFullscreenAd() { // Get And Load Fullscreen Ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        fullscreenAd.loadAd(adRequest);
+    }
+
+    public void loadVideoAd() { // Get And Load Video Ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        videoAd.loadAd(adRequest);
+    }
+
+    public AdView getBannerAd() {
         return bannerAd;
     }
 
-    public InterstitialAd getFullscreenAd() { // Get And Load Fullscreen Ad
-        AdRequest adRequest = new AdRequest.Builder().build();
-        fullscreenAd.loadAd(adRequest);
+    public InterstitialAd getFullscreenAd() {
         return fullscreenAd;
     }
 
-    public InterstitialAd getVideoAd() { // Get And Load Video Ad
-        AdRequest adRequest = new AdRequest.Builder().build();
-        videoAd.loadAd(adRequest);
+    public InterstitialAd getVideoAd() {
         return videoAd;
     }
 }

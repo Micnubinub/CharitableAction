@@ -1,14 +1,12 @@
 package bigshots.charity.io;
 
-public class Charity {
+import bigshots.charity.utilities.Interfaces;
+
+public class Charity implements Interfaces.Charity {
 
     private String name;
-    private String url;
+    private String link;
     private int votes;
-
-    public Charity() {
-
-    }
 
     public String getName() {
         return name;
@@ -18,12 +16,12 @@ public class Charity {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getLink() {
+        return link;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public int getVotes() {

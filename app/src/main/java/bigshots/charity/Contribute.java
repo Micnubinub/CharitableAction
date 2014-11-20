@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.ads.AdListener;
+
 import bigshots.charity.io.AdManager;
 
 /**
@@ -18,19 +20,29 @@ public class Contribute extends Activity {
     //Link to this months charity
 
     /*
-Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-startActivity(browserIntent);
- */
+    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+    startActivity(browserIntent);
+    */
     private AdManager adManager;
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.full_screen:
-                    adManager.getFullscreenAd();
+                    adManager.loadFullscreenAd();
+                    adManager.getFullscreenAd().setAdListener(new AdListener() {
+                        public void onAdLoaded() {
+                            adManager.getFullscreenAd().show();
+                        }
+                    });
                     break;
                 case R.id.video_ad:
-                    adManager.getVideoAd();
+                    adManager.loadVideoAd();
+                    adManager.getVideoAd().setAdListener(new AdListener() {
+                        public void onAdLoaded() {
+                            adManager.getVideoAd().show();
+                        }
+                    });
                     break;
                 case R.id.current_charity:
                     //Todo get current charity

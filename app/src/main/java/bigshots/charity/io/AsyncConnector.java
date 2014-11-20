@@ -37,7 +37,7 @@ public class AsyncConnector {
                     for (String s : tmp1) {
                         String[] tmp = s.split("\\^", -1);
                         Charity charity = new Charity();
-                        charity.setUrl(tmp[0]);
+                        charity.setLink(tmp[0]);
                         charity.setName(tmp[1]);
                         try {
                             charity.setVotes(Integer.valueOf(tmp[2]));
