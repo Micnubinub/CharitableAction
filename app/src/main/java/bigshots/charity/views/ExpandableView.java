@@ -9,26 +9,32 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.FrameLayout;
+
+import bigshots.charity.io.AdManager;
 
 /**
  * Created by root on 20/11/14.
  */
 public class ExpandableView extends ViewGroup {
 
-
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static int duration = 600;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    int videoHeight;
+    private State state = State.CONTRACTED;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animator) {
-
+            if (state == State.EXPANDED)
+                container.setVisibility(View.VISIBLE);
         }
 
         @Override
         public void onAnimationEnd(Animator animator) {
-
+            if (state == State.CONTRACTED)
+                container.setVisibility(View.GONE);
             invalidatePoster();
         }
 
@@ -43,15 +49,26 @@ public class ExpandableView extends ViewGroup {
 
         }
     };
-    private int width, height;
+    private OnClickListener listener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            toggleState();
+            if (state == State.EXPANDED)
+                adManager.getVideoAd();
+        }
+    };
+    private FrameLayout container;
+    private View toggle;
+    private int width, height, minHeight;
     private float animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());
-            invalidatePoster();
+            update();
         }
     };
+    private AdManager adManager;
     private boolean touchDown = false;
 
     public ExpandableView(Context context) {
@@ -79,8 +96,17 @@ public class ExpandableView extends ViewGroup {
 
     private void init() {
         final int padding = dpToPixels(16);
-        final int hiddenHeight = dpToPixels(72);
+        minHeight = dpToPixels(72);
+        toggle = new View(getContext());
+        toggle.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, minHeight));
+        toggle.setBackgroundColor(0xffbb00);
+        toggle.setOnClickListener(listener);
 
+        container = new FrameLayout(getContext());
+        container.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT));
+        container.setBackgroundColor(0xffffff);
+
+        adManager = new AdManager(getContext());
 
         setWillNotDraw(false);
         animator.setInterpolator(interpolator);
@@ -90,8 +116,9 @@ public class ExpandableView extends ViewGroup {
         paint.setColor(0x25000000);
 
         //Todo addView();
+        addView(toggle);
+        addView(container);
     }
-
 
     @Override
     protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {
@@ -106,54 +133,57 @@ public class ExpandableView extends ViewGroup {
         int measuredHeight = 0;
         int measuredWidth = 0;
 
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            measureChild(child, widthMeasureSpec, heightMeasureSpec);
-            measuredHeight = Math.max(child.getMeasuredHeight(), measuredHeight);
-            measuredWidth = Math.max(child.getMeasuredWidth(), measuredWidth);
+        if (state == State.EXPANDED) {
+            container.measure(widthMeasureSpec, heightMeasureSpec);
+            measuredHeight += container.getMeasuredHeight();
+            measuredWidth = Math.max(container.getMeasuredWidth(), measuredWidth);
         }
+        toggle.measure(widthMeasureSpec, heightMeasureSpec);
+        measuredHeight += toggle.getMeasuredHeight();
+        measuredWidth = Math.max(toggle.getMeasuredWidth(), measuredWidth);
 
-        setMeasuredDimension(resolveSizeAndState(measuredWidth, widthMeasureSpec, 0),
-                resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
+        setMeasuredDimension(resolveSizeAndState(measuredWidth, widthMeasureSpec, 0), resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
     }
 
     @Override
     protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
-        //  final int imageViewPaddingTop = (getMeasuredHeight() - imageView.getMeasuredHeight()) / 2;
-//        imageView.layout(getPaddingLeft(),
-//                imageViewPaddingTop,
-//                getPaddingLeft() + imageView.getMeasuredWidth(),
-//                getMeasuredHeight() - imageViewPaddingTop
-//        );
-//
-//        final int textViewPaddingTop = (getMeasuredHeight() - textView.getMeasuredHeight()) / 2;
-//        textView.layout(getPaddingLeft() + imageView.getMeasuredWidth(), textViewPaddingTop,
-//                getMeasuredWidth() - getPaddingRight(),
-//                getMeasuredHeight() - textViewPaddingTop);
-//
-//        checkViewParams(textView);
+        toggle.layout(0, 0, getMeasuredWidth(), toggle.getMeasuredHeight());
+        if (state == State.EXPANDED)
+            container.layout(0, toggle.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
+
     }
 
-    private void checkViewParams(final View view, final int layoutWidth, final int layoutHeight) {
-        final int width = view.getMeasuredWidth();
-        final int height = view.getMeasuredHeight();
-        if ((width > layoutWidth) || (height > layoutHeight)) {
-            view.setLayoutParams(new LayoutParams(layoutWidth, layoutHeight));
-            measureChild(view, MeasureSpec.AT_MOST, MeasureSpec.AT_MOST);
-            view.requestLayout();
-            view.invalidate();
-            requestLayout();
+    private void toggleState() {
+        if (state == State.CONTRACTED)
+            state = State.EXPANDED;
+        else
+            state = State.CONTRACTED;
+    }
 
+    private void update() {
+        if (animator.isRunning()) {
+            switch (state) {
+                case EXPANDED:
+                    getLayoutParams().height = Math.round(minHeight + (animated_value * videoHeight));
+                    break;
+                case CONTRACTED:
+                    getLayoutParams().height = Math.round(minHeight + ((1 - animated_value) * videoHeight));
+                    break;
+            }
+        } else {
+            switch (state) {
+                case EXPANDED:
+                    getLayoutParams().height = minHeight + videoHeight;
+                    break;
+                case CONTRACTED:
+                    getLayoutParams().height = minHeight;
+                    break;
+            }
         }
+        invalidatePoster();
     }
 
-    private void checkViewParams(final View view) {
-        final int layoutWidth = view.getRight() - view.getLeft();
-        final int layoutHeight = view.getBottom() - view.getTop();
-
-        checkViewParams(view, layoutWidth, layoutHeight);
-
+    private enum State {
+        EXPANDED, CONTRACTED
     }
-
-
 }

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -114,9 +113,9 @@ public class PlusButton extends View {
         w = w - getPaddingLeft() - getPaddingRight();
         h = h - getPaddingTop() - getPaddingBottom();
         r = Math.min(w, h) / 2;
-        lineR = (int) (r * 0.42f);
+        lineR = (int) (r * 0.435f);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(lineR / 6f);
+        paint.setStrokeWidth(lineR / 4.5f);
     }
 
     private void drawLines(Canvas canvas) {
@@ -141,7 +140,7 @@ public class PlusButton extends View {
 
             injectPositions(base);
         } else {
-            Log.e("animator", "not runing");
+
             switch (state) {
                 case MINUS:
                     verticalLinePos[0] = cx - lineR;
@@ -202,7 +201,7 @@ public class PlusButton extends View {
     }
 
     private void click() {
-        System.out.println("click");
+
         if (state == State.MINUS)
             state = State.PLUS;
         else

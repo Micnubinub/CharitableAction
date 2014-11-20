@@ -4,46 +4,43 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/popup"
+    <bigshots.charity.views.PopupSwitch
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:text="Popup banner"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:background="@color/white" />
 
     <TextView
         android:id="@+id/full_screen"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
+        android:background="@drawable/white_button_selector"
         android:maxLines="1"
         android:padding="10dp"
         android:text="Full screen ad"
         android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textColor="@color/dark_grey_text"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/video_ad"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
+        android:background="@drawable/white_button_selector"
         android:maxLines="1"
         android:padding="10dp"
         android:text="Watch video"
         android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textColor="@color/dark_grey_text"
+        android:textSize="22sp" />
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/current_charity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/white_button_selector"
         android:padding="10dp"
         android:text="Link to this months charity (website)"
         android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textColor="@color/dark_grey_text"
+        android:textSize="22sp" />
 </LinearLayout>
