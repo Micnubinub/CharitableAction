@@ -3,8 +3,6 @@ package bigshots.charity.io;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.google.android.gms.ads.AdListener;
-
 public class MainActivity extends Activity {
 
     @Override
@@ -20,12 +18,13 @@ public class MainActivity extends Activity {
         // con.getUserManager().insertUser("Steve@gmail.com");
         // con.getVoteManager().castVote("www.charity.com", "Steve@gmail.com");
         // con.getVoteManager().removeVote("Sidney");
-        final AdManager adManager = new AdManager(this);
-        adManager.loadVideoAd();
-        adManager.getVideoAd().setAdListener(new AdListener() {
-            public void onAdLoaded() {
-                adManager.getVideoAd().show();
-            }
-        });
+        con.getCharityManager().monthlyCharity();
+        // final AdManager adManager = new AdManager(this);
+        // adManager.loadVideoAd();
+        // adManager.getVideoAd().setAdListener(new AdListener() {
+        // public void onAdLoaded() {
+        // adManager.getVideoAd().show();
+        // }
+        // });
     }
 }

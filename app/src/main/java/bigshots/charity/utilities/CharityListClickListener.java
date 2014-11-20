@@ -5,6 +5,8 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
+import bigshots.charity.io.Charity;
+
 /**
  * Created by root on 19/11/14.
  */
@@ -19,6 +21,6 @@ public class CharityListClickListener implements AdapterView.OnItemClickListener
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //Todo vote>
-        charities.get(position).getLink();
+        // charities.get(position).getLink();
     }
 }

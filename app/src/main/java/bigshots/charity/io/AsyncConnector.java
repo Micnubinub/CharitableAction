@@ -14,10 +14,16 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class AsyncConnector {
+import bigshots.charity.utilities.Interfaces;
 
-    public static void makeConnection(ArrayList<NameValuePair> pairs,
-                                      String nm, String act) {
+public class AsyncConnector {
+    static Interfaces.ASyncListener listener;
+
+    public static void setListener(Interfaces.ASyncListener listener) {
+        AsyncConnector.listener = listener;
+    }
+
+    public static void makeConnection(ArrayList<NameValuePair> pairs, String nm, String act) {
         new ConnectorTask(act, pairs, nm).execute();
     }
 
@@ -37,7 +43,7 @@ public class AsyncConnector {
                     for (String s : tmp1) {
                         String[] tmp = s.split("\\^", -1);
                         Charity charity = new Charity();
-                        charity.setLink(tmp[0]);
+                        charity.setUrl(tmp[0]);
                         charity.setName(tmp[1]);
                         try {
                             charity.setVotes(Integer.valueOf(tmp[2]));
@@ -47,12 +53,35 @@ public class AsyncConnector {
                         charities.add(charity);
                     }
                 }
+
+
             } else if (action.equals("VOTE_CAST")) {
                 // Log.e("Async", resp);
             } else if (action.equals("VOTE_REMOVE")) {
                 // Log.e("Async", resp);
             } else if (action.equals("CHARITY_SUGGEST")) {
                 // Log.e("Async", resp);
+            } else if (action.equals("CHARITY_MONTH")) {
+                // Log.e("Async", resp);
+
+                Charity charity = new Charity();
+                if (!resp.equals("")) {
+                    resp = resp.substring(0, resp.length() - 1);
+                    String[] tmp1 = resp.split("\\|");
+                    String[] tmp = tmp1[0].split("\\^", -1);
+                    charity.setName(tmp[0]);
+                    charity.setUrl(tmp[1]);
+                    try {
+                        charity.setVotes(Integer.valueOf(tmp[2]));
+                    } catch (ClassCastException e) {
+                        charity.setVotes(0);
+                    }
+                    if (listener != null)
+                        listener.onCompleteSingle(charity);
+
+                } else {
+                    Log.e("Async", "Charity of the month not selected yet");
+                }
             } else if (action.equals("CHARITY_CURRENT")) {
                 // Log.e("Async", resp);
                 String charityURL = resp;
@@ -64,6 +93,7 @@ public class AsyncConnector {
             }
         }
     }
+
 }
 
 class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
@@ -102,9 +132,12 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
+
     @Override
     protected Boolean doInBackground(Void... params) {
         postData();
         return null;
     }
+
+
 }

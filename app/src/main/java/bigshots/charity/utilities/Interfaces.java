@@ -1,29 +1,21 @@
 package bigshots.charity.utilities;
 
+
+import java.util.ArrayList;
+
+import bigshots.charity.io.Charity;
+
+
 /**
  * Created by root on 19/11/14.
  */
 public class Interfaces {
 
-    public interface sendDirectMessage {
-        void sendMessage(String message);
-    }
+    public interface ASyncListener {
+        void onCompleteSingle(Charity charity);
 
-    public interface Charity {
-        String getLink();
+        void onCompleteArray(ArrayList<Charity> charities);
 
-        String getName();
-
-        int getVotes();
-    }
-
-    public interface vote {
-        //get the charity the user has currently cast a vote for using their gmail
-        String currentCharity();
-
-        void castVote(String link);
-
-        void removeVote(String link);
     }
 
     public interface suggestCharity {

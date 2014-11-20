@@ -6,6 +6,8 @@ import android.widget.BaseAdapter;
 
 import java.util.ArrayList;
 
+import bigshots.charity.io.Charity;
+
 /**
  * Created by root on 19/11/14.
  */

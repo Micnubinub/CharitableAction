@@ -1,12 +1,20 @@
 package bigshots.charity.io;
 
-import bigshots.charity.utilities.Interfaces;
-
-public class Charity implements Interfaces.Charity {
+public class Charity {
 
     private String name;
-    private String link;
+    private String url;
     private int votes;
+    private int worth; // Amount of Money Generated: Only for Charity of the
+    // Month
+
+    public int getWorth() {
+        return worth;
+    }
+
+    public void setWorth(int worth) {
+        this.worth = worth;
+    }
 
     public String getName() {
         return name;
@@ -16,12 +24,12 @@ public class Charity implements Interfaces.Charity {
         this.name = name;
     }
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public int getVotes() {

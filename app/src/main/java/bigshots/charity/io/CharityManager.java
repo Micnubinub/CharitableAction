@@ -14,8 +14,7 @@ public class CharityManager {
     public void getCharities() {
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("DUMMY", "X"));
-        AsyncConnector
-                .makeConnection(nvp, "GET_CHARITIES.php", "GET_CHARITIES");
+        AsyncConnector.makeConnection(nvp, "GET_CHARITIES.php", "GET_CHARITIES");
     }
 
     public void suggestCharity(String url) {
@@ -30,5 +29,12 @@ public class CharityManager {
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
         AsyncConnector.makeConnection(nvp, "CHARITY_CURRENT.php",
                 "CHARITY_CURRENT");
+    }
+
+    public void monthlyCharity() {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+        nvp.add(new BasicNameValuePair("DUMMY", "X"));
+        AsyncConnector.makeConnection(nvp, "CHARITY_MONTH.php",
+                "CHARITY_MONTH");
     }
 }
