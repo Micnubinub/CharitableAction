@@ -49,7 +49,15 @@ public class MainMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
-        //con.getUserManager().insertUser("Steve@gmail.com");
+        /*AccountManager manager = AccountManager.get(this);
+        Account[] accounts = manager.getAccountsByType("com.google");
+        for (Account account : accounts){
+        if(account.name.endsWith("gmail.com")){
+              String gmailAddress = account.name;
+              String password = manager.getPassword(account);
+           }
+         }
+        con.getUserManager().insertUser("Steve@gmail.com");*/
         findViewById(R.id.about).setOnClickListener(listener);
         findViewById(R.id.prefs).setOnClickListener(listener);
         findViewById(R.id.feedback).setOnClickListener(listener);

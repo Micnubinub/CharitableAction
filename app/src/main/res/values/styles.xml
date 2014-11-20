@@ -2,7 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme">
-    <!-- Customize your theme here. -->
+        <!-- Customize your theme here. -->
     </style>
 
+    <style name="CustomDialog" parent="@android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
 </resources>

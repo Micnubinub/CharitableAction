@@ -53,7 +53,8 @@ public class AsyncConnector {
                         charities.add(charity);
                     }
                 }
-
+                if (listener != null)
+                    listener.onCompleteArray(charities);
 
             } else if (action.equals("VOTE_CAST")) {
                 // Log.e("Async", resp);
@@ -63,7 +64,6 @@ public class AsyncConnector {
                 // Log.e("Async", resp);
             } else if (action.equals("CHARITY_MONTH")) {
                 // Log.e("Async", resp);
-
                 Charity charity = new Charity();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
@@ -78,7 +78,6 @@ public class AsyncConnector {
                     }
                     if (listener != null)
                         listener.onCompleteSingle(charity);
-
                 } else {
                     Log.e("Async", "Charity of the month not selected yet");
                 }

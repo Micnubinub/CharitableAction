@@ -22,7 +22,6 @@ public class Contribute extends Activity {
     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
     startActivity(browserIntent);
     */
-    public static String linkMonth;
     private AdManager adManager;
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
@@ -36,7 +35,6 @@ public class Contribute extends Activity {
                     });
                     break;
                 case R.id.video_ad:
-
                     adManager.getVideoAd().setAdListener(new AdListener() {
                         public void onAdLoaded() {
                             adManager.getVideoAd().show();
