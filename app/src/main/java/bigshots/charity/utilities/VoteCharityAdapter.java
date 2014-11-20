@@ -58,15 +58,13 @@ public class VoteCharityAdapter extends BaseAdapter {
     };
     private VoteManager voteManager = new VoteManager();
 
-    public VoteCharityAdapter(ArrayList<Charity> charities) {
+    public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
         getMax();
-    }
-
-    public VoteCharityAdapter(Context context) {
         this.context = context;
         height = dpToPixels(76);
     }
+
 
     private void getMax() {
         max = 0;

@@ -42,15 +42,21 @@ startActivity(browserIntent);
         }
 
         @Override
-        public void onCompleteArray(ArrayList<Charity> charities) {
+        public void onCompleteArray(final ArrayList<Charity> charities) {
             Vote.this.charities = charities;
             // charityListClickListener = new CharityListClickListener(charities);
             //Todo is this necessary
 //            if (listView!=null)
 //                listView.setOnItemClickListener(charityListClickListener);
-            adapter = new VoteCharityAdapter(charities);
-            if (listView != null)
-                listView.setAdapter(adapter);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter = new VoteCharityAdapter(Vote.this, charities);
+                    if (listView != null)
+                        listView.setAdapter(adapter);
+                }
+            });
+
 
         }
     };

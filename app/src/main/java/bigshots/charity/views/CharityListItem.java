@@ -22,7 +22,7 @@ import bigshots.charity.R;
 public class CharityListItem extends ViewGroup {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 600;
+    private static int duration = 800;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private TextView textView;
     private PlusButton plusButton;
