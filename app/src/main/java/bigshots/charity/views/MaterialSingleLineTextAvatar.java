@@ -4,12 +4,8 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
@@ -162,14 +158,6 @@ public class MaterialSingleLineTextAvatar extends ViewGroup {
 
         addView(textView);
         addView(imageView);
-    }
-
-    public void setIcon(Drawable icon) {
-        imageView.setImageBitmap(getCircleBitmap(icon, dpToPixels(40)));
-    }
-
-    public void setIcon(Bitmap icon) {
-        imageView.setImageBitmap(getCircleBitmap(icon, dpToPixels(40)));
     }
 
     public void setTextSize(int sp) {
@@ -325,32 +313,6 @@ public class MaterialSingleLineTextAvatar extends ViewGroup {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
-    }
-
-    public Bitmap getCircleBitmap(final Drawable drawable, final int width) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inMutable = true;
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        Bitmap bitmap = drawableToBitmap(drawable);
-
-        return getCircleBitmap(bitmap, width);
-    }
-
-    public Bitmap getCircleBitmap(Bitmap bitmap, final int width) {
-        bitmap.setHasAlpha(true);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, width, true);
-        Bitmap output = Bitmap.createBitmap(width,
-                width, Bitmap.Config.ARGB_8888);
-        final Rect rect = new Rect(0, 0, width,
-                width);
-        Canvas canvas = new Canvas(output);
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(0xff000000);
-        canvas.drawCircle(width / 2, width / 2, width / 2, paint);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-        bitmap.recycle();
-        return output;
     }
 
 

@@ -28,7 +28,7 @@ public class CharityListItem extends ViewGroup {
     private PlusButton plusButton;
     private int width;
     private int height;
-    private float animated_value = 0;
+    //private float animated_value;
     private int clickedX, clickedY;
     private String link;
     private boolean touchDown = false, animateRipple;
@@ -36,8 +36,7 @@ public class CharityListItem extends ViewGroup {
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
-            animated_value = (Float) (animation.getAnimatedValue());
-            ripple_animated_value = animated_value;
+            ripple_animated_value = (Float) (animation.getAnimatedValue());
             invalidatePoster();
         }
     };
@@ -146,7 +145,6 @@ public class CharityListItem extends ViewGroup {
     }
 
 
-
     public void setPrimaryTextSize(int sp) {
         textView.setTextSize(sp);
     }
@@ -213,7 +211,6 @@ public class CharityListItem extends ViewGroup {
         int measuredWidth = 0;
 
         for (int i = 0; i < getChildCount(); i++) {
-
             final View child = getChildAt(i);
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
             measuredHeight = Math.max(child.getMeasuredHeight(), measuredHeight);
