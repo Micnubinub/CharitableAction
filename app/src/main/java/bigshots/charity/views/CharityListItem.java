@@ -31,7 +31,7 @@ public class CharityListItem extends ViewGroup {
     //private float animated_value;
     private int clickedX, clickedY;
     private String link;
-    private boolean touchDown = false, animateRipple;
+    private boolean touchDown = false, animateRipple, votedFor;//Todo write code for voted for
     private float ripple_animated_value = 0;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -68,6 +68,7 @@ public class CharityListItem extends ViewGroup {
     };
     private int rippleR;
     private int rippleColor = 0x25000000;
+    private int pos;
 
     public CharityListItem(Context context) {
         super(context);
@@ -78,6 +79,22 @@ public class CharityListItem extends ViewGroup {
         super(context, attrs);
 
         init();
+    }
+
+    public boolean isVotedFor() {
+        return votedFor;
+    }
+
+    public void setVotedFor(boolean votedFor) {
+        this.votedFor = votedFor;
+    }
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
     }
 
     @Override

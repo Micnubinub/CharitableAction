@@ -3,6 +3,7 @@ package bigshots.charity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -28,11 +29,13 @@ public class Feedback extends Activity {
                     break;
                 case R.id.gplus:
                     //Todo make gPlus age
-
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://plus.google.com"));
+                    startActivity(browserIntent);
                     break;
                 case R.id.fb:
                     //Todo make facebook page
-
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
+                    startActivity(intent);
                     break;
                 case R.id.direct:
                     showDirectMessageDialog();

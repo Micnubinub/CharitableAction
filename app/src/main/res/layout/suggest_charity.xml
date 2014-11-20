@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:background="#09000000"
         android:hint="Enter charity website here"
+        android:inputType="textWebEditText"
         android:maxLines="1"
         android:padding="8dp"
         android:textColor="@color/dark_grey"
