@@ -1,0 +1,45 @@
+package bigshots.charity.io;
+
+import android.content.Context;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+
+public class AdManager {
+    private static final String BANNER_ID = "ca-app-pub-7957464690974751/7567893025";
+    private static final String FULLSCREEN_ID = "ca-app-pub-7957464690974751/1521359425";
+    private static final String VIDEO_ID = "ca-app-pub-7957464690974751/9044626224";
+    private AdView bannerAd;
+    private InterstitialAd fullscreenAd;
+    private InterstitialAd videoAd;
+
+    public AdManager(Context context) {
+        bannerAd = new AdView(context);
+        bannerAd.setAdUnitId(BANNER_ID);
+        fullscreenAd = new InterstitialAd(context);
+        fullscreenAd.setAdUnitId(FULLSCREEN_ID);
+        videoAd = new InterstitialAd(context);
+        videoAd.setAdUnitId(VIDEO_ID);
+    }
+
+    public AdView getBannerAd() { // Get And Load Banner Ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        bannerAd.setAdSize(AdSize.BANNER);
+        bannerAd.loadAd(adRequest);
+        return bannerAd;
+    }
+
+    public InterstitialAd getFullscreenAd() { // Get And Load Fullscreen Ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        fullscreenAd.loadAd(adRequest);
+        return fullscreenAd;
+    }
+
+    public InterstitialAd getVideoAd() { // Get And Load Video Ad
+        AdRequest adRequest = new AdRequest.Builder().build();
+        videoAd.loadAd(adRequest);
+        return videoAd;
+    }
+}

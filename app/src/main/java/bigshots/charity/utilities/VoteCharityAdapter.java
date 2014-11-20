@@ -10,11 +10,25 @@ import java.util.ArrayList;
  * Created by root on 19/11/14.
  */
 public class VoteCharityAdapter extends BaseAdapter {
+    private static int max;
     private ArrayList<Charity> charities;
 
     public VoteCharityAdapter(ArrayList<Charity> charities) {
         this.charities = charities;
+        getMax();
+    }
 
+    private void getMax() {
+        max = 0;
+        for (Charity charity : charities) {
+            max = Math.max(max, charity.getVotes());
+        }
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        getMax();
+        super.notifyDataSetChanged();
     }
 
     @Override

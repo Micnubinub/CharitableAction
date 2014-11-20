@@ -5,10 +5,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,18 +20,18 @@ import bigshots.charity.R;
  * Created by root on 19/11/14.
  */
 public class CharityListItem extends ViewGroup {
+
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static int duration = 600;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private TextView primaryTextView, secondaryTextView;
-    private String primaryText, secondaryText;
+    private TextView textView;
+    private PlusButton plusButton;
     private int width;
     private int height;
     private float animated_value = 0;
     private float scaleTo = 1.065f;
     private int clickedX, clickedY;
-    private boolean scaleOnTouch = true;
     private boolean touchDown = false, animateRipple;
     private float ripple_animated_value = 0;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
@@ -41,7 +39,6 @@ public class CharityListItem extends ViewGroup {
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());
             ripple_animated_value = animated_value;
-            Log.e("ripple val", String.format("%f", ripple_animated_value));
             invalidatePoster();
         }
     };
@@ -82,18 +79,8 @@ public class CharityListItem extends ViewGroup {
     public CharityListItem(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        if (secondaryText == null)
-            secondaryText = "";
-
-        if (primaryText == null)
-            primaryText = "";
-
         init();
-
-        setPrimaryText(primaryText);
-        setSecondaryText(secondaryText);
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -121,15 +108,9 @@ public class CharityListItem extends ViewGroup {
         return true;
     }
 
-    public void setPrimaryText(String text) {
-        primaryText = text;
-        primaryTextView.setText(text);
-        invalidatePoster();
-    }
 
-    public void setSecondaryText(String text) {
-        secondaryText = text;
-        secondaryTextView.setText(text);
+    public void setText(String text) {
+        textView.setText(text);
         invalidatePoster();
     }
 
@@ -140,27 +121,18 @@ public class CharityListItem extends ViewGroup {
     private void init() {
         //Todo consider 16 and 14 (in the guidelines)
         final int padding = dpToPixels(16);
-        final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        final int buttonWidth = dpToPixels(72);
 
-        primaryTextView = new TextView(getContext());
-        primaryTextView.setTextColor(getResources().getColor(R.color.dark_dark_grey));
-        primaryTextView.setTypeface(null, Typeface.BOLD);
-        primaryTextView.setTextSize(18);
-        primaryTextView.setMaxLines(1);
-        primaryTextView.setLayoutParams(params);
-        primaryTextView.setEllipsize(TextUtils.TruncateAt.END);
-        primaryTextView.setPadding(padding, padding, padding, padding / 2);
+        textView = new TextView(getContext());
+        textView.setTextColor(getResources().getColor(R.color.dark_dark_grey));
+        textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        textView.setTextSize(18);
+        textView.setMaxLines(1);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setPadding(padding, padding, padding, padding);
 
-        secondaryTextView = new TextView(getContext());
-        secondaryTextView.setTextColor(getResources().getColor(R.color.dark_grey));
-        secondaryTextView.setTextSize(16);
-        secondaryTextView.setMaxLines(1);
-        secondaryTextView.setLayoutParams(params);
-        secondaryTextView.setEllipsize(TextUtils.TruncateAt.END);
-        secondaryTextView.setPadding(padding, padding / 2, padding, padding);
-
-        primaryTextView.setText("Primary");
-        secondaryTextView.setText("Secondary text dkjsgjkab sjkdg bka sjb gas sdg sj dgjsgjs gj sgdjj jsdgj sdg");
+        plusButton = new PlusButton(getContext());
+        plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
 
         setWillNotDraw(false);
         animator.setInterpolator(interpolator);
@@ -170,68 +142,20 @@ public class CharityListItem extends ViewGroup {
         paint.setColor(0x25000000);
 
 
-        addView(primaryTextView);
-        addView(secondaryTextView);
+        addView(textView);
+        addView(plusButton);
     }
 
-    public void setSecondaryTextColor(int color) {
-        secondaryTextView.setTextColor(color);
-    }
 
-    public void setSecondaryTextMaxLines(int maxLines) {
-        secondaryTextView.setMaxLines(maxLines);
-    }
-
-    public void setSecondaryTextSize(int sp) {
-        secondaryTextView.setTextSize(sp);
-    }
 
     public void setPrimaryTextSize(int sp) {
-        primaryTextView.setTextSize(sp);
+        textView.setTextSize(sp);
     }
 
     public void setPrimaryTextColor(int color) {
-        primaryTextView.setTextColor(color);
+        textView.setTextColor(color);
     }
 
-    @Override
-    protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
-        final int textViewPadding = ((getMeasuredHeight() - primaryTextView.getMeasuredHeight() - secondaryTextView.getMeasuredHeight()) / 2);
-        primaryTextView.layout(getPaddingLeft(), textViewPadding,
-                getMeasuredWidth() - getPaddingRight(),
-                primaryTextView.getMeasuredHeight() + textViewPadding);
-
-        checkViewParams(primaryTextView);
-
-        secondaryTextView.layout(getPaddingLeft(),
-                getMeasuredHeight() - textViewPadding - secondaryTextView.getMeasuredHeight(),
-                getMeasuredWidth() - getPaddingRight(),
-                getMeasuredHeight() - textViewPadding
-        );
-
-        checkViewParams(secondaryTextView);
-    }
-
-    private void checkViewParams(final View view, final int layoutWidth, final int layoutHeight) {
-        final int width = view.getMeasuredWidth();
-        final int height = view.getMeasuredHeight();
-        if ((width > layoutWidth) || (height > layoutHeight)) {
-            view.setLayoutParams(new LayoutParams(layoutWidth, layoutHeight));
-            measureChild(view, MeasureSpec.AT_MOST, MeasureSpec.AT_MOST);
-            view.requestLayout();
-            view.invalidate();
-            requestLayout();
-
-        }
-    }
-
-    private void checkViewParams(final View view) {
-        final int layoutWidth = view.getRight() - view.getLeft();
-        final int layoutHeight = view.getBottom() - view.getTop();
-
-        checkViewParams(view, layoutWidth, layoutHeight);
-
-    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
@@ -247,10 +171,6 @@ public class CharityListItem extends ViewGroup {
 
     public void setScaleTo(float scaleTo) {
         this.scaleTo = scaleTo;
-    }
-
-    public void setScaleOnTouch(boolean scaleOnTouch) {
-        this.scaleOnTouch = scaleOnTouch;
     }
 
     private void invalidatePoster() {
@@ -278,7 +198,7 @@ public class CharityListItem extends ViewGroup {
 
     @Override
     public void addView(View child, int index, LayoutParams params) {
-        if (getChildCount() >= 2)
+        if (getChildCount() >= 3)
             return;
         super.addView(child, index, params);
     }
@@ -311,5 +231,42 @@ public class CharityListItem extends ViewGroup {
 
     }
 
+    @Override
+    protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
+        final int imageViewPadding = (getMeasuredHeight() - plusButton.getMeasuredHeight()) / 2;
+        plusButton.layout(imageViewPadding,
+                imageViewPadding,
+                getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
+                getMeasuredHeight() - imageViewPadding
+        );
+
+        final int textViewPadding = (getMeasuredHeight() - textView.getMeasuredHeight()) / 2;
+        textView.layout(getPaddingLeft(), textViewPadding,
+                getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
+                getMeasuredHeight() - textViewPadding);
+
+        checkViewParams(textView);
+    }
+
+    private void checkViewParams(final View view, final int layoutWidth, final int layoutHeight) {
+        final int width = view.getMeasuredWidth();
+        final int height = view.getMeasuredHeight();
+        if ((width > layoutWidth) || (height > layoutHeight)) {
+            view.setLayoutParams(new LayoutParams(layoutWidth, layoutHeight));
+            measureChild(view, MeasureSpec.AT_MOST, MeasureSpec.AT_MOST);
+            view.requestLayout();
+            view.invalidate();
+            requestLayout();
+
+        }
+    }
+
+    private void checkViewParams(final View view) {
+        final int layoutWidth = view.getRight() - view.getLeft();
+        final int layoutHeight = view.getBottom() - view.getTop();
+
+        checkViewParams(view, layoutWidth, layoutHeight);
+
+    }
 
 }
