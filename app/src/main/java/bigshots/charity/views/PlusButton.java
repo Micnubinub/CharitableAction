@@ -61,7 +61,7 @@ public class PlusButton extends View {
     private int rippleColor = 0x25000000;
     private int clickedX, clickedY;
     private OnPlusMinusButtonPressed onPlusMinusButtonPressed;
-    private int w, h, cx, cy, r, lineR;
+    private int cx, cy, r, lineR;
 
     public PlusButton(Context context) {
         super(context);
@@ -107,14 +107,14 @@ public class PlusButton extends View {
     }
 
     @Override
-    protected void onSizeChanged(int wi, int he, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        w = wi;
-        h = he;
         cx = w / 2;
         cy = h / 2;
+        w = w - getPaddingLeft() - getPaddingRight();
+        h = h - getPaddingTop() - getPaddingBottom();
         r = Math.min(w, h) / 2;
-        lineR = (int) (r * 0.5f);
+        lineR = (int) (r * 0.42f);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(lineR / 6f);
     }

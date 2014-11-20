@@ -20,7 +20,6 @@ import bigshots.charity.R;
  * Created by root on 19/11/14.
  */
 public class CharityListItem extends ViewGroup {
-
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static int duration = 600;
@@ -30,8 +29,8 @@ public class CharityListItem extends ViewGroup {
     private int width;
     private int height;
     private float animated_value = 0;
-    private float scaleTo = 1.065f;
     private int clickedX, clickedY;
+    private String link;
     private boolean touchDown = false, animateRipple;
     private float ripple_animated_value = 0;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
@@ -124,15 +123,17 @@ public class CharityListItem extends ViewGroup {
         final int buttonWidth = dpToPixels(72);
 
         textView = new TextView(getContext());
-        textView.setTextColor(getResources().getColor(R.color.dark_dark_grey));
-        textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        textView.setTextSize(18);
+        textView.setTextColor(getResources().getColor(R.color.dark_grey_text));
+        textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+        textView.setTextSize(22);
         textView.setMaxLines(1);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setPadding(padding, padding, padding, padding);
+        textView.setText("1,2 testing");
 
         plusButton = new PlusButton(getContext());
         plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
+        plusButton.setPadding(padding, padding, padding, padding);
 
         setWillNotDraw(false);
         animator.setInterpolator(interpolator);
@@ -140,8 +141,6 @@ public class CharityListItem extends ViewGroup {
         animator.addListener(animatorListener);
         animator.setDuration(duration);
         paint.setColor(0x25000000);
-
-
         addView(textView);
         addView(plusButton);
     }
@@ -167,10 +166,6 @@ public class CharityListItem extends ViewGroup {
     public void setDuration(int duration) {
         CharityListItem.duration = duration;
         animator.setDuration(duration);
-    }
-
-    public void setScaleTo(float scaleTo) {
-        this.scaleTo = scaleTo;
     }
 
     private void invalidatePoster() {
@@ -221,12 +216,11 @@ public class CharityListItem extends ViewGroup {
 
             final View child = getChildAt(i);
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
-            measuredHeight += child.getMeasuredHeight();
-            measuredWidth = Math.max(child.getMeasuredWidth(), measuredWidth);
+            measuredHeight = Math.max(child.getMeasuredHeight(), measuredHeight);
+            measuredWidth += child.getMeasuredWidth();
         }
 
-        setMeasuredDimension(resolveSizeAndState(measuredWidth, widthMeasureSpec, 0),
-                resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
+        setMeasuredDimension(resolveSizeAndState(measuredWidth, widthMeasureSpec, 0), resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
 
 
     }
@@ -234,9 +228,9 @@ public class CharityListItem extends ViewGroup {
     @Override
     protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
         final int imageViewPadding = (getMeasuredHeight() - plusButton.getMeasuredHeight()) / 2;
-        plusButton.layout(imageViewPadding,
+        plusButton.layout(getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
                 imageViewPadding,
-                getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
+                getMeasuredWidth() - getPaddingLeft(),
                 getMeasuredHeight() - imageViewPadding
         );
 
@@ -257,16 +251,24 @@ public class CharityListItem extends ViewGroup {
             view.requestLayout();
             view.invalidate();
             requestLayout();
-
         }
     }
 
     private void checkViewParams(final View view) {
         final int layoutWidth = view.getRight() - view.getLeft();
         final int layoutHeight = view.getBottom() - view.getTop();
-
         checkViewParams(view, layoutWidth, layoutHeight);
-
     }
 
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    private void CastVote() {
+        //Todo cast vote
+    }
+
+    private void openLink() {
+        //Todo open link
+    }
 }
