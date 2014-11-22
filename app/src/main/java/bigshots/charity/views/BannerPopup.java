@@ -51,7 +51,7 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private int spacing;
-    private int x, y, w, h;
+    private int x, y, w, h, maxHeight, maxWidth;
 
     public BannerPopup(Context context) {
         super(context);
@@ -77,7 +77,9 @@ public class BannerPopup extends ViewGroup {
 
                 break;
             case MotionEvent.ACTION_MOVE:
-
+                int x = (int) (event.getRawX() - mainView.getWidth() / 2);
+                int y = (int) (event.getRawY() - mainView.getHeight() / 2);
+                setPosition(x, y);
                 break;
 
         }
@@ -148,16 +150,13 @@ public class BannerPopup extends ViewGroup {
 //        ViewGroup.LayoutParams layoutParams = bubbleView.findViewById(R.id.bubble_id).getLayoutParams();
 //        layoutParams.height = Utils.getInstance(null).getPixelsFromDp(48);
 //        layoutParams.width = Utils.getInstance(null).getPixelsFromDp(48);
-        params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
+        params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
 
         // Todo int closeBannerID = 1, openAppID = 2, minimiseID = 3, mainViewID = 4;
         //todo windowManager.updateViewLayout(bubbleView, params);
         //todo windowManager.addView(bubbleView, params);
+        //Todo  maxHeight, maxWidth
+        //Todo addView()
 
     }
 

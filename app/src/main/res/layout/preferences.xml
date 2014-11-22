@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_blue_dark"
+        android:padding="18dp"
+        android:text="Preferences"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="fill_parent"
@@ -12,6 +23,7 @@
         android:padding="10dp"
         android:text="Popup at start up?"
         android:textAlignment="center"
+        android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -21,4 +33,4 @@
         android:layout_height="54dp"
         android:layout_alignParentRight="true" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -41,7 +41,12 @@ public class MenuItem extends View {
         if (dist > 1)
             return;
 
-        dist = dist < 0 ? 0 : dist;
+        if (dist < 0) {
+            setVisibility(GONE);
+            return;
+        } else {
+            setVisibility(VISIBLE);
+        }
 
         calcW = (int) (w * dist);
         calcH = (int) (h * dist);

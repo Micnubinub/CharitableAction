@@ -6,6 +6,16 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/material_blue_dark"
+        android:padding="18dp"
+        android:text="About"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
         android:id="@+id/vote"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
