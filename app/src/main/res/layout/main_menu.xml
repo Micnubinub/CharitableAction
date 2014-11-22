@@ -20,8 +20,8 @@
         android:layout_height="72dp" />
 
     <bigshots.charity.views.PlusButton
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/contribute"

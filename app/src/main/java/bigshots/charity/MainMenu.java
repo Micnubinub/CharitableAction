@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import bigshots.charity.io.AsyncConnector;
 import bigshots.charity.io.Charity;
 import bigshots.charity.utilities.Interfaces;
+import bigshots.charity.views.BannerPopup;
 
 /**
  * Created by root on 18/11/14.
@@ -49,6 +50,7 @@ public class MainMenu extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        new BannerPopup(this);
         /*AccountManager manager = AccountManager.get(this);
         Account[] accounts = manager.getAccountsByType("com.google");
         for (Account account : accounts){

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="close_banner" type="id" />
+    <item name="open_app" type="id" />
+    <item name="minimise" type="id" />
+    <item name="main_view" type="id" />
+
+
+</resources>
