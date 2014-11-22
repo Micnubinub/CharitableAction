@@ -32,7 +32,7 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private View closeBanner, openApp, minimiseBanner, hideMenu;
+    private View closeBanner, openApp, minimise, main;
     private BannerPopup popup;
     private AdManager adManager;
     private WindowManager windowManager;
@@ -140,5 +140,11 @@ public class BannerPopup extends ViewGroup {
     //todo windowManager.updateViewLayout(bubbleView, params);
     //todo windowManager.addView(bubbleView, params);
 
+    public enum State {
+        SHOWING_MENU, SHOWING_AD, MINIMISED
+    }
 
+    private enum Direction {
+        LEFT, RIGHT
+    }
 }

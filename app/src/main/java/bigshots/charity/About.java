@@ -29,7 +29,7 @@ startActivity(browserIntent);
                     break;
                 case R.id.website_link:
                     //Todo put website
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/developer?id=The+Big+Shots"));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.thebigshots.net/"));
                     startActivity(intent);
                     break;
             }
