@@ -98,6 +98,7 @@ public class BannerPopup extends ViewGroup {
         addView(openApp);
         addView(adView);
         addView(mainView);
+        windowManager.addView(this, params);
     }
 
     private void resolveAdSize() {
