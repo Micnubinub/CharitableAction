@@ -2,6 +2,7 @@ package bigshots.charity.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import bigshots.charity.R;
 import bigshots.charity.io.AdManager;
+import bigshots.charity.services.BannerPopupService;
 
 /**
  * Created by root on 18/11/14.
@@ -21,6 +23,7 @@ public class BannerPopup extends ViewGroup {
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static int duration = 750;
+    final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnLongClickListener longClickListener = new OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
@@ -56,9 +59,10 @@ public class BannerPopup extends ViewGroup {
     private int spacing;
     private int x, y, w, h, screenHeight, screenWidth;
 
-    public BannerPopup(Context context, WindowManager windowManager) {
+    public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
         this.windowManager = windowManager;
+        this.params = params;
         init();
     }
 
@@ -96,11 +100,11 @@ public class BannerPopup extends ViewGroup {
 //        layoutParams.height = Utils.getInstance(null).getPixelsFromDp(48);
 //        layoutParams.width = Utils.getInstance(null).getPixelsFromDp(48);
         setParameters();
-        addView(closeBanner);
-        addView(minimise);
-        addView(openApp);
-        addView(adView);
-        addView(mainView);
+//        addView(closeBanner);
+//        addView(minimise);
+//        addView(openApp);
+//        addView(adView);
+//        addView(mainView);
         invalidate();
 
         Toast.makeText(getContext(), "Should show up", Toast.LENGTH_LONG).show();
@@ -123,21 +127,30 @@ public class BannerPopup extends ViewGroup {
         screenHeight = metrics.heightPixels;
         // w = (int) (screenWidth * 0.66f);
         // w = Math.min(w,adWidth);
-
-        w = dpToPixels(adWidth);
         h = dpToPixels(mainViewHeight);
+        w = dpToPixels(adWidth + (int) (mainViewHeight * adDistance));
+
         final int adH = dpToPixels(adHeight);
 
         //Todo might have to mess around here   adView = adManager.getBannerAd();
         Toast.makeText(getContext(), String.format("sW,sH,w,h,adH : %d, %d, %d, %d, %d", screenWidth, screenHeight, w, h, adH), Toast.LENGTH_LONG).show();
-        mainView.setLayoutParams(new LayoutParams(h, h));
-        mainView.setBackgroundColor(0x4432dddd);
-        closeBanner.setLayoutParams(new LayoutParams(adH, adH));
-        closeBanner.setBackgroundColor(0x44fff3dd);
-        minimise.setLayoutParams(new LayoutParams(adH, adH));
-        minimise.setBackgroundColor(0x4467e2d);
-        openApp.setLayoutParams(new LayoutParams(adH, adH));
-        openApp.setBackgroundColor(0x44d35d2e);
+//        mainView.setLayoutParams();
+//        mainView.setBackgroundColor(0x4432dddd);
+//        closeBanner.setLayoutParams();
+//        closeBanner.setBackgroundColor(0x44fff3dd);
+//        minimise.setLayoutParams();
+//        minimise.setBackgroundColor(0x4467e2d);
+//        openApp.setLayoutParams();
+//        openApp.setBackgroundColor(0x44d35d2e);
+
+        addView(closeBanner, new LayoutParams(adH, adH));
+        // closeBanner.setBackgroundColor(0xffffff);
+        addView(minimise, new LayoutParams(adH, adH));
+        addView(openApp, new LayoutParams(adH, adH));
+        addView(adView, new LayoutParams(dpToPixels(adWidth), adH));
+        addView(mainView, new LayoutParams(h, h));
+        mainView.setBackgroundColor(0xffffff);
+        // windowManager.updateViewLayout(this, params);
         this.setLayoutParams(new LayoutParams(w, h));
 
     }
@@ -154,7 +167,9 @@ public class BannerPopup extends ViewGroup {
 //            public void onAdLoaded() {
 //                adManager.getVideoAd().show();
 //            }
+
 //        });
+        //Todo getContext().stopService(service);
     }
 
     private void longClick(View view) {
@@ -178,7 +193,16 @@ public class BannerPopup extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            if ((child instanceof MenuItem) && (child.getVisibility() != GONE)) {
+                //Todo fill this in
+                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+            }
+        }
 
+        adView.layout(getMeasuredWidth() - adView.getMeasuredWidth(), 0, getMeasuredWidth(), getMeasuredHeight());
+        mainView.layout(0, 0, getMeasuredHeight(), getMeasuredHeight());
     }
 
     @Override

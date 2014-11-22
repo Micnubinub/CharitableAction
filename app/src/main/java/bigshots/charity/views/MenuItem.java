@@ -31,7 +31,8 @@ public class MenuItem extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap, calcX, calcY, paint);
+        if (bitmap != null)
+            canvas.drawBitmap(bitmap, calcX, calcY, paint);
     }
 
     @Override

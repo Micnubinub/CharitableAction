@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
-import android.widget.Toast;
 
 import bigshots.charity.R;
 
@@ -49,9 +48,7 @@ public class MainBannerView extends View {
     private void giving() {
 //Todo fill in
         bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hands);
-        Toast.makeText(getContext(), "Giving", Toast.LENGTH_LONG).show();
         invalidate();
-
     }
 
     private void menu() {

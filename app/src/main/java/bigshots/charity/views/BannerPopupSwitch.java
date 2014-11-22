@@ -237,6 +237,7 @@ public class BannerPopupSwitch extends ViewGroup {
 
         materialSwitch.setLayoutParams(new LayoutParams(dpToPixels(35), dpToPixels(20)));
         setPadding(PADDING, PADDING, PADDING, PADDING);
+        setChecked(BannerPopupService.isServiceRunning);
 
         textView = new TextView(getContext());
         PADDING = dpToPixels(5);

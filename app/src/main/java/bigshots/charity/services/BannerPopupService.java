@@ -6,7 +6,6 @@ import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import bigshots.charity.views.BannerPopup;
 
@@ -29,17 +28,15 @@ public class BannerPopupService extends Service {
 
         isServiceRunning = true;
         if (bannerPopup == null)
-            bannerPopup = new BannerPopup(this, windowManager);
+            bannerPopup = new BannerPopup(this, windowManager, params);
 
         bannerPopup.setBackgroundColor(0xffffbb00);
-        Toast.makeText(this, String.format("bp.x,.y :%d, %d", bannerPopup.getW(), bannerPopup.getH()), Toast.LENGTH_LONG).show();
-        params = new WindowManager.LayoutParams(bannerPopup.getW(), bannerPopup.getH(), WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
+        params = new WindowManager.LayoutParams(bannerPopup.getW(), bannerPopup.getH(), WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP | Gravity.LEFT;
         params.x = 100;
         params.y = 100;
         windowManager.addView(bannerPopup, params);
-        // windowManager.updateViewLayout(bannerPopup, paramss);
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
+        windowManager.updateViewLayout(bannerPopup, params);
     }
 
     @Override

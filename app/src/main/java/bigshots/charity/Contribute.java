@@ -46,9 +46,13 @@ public class Contribute extends Activity {
                     });
                     break;
                 case R.id.current_charity:
-                    if (currentCharity != null && currentCharity.length() > 3) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentCharity));
-                        startActivity(browserIntent);
+                    try {
+                        if (currentCharity != null && currentCharity.length() > 3) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentCharity));
+                            startActivity(browserIntent);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                     break;
