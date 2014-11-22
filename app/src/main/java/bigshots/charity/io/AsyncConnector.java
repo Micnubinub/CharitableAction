@@ -98,9 +98,9 @@ public class AsyncConnector {
 
 class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
 
-    private String action;
-    private ArrayList<NameValuePair> nvp;
-    private String fileName;
+    private final String action;
+    private final ArrayList<NameValuePair> nvp;
+    private final String fileName;
 
     public ConnectorTask(String action, ArrayList<NameValuePair> nvp, String fn) {
         this.action = action;

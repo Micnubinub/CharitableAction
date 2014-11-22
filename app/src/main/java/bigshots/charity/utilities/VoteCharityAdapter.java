@@ -20,6 +20,9 @@ import bigshots.charity.views.PlusButton;
  */
 public class VoteCharityAdapter extends BaseAdapter {
     private static int max;
+    private final Context context;
+    private final ArrayList<Charity> charities;
+    private final VoteManager voteManager = new VoteManager();
     //Todo implement this
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
@@ -39,8 +42,6 @@ public class VoteCharityAdapter extends BaseAdapter {
             }
         }
     };
-    private Context context;
-    private ArrayList<Charity> charities;
     private int height = 100;
     private String votedFor;
     //Todo implement this con.getCharityManager().currentCharity("Steve@gmail.com");
@@ -56,7 +57,6 @@ public class VoteCharityAdapter extends BaseAdapter {
 
         }
     };
-    private VoteManager voteManager = new VoteManager();
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;

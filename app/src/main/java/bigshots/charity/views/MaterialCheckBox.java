@@ -27,6 +27,7 @@ public class MaterialCheckBox extends ViewGroup {
     private static int PADDING = 2;
     private static int duration = 650;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    private final String text = "";
     private int height;
     private int rippleR;
     private float ripple_animated_value = 0;
@@ -59,7 +60,6 @@ public class MaterialCheckBox extends ViewGroup {
         }
     };
     private int textSize;
-    private String text = "";
     private CheckBox materialCheckBox;
     private int width;
     private boolean checked = false;

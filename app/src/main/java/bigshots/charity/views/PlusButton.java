@@ -14,13 +14,16 @@ import android.view.animation.AccelerateInterpolator;
  */
 public class PlusButton extends View {
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 800;
+    private static final int duration = 800;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private Paint paint = new Paint();
-    private int circleColor = 0xffdcdcdc, plusMinusColor = 0xff454545;
-    private int[] verticalLinePos = new int[4], horizontalLinePos = new int[4];
+    private final Paint paint = new Paint();
+    private final int circleColor = 0xffdcdcdc;
+    private final int plusMinusColor = 0xff454545;
+    private final int[] verticalLinePos = new int[4];
+    private final int[] horizontalLinePos = new int[4];
+    private final boolean touchDown = false;
     private State state = State.PLUS;
-    private boolean touchDown = false, animateRipple;
+    private boolean animateRipple;
     private float ripple_animated_value, animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override

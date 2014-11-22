@@ -2,9 +2,13 @@ package bigshots.charity.views;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
+import android.widget.Toast;
+
+import bigshots.charity.R;
 
 /**
  * Created by root on 22/11/14.
@@ -38,10 +42,16 @@ public class MainBannerView extends View {
 
     private void give() {
 //Todo fill in
+
+
     }
 
     private void giving() {
 //Todo fill in
+        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hands);
+        Toast.makeText(getContext(), "Giving", Toast.LENGTH_LONG).show();
+        invalidate();
+
     }
 
     private void menu() {
@@ -51,7 +61,8 @@ public class MainBannerView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap, 0, 0, paint);
+        if (bitmap != null)
+            canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
     @Override

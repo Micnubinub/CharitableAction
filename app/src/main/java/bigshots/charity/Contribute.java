@@ -27,7 +27,7 @@ public class Contribute extends Activity {
 
     private AdManager adManager;
     private String currentCharity;
-    private View.OnClickListener listener = new View.OnClickListener() {
+    private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -78,6 +78,7 @@ public class Contribute extends Activity {
         findViewById(R.id.full_screen).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
         findViewById(R.id.video_ad).setOnClickListener(listener);
+
         AsyncConnector.setListener(aSyncListener);
         new Connector().getCharityManager().monthlyCharity();
     }

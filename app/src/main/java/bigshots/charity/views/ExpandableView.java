@@ -20,7 +20,7 @@ public class ExpandableView extends ViewGroup {
 
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 600;
+    private static final int duration = 600;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     int videoHeight;
     private State state = State.CONTRACTED;
@@ -49,7 +49,7 @@ public class ExpandableView extends ViewGroup {
 
         }
     };
-    private OnClickListener listener = new OnClickListener() {
+    private final OnClickListener listener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             toggleState();

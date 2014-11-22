@@ -2,7 +2,6 @@ package bigshots.charity.views;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Toast;
 
 import bigshots.charity.R;
 import bigshots.charity.io.AdManager;
@@ -35,6 +35,7 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    private final WindowManager windowManager;
     private MenuItem closeBanner, openApp, minimise;
     private MainBannerView mainView;
     // private BannerPopup popup;
@@ -43,7 +44,6 @@ public class BannerPopup extends ViewGroup {
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
     private float adDistance = 0.894f;
-    private WindowManager windowManager;
     private WindowManager.LayoutParams params;
     private float animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
@@ -56,17 +56,20 @@ public class BannerPopup extends ViewGroup {
     private int spacing;
     private int x, y, w, h, screenHeight, screenWidth;
 
-    public BannerPopup(Context context) {
+    public BannerPopup(Context context, WindowManager windowManager) {
         super(context);
+        this.windowManager = windowManager;
         init();
     }
 
     //Todo check the screensize, and scale the ad acordingly
 
     private void init() {
-        windowManager = (WindowManager) getContext().getSystemService(getContext().WINDOW_SERVICE);
+
         adManager = new AdManager(getContext());
-        adView = adManager.getBannerAd();
+        adManager.loadBannerAd();
+
+
         mainView = new MainBannerView(getContext());
         mainView.setState(State.SHOWING_AD);
         mainView.setId(R.id.main_view);
@@ -80,6 +83,7 @@ public class BannerPopup extends ViewGroup {
         openApp = new MenuItem(getContext(), R.drawable.hands);
         openApp.setId(R.id.open_app);
 
+        adView = adManager.getBannerAd();
 
         // Todo int closeBannerID = 1, openAppID = 2, minimiseID = 3, mainViewID = 4;
         //todo windowManager.updateViewLayout(bubbleView, params);
@@ -91,14 +95,25 @@ public class BannerPopup extends ViewGroup {
 //        ViewGroup.LayoutParams layoutParams = bubbleView.findViewById(R.id.bubble_id).getLayoutParams();
 //        layoutParams.height = Utils.getInstance(null).getPixelsFromDp(48);
 //        layoutParams.width = Utils.getInstance(null).getPixelsFromDp(48);
-        params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         setParameters();
         addView(closeBanner);
         addView(minimise);
         addView(openApp);
         addView(adView);
         addView(mainView);
-        windowManager.addView(this, params);
+        invalidate();
+
+        Toast.makeText(getContext(), "Should show up", Toast.LENGTH_LONG).show();
+
+        //windowManager.updateViewLayout(this, params);
+    }
+
+    public int getW() {
+        return w;
+    }
+
+    public int getH() {
+        return h;
     }
 
     private void resolveAdSize() {
@@ -106,6 +121,24 @@ public class BannerPopup extends ViewGroup {
         windowManager.getDefaultDisplay().getMetrics(metrics);
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
+        // w = (int) (screenWidth * 0.66f);
+        // w = Math.min(w,adWidth);
+
+        w = dpToPixels(adWidth);
+        h = dpToPixels(mainViewHeight);
+        final int adH = dpToPixels(adHeight);
+
+        //Todo might have to mess around here   adView = adManager.getBannerAd();
+        Toast.makeText(getContext(), String.format("sW,sH,w,h,adH : %d, %d, %d, %d, %d", screenWidth, screenHeight, w, h, adH), Toast.LENGTH_LONG).show();
+        mainView.setLayoutParams(new LayoutParams(h, h));
+        mainView.setBackgroundColor(0x4432dddd);
+        closeBanner.setLayoutParams(new LayoutParams(adH, adH));
+        closeBanner.setBackgroundColor(0x44fff3dd);
+        minimise.setLayoutParams(new LayoutParams(adH, adH));
+        minimise.setBackgroundColor(0x4467e2d);
+        openApp.setLayoutParams(new LayoutParams(adH, adH));
+        openApp.setBackgroundColor(0x44d35d2e);
+        this.setLayoutParams(new LayoutParams(w, h));
 
     }
 

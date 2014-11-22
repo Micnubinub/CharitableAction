@@ -35,7 +35,7 @@ startActivity(browserIntent);
     //private CharityListClickListener charityListClickListener;
     private VoteCharityAdapter adapter;
     private ArrayList<Charity> charities;
-    private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
 

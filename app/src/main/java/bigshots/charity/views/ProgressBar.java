@@ -16,14 +16,14 @@ import bigshots.charity.R;
  */
 public class ProgressBar extends View {
     private static final DecelerateInterpolator interpolator = new DecelerateInterpolator();
-    private static int duration = 750;
+    private static final int duration = 750;
     private final Paint paint = new Paint();
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private int progress, w, h;
     private float max;
     private int backgroundColor, progressColor;
     private boolean animateIn = true;
-    private ValueAnimator.AnimatorListener listener = new Animator.AnimatorListener() {
+    private final ValueAnimator.AnimatorListener listener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
 
@@ -45,7 +45,7 @@ public class ProgressBar extends View {
         }
     };
     private float animated_value;
-    private ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
+    private final ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());

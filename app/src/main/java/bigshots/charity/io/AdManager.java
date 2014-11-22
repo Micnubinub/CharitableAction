@@ -11,9 +11,9 @@ public class AdManager {
     private static final String BANNER_ID = "ca-app-pub-7957464690974751/7567893025";
     private static final String FULLSCREEN_ID = "ca-app-pub-7957464690974751/1521359425";
     private static final String VIDEO_ID = "ca-app-pub-7957464690974751/9044626224";
-    private AdView bannerAd;
-    private InterstitialAd fullscreenAd;
-    private InterstitialAd videoAd;
+    private final AdView bannerAd;
+    private final InterstitialAd fullscreenAd;
+    private final InterstitialAd videoAd;
 
     public AdManager(Context context) {
         bannerAd = new AdView(context);

@@ -1,10 +1,10 @@
 package bigshots.charity.io;
 
 public class Connector {
-    private CharityManager charityManager;
-    private MessageManager messageManager;
-    private VoteManager voteManager;
-    private UserManager userManager;
+    private final CharityManager charityManager;
+    private final MessageManager messageManager;
+    private final VoteManager voteManager;
+    private final UserManager userManager;
 
     public Connector() {
         charityManager = new CharityManager();

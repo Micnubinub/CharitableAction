@@ -15,7 +15,7 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.PopupSwitch
+    <bigshots.charity.views.BannerPopupSwitch
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:background="@color/white" />

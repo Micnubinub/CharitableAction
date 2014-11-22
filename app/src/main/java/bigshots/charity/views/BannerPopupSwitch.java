@@ -22,7 +22,7 @@ import bigshots.charity.services.BannerPopupService;
  * Created by root on 30/09/14.
  */
 @SuppressWarnings("ALL")
-public class PopupSwitch extends ViewGroup {
+public class BannerPopupSwitch extends ViewGroup {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static int PADDING = 2;
     private static int duration = 700;
@@ -82,17 +82,17 @@ public class PopupSwitch extends ViewGroup {
     private int width;
     private int rippleColor = 0x25000000;
 
-    public PopupSwitch(Context context) {
+    public BannerPopupSwitch(Context context) {
         super(context);
         init();
     }
 
-    public PopupSwitch(Context context, AttributeSet attrs) {
+    public BannerPopupSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public PopupSwitch(Context context, AttributeSet attrs, int defStyle) {
+    public BannerPopupSwitch(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
@@ -217,7 +217,7 @@ public class PopupSwitch extends ViewGroup {
     }
 
     public void setAnimationDuration(int duration) {
-        PopupSwitch.duration = duration;
+        BannerPopupSwitch.duration = duration;
         animator.setDuration(duration);
     }
 
@@ -305,7 +305,7 @@ public class PopupSwitch extends ViewGroup {
     }
 
     public void setDuration(int duration) {
-        PopupSwitch.duration = duration;
+        BannerPopupSwitch.duration = duration;
         animator.setDuration(duration);
     }
 
@@ -339,7 +339,7 @@ public class PopupSwitch extends ViewGroup {
     }
 
     public interface OnCheckedChangedListener {
-        public void onCheckedChange(PopupSwitch materialSwitch, boolean isChecked);
+        public void onCheckedChange(BannerPopupSwitch materialSwitch, boolean isChecked);
     }
 
     private class Switch extends View {

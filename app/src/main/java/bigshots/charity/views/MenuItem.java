@@ -15,8 +15,12 @@ import bigshots.charity.R;
 public class MenuItem extends View {
     private static int w, h;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final int resId;
     private Bitmap bitmap;
-    private int calcX, calcY, calcW, calcH, resId;
+    private int calcX;
+    private int calcY;
+    private int calcW;
+    private int calcH;
 
     public MenuItem(Context context, int resId) {
         super(context);

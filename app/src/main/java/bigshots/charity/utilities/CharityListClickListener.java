@@ -12,7 +12,7 @@ import bigshots.charity.io.Charity;
  */
 public class CharityListClickListener implements AdapterView.OnItemClickListener {
 
-    private ArrayList<Charity> charities;
+    private final ArrayList<Charity> charities;
 
     public CharityListClickListener(ArrayList<Charity> charities) {
         this.charities = charities;
