@@ -1,11 +1,16 @@
 package bigshots.charity.services;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import bigshots.charity.views.BannerPopup;
 
@@ -22,15 +27,10 @@ public class BannerPopupService extends Service {
     public void onCreate() {
         super.onCreate();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-//        params.width = w;
-//        params.height = h;
-
         isServiceRunning = true;
         if (bannerPopup == null)
             bannerPopup = new BannerPopup(this, windowManager, params);
 
-        bannerPopup.setBackgroundColor(0xffffbb00);
         params = new WindowManager.LayoutParams(bannerPopup.getW(), bannerPopup.getH(), WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP | Gravity.LEFT;
         params.x = 100;
@@ -71,5 +71,20 @@ public class BannerPopupService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    public class ConnectionChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+            NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            if (activeNetInfo != null) {
+                Toast.makeText(context, "Active Network Type : " + activeNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
+            }
+            if (mobNetInfo != null) {
+                Toast.makeText(context, "Mobile Network Type : " + mobNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

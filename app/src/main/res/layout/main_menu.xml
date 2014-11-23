@@ -15,9 +15,10 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.CharityListItem
-        android:layout_width="fill_parent"
-        android:layout_height="72dp" />
+
+    <bigshots.charity.views.BannerPopup
+        android:layout_width="400dp"
+        android:layout_height="64dp" />
 
     <bigshots.charity.views.PlusButton
         android:layout_width="50dp"

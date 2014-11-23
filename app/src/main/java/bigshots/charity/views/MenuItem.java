@@ -7,8 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 
-import bigshots.charity.R;
-
 /**
  * Created by root on 22/11/14.
  */
@@ -16,7 +14,7 @@ public class MenuItem extends View {
     private static int w, h;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final int resId;
-    private Bitmap bitmap;
+    private Bitmap bitmap, scaledBitmap;
     private int calcX;
     private int calcY;
     private int calcW;
@@ -25,14 +23,15 @@ public class MenuItem extends View {
     public MenuItem(Context context, int resId) {
         super(context);
         this.resId = resId;
+        bitmap = BitmapFactory.decodeResource(getResources(), resId);
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (bitmap != null)
-            canvas.drawBitmap(bitmap, calcX, calcY, paint);
+        if (scaledBitmap != null)
+            canvas.drawBitmap(scaledBitmap, calcX, calcY, paint);
     }
 
     @Override
@@ -40,6 +39,7 @@ public class MenuItem extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         this.w = w;
         this.h = h;
+        generateScaledBitmap(w, h);
     }
 
     public void setDistance(float dist) {
@@ -61,12 +61,7 @@ public class MenuItem extends View {
         generateScaledBitmap(calcW, calcH);
     }
 
-    public void reset() {
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fa_default_background_default);
-        generateScaledBitmap(w, h);
-    }
-
     private void generateScaledBitmap(int width, int height) {
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
     }
 }

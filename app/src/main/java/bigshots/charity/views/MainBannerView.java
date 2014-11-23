@@ -20,6 +20,8 @@ public class MainBannerView extends View {
 
     public MainBannerView(Context context) {
         super(context);
+        setBackgroundColor(0xffffff);
+        getBitmap(R.drawable.fa_default_background_pressed);
     }
 
     public void setState(BannerPopup.State state) {
@@ -47,7 +49,7 @@ public class MainBannerView extends View {
 
     private void giving() {
 //Todo fill in
-        bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.hands);
+        getBitmap(R.drawable.hands);
         invalidate();
     }
 
@@ -62,10 +64,15 @@ public class MainBannerView extends View {
             canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
+    private void getBitmap(int resID) {
+        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), 150, 150, false);
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         this.w = w;
         this.h = h;
+        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.hands), w, h, false);
     }
 }

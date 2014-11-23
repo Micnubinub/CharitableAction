@@ -3,7 +3,9 @@ package bigshots.charity.views;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,7 +40,8 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private final WindowManager windowManager;
+    private State state = State.SHOWING_AD;
+    //private final WindowManager windowManager;
     private MenuItem closeBanner, openApp, minimise;
     private MainBannerView mainView;
     // private BannerPopup popup;
@@ -46,8 +49,8 @@ public class BannerPopup extends ViewGroup {
     private AdManager adManager;
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
-    private float adDistance = 0.894f;
-    private WindowManager.LayoutParams params;
+    private float adDistance = 0.425f;
+    //private WindowManager.LayoutParams params;
     private float animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -56,23 +59,52 @@ public class BannerPopup extends ViewGroup {
             invalidatePoster();
         }
     };
-    private int spacing;
+    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
     private int x, y, w, h, screenHeight, screenWidth;
+    private OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            Log.e("Touch", "view");
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    initialX = (int) getX();
+                    initialY = (int) getY();
+                    initialTouchX = (int) event.getRawX();
+                    initialTouchY = (int) event.getRawY();
+
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    setX(initialX + (int) (event.getRawX() - initialTouchX));
+                    setY(initialY + (int) (event.getRawY() - initialTouchY));
+                    invalidate();
+                    break;
+
+            }
+            return true;
+        }
+    };
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
-        this.windowManager = windowManager;
-        this.params = params;
+        //  this.windowManager = windowManager;
+        //  this.params = params;
         init();
     }
 
-    //Todo check the screensize, and scale the ad acordingly
+
+    public BannerPopup(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    //Todo check the screenSize, and scale the ad accordingly
 
     private void init() {
-
         adManager = new AdManager(getContext());
         adManager.loadBannerAd();
-
 
         mainView = new MainBannerView(getContext());
         mainView.setState(State.SHOWING_AD);
@@ -89,7 +121,6 @@ public class BannerPopup extends ViewGroup {
 
         adView = adManager.getBannerAd();
 
-        // Todo int closeBannerID = 1, openAppID = 2, minimiseID = 3, mainViewID = 4;
         //todo windowManager.updateViewLayout(bubbleView, params);
         //todo windowManager.addView(bubbleView, params);
         //Todo  maxHeight, maxWidth
@@ -122,14 +153,17 @@ public class BannerPopup extends ViewGroup {
 
     private void resolveAdSize() {
         final DisplayMetrics metrics = new DisplayMetrics();
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        screenWidth = metrics.widthPixels;
-        screenHeight = metrics.heightPixels;
+        try {
+            //windowManager.getDefaultDisplay().getMetrics(metrics);
+            screenWidth = metrics.widthPixels;
+            screenHeight = metrics.heightPixels;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // w = (int) (screenWidth * 0.66f);
         // w = Math.min(w,adWidth);
         h = dpToPixels(mainViewHeight);
         w = dpToPixels(adWidth + (int) (mainViewHeight * adDistance));
-
         final int adH = dpToPixels(adHeight);
 
         //Todo might have to mess around here   adView = adManager.getBannerAd();
@@ -144,12 +178,15 @@ public class BannerPopup extends ViewGroup {
 //        openApp.setBackgroundColor(0x44d35d2e);
 
         addView(closeBanner, new LayoutParams(adH, adH));
-        // closeBanner.setBackgroundColor(0xffffff);
+        closeBanner.setOnClickListener(clickListener);
         addView(minimise, new LayoutParams(adH, adH));
+        minimise.setOnClickListener(clickListener);
         addView(openApp, new LayoutParams(adH, adH));
-        addView(adView, new LayoutParams(dpToPixels(adWidth), adH));
+        openApp.setOnClickListener(clickListener);
+        addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         addView(mainView, new LayoutParams(h, h));
-        mainView.setBackgroundColor(0xffffff);
+        mainView.setOnTouchListener(mainViewOnTouchListener);
+        mainView.setOnClickListener(clickListener);
         // windowManager.updateViewLayout(this, params);
         this.setLayoutParams(new LayoutParams(w, h));
 
@@ -162,46 +199,45 @@ public class BannerPopup extends ViewGroup {
     }
 
 
-    private void click(View view) {
-//        adManager.getFullscreenAd().setAdListener(new AdListener() {
-//            public void onAdLoaded() {
-//                adManager.getVideoAd().show();
-//            }
+    private void click(View v) {
+        switch (v.getId()) {
+            case R.id.main_view:
+                Log.e("Click", "main");
+                break;
+            case R.id.close_banner:
 
-//        });
-        //Todo getContext().stopService(service);
+                break;
+            case R.id.minimise:
+
+                break;
+            case R.id.open_app:
+
+                break;
+        }
     }
 
     private void longClick(View view) {
 
     }
 
-    private void touch(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int x = (int) (event.getRawX() - mainView.getWidth() / 2);
-                int y = (int) (event.getRawY() - mainView.getHeight() / 2);
-                setPosition(x, y);
-                break;
-
-        }
-    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-            if ((child instanceof MenuItem) && (child.getVisibility() != GONE)) {
+            if ((child instanceof MenuItem) && (child.getVisibility() != GONE && state == State.SHOWING_MENU)) {
                 //Todo fill this in
+                //Log.e("instance of", String.format("w,h,x,y : %d, %d, %d, %d", child.getMeasuredWidth(), child.getMeasuredHeight(), (int) child.getX(), (int) child.getY()));
                 child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
             }
         }
 
-        adView.layout(getMeasuredWidth() - adView.getMeasuredWidth(), 0, getMeasuredWidth(), getMeasuredHeight());
+        int adViewPadding = (getMeasuredHeight() - adView.getMeasuredHeight()) / 2;
+        adViewPadding = adViewPadding < 0 ? 0 : adViewPadding;
+
+        if (state == State.SHOWING_AD)
+            adView.layout((int) (getMeasuredHeight() * adDistance), adViewPadding, getMeasuredWidth(), getMeasuredHeight() - adViewPadding);
+
         mainView.layout(0, 0, getMeasuredHeight(), getMeasuredHeight());
     }
 
@@ -233,22 +269,22 @@ public class BannerPopup extends ViewGroup {
         getLayoutParams().height = height;
         getLayoutParams().width = width;
 
-        params.height = height;
-        params.width = width;
-        windowManager.updateViewLayout(this, params);
+//        params.height = height;
+//        params.width = width;
+//        windowManager.updateViewLayout(this, params);
     }
 
     public int dpToPixels(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
-    private void setWidth(int width) {
-        resize(width, params.height);
-    }
-
-    private void setHeight(int height) {
-        resize(params.width, height);
-    }
+//    private void setWidth(int width) {
+//        resize(width, params.height);
+//    }
+//
+//    private void setHeight(int height) {
+//        resize(params.width, height);
+//    }
 
     private void invalidatePoster() {
         this.post(new Runnable() {
@@ -292,14 +328,38 @@ public class BannerPopup extends ViewGroup {
         animator.start();
     }
 
-    private void setPosition(int x, int y) {
-        params.x = x;
-        params.y = y;
-        windowManager.updateViewLayout(this, params);
-    }
+//    private void setPosition(int x, int y) {
+//        params.x = x;
+//        params.y = y;
+//        windowManager.updateViewLayout(this, params);
+//    }
 
     private void setSize(int width, int height) {
         resize(width, height);
+    }
+
+    private void showAd(float start, float stop) {
+
+    }
+
+    private void hideAd(float start, float stop) {
+
+    }
+
+    private void showMenu(float start, float stop) {
+
+    }
+
+    private void hideMenu(float start, float stop) {
+
+    }
+
+    private void minimise(float start, float stop) {
+
+    }
+
+    private void maximise(float start, float stop) {
+
     }
 
     public enum State {
