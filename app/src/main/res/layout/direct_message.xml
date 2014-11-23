@@ -48,5 +48,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/message"
-        android:layout_gravity="right" />
+        android:layout_gravity="right"
+        android:layout_marginTop="8dp" />
 </RelativeLayout>
