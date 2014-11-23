@@ -73,6 +73,10 @@ public class MainBannerView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         this.w = w;
         this.h = h;
-        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.hands), w, h, false);
+        try {
+            bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.hands), w, h, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -5,13 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Toast;
 
 import bigshots.charity.R;
 import bigshots.charity.Vote;
@@ -37,6 +37,7 @@ public class BannerPopup extends ViewGroup {
     //private final WindowManager windowManager;
     private MenuItem closeBanner, openApp, minimise;
     private MainBannerView mainView;
+    private long downTime;
     // private BannerPopup popup;
     private Direction direction;
     private AdManager adManager;
@@ -53,25 +54,27 @@ public class BannerPopup extends ViewGroup {
             invalidatePoster();
         }
     };
-    private int[] mainViewLocation;
+    private int[] mainViewLocation = new int[2];
     private OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            Log.e("Touch", "view");
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     initialX = (int) getX();
                     initialY = (int) getY();
                     initialTouchX = (int) event.getRawX();
                     initialTouchY = (int) event.getRawY();
-
+                    downTime = System.currentTimeMillis();
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-
+                    if ((System.currentTimeMillis() - downTime) < 85)
+                        click(mainView);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     setX(initialX + (int) (event.getRawX() - initialTouchX));
                     setY(initialY + (int) (event.getRawY() - initialTouchY));
+
+                    invalidate();
 
                     mainView.getLocationInWindow(mainViewLocation);
 
@@ -80,7 +83,7 @@ public class BannerPopup extends ViewGroup {
                     else
                         direction = Direction.LEFT;
 
-                    invalidate();
+
                     break;
 
             }
@@ -88,7 +91,7 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private int spacing, initialX, initialY, initialTouchX, initialTouchY;
-    private int snapToX, snapTpY, x, y, w, h, screenHeight, screenWidth;
+    private int snapToX, x, y, w, h, screenHeight, screenWidth;
     private CurrentAnimation[] currentAnimations;
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
@@ -192,7 +195,6 @@ public class BannerPopup extends ViewGroup {
         addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         addView(mainView, new LayoutParams(h, h));
         mainView.setOnTouchListener(mainViewOnTouchListener);
-        mainView.setOnClickListener(clickListener);
         // windowManager.updateViewLayout(this, params);
         this.setLayoutParams(new LayoutParams(w, h));
 
@@ -208,7 +210,8 @@ public class BannerPopup extends ViewGroup {
     private void click(View v) {
         switch (v.getId()) {
             case R.id.main_view:
-                Log.e("Click", "main");
+                Toast.makeText(getContext(), "Click", Toast.LENGTH_LONG).show();
+                // startAnimator();
                 break;
             case R.id.close_banner:
                 try {
@@ -223,8 +226,7 @@ public class BannerPopup extends ViewGroup {
                     snapToX = -((int) (0.2f * getMeasuredHeight()));
                 else
                     snapToX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
-
-
+                startAnimator();
                 break;
             case R.id.open_app:
                 final Intent intent = new Intent(getContext(), Vote.class);
@@ -379,4 +381,5 @@ public class BannerPopup extends ViewGroup {
     private enum CurrentAnimation {
         SHOW_AD, HIDE_AD, SHOW_MENU, HIDE_MENU, MINIMISE, MAXIMISE, NONE, SNAP_TO
     }
+
 }
