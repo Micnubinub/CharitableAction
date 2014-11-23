@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/round_rect"
@@ -6,11 +6,11 @@
     android:padding="8dp">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-
         android:padding="8dp"
         android:text="Email"
         android:textColor="@color/dark_grey_text"
@@ -21,6 +21,7 @@
         android:id="@+id/subject"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
         android:background="#09000000"
         android:hint="Subject"
         android:inputType="textAutoCorrect"
@@ -33,6 +34,7 @@
         android:id="@+id/body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/subject"
         android:layout_marginTop="8dp"
         android:background="#09000000"
         android:hint="Body"
@@ -46,5 +48,7 @@
         layout="@layout/send_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/body"
         android:layout_gravity="right" />
-</LinearLayout>
+</RelativeLayout>

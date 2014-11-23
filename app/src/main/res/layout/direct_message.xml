@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/round_rect"
@@ -6,20 +6,23 @@
     android:padding="8dp">
 
     <TextView
+        android:id="@+id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-
         android:padding="8dp"
         android:text="Direct message"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
 
+
     <TextView
+        android:id="@+id/body"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
         android:ellipsize="end"
         android:padding="8dp"
         android:text="Note that a message sent this way will not get a follow up, if you'd like a reply use the email or social media options"
@@ -30,16 +33,20 @@
         android:id="@+id/message"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/body"
         android:background="#09000000"
         android:hint="Enter message here"
         android:padding="8dp"
         android:textColor="@color/dark_grey"
         android:textSize="19sp" />
 
+
     <include
         android:id="@+id/send_cancel"
         layout="@layout/send_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/message"
         android:layout_gravity="right" />
-</LinearLayout>
+</RelativeLayout>

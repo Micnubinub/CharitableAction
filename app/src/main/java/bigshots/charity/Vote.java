@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import bigshots.charity.io.AsyncConnector;
 import bigshots.charity.io.Charity;
 import bigshots.charity.io.CharityManager;
-import bigshots.charity.io.Connector;
 import bigshots.charity.utilities.Interfaces;
 import bigshots.charity.utilities.VoteCharityAdapter;
 
@@ -27,9 +26,9 @@ public class Vote extends Activity {
     //Suggest Charity
 
     /*
-Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-startActivity(browserIntent);
- */
+    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+    startActivity(browserIntent);
+    */
 
     private ListView listView;
     //private CharityListClickListener charityListClickListener;
@@ -79,19 +78,20 @@ startActivity(browserIntent);
 
     private void showSuggestionDialog() {
         final Dialog dialog = new Dialog(this, R.style.CustomDialog);
-        dialog.setContentView(R.layout.email);
+        dialog.setContentView(R.layout.suggest_charity);
         final EditText charity = (EditText) dialog.findViewById(R.id.suggested_charity);
 
         final View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.send:
+                    case R.id.submit:
                         String charityName = charity.getText().toString();
                         if (charityName != null && charityName.length() > 3) {
-                            new Connector().getCharityManager().suggestCharity(charityName);
+                            new CharityManager().suggestCharity(charityName);
                             dialog.dismiss();
                         }
+
                         break;
                     case R.id.cancel:
                         dialog.dismiss();
@@ -100,8 +100,8 @@ startActivity(browserIntent);
             }
         };
 
-        dialog.findViewById(R.id.send_cancel).findViewById(R.id.send).setOnClickListener(onClickListener);
-        dialog.findViewById(R.id.send_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
+        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setOnClickListener(onClickListener);
+        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
 
         dialog.show();
     }
