@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Toast;
 
 import bigshots.charity.R;
+import bigshots.charity.Vote;
 import bigshots.charity.io.AdManager;
 import bigshots.charity.services.BannerPopupService;
 
@@ -26,13 +26,6 @@ public class BannerPopup extends ViewGroup {
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static int duration = 750;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
-    private final OnLongClickListener longClickListener = new OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            longClick(v);
-            return false;
-        }
-    };
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -56,11 +49,11 @@ public class BannerPopup extends ViewGroup {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());
+            runAnimations();
             invalidatePoster();
         }
     };
-    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
-    private int x, y, w, h, screenHeight, screenWidth;
+    private int[] mainViewLocation;
     private OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -79,6 +72,14 @@ public class BannerPopup extends ViewGroup {
                 case MotionEvent.ACTION_MOVE:
                     setX(initialX + (int) (event.getRawX() - initialTouchX));
                     setY(initialY + (int) (event.getRawY() - initialTouchY));
+
+                    mainView.getLocationInWindow(mainViewLocation);
+
+                    if (mainViewLocation[0] > (screenWidth / 2))
+                        direction = Direction.RIGHT;
+                    else
+                        direction = Direction.LEFT;
+
                     invalidate();
                     break;
 
@@ -86,6 +87,9 @@ public class BannerPopup extends ViewGroup {
             return true;
         }
     };
+    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
+    private int snapToX, snapTpY, x, y, w, h, screenHeight, screenWidth;
+    private CurrentAnimation[] currentAnimations;
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
@@ -103,6 +107,10 @@ public class BannerPopup extends ViewGroup {
     //Todo check the screenSize, and scale the ad accordingly
 
     private void init() {
+        animator.setDuration(duration);
+        animator.setInterpolator(interpolator);
+        animator.addUpdateListener(animatorUpdateListener);
+
         adManager = new AdManager(getContext());
         adManager.loadBannerAd();
 
@@ -138,7 +146,6 @@ public class BannerPopup extends ViewGroup {
 //        addView(mainView);
         invalidate();
 
-        Toast.makeText(getContext(), "Should show up", Toast.LENGTH_LONG).show();
 
         //windowManager.updateViewLayout(this, params);
     }
@@ -167,7 +174,6 @@ public class BannerPopup extends ViewGroup {
         final int adH = dpToPixels(adHeight);
 
         //Todo might have to mess around here   adView = adManager.getBannerAd();
-        Toast.makeText(getContext(), String.format("sW,sH,w,h,adH : %d, %d, %d, %d, %d", screenWidth, screenHeight, w, h, adH), Toast.LENGTH_LONG).show();
 //        mainView.setLayoutParams();
 //        mainView.setBackgroundColor(0x4432dddd);
 //        closeBanner.setLayoutParams();
@@ -205,13 +211,24 @@ public class BannerPopup extends ViewGroup {
                 Log.e("Click", "main");
                 break;
             case R.id.close_banner:
-
+                try {
+                    getContext().stopService(service);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.minimise:
+                currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SNAP_TO};
+                if (direction == direction.LEFT)
+                    snapToX = -((int) (0.2f * getMeasuredHeight()));
+                else
+                    snapToX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
+
 
                 break;
             case R.id.open_app:
-
+                final Intent intent = new Intent(getContext(), Vote.class);
+                getContext().startActivity(intent);
                 break;
         }
     }
@@ -257,7 +274,6 @@ public class BannerPopup extends ViewGroup {
             }
         }
         setMeasuredDimension(resolveSizeAndState(measuredWidth, widthMeasureSpec, 0), resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
-
     }
 
     @Override
@@ -272,6 +288,7 @@ public class BannerPopup extends ViewGroup {
 //        params.height = height;
 //        params.width = width;
 //        windowManager.updateViewLayout(this, params);
+
     }
 
     public int dpToPixels(int dp) {
@@ -338,27 +355,16 @@ public class BannerPopup extends ViewGroup {
         resize(width, height);
     }
 
-    private void showAd(float start, float stop) {
+    private void runAnimations() {
+        if (animated_value > 0.999f) {
+            currentAnimation = CurrentAnimation.NONE;
+            return;
+        }
 
-    }
-
-    private void hideAd(float start, float stop) {
-
-    }
-
-    private void showMenu(float start, float stop) {
-
-    }
-
-    private void hideMenu(float start, float stop) {
-
-    }
-
-    private void minimise(float start, float stop) {
-
-    }
-
-    private void maximise(float start, float stop) {
+        if (animated_value > 0.5f)
+            currentAnimation = currentAnimations[1];
+        else
+            currentAnimation = currentAnimations[0];
 
     }
 
@@ -371,6 +377,6 @@ public class BannerPopup extends ViewGroup {
     }
 
     private enum CurrentAnimation {
-        SHOW_AD, HIDE_AD, SHOW_MENU, HIDE_MENU, MINIMISE, MAXIMISE, NONE
+        SHOW_AD, HIDE_AD, SHOW_MENU, HIDE_MENU, MINIMISE, MAXIMISE, NONE, SNAP_TO
     }
 }
