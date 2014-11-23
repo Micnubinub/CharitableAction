@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Toast;
 
 import bigshots.charity.R;
 import bigshots.charity.Vote;
@@ -24,7 +23,7 @@ import bigshots.charity.services.BannerPopupService;
 public class BannerPopup extends ViewGroup {
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
-    private static int duration = 750;
+    private static int duration = 750, touchSlop;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
@@ -33,7 +32,7 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private State state = State.SHOWING_AD;
+    private State state;
     //private final WindowManager windowManager;
     private MenuItem closeBanner, openApp, minimise;
     private MainBannerView mainView;
@@ -65,16 +64,15 @@ public class BannerPopup extends ViewGroup {
                     initialTouchX = (int) event.getRawX();
                     initialTouchY = (int) event.getRawY();
                     downTime = System.currentTimeMillis();
+                    break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-                    if ((System.currentTimeMillis() - downTime) < 85)
+                    if (((System.currentTimeMillis() - downTime) < 92) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop))
                         click(mainView);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     setX(initialX + (int) (event.getRawX() - initialTouchX));
                     setY(initialY + (int) (event.getRawY() - initialTouchY));
-
-                    invalidate();
 
                     mainView.getLocationInWindow(mainViewLocation);
 
@@ -83,7 +81,7 @@ public class BannerPopup extends ViewGroup {
                     else
                         direction = Direction.LEFT;
 
-
+                    invalidate();
                     break;
 
             }
@@ -114,6 +112,8 @@ public class BannerPopup extends ViewGroup {
         animator.setInterpolator(interpolator);
         animator.addUpdateListener(animatorUpdateListener);
 
+        touchSlop = dpToPixels(4);
+
         adManager = new AdManager(getContext());
         adManager.loadBannerAd();
 
@@ -131,6 +131,10 @@ public class BannerPopup extends ViewGroup {
         openApp.setId(R.id.open_app);
 
         adView = adManager.getBannerAd();
+        adView.setPivotX(0);
+
+        setState(State.SHOWING_AD);
+
 
         //todo windowManager.updateViewLayout(bubbleView, params);
         //todo windowManager.addView(bubbleView, params);
@@ -206,12 +210,32 @@ public class BannerPopup extends ViewGroup {
 
     }
 
+    public void setState(State state) {
+        this.state = state;
+    }
 
     private void click(View v) {
         switch (v.getId()) {
             case R.id.main_view:
-                Toast.makeText(getContext(), "Click", Toast.LENGTH_LONG).show();
-                // startAnimator();
+                switch (state) {
+                    case SHOWING_MENU:
+                        currentAnimation = CurrentAnimation.HIDE_MENU;
+                        currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SHOW_AD};
+                        setState(State.SHOWING_AD);
+                        break;
+                    case SHOWING_AD:
+                        currentAnimation = CurrentAnimation.HIDE_AD;
+                        currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_AD, CurrentAnimation.SHOW_MENU};
+                        setState(State.SHOWING_MENU);
+                        break;
+                    case MINIMISED:
+                        currentAnimation = CurrentAnimation.SNAP_TO;
+                        currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO, CurrentAnimation.SHOW_AD};
+                        snapToX = x;
+                        setState(State.SHOWING_AD);
+                        break;
+                }
+                startAnimator();
                 break;
             case R.id.close_banner:
                 try {
@@ -227,6 +251,7 @@ public class BannerPopup extends ViewGroup {
                 else
                     snapToX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
                 startAnimator();
+                setState(State.MINIMISED);
                 break;
             case R.id.open_app:
                 final Intent intent = new Intent(getContext(), Vote.class);
@@ -367,6 +392,32 @@ public class BannerPopup extends ViewGroup {
             currentAnimation = currentAnimations[1];
         else
             currentAnimation = currentAnimations[0];
+
+        final float val = animated_value % 0.5f;
+        switch (currentAnimation) {
+            case SHOW_AD:
+                //Todo check
+                adView.setScaleX((0.5f - val) / 0.5f);
+                break;
+            case HIDE_AD:
+                adView.setScaleX(val / 0.5f);
+                break;
+            case SHOW_MENU:
+
+                break;
+            case HIDE_MENU:
+
+                break;
+            case MINIMISE:
+
+                break;
+            case MAXIMISE:
+
+                break;
+            case SNAP_TO:
+
+                break;
+        }
 
     }
 
