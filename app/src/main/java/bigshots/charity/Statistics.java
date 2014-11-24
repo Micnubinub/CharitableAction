@@ -9,7 +9,7 @@ import android.os.Bundle;
 public class Statistics extends Activity {
     //How much they donated over time >>> graph
     //Leader board
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

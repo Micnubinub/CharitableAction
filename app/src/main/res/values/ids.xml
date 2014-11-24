@@ -5,6 +5,7 @@
     <item name="open_app" type="id" />
     <item name="minimise" type="id" />
     <item name="main_view" type="id" />
+    <item name="full_screen" type="id" />
 
 
 </resources>
