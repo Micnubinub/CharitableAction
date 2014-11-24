@@ -26,15 +26,19 @@ public class BannerPopupService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         isServiceRunning = true;
-        if (bannerPopup == null)
-            bannerPopup = new BannerPopup(this, windowManager, params);
 
-        params = new WindowManager.LayoutParams(bannerPopup.getW(), bannerPopup.getH(), WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP | Gravity.LEFT;
         params.x = 100;
         params.y = 100;
+
+
+        if (bannerPopup == null)
+            bannerPopup = new BannerPopup(this, windowManager, params);
+
+
         windowManager.addView(bannerPopup, params);
         windowManager.updateViewLayout(bannerPopup, params);
     }

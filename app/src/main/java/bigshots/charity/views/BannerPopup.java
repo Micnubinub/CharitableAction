@@ -5,7 +5,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -55,8 +54,8 @@ public class BannerPopup extends ViewGroup {
 
         }
     };
+    private final WindowManager windowManager;
     private State state;
-    //private final WindowManager windowManager;
     private MenuItem closeBanner, openApp, fullScreen, minimise;
     private MainBannerView mainView;
     private long downTime;
@@ -67,7 +66,7 @@ public class BannerPopup extends ViewGroup {
     private View adView;
     private float adDistance = 0.425f;
     private int lastMenuItemDistance, menuItemWidth;
-    //private WindowManager.LayoutParams params;
+    private WindowManager.LayoutParams params;
     private float animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -78,13 +77,16 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private int[] mainViewLocation = new int[2];
+    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
+    private int toX, fromX, x, y, w, h, screenHeight, screenWidth;
+    private CurrentAnimation[] currentAnimations;
     private OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    initialX = (int) getX();
-                    initialY = (int) getY();
+                    initialX = params.x;
+                    initialY = params.y;
                     initialTouchX = (int) event.getRawX();
                     initialTouchY = (int) event.getRawY();
                     downTime = System.currentTimeMillis();
@@ -93,10 +95,17 @@ public class BannerPopup extends ViewGroup {
                 case MotionEvent.ACTION_UP:
                     if (((System.currentTimeMillis() - downTime) < 92) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop))
                         click(mainView);
+
+                    if (state == State.MINIMISED) {
+                        currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO};
+                        setToX();
+                        fromX = x;
+                        startAnimator();
+                        setState(State.MINIMISED);
+                    }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    setX(initialX + (int) (event.getRawX() - initialTouchX));
-                    setY(initialY + (int) (event.getRawY() - initialTouchY));
+                    setPosition((initialX + (int) (event.getRawX() - initialTouchX)), (initialY + (int) (event.getRawY() - initialTouchY)));
 
                     mainView.getLocationInWindow(mainViewLocation);
 
@@ -112,22 +121,14 @@ public class BannerPopup extends ViewGroup {
             return true;
         }
     };
-    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
-    private int toX, fromX, x, y, w, h, screenHeight, screenWidth;
-    private CurrentAnimation[] currentAnimations;
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
-        //  this.windowManager = windowManager;
-        //  this.params = params;
+        this.windowManager = windowManager;
+        this.params = params;
         init();
     }
 
-
-    public BannerPopup(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
 
     //Todo check the screenSize, and scale the ad accordingly
 
@@ -169,18 +170,8 @@ public class BannerPopup extends ViewGroup {
         //Todo addView()
         //Todo set direction
 
-
-//        ViewGroup.LayoutParams layoutParams = bubbleView.findViewById(R.id.bubble_id).getLayoutParams();
-//        layoutParams.height = Utils.getInstance(null).getPixelsFromDp(48);
-//        layoutParams.width = Utils.getInstance(null).getPixelsFromDp(48);
         setParameters();
-//        addView(closeBanner);
-//        addView(minimise);
-//        addView(openApp);
-//        addView(adView);
-//        addView(mainView);
         invalidate();
-        //windowManager.updateViewLayout(this, params);
     }
 
     private void finishAnimation() {
@@ -199,13 +190,11 @@ public class BannerPopup extends ViewGroup {
 
     private void resolveAdSize() {
         final DisplayMetrics metrics = new DisplayMetrics();
-        try {
-            //windowManager.getDefaultDisplay().getMetrics(metrics);
-            screenWidth = metrics.widthPixels;
-            screenHeight = metrics.heightPixels;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+
         // w = (int) (screenWidth * 0.66f);
         // w = Math.min(w,adWidth);
         h = dpToPixels(mainViewHeight);
@@ -217,14 +206,6 @@ public class BannerPopup extends ViewGroup {
 
         //Todo might have to mess around here   adView = adManager.getBannerAd();
         adView.setBackgroundColor(0xffbbff00);
-//      mainView.setLayoutParams();
-//        mainView.setBackgroundColor(0x4432dddd);
-//        closeBanner.setLayoutParams();
-//        closeBanner.setBackgroundColor(0x44fff3dd);
-//        minimise.setLayoutParams();
-//        minimise.setBackgroundColor(0x4467e2d);
-//        openApp.setLayoutParams();
-//        openApp.setBackgroundColor(0x44d35d2e);
         final int padding = (h - adH) / 2;
         addView(closeBanner, new LayoutParams(adH, adH));
         closeBanner.setOnClickListener(clickListener);
@@ -252,9 +233,13 @@ public class BannerPopup extends ViewGroup {
         resetMenuItemPositions();
         currentAnimation = CurrentAnimation.NONE;
 
-        // windowManager.updateViewLayout(this, params);
-        this.setLayoutParams(new LayoutParams(w, h));
-
+        params.width = w;
+        params.height = h;
+        try {
+            windowManager.updateViewLayout(this, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setMenuItemVisibility(int visibility) {
@@ -310,11 +295,7 @@ public class BannerPopup extends ViewGroup {
                 getContext().startActivity(intent);
             case R.id.minimise:
                 currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SNAP_TO};
-                if (direction == direction.LEFT)
-                    toX = -((int) (0.2f * getMeasuredHeight()));
-                else
-                    toX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
-
+                setToX();
                 fromX = x;
                 startAnimator();
                 setState(State.MINIMISED);
@@ -327,6 +308,12 @@ public class BannerPopup extends ViewGroup {
 
     }
 
+    public void setToX() {
+        if (direction == direction.LEFT)
+            toX = -((int) (0.2f * getMeasuredHeight()));
+        else
+            toX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
+    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -372,9 +359,13 @@ public class BannerPopup extends ViewGroup {
         getLayoutParams().height = height;
         getLayoutParams().width = width;
 
-//        params.height = height;
-//        params.width = width;
-//        windowManager.updateViewLayout(this, params);
+        params.height = height;
+        params.width = width;
+        try {
+            windowManager.updateViewLayout(this, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -382,13 +373,13 @@ public class BannerPopup extends ViewGroup {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
-//    private void setWidth(int width) {
-//        resize(width, params.height);
-//    }
+    private void setWidth(int width) {
+        resize(width, params.height);
+    }
 
-//    private void setHeight(int height) {
-//        resize(params.width, height);
-//    }
+    private void setHeight(int height) {
+        resize(params.width, height);
+    }
 
     private void invalidatePoster() {
         this.post(new Runnable() {
@@ -424,19 +415,19 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void resetMenuItemPositions() {
-        final int x = mainView.getLeft() + (mainView.getWidth() / 2);
+
         switch (direction) {
             case LEFT:
-                closeBanner.setX(x);
-                openApp.setX(x - spacing - menuItemWidth);
-                fullScreen.setX(x - spacing - menuItemWidth - spacing - menuItemWidth);
-                minimise.setX(x - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
+                closeBanner.setX(0);
+                openApp.setX(0 - spacing - menuItemWidth);
+                fullScreen.setX(0 - spacing - menuItemWidth - spacing - menuItemWidth);
+                minimise.setX(0 - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
                 break;
             case RIGHT:
-                closeBanner.setX(x);
-                openApp.setX(x + spacing + menuItemWidth);
-                fullScreen.setX(x + spacing + menuItemWidth + spacing + menuItemWidth);
-                minimise.setX(x + spacing + menuItemWidth + spacing + menuItemWidth + spacing + menuItemWidth);
+                closeBanner.setX(0);
+                openApp.setX(0 + spacing + menuItemWidth);
+                fullScreen.setX(0 + spacing + menuItemWidth + spacing + menuItemWidth);
+                minimise.setX(0 + spacing + menuItemWidth + spacing + menuItemWidth + spacing + menuItemWidth);
                 break;
         }
 
@@ -450,29 +441,46 @@ public class BannerPopup extends ViewGroup {
         animator.start();
     }
 
-//    private void setPosition(int x, int y) {
-//        params.x = x;
-//        params.y = y;
-//        windowManager.updateViewLayout(this, params);
-//    }
+    private void setPosition(int x, int y) {
+        Log.e("SetPosition : ", String.format("%d, %d", x, y));
+        params.x = x;
+        params.y = y;
+        try {
+            windowManager.updateViewLayout(this, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
     public void invalidate() {
         super.invalidate();
-        // windowManager.updateViewLayout(this, params);
+        try {
+            windowManager.updateViewLayout(this, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void invalidate(int l, int t, int r, int b) {
         super.invalidate(l, t, r, b);
-        //windowManager.updateViewLayout(this, params);
+        try {
+            windowManager.updateViewLayout(this, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void invalidate(Rect dirty) {
         super.invalidate(dirty);
-        //windowManager.updateViewLayout(this, params);
+        try {
+            windowManager.updateViewLayout(this, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setSize(int width, int height) {
@@ -480,14 +488,20 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void runAnimations() {
-        if (animated_value > 0.5f)
-            currentAnimation = currentAnimations[1];
-        else
-            currentAnimation = currentAnimations[0];
+        if (currentAnimations.length > 1) {
+            if (animated_value > 0.5f)
+                currentAnimation = currentAnimations[1];
+            else
+                currentAnimation = currentAnimations[0];
 
-        if (animated_value == 1)
-            animated_value = 0.999f;
-
+            if (animated_value == 1)
+                animated_value = 0.999f;
+        } else {
+            if (animated_value > 0.5f) {
+                animator.cancel();
+                return;
+            }
+        }
         final float val = animated_value % 0.5f;
         switch (currentAnimation) {
             //Todo use interpolator from hunid jumps
@@ -512,11 +526,11 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void snap(float progress) {
-        setX(fromX + Math.round((toX - fromX) * progress));
+        setPosition(fromX + Math.round((toX - fromX) * progress), params.y);
     }
 
     private void updateMenuItemDistance(float distance) {
-        Log.e("setDistance", String.valueOf(distance));
+
         setMenuItemsX((getHeight() / 2) + Math.round(distance * lastMenuItemDistance));
         setDistance();
     }
