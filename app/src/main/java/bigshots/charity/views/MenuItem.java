@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -32,6 +33,8 @@ public class MenuItem extends View {
         super.onDraw(canvas);
         if (scaledBitmap != null)
             canvas.drawBitmap(scaledBitmap, calcX, calcY, paint);
+        paint.setColor(0xffffbb00);
+        canvas.drawRect(0, 0, canvas.getWidth(), canvas.getHeight(), paint);
     }
 
     @Override
@@ -39,22 +42,22 @@ public class MenuItem extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         this.w = w;
         this.h = h;
+
+        if (Math.min(w, h) > 1)
+            setVisibility(VISIBLE);
+
         generateScaledBitmap(w, h);
     }
 
     public void setDistance(float dist) {
+        dist = Math.abs(dist);
+        Log.e("setDist", String.valueOf(dist));
         if (dist > 1)
             return;
 
-        if (dist < 0) {
-            setVisibility(GONE);
-            return;
-        } else {
-            setVisibility(VISIBLE);
-        }
-
         calcW = (int) (w * dist);
         calcH = (int) (h * dist);
+
         calcX = (w - calcW) / 2;
         calcY = (h - calcH) / 2;
 
@@ -62,6 +65,8 @@ public class MenuItem extends View {
     }
 
     private void generateScaledBitmap(int width, int height) {
+        width = width < 1 ? 1 : width;
+        height = height < 1 ? 1 : height;
         scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
     }
 }

@@ -1,19 +1,22 @@
 package bigshots.charity.views;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import bigshots.charity.Contribute;
 import bigshots.charity.R;
-import bigshots.charity.Vote;
 import bigshots.charity.io.AdManager;
 import bigshots.charity.services.BannerPopupService;
 
@@ -31,6 +34,27 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            finishAnimation();
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            finishAnimation();
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+    };
     private State state;
     //private final WindowManager windowManager;
     private MenuItem closeBanner, openApp, fullScreen, minimise;
@@ -42,7 +66,7 @@ public class BannerPopup extends ViewGroup {
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
     private float adDistance = 0.425f;
-    private int lastMenuItemDistance;
+    private int lastMenuItemDistance, menuItemWidth;
     //private WindowManager.LayoutParams params;
     private float animated_value;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
@@ -110,6 +134,7 @@ public class BannerPopup extends ViewGroup {
     private void init() {
         animator.setDuration(duration);
         animator.addUpdateListener(animatorUpdateListener);
+        animator.addListener(animatorListener);
 
         touchSlop = dpToPixels(4);
 
@@ -142,7 +167,7 @@ public class BannerPopup extends ViewGroup {
         //todo windowManager.addView(bubbleView, params);
         //Todo  maxHeight, maxWidth
         //Todo addView()
-        //Todo set diretion
+        //Todo set direction
 
 
 //        ViewGroup.LayoutParams layoutParams = bubbleView.findViewById(R.id.bubble_id).getLayoutParams();
@@ -155,9 +180,13 @@ public class BannerPopup extends ViewGroup {
 //        addView(adView);
 //        addView(mainView);
         invalidate();
-
-
         //windowManager.updateViewLayout(this, params);
+    }
+
+    private void finishAnimation() {
+        animated_value = 1;
+        runAnimations();
+        currentAnimation = CurrentAnimation.NONE;
     }
 
     public int getW() {
@@ -181,11 +210,14 @@ public class BannerPopup extends ViewGroup {
         // w = Math.min(w,adWidth);
         h = dpToPixels(mainViewHeight);
         w = dpToPixels(adWidth + (int) (mainViewHeight * adDistance));
+        final int adW = dpToPixels(adWidth);
         final int adH = dpToPixels(adHeight);
-        distanceFromLast = adH * 3 + spacing * 4;
+        lastMenuItemDistance = adW - adH;
+        menuItemWidth = adH;
 
         //Todo might have to mess around here   adView = adManager.getBannerAd();
-//        mainView.setLayoutParams();
+        adView.setBackgroundColor(0xffbbff00);
+//      mainView.setLayoutParams();
 //        mainView.setBackgroundColor(0x4432dddd);
 //        closeBanner.setLayoutParams();
 //        closeBanner.setBackgroundColor(0x44fff3dd);
@@ -193,25 +225,43 @@ public class BannerPopup extends ViewGroup {
 //        minimise.setBackgroundColor(0x4467e2d);
 //        openApp.setLayoutParams();
 //        openApp.setBackgroundColor(0x44d35d2e);
-
+        final int padding = (h - adH) / 2;
         addView(closeBanner, new LayoutParams(adH, adH));
         closeBanner.setOnClickListener(clickListener);
+        closeBanner.setY(padding);
 
         addView(minimise, new LayoutParams(adH, adH));
         minimise.setOnClickListener(clickListener);
+        minimise.setY(padding);
 
         addView(fullScreen, new LayoutParams(adH, adH));
         fullScreen.setOnClickListener(clickListener);
+        fullScreen.setY(padding);
 
         addView(openApp, new LayoutParams(adH, adH));
         openApp.setOnClickListener(clickListener);
-        spacing = (dpToPixels(adWidth) - (adH * 4)) / 4;
-        addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        openApp.setY(padding);
+
+        spacing = (adW - (adH * 4)) / 4;
+        addView(adView, new LayoutParams(adH, adW));
         addView(mainView, new LayoutParams(h, h));
         mainView.setOnTouchListener(mainViewOnTouchListener);
+
+        currentAnimation = CurrentAnimation.HIDE_MENU;
+        updateMenuItemDistance(1);
+        resetMenuItemPositions();
+        currentAnimation = CurrentAnimation.NONE;
+
         // windowManager.updateViewLayout(this, params);
         this.setLayoutParams(new LayoutParams(w, h));
 
+    }
+
+    private void setMenuItemVisibility(int visibility) {
+        openApp.setVisibility(visibility);
+        closeBanner.setVisibility(visibility);
+        fullScreen.setVisibility(visibility);
+        minimise.setVisibility(visibility);
     }
 
     private void setParameters() {
@@ -225,24 +275,25 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void click(View v) {
+        Toast.makeText(getContext(), String.valueOf(state), Toast.LENGTH_SHORT).show();
         switch (v.getId()) {
             case R.id.main_view:
                 switch (state) {
                     case SHOWING_MENU:
+                        setState(State.SHOWING_AD);
                         currentAnimation = CurrentAnimation.HIDE_MENU;
                         currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SHOW_AD};
-                        setState(State.SHOWING_AD);
                         break;
                     case SHOWING_AD:
+                        setState(State.SHOWING_MENU);
                         currentAnimation = CurrentAnimation.HIDE_AD;
                         currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_AD, CurrentAnimation.SHOW_MENU};
-                        setState(State.SHOWING_MENU);
                         break;
                     case MINIMISED:
+                        setState(State.SHOWING_AD);
                         currentAnimation = CurrentAnimation.SNAP_TO;
                         currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO, CurrentAnimation.SHOW_AD};
                         toX = x;
-                        setState(State.SHOWING_AD);
                         break;
                 }
                 startAnimator();
@@ -255,7 +306,7 @@ public class BannerPopup extends ViewGroup {
                 }
                 break;
             case R.id.open_app:
-                final Intent intent = new Intent(getContext(), Vote.class);
+                final Intent intent = new Intent(getContext(), Contribute.class);
                 getContext().startActivity(intent);
             case R.id.minimise:
                 currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SNAP_TO};
@@ -263,6 +314,8 @@ public class BannerPopup extends ViewGroup {
                     toX = -((int) (0.2f * getMeasuredHeight()));
                 else
                     toX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
+
+                fromX = x;
                 startAnimator();
                 setState(State.MINIMISED);
                 break;
@@ -277,17 +330,15 @@ public class BannerPopup extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            if ((child instanceof MenuItem) && (state == State.SHOWING_MENU) && (child.getVisibility() != GONE)) {
-                //Todo fill this in
-                //Log.e("instance of", String.format("w,h,x,y : %d, %d, %d, %d", child.getMeasuredWidth(), child.getMeasuredHeight(), (int) child.getX(), (int) child.getY()));
-                child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
-            }
-        }
-
         int adViewPadding = (getMeasuredHeight() - adView.getMeasuredHeight()) / 2;
         adViewPadding = adViewPadding < 0 ? 0 : adViewPadding;
+
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            if ((child instanceof MenuItem) && (state == State.SHOWING_MENU)) {
+                child.layout((int) child.getX(), adViewPadding, (int) child.getX() + child.getMeasuredWidth(), child.getMeasuredHeight() - adViewPadding);
+            }
+        }
 
         if ((state == State.SHOWING_AD) && (adView.getScaleX() > 0.02f))
             adView.layout((int) (getMeasuredHeight() * adDistance), adViewPadding, getMeasuredWidth(), getMeasuredHeight() - adViewPadding);
@@ -304,11 +355,10 @@ public class BannerPopup extends ViewGroup {
 
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-            if (child.getVisibility() != GONE) {
-                measureChild(child, widthMeasureSpec, heightMeasureSpec);
-                measuredHeight += child.getMeasuredHeight();
-                measuredWidth = Math.max(measuredWidth, child.getMeasuredWidth());
-            }
+            //Todo don't measure menu items if not showing menu, don't measure ad if not showing ad
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            measuredHeight += child.getMeasuredHeight();
+            measuredWidth = Math.max(measuredWidth, child.getMeasuredWidth());
         }
         setMeasuredDimension(resolveSizeAndState(measuredWidth, widthMeasureSpec, 0), resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
     }
@@ -349,21 +399,20 @@ public class BannerPopup extends ViewGroup {
         });
     }
 
-
-
     private void setDistance() {
         closeBanner.setDistance(getDistance(closeBanner));
         openApp.setDistance(getDistance(openApp));
         minimise.setDistance(getDistance(minimise));
+        fullScreen.setDistance(getDistance(fullScreen));
     }
 
     private float getDistance(View v) {
         if (v instanceof MainBannerView)
             return 0;
 
-        int mainViewR = (mainView.getWidth() / 2);
-        float base = mainViewR + spacing;
-        int mainViewCenter = mainView.getLeft() + mainViewR;
+        final float base = (mainView.getWidth() / 2) + spacing;
+        final int mainViewCenter = mainView.getLeft() + (mainView.getWidth() / 2);
+
         switch (direction) {
             case LEFT:
                 return (v.getLeft() - mainViewCenter) / base;
@@ -372,6 +421,25 @@ public class BannerPopup extends ViewGroup {
         }
 
         return 0;
+    }
+
+    private void resetMenuItemPositions() {
+        final int x = mainView.getLeft() + (mainView.getWidth() / 2);
+        switch (direction) {
+            case LEFT:
+                closeBanner.setX(x);
+                openApp.setX(x - spacing - menuItemWidth);
+                fullScreen.setX(x - spacing - menuItemWidth - spacing - menuItemWidth);
+                minimise.setX(x - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
+                break;
+            case RIGHT:
+                closeBanner.setX(x);
+                openApp.setX(x + spacing + menuItemWidth);
+                fullScreen.setX(x + spacing + menuItemWidth + spacing + menuItemWidth);
+                minimise.setX(x + spacing + menuItemWidth + spacing + menuItemWidth + spacing + menuItemWidth);
+                break;
+        }
+
     }
 
     private void startAnimator() {
@@ -412,15 +480,13 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void runAnimations() {
-        if (animated_value > 0.99f) {
-            currentAnimation = CurrentAnimation.NONE;
-            return;
-        }
-
         if (animated_value > 0.5f)
             currentAnimation = currentAnimations[1];
         else
             currentAnimation = currentAnimations[0];
+
+        if (animated_value == 1)
+            animated_value = 0.999f;
 
         final float val = animated_value % 0.5f;
         switch (currentAnimation) {
@@ -450,24 +516,26 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void updateMenuItemDistance(float distance) {
-        setMenuItemsX((getHeight() / 2) + Math.round(distance * distanceFromLast));
+        Log.e("setDistance", String.valueOf(distance));
+        setMenuItemsX((getHeight() / 2) + Math.round(distance * lastMenuItemDistance));
         setDistance();
     }
 
     private void setMenuItemsX(int x) {
-        final int r = Math.min(openApp.getWidth(), openApp.getHeight());
+
+
         switch (direction) {
             case LEFT:
                 closeBanner.setX(x);
-                openApp.setX(x - spacing - r);
-                fullScreen.setX(x - spacing - r - spacing - r);
-                minimise.setX(x - spacing - r - spacing - r - spacing - r);
+                openApp.setX(x - spacing - menuItemWidth);
+                fullScreen.setX(x - spacing - menuItemWidth - spacing - menuItemWidth);
+                minimise.setX(x - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
                 break;
             case RIGHT:
-                closeBanner.setX(x + spacing + r);
-                openApp.setX(x + spacing + r + spacing + r);
-                fullScreen.setX(x + spacing + r + spacing + r);
-                minimise.setX(x + spacing + r + spacing + r + spacing + r);
+                closeBanner.setX(x + spacing + menuItemWidth);
+                openApp.setX(x + spacing + menuItemWidth + spacing + menuItemWidth);
+                fullScreen.setX(x + spacing + menuItemWidth + spacing + menuItemWidth + spacing + menuItemWidth);
+                minimise.setX(x + spacing + menuItemWidth + spacing + menuItemWidth + spacing + menuItemWidth + spacing + menuItemWidth);
                 break;
         }
 
