@@ -20,8 +20,6 @@ public class MainBannerView extends View {
 
     public MainBannerView(Context context) {
         super(context);
-        setBackgroundColor(0xffffff);
-        getBitmap(R.drawable.fa_default_background_pressed);
     }
 
     public void setState(BannerPopup.State state) {

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -142,13 +141,13 @@ public class BannerPopup extends ViewGroup {
         mainView.setState(State.SHOWING_AD);
         mainView.setId(R.id.main_view);
 
-        closeBanner = new MenuItem(getContext(), R.drawable.fa_default_background_default);
+        closeBanner = new MenuItem(getContext(), R.drawable.close);
         closeBanner.setId(R.id.close_banner);
 
-        minimise = new MenuItem(getContext(), R.drawable.white_arrow);
+        minimise = new MenuItem(getContext(), R.drawable.minimise);
         minimise.setId(R.id.minimise);
 
-        fullScreen = new MenuItem(getContext(), R.drawable.white_arrow);
+        fullScreen = new MenuItem(getContext(), R.drawable.full_screen_ad);
         fullScreen.setId(R.id.full_screen);
 
         openApp = new MenuItem(getContext(), R.drawable.open_app);
@@ -201,7 +200,6 @@ public class BannerPopup extends ViewGroup {
         menuItemWidth = adH;
 
         //Todo might have to mess around here   adView = adManager.getBannerAd();
-        adView.setBackgroundColor(0xffbbff00);
         final int padding = (h - adH) / 2;
         addView(closeBanner, new LayoutParams(adH, adH));
         closeBanner.setOnClickListener(clickListener);
@@ -238,13 +236,13 @@ public class BannerPopup extends ViewGroup {
             e.printStackTrace();
         }
     }
-
-    private void setMenuItemVisibility(int visibility) {
-        openApp.setVisibility(visibility);
-        closeBanner.setVisibility(visibility);
-        fullScreen.setVisibility(visibility);
-        minimise.setVisibility(visibility);
-    }
+//
+//    private void setMenuItemVisibility(int visibility) {
+//        openApp.setVisibility(visibility);
+//        closeBanner.setVisibility(visibility);
+//        fullScreen.setVisibility(visibility);
+//        minimise.setVisibility(visibility);
+//    }
 
     private void setParameters() {
         resolveAdSize();
@@ -281,7 +279,6 @@ public class BannerPopup extends ViewGroup {
                 startAnimator();
                 break;
             case R.id.close_banner:
-                Toast.makeText(getContext(), "close", Toast.LENGTH_SHORT).show();
                 try {
                     getContext().stopService(service);
                 } catch (Exception e) {
@@ -289,12 +286,10 @@ public class BannerPopup extends ViewGroup {
                 }
                 break;
             case R.id.open_app:
-                Toast.makeText(getContext(), "Open app", Toast.LENGTH_SHORT).show();
                 final Intent intent = new Intent(getContext(), Contribute.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
             case R.id.minimise:
-                Toast.makeText(getContext(), "minimise", Toast.LENGTH_SHORT).show();
                 currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SNAP_TO};
                 setToX();
                 fromX = x;
@@ -302,7 +297,6 @@ public class BannerPopup extends ViewGroup {
                 setState(State.MINIMISED);
                 break;
             case R.id.full_screen:
-                Toast.makeText(getContext(), "Full screen", Toast.LENGTH_SHORT).show();
                 adManager.loadFullscreenAd();
                 adManager.getFullscreenAd();
                 break;
@@ -394,7 +388,6 @@ public class BannerPopup extends ViewGroup {
 
     private void setDistance() {
         if (animator.isRunning()) {
-            Log.e("setting", "distance");
             closeBanner.setDistance(getDistance(closeBanner));
             openApp.setDistance(getDistance(openApp));
             minimise.setDistance(getDistance(minimise));
