@@ -16,7 +16,7 @@ public class MainBannerView extends View {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private BannerPopup.State state = BannerPopup.State.SHOWING_AD;
     private Bitmap bitmap;
-    private int w, h;
+    private int w, h, resID = R.drawable.icon_blue;
 
     public MainBannerView(Context context) {
         super(context);
@@ -43,13 +43,14 @@ public class MainBannerView extends View {
 
     private void give() {
 //Todo fill in
-
+        getBitmap(R.drawable.icon_orange);
+        invalidate();
 
     }
 
     private void giving() {
 //Todo fill in
-        getBitmap(R.drawable.hands);
+        getBitmap(R.drawable.icon_blue);
         invalidate();
     }
 
@@ -65,7 +66,10 @@ public class MainBannerView extends View {
     }
 
     private void getBitmap(int resID) {
-        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), 150, 150, false);
+        this.resID = resID;
+        if (w < 1 || h < 1)
+            return;
+        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), w, h, false);
     }
 
     @Override
@@ -74,7 +78,12 @@ public class MainBannerView extends View {
         this.w = w;
         this.h = h;
         try {
-            bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.hands), w, h, false);
+            bitmap.recycle();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), w, h, false);
         } catch (Exception e) {
             e.printStackTrace();
         }

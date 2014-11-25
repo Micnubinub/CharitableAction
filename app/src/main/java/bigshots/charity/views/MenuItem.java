@@ -42,6 +42,12 @@ public class MenuItem extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         this.w = w;
         this.h = h;
+        try {
+            bitmap.recycle();
+            scaledBitmap.recycle();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (Math.min(w, h) > 1)
             setVisibility(VISIBLE);

@@ -24,7 +24,7 @@ import bigshots.charity.services.BannerPopupService;
  */
 public class BannerPopup extends ViewGroup {
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
-    private static int duration = 750, touchSlop, distanceFromLast;
+    private static int duration = 750, touchSlop;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
@@ -76,8 +76,8 @@ public class BannerPopup extends ViewGroup {
             invalidatePoster();
         }
     };
-    private int[] mainViewLocation = new int[2];
     private int spacing, initialX, initialY, initialTouchX, initialTouchY;
+    //Todo implement x,t
     private int toX, fromX, x, y, w, h, screenHeight, screenWidth;
     private CurrentAnimation[] currentAnimations;
     private OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
@@ -106,18 +106,14 @@ public class BannerPopup extends ViewGroup {
                     break;
                 case MotionEvent.ACTION_MOVE:
                     setPosition((initialX + (int) (event.getRawX() - initialTouchX)), (initialY + (int) (event.getRawY() - initialTouchY)));
-
-                    mainView.getLocationInWindow(mainViewLocation);
-
-                    if (mainViewLocation[0] > (screenWidth / 2))
+                    if (initialX + (int) (event.getRawX() - initialTouchX) > (screenWidth / 2))
                         direction = Direction.RIGHT;
                     else
                         direction = Direction.LEFT;
-
-                    invalidate();
                     break;
 
             }
+            invalidate();
             return true;
         }
     };
@@ -155,7 +151,7 @@ public class BannerPopup extends ViewGroup {
         fullScreen = new MenuItem(getContext(), R.drawable.white_arrow);
         fullScreen.setId(R.id.full_screen);
 
-        openApp = new MenuItem(getContext(), R.drawable.hands);
+        openApp = new MenuItem(getContext(), R.drawable.open_app);
         openApp.setId(R.id.open_app);
 
         adView = adManager.getBannerAd();
@@ -229,6 +225,7 @@ public class BannerPopup extends ViewGroup {
         mainView.setOnTouchListener(mainViewOnTouchListener);
 
         currentAnimation = CurrentAnimation.HIDE_MENU;
+
         updateMenuItemDistance(1);
         resetMenuItemPositions();
         currentAnimation = CurrentAnimation.NONE;
@@ -284,6 +281,7 @@ public class BannerPopup extends ViewGroup {
                 startAnimator();
                 break;
             case R.id.close_banner:
+                Toast.makeText(getContext(), "close", Toast.LENGTH_SHORT).show();
                 try {
                     getContext().stopService(service);
                 } catch (Exception e) {
@@ -291,9 +289,12 @@ public class BannerPopup extends ViewGroup {
                 }
                 break;
             case R.id.open_app:
+                Toast.makeText(getContext(), "Open app", Toast.LENGTH_SHORT).show();
                 final Intent intent = new Intent(getContext(), Contribute.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
             case R.id.minimise:
+                Toast.makeText(getContext(), "minimise", Toast.LENGTH_SHORT).show();
                 currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SNAP_TO};
                 setToX();
                 fromX = x;
@@ -301,6 +302,7 @@ public class BannerPopup extends ViewGroup {
                 setState(State.MINIMISED);
                 break;
             case R.id.full_screen:
+                Toast.makeText(getContext(), "Full screen", Toast.LENGTH_SHORT).show();
                 adManager.loadFullscreenAd();
                 adManager.getFullscreenAd();
                 break;
@@ -391,10 +393,13 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void setDistance() {
-        closeBanner.setDistance(getDistance(closeBanner));
-        openApp.setDistance(getDistance(openApp));
-        minimise.setDistance(getDistance(minimise));
-        fullScreen.setDistance(getDistance(fullScreen));
+        if (animator.isRunning()) {
+            Log.e("setting", "distance");
+            closeBanner.setDistance(getDistance(closeBanner));
+            openApp.setDistance(getDistance(openApp));
+            minimise.setDistance(getDistance(minimise));
+            fullScreen.setDistance(getDistance(fullScreen));
+        }
     }
 
     private float getDistance(View v) {
@@ -442,7 +447,6 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void setPosition(int x, int y) {
-        Log.e("SetPosition : ", String.format("%d, %d", x, y));
         params.x = x;
         params.y = y;
         try {
@@ -530,14 +534,11 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void updateMenuItemDistance(float distance) {
-
         setMenuItemsX((getHeight() / 2) + Math.round(distance * lastMenuItemDistance));
         setDistance();
     }
 
     private void setMenuItemsX(int x) {
-
-
         switch (direction) {
             case LEFT:
                 closeBanner.setX(x);
