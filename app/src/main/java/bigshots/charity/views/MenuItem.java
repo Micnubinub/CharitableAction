@@ -19,11 +19,22 @@ public class MenuItem extends View {
     public MenuItem(Context context, int resID) {
         super(context);
         this.resID = resID;
-        paint.setColor(0xffffff);
+
     }
 
     private void getBitmap(int resID, int r) {
-        bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), r, r, false);
+
+        if (r < 1)
+            return;
+
+        try {
+            if (bitmap != null)
+                bitmap.recycle();
+
+            bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), r, r, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -31,6 +42,11 @@ public class MenuItem extends View {
         super.onDraw(canvas);
         try {
             canvas.drawBitmap(bitmap, canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
+            paint.setColor(0xffffff);
+            canvas.drawCircle(canvas.getWidth() / 2,
+                    canvas.getHeight() / 2,
+                    Math.min(canvas.getWidth(), canvas.getHeight()) / 2,
+                    paint);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -57,13 +73,13 @@ public class MenuItem extends View {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
-    public void setDistance(float dist) {
-        Log.e("setDist", String.valueOf(dist));
-        dist = Math.abs(dist);
-
-        if (dist > 1 || dist < 0)
+    public void setDistanceScale(float scale) {
+        scale = Math.abs(scale);
+        Log.e("setDist", String.valueOf(scale));
+        if (scale > 1 || scale < 0)
             return;
-        setScaleX(dist);
-        setScaleY(dist);
+
+        setScaleX(scale);
+        setScaleY(scale);
     }
 }

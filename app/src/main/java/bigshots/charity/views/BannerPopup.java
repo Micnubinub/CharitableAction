@@ -56,7 +56,8 @@ public class BannerPopup extends ViewGroup {
 
         @Override
         public void onAnimationCancel(Animator animation) {
-            finishAnimation();
+            if (!animationFinished)
+                finishAnimation();
         }
 
         @Override
@@ -69,7 +70,7 @@ public class BannerPopup extends ViewGroup {
     private float adDistance = 0.425f;
     private int lastMenuItemDistance, menuItemWidth;
     private WindowManager.LayoutParams params;
-    private float animated_value;
+    private float animated_value, unit;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
@@ -140,10 +141,6 @@ public class BannerPopup extends ViewGroup {
         adManager = new AdManager(getContext());
         adManager.loadBannerAd();
 
-        mainView = new MainBannerView(getContext());
-        mainView.setState(State.SHOWING_AD);
-        mainView.setId(R.id.main_view);
-
         closeBanner = new MenuItem(getContext(), R.drawable.close);
         closeBanner.setId(R.id.close_banner);
 
@@ -158,8 +155,6 @@ public class BannerPopup extends ViewGroup {
 
         adView = adManager.getBannerAd();
         adView.setPivotX(0);
-
-        setState(State.SHOWING_AD);
 
 
         //Todo  maxHeight, maxWidth
@@ -196,12 +191,26 @@ public class BannerPopup extends ViewGroup {
         // w = Math.min(w,adWidth);
         h = dpToPixels(mainViewHeight);
         w = dpToPixels(adWidth + (int) (mainViewHeight * adDistance));
-        final int adW = dpToPixels(adWidth);
-        final int adH = dpToPixels(adHeight);
-        lastMenuItemDistance = adW - adH;
-        menuItemWidth = adH;
+        int adW = dpToPixels(adWidth);
+        int adH = dpToPixels(adHeight);
 
-        //Todo might have to mess around here   adView = adManager.getBannerAd();
+        final float scale = getScale(screenWidth, w, adW);
+        if (scale < 0.9999f) {
+            //Todo check
+            h = (int) (h * scale);
+            w = (int) (w * scale);
+            adW = (int) (adW * scale);
+            adH = (int) (adH * scale);
+        }
+
+        mainView = new MainBannerView(getContext(), h);
+        mainView.setId(R.id.main_view);
+        setState(State.SHOWING_AD);
+
+        lastMenuItemDistance = (adH * 5) + (h / 2);
+        menuItemWidth = adH;
+        unit = adH + spacing + (h / 2);
+
         final int padding = (h - adH) / 2;
         addView(closeBanner, new LayoutParams(adH, adH));
         closeBanner.setOnClickListener(clickListener);
@@ -236,13 +245,11 @@ public class BannerPopup extends ViewGroup {
         update();
 
     }
-//
-//    private void setMenuItemVisibility(int visibility) {
-//        openApp.setVisibility(visibility);
-//        closeBanner.setVisibility(visibility);
-//        fullScreen.setVisibility(visibility);
-//        minimise.setVisibility(visibility);
-//    }
+
+    private float getScale(int screenWidth, int viewWidth, int adWidth) {
+        //TOdo fill in
+        return 1f;
+    }
 
     private void setParameters() {
         resolveAdSize();
@@ -252,10 +259,10 @@ public class BannerPopup extends ViewGroup {
 
     public void setState(State state) {
         this.state = state;
+        mainView.setState(state);
     }
 
     private void click(View v) {
-        Toast.makeText(getContext(), String.valueOf(state), Toast.LENGTH_SHORT).show();
         switch (v.getId()) {
             case R.id.main_view:
                 switch (state) {
@@ -281,6 +288,7 @@ public class BannerPopup extends ViewGroup {
             case R.id.close_banner:
                 try {
                     getContext().stopService(service);
+                    Toast.makeText(getContext(), "Thanks. We appreciate your time", Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -308,7 +316,7 @@ public class BannerPopup extends ViewGroup {
         if (direction == direction.LEFT)
             toX = -((int) (0.2f * getMeasuredHeight()));
         else
-            toX = screenWidth - ((int) (0.2f * getMeasuredHeight()));
+            toX = screenWidth - ((int) (0.8f * getMeasuredHeight()));
     }
 
     @Override
@@ -354,13 +362,9 @@ public class BannerPopup extends ViewGroup {
     private void resize(int width, int height) {
         getLayoutParams().height = height;
         getLayoutParams().width = width;
-
         params.height = height;
         params.width = width;
-
         update();
-
-
     }
 
     public int dpToPixels(int dp) {
@@ -386,10 +390,10 @@ public class BannerPopup extends ViewGroup {
 
     private void setDistance() {
         if (animator.isRunning()) {
-            closeBanner.setDistance(getDistance(closeBanner));
-            openApp.setDistance(getDistance(openApp));
-            minimise.setDistance(getDistance(minimise));
-            fullScreen.setDistance(getDistance(fullScreen));
+            closeBanner.setDistanceScale(getDistance(closeBanner));
+            openApp.setDistanceScale(getDistance(openApp));
+            minimise.setDistanceScale(getDistance(minimise));
+            fullScreen.setDistanceScale(getDistance(fullScreen));
         }
     }
 
@@ -397,21 +401,20 @@ public class BannerPopup extends ViewGroup {
         if (v instanceof MainBannerView)
             return 0;
 
-        final float base = (mainView.getWidth() / 2) + spacing;
         final int mainViewCenter = mainView.getLeft() + (mainView.getWidth() / 2);
 
         switch (direction) {
             case LEFT:
-                return (v.getLeft() - mainViewCenter) / base;
+                return (v.getLeft() - mainViewCenter) / unit;
             case RIGHT:
-                return (mainViewCenter - v.getLeft()) / base;
+                return (mainViewCenter - v.getRight()) / unit;
         }
 
         return 0;
     }
 
     private void resetMenuItemPositions() {
-
+//Todo fix positions
         switch (direction) {
             case LEFT:
                 closeBanner.setX(0);
