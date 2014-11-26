@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 
@@ -15,6 +16,9 @@ import bigshots.charity.io.AdManager;
 import bigshots.charity.io.AsyncConnector;
 import bigshots.charity.io.Charity;
 import bigshots.charity.io.Connector;
+import bigshots.charity.schedule_wheel.AbstractWheel;
+import bigshots.charity.schedule_wheel.OnWheelChangedListener;
+import bigshots.charity.schedule_wheel.adapters.NumericWheelAdapter;
 import bigshots.charity.utilities.Interfaces;
 
 /**
@@ -26,8 +30,11 @@ public class Contribute extends Activity {
     //Banner popup
     //Link to this months charity
 
+    private int frequencyMinutes;
+
     private AdManager adManager;
     private String currentCharity;
+
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -75,6 +82,16 @@ public class Contribute extends Activity {
 
         }
     };
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case 1:
+
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +114,38 @@ public class Contribute extends Activity {
     private Dialog getScheduledAds() {
         final Dialog dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(R.layout.scheduled_dialog);
+
+
+        final TextView frequency = (TextView) dialog.findViewById(R.id.frequency);
+        final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
+        final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
+
+        hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        hours.setCyclic(true);
+
+        minutes.setViewAdapter(new NumericWheelAdapter(this, 0, 59));
+        minutes.setCyclic(true);
+
+        // set current time
+
+        hours.setCurrentItem(0);
+        minutes.setCurrentItem(20);
+        final String prefix = "A full screen Ad will be show every :";
+
+        frequency.setText(prefix + "20 minutes");
+        OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                frequency.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        frequency.setText(prefix + String.valueOf((hours.getCurrentItem() * 60) + minutes.getCurrentItem()) + " minutes");
+                    }
+                });
+
+            }
+        };
+        hours.addChangingListener(wheelListener);
+        minutes.addChangingListener(wheelListener);
 
         return dialog;
     }

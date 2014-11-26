@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/round_rect"
     android:orientation="vertical">
 
     <TextView
+        android:id="@id/title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:padding="8dp"
@@ -17,26 +19,33 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/frequency"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/title"
         android:background="@color/material_blue"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:padding="8dp"
-        android:text="Scheduled Ads"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:maxLines="3"
+        android:paddingBottom="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:text="A full screen Ad will be show every :"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
     <LinearLayout
+        android:id="@+id/subject"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/frequency"
         android:orientation="horizontal">
 
-        <TextView
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/white"
             android:maxLines="1"
             android:padding="10dp"
             android:text="Hours"
@@ -44,10 +53,11 @@
             android:textColor="@color/dark_grey_text"
             android:textSize="18sp" />
 
-        <TextView
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/white"
             android:maxLines="1"
             android:padding="10dp"
             android:text="Minutes"
@@ -57,13 +67,15 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/body"
         android:layout_width="fill_parent"
-        android:layout_height="65dp"
+        android:layout_height="82dp"
+        android:layout_below="@+id/subject"
         android:orientation="horizontal"
-        android:paddingBottom="8dp"
+        android:paddingBottom="4dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingTop="8dp">
+        android:paddingTop="4dp">
 
         <bigshots.charity.schedule_wheel.WheelVerticalView
             android:id="@+id/hours"
@@ -75,7 +87,7 @@
 
         <bigshots.charity.schedule_wheel.WheelVerticalView
             android:id="@+id/minutes"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:paddingLeft="16dp"
@@ -83,4 +95,13 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    <include
+        android:id="@+id/save_cancel"
+        layout="@layout/save_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/body"
+        android:layout_margin="8dp" />
+
+</RelativeLayout>
