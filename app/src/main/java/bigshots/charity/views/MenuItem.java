@@ -1,84 +1,28 @@
 package bigshots.charity.views;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.util.Log;
-import android.view.View;
+import android.widget.ImageView;
 
 /**
  * Created by root on 22/11/14.
  */
-public class MenuItem extends View {
-    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final int resID;
-    private Bitmap bitmap;
-
+public class MenuItem extends ImageView {
     public MenuItem(Context context, int resID) {
         super(context);
-        this.resID = resID;
-
-    }
-
-    private void getBitmap(int resID, int r) {
-
-        if (r < 1)
-            return;
-
-        try {
-            if (bitmap != null)
-                bitmap.recycle();
-
-            bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), resID), r, r, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        try {
-            canvas.drawBitmap(bitmap, canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
-            paint.setColor(0xffffff);
-            canvas.drawCircle(canvas.getWidth() / 2,
-                    canvas.getHeight() / 2,
-                    Math.min(canvas.getWidth(), canvas.getHeight()) / 2,
-                    paint);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            canvas.drawCircle(canvas.getWidth() / 2,
-                    canvas.getHeight() / 2,
-                    Math.min(canvas.getWidth(), canvas.getHeight()) / 2,
-                    paint);
-        }
+        setScaleType(ScaleType.CENTER_INSIDE);
+        setImageResource(resID);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-
-        try {
-            bitmap.recycle();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (Math.min(w, h) > 1)
-            setVisibility(VISIBLE);
-
-        getBitmap(resID, Math.min(w, h));
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
     public void setDistanceScale(float scale) {
-        scale = Math.abs(scale);
-        Log.e("setDist", String.valueOf(scale));
-        if (scale > 1 || scale < 0)
-            return;
-
+        Log.e("dist", String.valueOf(scale));
+        scale = scale < 0.01f ? 0.01f : scale;
+        scale = scale > 1 ? 1 : scale;
         setScaleX(scale);
         setScaleY(scale);
     }
