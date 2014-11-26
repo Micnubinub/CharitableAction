@@ -32,15 +32,26 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    private final WindowManager windowManager;
+    private State state;
+    private MenuItem closeBanner, openApp, fullScreen, minimise;
+    private MainBannerView mainView;
+    private long downTime;
+    // private BannerPopup popup;
+    private Direction direction = Direction.LEFT;
+    private AdManager adManager;
+    private boolean animationFinished;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
-
+            animationFinished = false;
         }
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            finishAnimation();
+            if (!animationFinished)
+                finishAnimation();
+
         }
 
         @Override
@@ -53,14 +64,6 @@ public class BannerPopup extends ViewGroup {
 
         }
     };
-    private final WindowManager windowManager;
-    private State state;
-    private MenuItem closeBanner, openApp, fullScreen, minimise;
-    private MainBannerView mainView;
-    private long downTime;
-    // private BannerPopup popup;
-    private Direction direction = Direction.LEFT;
-    private AdManager adManager;
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
     private float adDistance = 0.425f;
@@ -159,8 +162,6 @@ public class BannerPopup extends ViewGroup {
         setState(State.SHOWING_AD);
 
 
-        //todo windowManager.updateViewLayout(bubbleView, params);
-        //todo windowManager.addView(bubbleView, params);
         //Todo  maxHeight, maxWidth
         //Todo addView()
         //Todo set direction
@@ -170,6 +171,7 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void finishAnimation() {
+        animationFinished = true;
         animated_value = 1;
         runAnimations();
         currentAnimation = CurrentAnimation.NONE;
@@ -217,7 +219,7 @@ public class BannerPopup extends ViewGroup {
         openApp.setOnClickListener(clickListener);
         openApp.setY(padding);
 
-        spacing = (adW - (adH * 4)) / 4;
+        spacing = adH / 4;
         addView(adView, new LayoutParams(adH, adW));
         addView(mainView, new LayoutParams(h, h));
         mainView.setOnTouchListener(mainViewOnTouchListener);
@@ -230,11 +232,9 @@ public class BannerPopup extends ViewGroup {
 
         params.width = w;
         params.height = h;
-        try {
-            windowManager.updateViewLayout(this, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        update();
+
     }
 //
 //    private void setMenuItemVisibility(int visibility) {
@@ -357,11 +357,9 @@ public class BannerPopup extends ViewGroup {
 
         params.height = height;
         params.width = width;
-        try {
-            windowManager.updateViewLayout(this, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        update();
+
 
     }
 
@@ -439,45 +437,37 @@ public class BannerPopup extends ViewGroup {
         animator.start();
     }
 
-    private void setPosition(int x, int y) {
-        params.x = x;
-        params.y = y;
+    private void update() {
         try {
             windowManager.updateViewLayout(this, params);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setPosition(int x, int y) {
+        params.x = x;
+        params.y = y;
+        update();
     }
 
 
     @Override
     public void invalidate() {
         super.invalidate();
-        try {
-            windowManager.updateViewLayout(this, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        update();
     }
 
     @Override
     public void invalidate(int l, int t, int r, int b) {
         super.invalidate(l, t, r, b);
-        try {
-            windowManager.updateViewLayout(this, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        update();
     }
 
     @Override
     public void invalidate(Rect dirty) {
         super.invalidate(dirty);
-        try {
-            windowManager.updateViewLayout(this, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        update();
     }
 
     private void setSize(int width, int height) {
