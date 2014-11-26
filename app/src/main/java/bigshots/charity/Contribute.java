@@ -1,6 +1,7 @@
 package bigshots.charity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class Contribute extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+
                 case R.id.full_screen:
                     adManager.getFullscreenAd().setAdListener(new AdListener() {
                         public void onAdLoaded() {
@@ -54,7 +56,10 @@ public class Contribute extends Activity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    break;
 
+                case R.id.scheduled_ads:
+                    getScheduledAds().show();
                     break;
             }
         }
@@ -82,8 +87,17 @@ public class Contribute extends Activity {
         findViewById(R.id.full_screen).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
         findViewById(R.id.video_ad).setOnClickListener(listener);
+        findViewById(R.id.scheduled_ads).setOnClickListener(listener);
+        findViewById(R.id.current_charity).setOnClickListener(listener);
 
         AsyncConnector.setListener(aSyncListener);
         new Connector().getCharityManager().monthlyCharity();
+    }
+
+    private Dialog getScheduledAds() {
+        final Dialog dialog = new Dialog(this, R.style.CustomDialog);
+        dialog.setContentView(R.layout.scheduled_dialog);
+
+        return dialog;
     }
 }

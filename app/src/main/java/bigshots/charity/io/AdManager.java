@@ -1,6 +1,7 @@
 package bigshots.charity.io;
 
 import android.content.Context;
+import android.view.View;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -27,6 +28,7 @@ public class AdManager {
     public void loadBannerAd() { // Get And Load Banner Ad
         AdRequest adRequest = new AdRequest.Builder().build();
         bannerAd.setAdSize(AdSize.BANNER);
+        bannerAd.setVisibility(View.VISIBLE);
         bannerAd.loadAd(adRequest);
     }
 
