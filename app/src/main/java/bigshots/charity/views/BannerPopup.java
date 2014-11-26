@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
+
 import bigshots.charity.Contribute;
 import bigshots.charity.R;
 import bigshots.charity.io.AdManager;
@@ -25,6 +28,7 @@ import bigshots.charity.services.BannerPopupService;
 public class BannerPopup extends ViewGroup {
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static int duration = 1100, touchSlop;
+    private static InterstitialAd fullScreenAd;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
@@ -41,7 +45,7 @@ public class BannerPopup extends ViewGroup {
     private long downTime;
     // private BannerPopup popup;
     private Direction direction = Direction.LEFT;
-    private AdManager adManager;
+    private AdManager bannerAdManager;//, fullScreenAdmanager;
     private boolean animationFinished;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
@@ -137,16 +141,17 @@ public class BannerPopup extends ViewGroup {
     //Todo check the screenSize, and scale the ad accordingly
 
     private void init() {
-
         animator.setDuration(duration);
         animator.addUpdateListener(animatorUpdateListener);
         animator.addListener(animatorListener);
 
         touchSlop = dpToPixels(4);
 
-        adManager = new AdManager(getContext());
-        //Todo adManager.loadBannerAd();
-        adView = adManager.getBannerAd();
+        bannerAdManager = new AdManager(getContext());
+        // fullScreenAdmanager = new AdManager(getContext());
+        bannerAdManager.loadBannerAd();
+        adView = bannerAdManager.getBannerAd();
+        // fullScreenAdmanager.loadFullscreenAd();
         adView.setPivotX(0);
 
         mainView = new MainBannerView(getContext());
@@ -352,8 +357,28 @@ public class BannerPopup extends ViewGroup {
                 setState(State.MINIMISED);
                 break;
             case R.id.full_screen:
-                adManager.loadFullscreenAd();
-                adManager.getFullscreenAd();
+                bannerAdManager.loadFullscreenAd();
+                fullScreenAd = bannerAdManager.getFullscreenAd();
+                fullScreenAd.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdLoaded() {
+                        super.onAdLoaded();
+                        fullScreenAd.show();
+                    }
+
+                    @Override
+                    public void onAdClosed() {
+                        super.onAdClosed();
+                        //Todo make reload it
+                    }
+
+                    @Override
+                    public void onAdFailedToLoad(int errorCode) {
+                        super.onAdFailedToLoad(errorCode);
+                        Toast.makeText(getContext(), "Failed to load ad", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 break;
         }
 
