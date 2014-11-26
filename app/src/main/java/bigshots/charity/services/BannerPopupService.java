@@ -34,10 +34,7 @@ public class BannerPopupService extends Service {
         params.x = 100;
         params.y = 100;
 
-
-        if (bannerPopup == null)
-            bannerPopup = new BannerPopup(this, windowManager, params);
-
+        bannerPopup = new BannerPopup(this, windowManager, params);
 
         windowManager.addView(bannerPopup, params);
         windowManager.updateViewLayout(bannerPopup, params);

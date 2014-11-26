@@ -1,7 +1,6 @@
 package bigshots.charity.views;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.ImageView;
 
 /**
@@ -20,7 +19,6 @@ public class MenuItem extends ImageView {
     }
 
     public void setDistanceScale(float scale) {
-        Log.e("dist", String.valueOf(scale));
         scale = scale < 0.01f ? 0.01f : scale;
         scale = scale > 1 ? 1 : scale;
         setScaleX(scale);

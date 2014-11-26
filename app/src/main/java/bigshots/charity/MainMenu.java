@@ -8,9 +8,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import bigshots.charity.io.AsyncConnector;
 import bigshots.charity.io.Charity;
+import bigshots.charity.schedule_wheel.AbstractWheel;
+import bigshots.charity.schedule_wheel.OnWheelChangedListener;
+import bigshots.charity.schedule_wheel.OnWheelClickedListener;
+import bigshots.charity.schedule_wheel.adapters.NumericWheelAdapter;
 import bigshots.charity.utilities.Interfaces;
 
 /**
@@ -45,10 +50,53 @@ public class MainMenu extends Activity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+
+        final TextView textView = (TextView) findViewById(R.id.text);
+        final AbstractWheel hours = (AbstractWheel) findViewById(R.id.wheel);
+        hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        hours.setCyclic(true);
+
+        // set current time
+        Calendar c = Calendar.getInstance();
+        int curHours = c.get(Calendar.HOUR_OF_DAY);
+        hours.setCurrentItem(curHours);
+        textView.setText(String.valueOf(curHours));
+
+        OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                textView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        textView.setText(String.valueOf(hours.getCurrentItem()));
+                    }
+                });
+
+            }
+        };
+        hours.addChangingListener(wheelListener);
+        OnWheelClickedListener click = new OnWheelClickedListener() {
+            public void onItemClicked(AbstractWheel wheel, int itemIndex) {
+                wheel.setCurrentItem(itemIndex, true);
+            }
+        };
+        hours.addClickingListener(click);
+
+
+
+
+
+
+
+
+
+
+
+
         /*AccountManager manager = AccountManager.get(this);
         Account[] accounts = manager.getAccountsByType("com.google");
         for (Account account : accounts){

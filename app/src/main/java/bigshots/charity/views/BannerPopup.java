@@ -119,7 +119,6 @@ public class BannerPopup extends ViewGroup {
                     else
                         direction = Direction.LEFT;
                     break;
-
             }
             invalidate();
             return true;
@@ -133,10 +132,10 @@ public class BannerPopup extends ViewGroup {
         init();
     }
 
-
     //Todo check the screenSize, and scale the ad accordingly
 
     private void init() {
+
         animator.setDuration(duration);
         animator.addUpdateListener(animatorUpdateListener);
         animator.addListener(animatorListener);
@@ -164,7 +163,6 @@ public class BannerPopup extends ViewGroup {
         openApp = new MenuItem(getContext(), R.drawable.open_app);
         openApp.setId(R.id.open_app);
 
-
         //Todo  maxHeight, maxWidth
         //Todo addView()
         //Todo set direction
@@ -172,6 +170,7 @@ public class BannerPopup extends ViewGroup {
         setParameters();
         invalidate();
         settingUp = false;
+
     }
 
     private void finishAnimation() {
@@ -259,8 +258,6 @@ public class BannerPopup extends ViewGroup {
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
 
-        // w = (int) (screenWidth * 0.66f);
-        // w = Math.min(w,adWidth);
         h = dpToPixels(mainViewHeight);
         w = dpToPixels(adWidth + (int) (mainViewHeight * adDistance));
         adW = dpToPixels(adWidth);
@@ -312,7 +309,6 @@ public class BannerPopup extends ViewGroup {
     private void click(View v) {
         switch (v.getId()) {
             case R.id.main_view:
-                Toast.makeText(getContext(), "click", Toast.LENGTH_SHORT).show();
                 switch (state) {
                     case SHOWING_MENU:
                         setState(State.SHOWING_AD);
@@ -449,10 +445,9 @@ public class BannerPopup extends ViewGroup {
         if (!(v instanceof MenuItem))
             return 0;
 
-
         switch (direction) {
             case LEFT:
-                return (v.getLeft() - mainView.getLeft()) / unit;
+                return (v.getX() - mainView.getLeft()) / unit;
             case RIGHT:
                 return (mainView.getRight() - v.getRight()) / unit;
         }
@@ -478,8 +473,12 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void setPosition(int x, int y) {
-        params.x = x;
-        params.y = y;
+        if (x > -(mainViewHeight * 0.2f) && (x + mainView.getWidth() - (mainViewHeight * 0.2f)) < screenWidth)
+            params.x = x;
+
+        if (y > 0 && y + mainView.getHeight() < screenHeight)
+            params.y = y;
+
         update();
     }
 
