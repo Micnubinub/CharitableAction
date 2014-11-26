@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -23,7 +24,7 @@
         android:layout_below="@+id/title"
         android:dividerHeight="0px" />
 
-    <Button
+    <bigshots.charity.views.RippleButton
         android:id="@+id/fab"
         android:layout_width="76dp"
         android:layout_height="76dp"
@@ -33,7 +34,8 @@
         android:background="@drawable/fab"
         android:text="+"
         android:textColor="@color/dark_grey_text"
-        android:textSize="24dp" />
+        android:textSize="24dp"
+        app:is_circle="true" />
 
 
 </RelativeLayout>

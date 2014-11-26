@@ -107,8 +107,10 @@ public class BannerPopup extends ViewGroup {
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-                    if (((System.currentTimeMillis() - downTime) < 180) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop))
+                    if (((System.currentTimeMillis() - downTime) < 180) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop)) {
                         click(mainView);
+                        mainView.rippleOut();
+                    }
 
                     if (state == State.MINIMISED) {
                         currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO};
@@ -149,7 +151,7 @@ public class BannerPopup extends ViewGroup {
 
         bannerAdManager = new AdManager(getContext());
         // fullScreenAdmanager = new AdManager(getContext());
-        bannerAdManager.loadBannerAd();
+        //Todo bannerAdManager.loadBannerAd();
         adView = bannerAdManager.getBannerAd();
         // fullScreenAdmanager.loadFullscreenAd();
         adView.setPivotX(0);

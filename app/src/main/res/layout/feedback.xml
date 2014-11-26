@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <TextView
+    <bigshots.charity.views.RippleText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/material_blue_dark"
@@ -15,7 +15,7 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <TextView
+    <bigshots.charity.views.RippleText
         android:id="@+id/email"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -27,7 +27,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <TextView
+    <bigshots.charity.views.RippleText
         android:id="@+id/gplus"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -39,7 +39,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <TextView
+    <bigshots.charity.views.RippleText
         android:id="@+id/fb"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -51,7 +51,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <TextView
+    <bigshots.charity.views.RippleText
         android:id="@+id/direct"
         android:layout_width="fill_parent"
         android:layout_height="54dp"

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import bigshots.charity.R;
 
@@ -16,7 +17,7 @@ import bigshots.charity.R;
 public class MainBannerView extends ImageView {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 650;
+    private static int duration = 1100;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private BannerPopup.State state;
     private float animated_value = 0;
@@ -28,7 +29,6 @@ public class MainBannerView extends ImageView {
         }
     };
     private boolean animateRipple;
-    private float ripple_animated_value = 0;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animator) {
@@ -37,7 +37,7 @@ public class MainBannerView extends ImageView {
 
         @Override
         public void onAnimationEnd(Animator animator) {
-            ripple_animated_value = 0;
+            animated_value = 0;
             animateRipple = false;
             invalidatePoster();
         }
@@ -54,13 +54,17 @@ public class MainBannerView extends ImageView {
         }
     };
     private int rippleR, cx, cy;
-    private int rippleColor = 0x25ffffff;
+    private int rippleColor = 0x35ffffff;
 
     public MainBannerView(Context context) {
         super(context);
         setScaleType(ScaleType.CENTER_INSIDE);
         animator.setInterpolator(interpolator);
         animator.setDuration(duration);
+        animator.addListener(animatorListener);
+        animator.addUpdateListener(animatorUpdateListener);
+        setWillNotDraw(false);
+        paint.setColor(rippleColor);
     }
 
     public void setState(BannerPopup.State state) {
@@ -97,7 +101,7 @@ public class MainBannerView extends ImageView {
     }
 
     public void rippleOut() {
-
+        Toast.makeText(getContext(), "Ripple", Toast.LENGTH_SHORT).show();
         try {
             animator.cancel();
             animator.end();
@@ -124,8 +128,7 @@ public class MainBannerView extends ImageView {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         if (animateRipple) {
-            paint.setColor(rippleColor);
-            canvas.drawCircle(cx, cy, rippleR * ripple_animated_value, paint);
+            canvas.drawCircle(cx, cy, rippleR * animated_value, paint);
         }
     }
 
@@ -135,6 +138,5 @@ public class MainBannerView extends ImageView {
         cx = w / 2;
         cy = h / 2;
         rippleR = Math.min(cx, cy);
-
     }
 }

@@ -15,7 +15,7 @@
         android:textSize="28sp"
         android:textStyle="bold" />
 
-    <TextView
+    <bigshots.charity.views.RippleText
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:layout_toLeftOf="@+id/vote"

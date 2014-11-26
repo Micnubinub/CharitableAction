@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="4dp">
 
-    <Button
+    <bigshots.charity.views.RippleButton
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         android:textColor="@color/dark_grey_text"
         android:textSize="18sp" />
 
-    <Button
+    <bigshots.charity.views.RippleButton
         android:id="@+id/submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
