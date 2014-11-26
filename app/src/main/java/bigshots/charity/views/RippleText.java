@@ -21,12 +21,10 @@ public class RippleText extends TextView {
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static int duration = 850;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private TextView primaryTextView, secondaryTextView;
-    private String primaryText, secondaryText;
     private int width;
     private int height;
     private float animated_value = 0;
-    private float scaleTo = 1.065f;
+
     private int clickedX, clickedY;
     private boolean touchDown = false, animateRipple;
     private float ripple_animated_value = 0;
@@ -66,7 +64,9 @@ public class RippleText extends TextView {
         }
     };
     private int rippleR;
-    private int rippleColor = 0x25000000;
+    private int rippleColor;
+    private long downTime;
+    private OnClickListener listener;
 
     public RippleText(Context context) {
         super(context);
@@ -75,13 +75,16 @@ public class RippleText extends TextView {
 
     public RippleText(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RippleText, 0, 0);
+        rippleColor = a.getBoolean(R.attr.white_ripple, false) ? 0x33ffffff : 0x25000000;
+        a.recycle();
         init();
     }
 
     public RippleText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RippleText, 0, 0);
-        setRippleColor(a.getColor(R.attr.ripple_color, 0x25000000));
+        rippleColor = a.getBoolean(R.attr.white_ripple, false) ? 0x33ffffff : 0x25000000;
         a.recycle();
         init();
     }
@@ -134,10 +137,11 @@ public class RippleText extends TextView {
                 animator.start();
 
                 touchDown = true;
+                downTime = System.currentTimeMillis();
                 break;
+
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-                callOnClick();
                 touchDown = false;
 
                 if (!animator.isRunning()) {
@@ -145,10 +149,19 @@ public class RippleText extends TextView {
                     ripple_animated_value = 0;
                     invalidatePoster();
                 }
+
+                if (((System.currentTimeMillis() - downTime) < 180)) {
+                    if (listener != null)
+                        listener.onClick(this);
+                }
                 break;
         }
+
         return true;
     }
 
-
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        listener = l;
+    }
 }

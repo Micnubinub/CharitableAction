@@ -14,8 +14,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/material_blue_dark"
-        android:padding="18dp"
-        android:text="Main"
+        android:padding="16dp"
+        android:text="Main menu"
         android:textColor="@color/white"
         android:textSize="28sp"
         android:textStyle="bold" />

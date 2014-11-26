@@ -3,8 +3,10 @@ package bigshots.charity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import bigshots.charity.schedule_wheel.AbstractWheel;
 import bigshots.charity.schedule_wheel.OnWheelChangedListener;
 import bigshots.charity.schedule_wheel.adapters.NumericWheelAdapter;
 import bigshots.charity.utilities.Interfaces;
+import bigshots.charity.utilities.Utils;
 
 /**
  * Created by root on 18/11/14.
@@ -31,7 +34,7 @@ public class Contribute extends Activity {
     //Link to this months charity
 
     private int frequencyMinutes;
-
+    private Dialog dialog;
     private AdManager adManager;
     private String currentCharity;
 
@@ -66,7 +69,15 @@ public class Contribute extends Activity {
                     break;
 
                 case R.id.scheduled_ads:
-                    getScheduledAds().show();
+                    dialog = getScheduledAds();
+                    dialog.show();
+                    break;
+
+                case R.id.save:
+                    save();
+                case R.id.cancel:
+                    if (dialog != null)
+                        dialog.dismiss();
                     break;
             }
         }
@@ -82,16 +93,7 @@ public class Contribute extends Activity {
 
         }
     };
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case 1:
 
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +117,8 @@ public class Contribute extends Activity {
         final Dialog dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(R.layout.scheduled_dialog);
 
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(listener);
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(listener);
 
         final TextView frequency = (TextView) dialog.findViewById(R.id.frequency);
         final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
@@ -135,18 +139,26 @@ public class Contribute extends Activity {
         frequency.setText(prefix + "20 minutes");
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                frequencyMinutes = (hours.getCurrentItem() * 60) + minutes.getCurrentItem();
                 frequency.post(new Runnable() {
                     @Override
                     public void run() {
-                        frequency.setText(prefix + String.valueOf((hours.getCurrentItem() * 60) + minutes.getCurrentItem()) + " minutes");
+                        frequency.setText(prefix + String.valueOf(frequencyMinutes) + " minutes");
                     }
                 });
-
             }
         };
+
         hours.addChangingListener(wheelListener);
         minutes.addChangingListener(wheelListener);
 
         return dialog;
+    }
+
+    private void save() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
     }
 }

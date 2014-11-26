@@ -30,7 +30,7 @@
     </declare-styleable>
 
     <declare-styleable name="RippleText">
-        <attr name="ripple_color" format="color" />
+        <attr name="white_ripple" format="boolean" />
         <attr name="is_circle" format="boolean" />
     </declare-styleable>
 
