@@ -24,7 +24,7 @@ import bigshots.charity.services.BannerPopupService;
  */
 public class BannerPopup extends ViewGroup {
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
-    private static int duration = 750, touchSlop;
+    private static int duration = 1100, touchSlop;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
@@ -46,6 +46,7 @@ public class BannerPopup extends ViewGroup {
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
+
             animationFinished = false;
             if (state == State.SHOWING_MENU) {
                 adMenuItems();
@@ -73,7 +74,7 @@ public class BannerPopup extends ViewGroup {
     };
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
-    private float adDistance = 0.525f;
+    private float adDistance = 0.625f;
     private int lastMenuItemDistance, menuItemWidth;
     private WindowManager.LayoutParams params;
     private float animated_value, unit;
@@ -376,6 +377,8 @@ public class BannerPopup extends ViewGroup {
             if ((child instanceof MenuItem) && (state == State.SHOWING_MENU)) {
                 child.layout((int) child.getX(), adViewPadding, (int) child.getX() + adH, getMeasuredHeight() - adViewPadding);
             }
+            if ((int) child.getX() != child.getLeft())
+                Log.e("getX, getLeft", String.format("%d, %d", (int) child.getX(), child.getLeft()));
         }
         if ((state == State.SHOWING_AD) && (adView.getScaleX() > 0.01f))
             adView.layout((int) (getMeasuredHeight() * adDistance), adViewPadding, getMeasuredWidth(), getMeasuredHeight() - adViewPadding);
@@ -411,12 +414,13 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void resize(int width, int height) {
-        final LayoutParams params1 = getLayoutParams();
-        params1.height = height;
-        params1.width = width;
-        setLayoutParams(params1);
+//        final LayoutParams params1 = getLayoutParams();
+//        params1.height = height;
+//        params1.width = width;
+//        setLayoutParams(params1);
         params.height = height;
         params.width = width;
+
         update();
     }
 
@@ -587,7 +591,7 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void setMenuItemsX(int x) {
-        Log.e("setX", String.valueOf(x));
+
         switch (direction) {
             case LEFT:
                 int left = (mainView.getWidth() / 2) + x - menuItemWidth;
