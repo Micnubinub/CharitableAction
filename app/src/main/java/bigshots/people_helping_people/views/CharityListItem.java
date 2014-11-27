@@ -47,12 +47,12 @@ public class CharityListItem extends ViewGroup {
     };
     private RippleText textView;
     private PlusButton plusButton;
+    private ProgressBar progressBar;
     private int width;
     private int height;
-    //Todo add the progressbar
     private int clickedX, clickedY;
     private String link;
-    private boolean touchDown = false, animateRipple, votedFor;//Todo write code for voted for
+    private boolean touchDown = false, animateRipple, votedFor;
     private float ripple_animated_value = 0;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -178,14 +178,19 @@ public class CharityListItem extends ViewGroup {
         plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
         plusButton.setPadding(padding, padding, padding, padding);
 
+        progressBar = new ProgressBar(getContext());
+        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 4));
+
         setWillNotDraw(false);
         valueAnimator.setInterpolator(interpolator);
         valueAnimator.addUpdateListener(animatorUpdateListener);
         valueAnimator.addListener(animatorListener);
         valueAnimator.setDuration(duration);
         paint.setColor(0x25000000);
+        addView(progressBar);
         addView(textView);
         addView(plusButton);
+
 
         manager = AccountManager.get(getContext());
         accounts = manager.getAccountsByType("com.google");
@@ -264,6 +269,8 @@ public class CharityListItem extends ViewGroup {
 
     @Override
     protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
+        progressBar.layout(0, getHeight() - progressBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
+
         final int imageViewPadding = (getMeasuredHeight() - plusButton.getMeasuredHeight()) / 2;
         plusButton.layout(getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
                 imageViewPadding,
@@ -289,6 +296,10 @@ public class CharityListItem extends ViewGroup {
             view.invalidate();
             requestLayout();
         }
+    }
+
+    public void setProgress(int progress) {
+        progressBar.setProgress(progress);
     }
 
     private void checkViewParams(final View view) {

@@ -31,19 +31,31 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <bigshots.people_helping_people.views.RippleText
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:text="Popup at start up?"
-        android:textColor="@color/dark_grey_text"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_height="fill_parent">
 
-    <bigshots.people_helping_people.views.MaterialSwitch
-        android:id="@+id/vote"
-        android:layout_width="54dp"
-        android:layout_height="54dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+
+            <bigshots.people_helping_people.views.RippleText
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:text="Popup at start up?"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <bigshots.people_helping_people.views.MaterialSwitch
+                android:id="@+id/vote"
+                android:layout_width="54dp"
+                android:layout_height="54dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

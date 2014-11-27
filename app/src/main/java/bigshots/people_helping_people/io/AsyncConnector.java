@@ -53,7 +53,6 @@ public class AsyncConnector {
                         charities.add(charity);
                     }
                 }
-                Log.e("done getting charites", String.format("len : %d", charities.size()));
                 if (listener != null)
                     listener.onCompleteArray(charities);
 

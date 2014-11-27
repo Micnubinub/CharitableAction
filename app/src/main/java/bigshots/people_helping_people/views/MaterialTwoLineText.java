@@ -124,7 +124,6 @@ public class MaterialTwoLineText extends ViewGroup {
     }
 
     private void init() {
-        //Todo consider 16 and 14 (in the guidelines)
         final int padding = dpToPixels(16);
         final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 

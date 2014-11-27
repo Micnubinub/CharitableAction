@@ -18,10 +18,10 @@ import bigshots.people_helping_people.R;
 public class ProgressBar extends View {
     private static final DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private static final int duration = 750;
+    private static float max;
     private final Paint paint = new Paint();
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private int progress, w, h;
-    private float max;
     private int backgroundColor, progressColor;
     private boolean animateIn = true;
     private final ValueAnimator.AnimatorListener listener = new Animator.AnimatorListener() {
@@ -68,7 +68,6 @@ public class ProgressBar extends View {
         animator.addUpdateListener(updateListener);
         animator.addListener(listener);
         animator.setInterpolator(interpolator);
-        progress = 50;
         max = 100;
         progressColor = getResources().getColor(R.color.material_blue);
         backgroundColor = getResources().getColor(R.color.light_grey);
@@ -110,8 +109,8 @@ public class ProgressBar extends View {
         return max;
     }
 
-    public void setMax(float max) {
-        this.max = max;
+    public static void setMax(float max) {
+        ProgressBar.max = max;
     }
 
     public int getProgress() {

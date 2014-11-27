@@ -11,7 +11,6 @@ import android.view.View;
  */
 @SuppressWarnings("ALL")
 public class About extends Activity {
-    //Todo fill in
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

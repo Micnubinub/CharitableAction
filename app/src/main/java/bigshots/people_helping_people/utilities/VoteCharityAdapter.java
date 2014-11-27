@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.views.CharityListItem;
+import bigshots.people_helping_people.views.ProgressBar;
 
 /**
  * Created by root on 19/11/14.
@@ -23,11 +24,8 @@ public class VoteCharityAdapter extends BaseAdapter {
     private static int max;
     private final Context context;
     private final ArrayList<Charity> charities;
-    //Todo implement this
-
     private int height = 100;
     private String votedFor;
-    //Todo implement this con.getCharityManager().currentCharity("Steve@gmail.com");
     private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
@@ -64,10 +62,10 @@ public class VoteCharityAdapter extends BaseAdapter {
     }
 
     private void getMax() {
-        max = 0;
         for (Charity charity : charities) {
             max = Math.max(max, charity.getVotes());
         }
+        ProgressBar.setMax(max);
     }
 
     @Override
@@ -98,6 +96,7 @@ public class VoteCharityAdapter extends BaseAdapter {
         view.setPos(position);
         view.setLink(charities.get(position).getUrl());
         view.setText(charities.get(position).getName());
+        view.setProgress(charities.get(position).getVotes());
         if (votedFor != null && charities.get(position).getUrl().equals(votedFor))
             view.setVotedFor(true);
         else

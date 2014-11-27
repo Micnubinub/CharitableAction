@@ -27,12 +27,10 @@ import bigshots.people_helping_people.services.BannerPopupService;
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
 
-    //Todo Make Menu less empty (More Information etc)
-    //Todo Fix Banner Horizontal Issue.
-    //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
+    //Todo Make Menu less empty (More Information etc) add icons
     //Todo add intro slides
-    //Todo add scrollviews to all items
-    //Todo add icons
+    //Fix Banner Horizontal Issue.
+    //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
     //Todo make sure animations are doing exactly what they are meant to be doing. Remove view quicky
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
