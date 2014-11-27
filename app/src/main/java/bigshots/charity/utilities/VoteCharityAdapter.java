@@ -1,8 +1,6 @@
 package bigshots.charity.utilities;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import java.util.ArrayList;
 import bigshots.charity.io.Charity;
 import bigshots.charity.io.VoteManager;
 import bigshots.charity.views.CharityListItem;
-import bigshots.charity.views.PlusButton;
 
 /**
  * Created by root on 19/11/14.
@@ -25,24 +22,7 @@ public class VoteCharityAdapter extends BaseAdapter {
     private final ArrayList<Charity> charities;
     private final VoteManager voteManager = new VoteManager();
     //Todo implement this
-    private View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            CharityListItem charityListItem = (CharityListItem) v;
-            final String link = charities.get(charityListItem.getPos()).getUrl();
 
-            if (v instanceof PlusButton) {
-                if (link != null && link.length() > 3)
-                    castVote(link);
-            } else {
-
-                if (link != null && link.length() > 3) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                    context.startActivity(browserIntent);
-                }
-            }
-        }
-    };
     private int height = 100;
     private String votedFor;
     //Todo implement this con.getCharityManager().currentCharity("Steve@gmail.com");
@@ -100,6 +80,7 @@ public class VoteCharityAdapter extends BaseAdapter {
         final CharityListItem view = new CharityListItem(context);
         view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));
         view.setPos(position);
+        view.setLink(charities.get(position).getUrl());
         view.setText(charities.get(position).getName());
         if (votedFor != null && charities.get(position).getUrl() == votedFor)
             view.setVotedFor(true);

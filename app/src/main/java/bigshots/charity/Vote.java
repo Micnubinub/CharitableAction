@@ -44,10 +44,6 @@ public class Vote extends Activity {
         @Override
         public void onCompleteArray(final ArrayList<Charity> charities) {
             Vote.this.charities = charities;
-            // charityListClickListener = new CharityListClickListener(charities);
-            //Todo is this necessary
-//            if (listView!=null)
-//                listView.setOnItemClickListener(charityListClickListener);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

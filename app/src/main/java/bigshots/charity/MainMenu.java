@@ -1,5 +1,7 @@
 package bigshots.charity;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 
 import bigshots.charity.io.AsyncConnector;
 import bigshots.charity.io.Charity;
+import bigshots.charity.io.UserManager;
 import bigshots.charity.utilities.Interfaces;
 
 /**
@@ -51,16 +54,18 @@ public class MainMenu extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
 
-
-        /*Todo AccountManager manager = AccountManager.get(this);
-        Account[] accounts = manager.getAccountsByType("com.google");
-        for (Account account : accounts){
-        if(account.name.endsWith("gmail.com")){
-              String gmailAddress = account.name;
-              String password = manager.getPassword(account);
-           }
-         }
-        con.getUserManager().insertUser("Steve@gmail.com");*/
+        try {
+            AccountManager manager = AccountManager.get(this);
+            Account[] accounts = manager.getAccountsByType("com.google");
+            for (Account account : accounts) {
+                if (account.name.contains("@gmail")) {
+                    new UserManager().insertUser(account.name);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         findViewById(R.id.about).setOnClickListener(listener);
         findViewById(R.id.prefs).setOnClickListener(listener);
         findViewById(R.id.feedback).setOnClickListener(listener);
