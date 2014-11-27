@@ -2,7 +2,6 @@ package bigshots.charity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -76,8 +75,7 @@ public class Vote extends Activity {
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent i = new Intent(Vote.this, MainMenu.class);
-                startActivity(i);
+                finish();
             }
         });
         listView = (ListView) findViewById(R.id.list);

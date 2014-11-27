@@ -1,7 +1,6 @@
 package bigshots.charity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -17,8 +16,7 @@ public class Preferences extends Activity {
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent i = new Intent(Preferences.this, MainMenu.class);
-                startActivity(i);
+                finish();
             }
         });
     }

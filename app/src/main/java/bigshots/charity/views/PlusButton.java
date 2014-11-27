@@ -8,41 +8,24 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 
 /**
  * Created by root on 19/11/14.
  */
-public class PlusButton extends View {
+public class PlusButton extends Button {
+    private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static final int duration = 800;
+    private static int duration = 600;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private final Paint paint = new Paint();
-    private final int circleColor = 0xffdcdcdc;
-    private final int plusMinusColor = 0xff454545;
-    private final int[] verticalLinePos = new int[4];
-    private final int[] horizontalLinePos = new int[4];
-    private final boolean touchDown = false;
-    private State state = State.PLUS;
-    private boolean animateRipple;
-    private float ripple_animated_value, animated_value;
-    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            animated_value = (Float) (animation.getAnimatedValue());
-            ripple_animated_value = animated_value;
-            invalidatePoster();
-        }
-    };
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animator) {
-
+            animateRipple = true;
         }
 
         @Override
         public void onAnimationEnd(Animator animator) {
-            if (!touchDown)
-                ripple_animated_value = 0;
 
             animateRipple = false;
             invalidatePoster();
@@ -59,11 +42,27 @@ public class PlusButton extends View {
 
         }
     };
+    private int cx, cy;
+    private boolean votedFor = false, animateRipple;
+    private float ripple_animated_value = 0;
+    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            ripple_animated_value = (Float) (animation.getAnimatedValue());
+
+            invalidatePoster();
+        }
+    };
     private int rippleR;
-    private int rippleColor = 0x25000000;
-    private int clickedX, clickedY;
-    private OnPlusMinusButtonPressed onPlusMinusButtonPressed;
-    private int cx, cy, r, lineR;
+
+    private OnClickListener listener, onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            click();
+            if (listener != null)
+                listener.onClick(v);
+        }
+    };
 
     public PlusButton(Context context) {
         super(context);
@@ -75,145 +74,17 @@ public class PlusButton extends View {
         init();
     }
 
+    public PlusButton(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
     private void init() {
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                click();
-            }
-        });
-
-
-        animator.setInterpolator(interpolator);
+        super.setOnClickListener(onClickListener);
+        animator.setDuration(duration);
         animator.addUpdateListener(animatorUpdateListener);
         animator.addListener(animatorListener);
-        animator.setDuration(duration);
-
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        paint.setColor(circleColor);
-        canvas.drawCircle(cx, cy, r, paint);
-        drawLines(canvas);
-    }
-
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
-        if (animateRipple) {
-            paint.setColor(rippleColor);
-            canvas.drawCircle(clickedX, clickedY, rippleR * ripple_animated_value, paint);
-        }
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        cx = w / 2;
-        cy = h / 2;
-        w = w - getPaddingLeft() - getPaddingRight();
-        h = h - getPaddingTop() - getPaddingBottom();
-        r = Math.min(w, h) / 2;
-        lineR = (int) (r * 0.435f);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeWidth(lineR / 4.5f);
-    }
-
-    private void drawLines(Canvas canvas) {
-        calculatePositions();
-        paint.setColor(plusMinusColor);
-        canvas.drawLine(verticalLinePos[0], verticalLinePos[1], verticalLinePos[2], verticalLinePos[3], paint);
-        canvas.drawLine(horizontalLinePos[0], horizontalLinePos[1], horizontalLinePos[2], horizontalLinePos[3], paint);
-    }
-
-    private void calculatePositions() {
-        if (animator.isRunning()) {
-
-            int base = 0;
-            switch (state) {
-                case MINUS:
-                    base = (int) ((animated_value * 270) - 90);
-                    break;
-                case PLUS:
-                    base = (int) ((animated_value * 90) + 180);
-                    break;
-            }
-
-            injectPositions(base);
-        } else {
-
-            switch (state) {
-                case MINUS:
-                    verticalLinePos[0] = cx - lineR;
-                    verticalLinePos[1] = cy;
-                    verticalLinePos[2] = cx + lineR;
-                    verticalLinePos[3] = cy;
-
-                    horizontalLinePos[0] = cx - lineR;
-                    horizontalLinePos[1] = cy;
-                    horizontalLinePos[2] = cx + lineR;
-                    horizontalLinePos[3] = cy;
-
-                    break;
-                case PLUS:
-                    verticalLinePos[0] = cx;
-                    verticalLinePos[1] = cy - lineR;
-                    verticalLinePos[2] = cx;
-                    verticalLinePos[3] = cy + lineR;
-
-                    horizontalLinePos[0] = cx - lineR;
-                    horizontalLinePos[1] = cy;
-                    horizontalLinePos[2] = cx + lineR;
-                    horizontalLinePos[3] = cy;
-                    break;
-            }
-        }
-
-    }
-
-    private void injectPositions(int baseDeg) {
-        switch (state) {
-            case PLUS:
-                verticalLinePos[0] = cx + (int) (Math.cos(Math.toRadians(baseDeg)) * lineR);
-                verticalLinePos[1] = cy + (int) (Math.sin(Math.toRadians(baseDeg)) * lineR);
-                verticalLinePos[2] = cx + (int) (Math.cos(Math.toRadians(baseDeg - 180)) * lineR);
-                verticalLinePos[3] = cy + (int) (Math.sin(Math.toRadians(baseDeg - 180)) * lineR);
-                baseDeg -= 90;
-                horizontalLinePos[0] = cx + (int) (Math.sin(Math.toRadians(baseDeg)) * lineR);
-                horizontalLinePos[1] = cy + (int) (Math.cos(Math.toRadians(baseDeg)) * lineR);
-                horizontalLinePos[2] = cx + (int) (Math.sin(Math.toRadians(baseDeg - 180)) * lineR);
-                horizontalLinePos[3] = cy + (int) (Math.cos(Math.toRadians(baseDeg - 180)) * lineR);
-
-                break;
-            case MINUS:
-                verticalLinePos[0] = cx + (int) (Math.cos(Math.toRadians(baseDeg)) * lineR);
-                verticalLinePos[1] = cy + (int) (Math.sin(Math.toRadians(baseDeg)) * lineR);
-                verticalLinePos[2] = cx + (int) (Math.cos(Math.toRadians(baseDeg - 180)) * lineR);
-                verticalLinePos[3] = cy + (int) (Math.sin(Math.toRadians(baseDeg - 180)) * lineR);
-
-                baseDeg -= 90;
-                horizontalLinePos[0] = cx + (int) (Math.cos(Math.toRadians(baseDeg)) * lineR);
-                horizontalLinePos[1] = cy + (int) (Math.sin(Math.toRadians(baseDeg)) * lineR);
-                horizontalLinePos[2] = cx + (int) (Math.cos(Math.toRadians(baseDeg - 180)) * lineR);
-                horizontalLinePos[3] = cy + (int) (Math.sin(Math.toRadians(baseDeg - 180)) * lineR);
-                break;
-        }
-
-    }
-
-    private void click() {
-
-        if (state == State.MINUS)
-            state = State.PLUS;
-        else
-            state = State.MINUS;
-
-        if (onPlusMinusButtonPressed != null)
-            onPlusMinusButtonPressed.onButtonPressed(state);
-
-        animator.start();
+        animator.setInterpolator(interpolator);
     }
 
     private void invalidatePoster() {
@@ -225,16 +96,56 @@ public class PlusButton extends View {
         });
     }
 
-    public void setRippleColor(int color) {
-        rippleColor = color;
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (animateRipple && animator.isRunning()) {
+            paint.setColor(getColor(!votedFor));
+            canvas.drawCircle(cx, cy, rippleR, paint);
+            paint.setColor(getColor(votedFor));
+            canvas.drawCircle(cx, cy, rippleR * ripple_animated_value, paint);
+        } else {
+            paint.setColor(getColor(votedFor));
+            canvas.drawCircle(cx, cy, rippleR, paint);
+        }
     }
 
-    public enum State {
-        MINUS, PLUS
 
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        cx = w / 2;
+        cy = h / 2;
+        w = w - getPaddingLeft() - getPaddingRight();
+        h = h - getPaddingTop() - getPaddingBottom();
+
+        rippleR = Math.min(w, h) / 2;
     }
 
-    public interface OnPlusMinusButtonPressed {
-        void onButtonPressed(State state);
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        listener = l;
+    }
+
+    public void setIsVotedFor(boolean votedFor) {
+        this.votedFor = votedFor;
+    }
+
+    private void startAnimator() {
+        if (animator.isRunning()) {
+            animator.end();
+            animator.cancel();
+        }
+
+        animator.start();
+    }
+
+    private void click() {
+        setIsVotedFor(!votedFor);
+        startAnimator();
+    }
+
+    private int getColor(boolean b) {
+        return b ? 0x42bd41 : 0xe51c23;
     }
 }

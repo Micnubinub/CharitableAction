@@ -109,8 +109,7 @@ public class Contribute extends Activity {
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent i = new Intent(Contribute.this, MainMenu.class);
-                startActivity(i);
+                finish();
             }
         });
 

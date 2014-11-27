@@ -55,8 +55,7 @@ public class Feedback extends Activity {
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent i = new Intent(Feedback.this, MainMenu.class);
-                startActivity(i);
+                finish();
             }
         });
     }

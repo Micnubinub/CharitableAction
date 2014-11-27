@@ -18,7 +18,6 @@ Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.goog
 startActivity(browserIntent);
  */
 
-
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -45,8 +44,7 @@ startActivity(browserIntent);
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent i = new Intent(About.this, MainMenu.class);
-                startActivity(i);
+                finish();
             }
         });
     }
