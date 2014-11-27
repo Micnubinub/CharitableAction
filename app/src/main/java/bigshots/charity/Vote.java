@@ -76,7 +76,7 @@ public class Vote extends Activity {
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Vote.this, MainMenu.class);
+                final Intent i = new Intent(Vote.this, MainMenu.class);
                 startActivity(i);
             }
         });

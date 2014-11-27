@@ -52,7 +52,13 @@ public class Feedback extends Activity {
         findViewById(R.id.gplus).setOnClickListener(listener);
         findViewById(R.id.fb).setOnClickListener(listener);
         findViewById(R.id.direct).setOnClickListener(listener);
-
+        findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent i = new Intent(Feedback.this, MainMenu.class);
+                startActivity(i);
+            }
+        });
     }
 
     private void showDirectMessageDialog() {
@@ -89,7 +95,6 @@ public class Feedback extends Activity {
         dialog.setContentView(R.layout.email);
         final EditText subject = (EditText) dialog.findViewById(R.id.subject);
         final EditText body = (EditText) dialog.findViewById(R.id.body);
-
         final View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

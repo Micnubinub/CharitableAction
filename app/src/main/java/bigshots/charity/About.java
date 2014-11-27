@@ -42,5 +42,12 @@ startActivity(browserIntent);
         setContentView(R.layout.about);
         findViewById(R.id.playstore_link).setOnClickListener(listener);
         findViewById(R.id.website_link).setOnClickListener(listener);
+        findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent i = new Intent(About.this, MainMenu.class);
+                startActivity(i);
+            }
+        });
     }
 }

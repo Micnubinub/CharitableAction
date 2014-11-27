@@ -106,6 +106,13 @@ public class Contribute extends Activity {
         findViewById(R.id.video_ad).setOnClickListener(listener);
         findViewById(R.id.scheduled_ads).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
+        findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent i = new Intent(Contribute.this, MainMenu.class);
+                startActivity(i);
+            }
+        });
 
         AsyncConnector.setListener(aSyncListener);
         new Connector().getCharityManager().monthlyCharity();
@@ -132,7 +139,7 @@ public class Contribute extends Activity {
 
         hours.setCurrentItem(0);
         minutes.setCurrentItem(20);
-        final String prefix = "A full screen Ad will be show every :";
+        final String prefix = "A full screen Ad will be show every : ";
 
         frequency.setText(prefix + "20 minutes");
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
@@ -156,7 +163,6 @@ public class Contribute extends Activity {
     private void save() {
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
-
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
     }
 }
