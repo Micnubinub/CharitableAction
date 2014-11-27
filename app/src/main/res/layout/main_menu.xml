@@ -1,194 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/material_blue_dark"
-        android:padding="16dp"
-        android:text="Main menu"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/material_blue_dark"
+            android:padding="16dp"
+            android:text="Main menu"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:orientation="vertical">
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:background="@color/white"
+                      android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/contribute_icon" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/contribute_icon"/>
 
-                <bigshots.people_helping_people.views.RippleText
-                    android:id="@+id/contribute"
-                    android:layout_width="fill_parent"
-                    android:layout_height="54dp"
-                    android:maxLines="1"
-                    android:paddingBottom="14dp"
-                    android:paddingLeft="52dp"
-                    android:paddingRight="14dp"
-                    android:paddingTop="14dp"
-                    android:text="Contribute"
-                    android:textColor="@color/dark_grey_text"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                <bigshots.people_helping_people.views.RippleTextView
+                        android:id="@+id/contribute"
+                        android:layout_width="fill_parent"
+                        android:layout_height="54dp"
+                        android:maxLines="1"
+                        android:paddingBottom="14dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="14dp"
+                        android:text="Contribute"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
             </RelativeLayout>
 
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/vote_icon" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/vote_icon"/>
 
-                <bigshots.people_helping_people.views.RippleText
-                    android:id="@+id/vote"
-                    android:layout_width="fill_parent"
-                    android:layout_height="54dp"
-                    android:maxLines="1"
-                    android:paddingBottom="14dp"
-                    android:paddingLeft="52dp"
-                    android:paddingRight="14dp"
-                    android:paddingTop="14dp"
-                    android:text="Your vote counts"
-                    android:textColor="@color/dark_grey_text"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                <bigshots.people_helping_people.views.RippleTextView
+                        android:id="@+id/vote"
+                        android:layout_width="fill_parent"
+                        android:layout_height="54dp"
+                        android:maxLines="1"
+                        android:paddingBottom="14dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="14dp"
+                        android:text="Your vote counts"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
             </RelativeLayout>
 
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/statistics_icon" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/statistics_icon"/>
 
-                <bigshots.people_helping_people.views.RippleText
-                    android:id="@+id/statistics"
-                    android:layout_width="fill_parent"
-                    android:layout_height="54dp"
-                    android:maxLines="1"
-                    android:paddingBottom="14dp"
-                    android:paddingLeft="52dp"
-                    android:paddingRight="14dp"
-                    android:paddingTop="14dp"
-                    android:text="Statistics"
-                    android:textColor="@color/dark_grey_text"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                <bigshots.people_helping_people.views.RippleTextView
+                        android:id="@+id/statistics"
+                        android:layout_width="fill_parent"
+                        android:layout_height="54dp"
+                        android:maxLines="1"
+                        android:paddingBottom="14dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="14dp"
+                        android:text="Statistics"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/feedback_icon" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/feedback_icon"/>
 
-                <bigshots.people_helping_people.views.RippleText
-                    android:id="@+id/feedback"
-                    android:layout_width="fill_parent"
-                    android:layout_height="54dp"
-                    android:maxLines="1"
-                    android:paddingBottom="14dp"
-                    android:paddingLeft="52dp"
-                    android:paddingRight="14dp"
-                    android:paddingTop="14dp"
-                    android:text="Feedback"
-                    android:textColor="@color/dark_grey_text"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                <bigshots.people_helping_people.views.RippleTextView
+                        android:id="@+id/feedback"
+                        android:layout_width="fill_parent"
+                        android:layout_height="54dp"
+                        android:maxLines="1"
+                        android:paddingBottom="14dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="14dp"
+                        android:text="Feedback"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
             </RelativeLayout>
 
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/prefs_icon" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/prefs_icon"/>
 
-                <bigshots.people_helping_people.views.RippleText
+                <bigshots.people_helping_people.views.RippleTextView
 
-                    android:id="@+id/prefs"
-                    android:layout_width="fill_parent"
-                    android:layout_height="54dp"
-                    android:maxLines="1"
-                    android:paddingBottom="14dp"
-                    android:paddingLeft="52dp"
-                    android:paddingRight="14dp"
-                    android:paddingTop="14dp"
-                    android:text="Preferences"
-                    android:textColor="@color/dark_grey_text"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                        android:id="@+id/prefs"
+                        android:layout_width="fill_parent"
+                        android:layout_height="54dp"
+                        android:maxLines="1"
+                        android:paddingBottom="14dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="14dp"
+                        android:text="Preferences"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/about_icon" />
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/about_icon"/>
 
-                <bigshots.people_helping_people.views.RippleText
-                    android:id="@+id/about"
-                    android:layout_width="fill_parent"
-                    android:layout_height="54dp"
-                    android:maxLines="1"
-                    android:paddingBottom="14dp"
-                    android:paddingLeft="52dp"
-                    android:paddingRight="14dp"
-                    android:paddingTop="14dp"
-                    android:text="About"
-                    android:textColor="@color/dark_grey_text"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
+                <bigshots.people_helping_people.views.RippleTextView
+                        android:id="@+id/about"
+                        android:layout_width="fill_parent"
+                        android:layout_height="54dp"
+                        android:maxLines="1"
+                        android:paddingBottom="14dp"
+                        android:paddingLeft="52dp"
+                        android:paddingRight="14dp"
+                        android:paddingTop="14dp"
+                        android:text="About"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="22sp"
+                        android:textStyle="bold"/>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

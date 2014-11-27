@@ -1,60 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white"
+              android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/material_blue_dark">
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="14dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/white_arrow" />
-
-        <bigshots.people_helping_people.views.WhiteRippleText
-            android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:paddingLeft="69dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp"
-            android:text="Preferences"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:background="@color/material_blue_dark">
+
+        <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="14dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/white_arrow"/>
+
+        <bigshots.people_helping_people.views.WhiteRippleText
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:paddingLeft="69dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:text="Preferences"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
     </RelativeLayout>
 
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
-            <bigshots.people_helping_people.views.RippleText
-                android:layout_width="fill_parent"
-                android:layout_height="54dp"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:text="Popup at start up?"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="22sp"
-                android:textStyle="bold" />
-
-            <bigshots.people_helping_people.views.MaterialSwitch
-                android:id="@+id/vote"
-                android:layout_width="54dp"
-                android:layout_height="54dp" />
+            <bigshots.people_helping_people.views.RippleButton
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@color/white"
+                    android:padding="10dp"
+                    android:text="Coming soon"
+                    android:textColor="@color/dark_grey_text"
+                    android:textSize="28sp"
+                    android:textStyle="bold"/>
 
         </LinearLayout>
     </ScrollView>

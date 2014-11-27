@@ -14,7 +14,7 @@ import android.widget.TextView;
  * Created by root on 27/11/14.
  */
 @SuppressWarnings("ALL")
-public class RippleText extends TextView {
+public class RippleTextView extends TextView {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static final int duration = 850;
@@ -22,7 +22,6 @@ public class RippleText extends TextView {
     private int width;
     private int height;
     private float animated_value = 0;
-
     private int clickedX, clickedY;
     private boolean touchDown = false, animateRipple;
     private float ripple_animated_value = 0;
@@ -66,18 +65,13 @@ public class RippleText extends TextView {
     private long downTime;
     private OnClickListener listener;
 
-    public RippleText(Context context) {
+    public RippleTextView(Context context) {
         super(context);
         init();
     }
 
-    public RippleText(Context context, AttributeSet attrs) {
+    public RippleTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
-
-    public RippleText(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
         init();
     }
 

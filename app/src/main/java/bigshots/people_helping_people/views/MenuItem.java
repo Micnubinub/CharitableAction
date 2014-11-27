@@ -9,7 +9,7 @@ import android.widget.ImageView;
  */
 @SuppressWarnings("ALL")
 public class MenuItem extends ImageView {
-    //Todo longclick message
+    //Todo longclick message in next update
     private int xPos;
 
     public MenuItem(Context context, int resID) {

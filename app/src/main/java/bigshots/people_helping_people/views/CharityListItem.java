@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
-
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.VoteManager;
 
@@ -45,7 +44,7 @@ public class CharityListItem extends ViewGroup {
 
         }
     };
-    private RippleText textView;
+    private RippleTextView textView;
     private PlusButton plusButton;
     private ProgressBar progressBar;
     private int width;
@@ -165,7 +164,7 @@ public class CharityListItem extends ViewGroup {
         final int padding = dpToPixels(16);
         final int buttonWidth = dpToPixels(72);
 
-        textView = new RippleText(getContext());
+        textView = new RippleTextView(getContext());
         textView.setTextColor(getResources().getColor(R.color.dark_grey_text));
         textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
         textView.setTextSize(22);
@@ -179,7 +178,7 @@ public class CharityListItem extends ViewGroup {
         plusButton.setPadding(padding, padding, padding, padding);
 
         progressBar = new ProgressBar(getContext());
-        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 4));
+        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 5));
 
         setWillNotDraw(false);
         valueAnimator.setInterpolator(interpolator);

@@ -12,26 +12,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
-
 import bigshots.people_helping_people.Contribute;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.services.BannerPopupService;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
 
 /**
  * Created by root on 18/11/14.
  */
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
-
-    //Todo Make Menu less empty (More Information etc) add icons
     //Todo add intro slides
     //Fix Banner Horizontal Issue.
     //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
     //Todo make sure animations are doing exactly what they are meant to be doing. Remove view quicky
+    //Todo scheduler
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
@@ -99,7 +96,7 @@ public class BannerPopup extends ViewGroup {
         }
     };
     private int spacing, initialX, initialY, initialTouchX, initialTouchY;
-    //Todo implement x,t
+    //implement x,t
     private int toX, fromX, x, y, padding, adH, adW, w, h, screenHeight, screenWidth;
     private CurrentAnimation[] currentAnimations;
     private final OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
@@ -148,8 +145,6 @@ public class BannerPopup extends ViewGroup {
         init();
     }
 
-    //Todo check the screenSize, and scale the ad accordingly
-
     private void init() {
         animator.setDuration(duration);
         animator.addUpdateListener(animatorUpdateListener);
@@ -158,7 +153,7 @@ public class BannerPopup extends ViewGroup {
         touchSlop = dpToPixels(4);
 
         bannerAdManager = new AdManager(getContext());
-        bannerAdManager.loadBannerAd();
+        // bannerAdManager.loadBannerAd();
         adView = bannerAdManager.getBannerAd();
         adView.setPivotX(0);
 
@@ -177,8 +172,6 @@ public class BannerPopup extends ViewGroup {
 
         openApp = new MenuItem(getContext(), R.drawable.open_app);
         openApp.setId(R.id.open_app);
-
-        //Todo set direction
 
         setParameters();
         invalidate();
@@ -274,7 +267,6 @@ public class BannerPopup extends ViewGroup {
 
         final float scale = getScale(screenWidth, w, adW);
         if (scale < 0.9999f) {
-            //Todo check
             h = (int) (h * scale);
             w = (int) (w * scale);
             adW = (int) (adW * scale);
@@ -299,7 +291,7 @@ public class BannerPopup extends ViewGroup {
     }
 
     private float getScale(int screenWidth, int viewWidth, int adWidth) {
-        //TOdo fill in
+        //TOdo fill in in next update
         return 1f;
     }
 
@@ -316,7 +308,6 @@ public class BannerPopup extends ViewGroup {
     private void click(View v) {
         switch (v.getId()) {
             case R.id.main_view:
-                Toast.makeText(getContext(), "click", Toast.LENGTH_LONG).show();
                 switch (state) {
                     case SHOWING_MENU:
                         setState(State.SHOWING_AD);
@@ -357,27 +348,7 @@ public class BannerPopup extends ViewGroup {
                 setState(State.MINIMISED);
                 break;
             case R.id.full_screen:
-                bannerAdManager.loadFullscreenAd();
-                fullScreenAd = bannerAdManager.getFullscreenAd();
-                fullScreenAd.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdLoaded() {
-                        super.onAdLoaded();
-                        fullScreenAd.show();
-                    }
-
-                    @Override
-                    public void onAdClosed() {
-                        super.onAdClosed();
-                        //Todo make reload it
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(int errorCode) {
-                        super.onAdFailedToLoad(errorCode);
-                        Toast.makeText(getContext(), "Failed to load ad", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                showFullScreenAd();
 
                 break;
         }
@@ -629,6 +600,30 @@ public class BannerPopup extends ViewGroup {
                 break;
         }
 
+    }
+
+    public void showFullScreenAd() {
+        bannerAdManager.loadFullscreenAd();
+        fullScreenAd = bannerAdManager.getFullscreenAd();
+        fullScreenAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                fullScreenAd.show();
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                //make reload it
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                super.onAdFailedToLoad(errorCode);
+                Toast.makeText(getContext(), "Failed to load ad", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public enum State {

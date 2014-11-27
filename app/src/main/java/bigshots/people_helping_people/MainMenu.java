@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.utilities.Interfaces;
+
+import java.util.ArrayList;
 
 /**
  * Created by root on 18/11/14.
@@ -40,7 +39,7 @@ public class MainMenu extends Activity {
                 case R.id.vote:
                     i = new Intent(MainMenu.this, Vote.class);
                     break;
-                case R.id.stats:
+                case R.id.statistics:
                     i = new Intent(MainMenu.this, Statistics.class);
                     break;
             }
@@ -72,7 +71,7 @@ public class MainMenu extends Activity {
         findViewById(R.id.feedback).setOnClickListener(listener);
         findViewById(R.id.vote).setOnClickListener(listener);
         findViewById(R.id.contribute).setOnClickListener(listener);
-        findViewById(R.id.stats).setOnClickListener(listener);
+        findViewById(R.id.statistics).setOnClickListener(listener);
         AsyncConnector.setListener(new Interfaces.ASyncListener() {
             @Override
             public void onCompleteSingle(final Charity charity) {
