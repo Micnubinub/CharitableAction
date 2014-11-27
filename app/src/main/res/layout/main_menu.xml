@@ -17,7 +17,7 @@
         android:padding="16dp"
         android:text="Main menu"
         android:textColor="@color/white"
-        android:textSize="28sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
 

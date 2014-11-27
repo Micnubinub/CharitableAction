@@ -3,15 +3,12 @@ package bigshots.charity.views;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
-
-import bigshots.charity.R;
 
 /**
  * Created by root on 27/11/14.
@@ -64,7 +61,7 @@ public class RippleText extends TextView {
         }
     };
     private int rippleR;
-    private int rippleColor;
+    private int rippleColor = 0x22000000;
     private long downTime;
     private OnClickListener listener;
 
@@ -75,17 +72,11 @@ public class RippleText extends TextView {
 
     public RippleText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RippleText, 0, 0);
-        rippleColor = a.getBoolean(R.attr.white_ripple, false) ? 0x33ffffff : 0x25000000;
-        a.recycle();
         init();
     }
 
     public RippleText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RippleText, 0, 0);
-        rippleColor = a.getBoolean(R.attr.white_ripple, false) ? 0x33ffffff : 0x25000000;
-        a.recycle();
         init();
     }
 
@@ -149,10 +140,12 @@ public class RippleText extends TextView {
                     ripple_animated_value = 0;
                     invalidatePoster();
                 }
-
-                if (((System.currentTimeMillis() - downTime) < 180)) {
-                    if (listener != null)
+                try {
+                    if (((System.currentTimeMillis() - downTime) < 180)) {
                         listener.onClick(this);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
         }

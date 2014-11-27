@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -13,13 +12,13 @@
         android:background="@color/material_blue_dark">
 
         <ImageView
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:padding="14dp"
             android:scaleType="centerInside"
             android:src="@drawable/white_arrow" />
 
-        <bigshots.charity.views.RippleText
+        <bigshots.charity.views.WhiteRippleText
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -29,9 +28,8 @@
             android:paddingTop="16dp"
             android:text="Vote"
             android:textColor="@color/white"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:white_ripple="true" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <ListView
@@ -51,8 +49,7 @@
         android:background="@drawable/fab"
         android:text="+"
         android:textColor="@color/dark_grey_text"
-        android:textSize="24dp"
-        app:is_circle="true" />
+        android:textSize="24dp" />
 
 
 </RelativeLayout>

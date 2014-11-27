@@ -42,7 +42,6 @@ public class Contribute extends Activity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-
                 case R.id.full_screen:
                     adManager.getFullscreenAd().setAdListener(new AdListener() {
                         public void onAdLoaded() {
@@ -60,7 +59,7 @@ public class Contribute extends Activity {
                 case R.id.current_charity:
                     try {
                         if (currentCharity != null && currentCharity.length() > 3) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentCharity));
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.savethechildren.org.au/"));//currentCharity));
                             startActivity(browserIntent);
                         }
                     } catch (Exception e) {
@@ -72,7 +71,6 @@ public class Contribute extends Activity {
                     dialog = getScheduledAds();
                     dialog.show();
                     break;
-
                 case R.id.save:
                     save();
                 case R.id.cancel:
@@ -156,7 +154,7 @@ public class Contribute extends Activity {
     }
 
     private void save() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();

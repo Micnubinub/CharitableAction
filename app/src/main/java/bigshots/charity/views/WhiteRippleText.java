@@ -8,20 +8,20 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * Created by root on 27/11/14.
  */
-public class RippleButton extends Button {
+public class WhiteRippleText extends TextView {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 600;
+    private static int duration = 650;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private int width;
     private int height;
-    private float animated_value;
-    private boolean isCircle;
+    private float animated_value = 0;
+
     private int clickedX, clickedY;
     private boolean touchDown = false, animateRipple;
     private float ripple_animated_value = 0;
@@ -36,14 +36,15 @@ public class RippleButton extends Button {
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animator) {
-
+            animateRipple = true;
         }
 
         @Override
         public void onAnimationEnd(Animator animator) {
-            if (!touchDown)
+            if (!touchDown) {
                 ripple_animated_value = 0;
-
+                return;
+            }
             animateRipple = false;
             invalidatePoster();
         }
@@ -59,22 +60,23 @@ public class RippleButton extends Button {
 
         }
     };
+
     private int rippleR;
-    private int rippleColor = 0x25000000;
+    private int rippleColor = 0x30ffffff;
     private long downTime;
     private OnClickListener listener;
 
-    public RippleButton(Context context) {
+    public WhiteRippleText(Context context) {
         super(context);
         init();
     }
 
-    public RippleButton(Context context, AttributeSet attrs) {
+    public WhiteRippleText(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public RippleButton(Context context, AttributeSet attrs, int defStyleAttr) {
+    public WhiteRippleText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -105,7 +107,6 @@ public class RippleButton extends Button {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         if (animateRipple) {
-            paint.setColor(rippleColor);
             canvas.drawCircle(clickedX, clickedY, rippleR * ripple_animated_value, paint);
         }
     }
@@ -121,26 +122,25 @@ public class RippleButton extends Button {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (!isCircle) {
-                    clickedX = (int) event.getX();
-                    clickedY = (int) event.getY();
-                    rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
-                } else {
-                    clickedX = width / 2;
-                    clickedY = height / 2;
-                    rippleR = Math.min(clickedX, clickedY);
-                }
+                clickedX = (int) event.getX();
+                clickedY = (int) event.getY();
+                rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
 
                 animator.start();
 
-                downTime = System.currentTimeMillis();
                 touchDown = true;
-                animateRipple = true;
+                downTime = System.currentTimeMillis();
                 break;
+
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 touchDown = false;
 
+                if (!animator.isRunning()) {
+                    animateRipple = false;
+                    ripple_animated_value = 0;
+                    invalidatePoster();
+                }
 
                 if (((System.currentTimeMillis() - downTime) < 180)) {
                     if (listener != null)
@@ -155,9 +155,5 @@ public class RippleButton extends Button {
     @Override
     public void setOnClickListener(OnClickListener l) {
         listener = l;
-    }
-
-    public void setIsCircle(boolean isCircle) {
-        this.isCircle = isCircle;
     }
 }

@@ -29,10 +29,5 @@
         <attr name="selectionDividerWidth" format="dimension" />
     </declare-styleable>
 
-    <declare-styleable name="RippleText">
-        <attr name="white_ripple" format="boolean" />
-        <attr name="is_circle" format="boolean" />
-    </declare-styleable>
-
     <attr name="abstractWheelViewStyle" format="reference" />
 </resources>
