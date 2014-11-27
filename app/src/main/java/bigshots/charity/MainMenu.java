@@ -19,6 +19,7 @@ import bigshots.charity.utilities.Interfaces;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class MainMenu extends Activity {
     private final View.OnClickListener listener = new View.OnClickListener() {
 
@@ -79,7 +80,7 @@ public class MainMenu extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView) findViewById(R.id.contribute)).setText(charity.getName().toString());
+                        ((TextView) findViewById(R.id.contribute)).setText(charity.getName());
                     }
                 });
             }

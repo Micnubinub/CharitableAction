@@ -22,6 +22,7 @@ import bigshots.charity.R;
 /**
  * Created by root on 20/10/14.
  */
+@SuppressWarnings("ALL")
 public class MaterialTwoLineText extends ViewGroup {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();

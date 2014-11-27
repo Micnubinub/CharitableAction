@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,22 +20,11 @@ import bigshots.charity.views.RippleButton;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class Vote extends Activity {
-    //Our Own voting system
-    //Google plus
-    //Facebook
-    //Show current stats (total of all votes)
-    //Suggest Charity
-
-    /*
-    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-    startActivity(browserIntent);
-    */
 
     private ListView listView;
-    //private CharityListClickListener charityListClickListener;
     private VoteCharityAdapter adapter;
-    private ArrayList<Charity> charities;
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
@@ -43,7 +33,6 @@ public class Vote extends Activity {
 
         @Override
         public void onCompleteArray(final ArrayList<Charity> charities) {
-            Vote.this.charities = charities;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -93,6 +82,7 @@ public class Vote extends Activity {
                         String charityName = charity.getText().toString();
                         if (charityName != null && charityName.length() > 3) {
                             new CharityManager().suggestCharity(charityName);
+                            Toast.makeText(getApplicationContext(), "Thank you for your suggestion.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
 

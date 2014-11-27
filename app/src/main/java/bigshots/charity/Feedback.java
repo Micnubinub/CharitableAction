@@ -14,6 +14,7 @@ import bigshots.charity.io.Connector;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class Feedback extends Activity {
     //Email
     //Facebook page

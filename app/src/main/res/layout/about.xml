@@ -37,7 +37,6 @@
         android:layout_height="wrap_content"
         android:padding="12dp"
         android:text="Gonna talk about us, what we're doing, post some links that can lead the users to us e.g. playstore account, website..."
-        android:textAlignment="center"
         android:textSize="22sp"
         android:textStyle="bold" />
 

@@ -48,16 +48,16 @@ public abstract class WheelScroller {
     // Messages
     private final int MESSAGE_SCROLL = 0;
     private final int MESSAGE_JUSTIFY = 1;
-    protected Scroller scroller;
     // Listener
-    private ScrollingListener listener;
+    private final ScrollingListener listener;
     // Context
-    private Context context;
+    private final Context context;
     // Scrolling
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
+    protected Scroller scroller;
     private int lastScrollPosition;
     // animation handler
-    private Handler animationHandler = new Handler() {
+    private final Handler animationHandler = new Handler() {
         public void handleMessage(Message msg) {
             scroller.computeScrollOffset();
             int currPosition = getCurrentScrollerPosition();

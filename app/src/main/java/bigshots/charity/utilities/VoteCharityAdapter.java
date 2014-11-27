@@ -1,5 +1,7 @@
 package bigshots.charity.utilities;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
@@ -10,17 +12,17 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import bigshots.charity.io.Charity;
-import bigshots.charity.io.VoteManager;
+import bigshots.charity.io.CharityManager;
 import bigshots.charity.views.CharityListItem;
 
 /**
  * Created by root on 19/11/14.
  */
+@SuppressWarnings("ALL")
 public class VoteCharityAdapter extends BaseAdapter {
     private static int max;
     private final Context context;
     private final ArrayList<Charity> charities;
-    private final VoteManager voteManager = new VoteManager();
     //Todo implement this
 
     private int height = 100;
@@ -30,6 +32,7 @@ public class VoteCharityAdapter extends BaseAdapter {
         @Override
         public void onCompleteSingle(Charity charity) {
             votedFor = charity.getUrl();
+            CharityListItem.setCurrentVote(votedFor);
             notifyDataSetChanged();
         }
 
@@ -44,8 +47,21 @@ public class VoteCharityAdapter extends BaseAdapter {
         getMax();
         this.context = context;
         height = dpToPixels(76);
+        getVotedFor();
     }
 
+    void getVotedFor() {
+        AccountManager manager = AccountManager.get(context);
+        Account[] accounts;
+        accounts = manager.getAccountsByType("com.google");
+        for (Account account : accounts) {
+            if (account.name.contains("@gmail")) {
+                new CharityManager().currentCharity(account.name);
+                break;
+            }
+        }
+
+    }
 
     private void getMax() {
         max = 0;
@@ -82,20 +98,15 @@ public class VoteCharityAdapter extends BaseAdapter {
         view.setPos(position);
         view.setLink(charities.get(position).getUrl());
         view.setText(charities.get(position).getName());
-        if (votedFor != null && charities.get(position).getUrl() == votedFor)
+        if (votedFor != null && charities.get(position).getUrl().equals(votedFor))
             view.setVotedFor(true);
         else
             view.setVotedFor(false);
         return view;
     }
 
-    //Todo implement this
-    private void castVote(String charity) {
-        voteManager.castVote("www.charity.com", "Steve@gmail.com");
-        voteManager.removeVote("Sidney");
-    }
 
-    public int dpToPixels(int dp) {
+    int dpToPixels(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 }

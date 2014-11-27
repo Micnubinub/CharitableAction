@@ -47,10 +47,6 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     public static final int DEFAULT_TEXT_COLOR = 0xFF555555;
     // Text settings
     private int textColor = DEFAULT_TEXT_COLOR;
-    /**
-     * Default text color
-     */
-    public static final int LABEL_COLOR = 0xFF700070;
 
     /**
      * Default text size
@@ -62,9 +58,9 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      */
     protected static final int NO_RESOURCE = 0;
     // Current context
-    protected Context context;
+    protected final Context context;
     // Layout inflater
-    protected LayoutInflater inflater;
+    protected final LayoutInflater inflater;
     // Items resources
     protected int itemResourceId;
     protected int itemTextResourceId;
@@ -106,105 +102,6 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
         itemTextResourceId = itemTextResource;
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    /**
-     * Gets text color
-     *
-     * @return the text color
-     */
-    public int getTextColor() {
-        return textColor;
-    }
-
-    /**
-     * Sets text color
-     *
-     * @param textColor the text color to set
-     */
-    public void setTextColor(int textColor) {
-        this.textColor = textColor;
-    }
-
-    /**
-     * Sets text typeface
-     *
-     * @param typeface typeface to set
-     */
-    public void setTextTypeface(Typeface typeface) {
-        this.textTypeface = typeface;
-    }
-
-    /**
-     * Gets text size
-     *
-     * @return the text size
-     */
-    public int getTextSize() {
-        return textSize;
-    }
-
-    /**
-     * Sets text size
-     *
-     * @param textSize the text size to set
-     */
-    public void setTextSize(int textSize) {
-        this.textSize = textSize;
-    }
-
-    /**
-     * Gets resource Id for items views
-     *
-     * @return the item resource Id
-     */
-    public int getItemResource() {
-        return itemResourceId;
-    }
-
-    /**
-     * Sets resource Id for items views
-     *
-     * @param itemResourceId the resource Id to set
-     */
-    public void setItemResource(int itemResourceId) {
-        this.itemResourceId = itemResourceId;
-    }
-
-    /**
-     * Gets resource Id for text view in item layout
-     *
-     * @return the item text resource Id
-     */
-    public int getItemTextResource() {
-        return itemTextResourceId;
-    }
-
-    /**
-     * Sets resource Id for text view in item layout
-     *
-     * @param itemTextResourceId the item text resource Id to set
-     */
-    public void setItemTextResource(int itemTextResourceId) {
-        this.itemTextResourceId = itemTextResourceId;
-    }
-
-    /**
-     * Gets resource Id for empty items views
-     *
-     * @return the empty item resource Id
-     */
-    public int getEmptyItemResource() {
-        return emptyItemResourceId;
-    }
-
-    /**
-     * Sets resource Id for empty items views
-     *
-     * @param emptyItemResourceId the empty item resource Id to set
-     */
-    public void setEmptyItemResource(int emptyItemResourceId) {
-        this.emptyItemResourceId = emptyItemResourceId;
     }
 
     /**

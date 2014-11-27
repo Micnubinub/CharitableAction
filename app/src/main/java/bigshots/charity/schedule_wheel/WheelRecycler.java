@@ -38,15 +38,12 @@ public class WheelRecycler {
 
     @SuppressWarnings("unused")
     private static final String LOG_TAG = WheelRecycler.class.getName();
-
+    // Wheel view
+    private final AbstractWheel wheel;
     // Cached items
     private List<View> items;
-
     // Cached empty items
     private List<View> emptyItems;
-
-    // Wheel view
-    private AbstractWheel wheel;
 
     /**
      * Constructor

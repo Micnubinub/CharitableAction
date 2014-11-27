@@ -9,6 +9,7 @@ import bigshots.charity.io.Charity;
 /**
  * Created by root on 19/11/14.
  */
+@SuppressWarnings("ALL")
 public class Interfaces {
 
     public interface ASyncListener {

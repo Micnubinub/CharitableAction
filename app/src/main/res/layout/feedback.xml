@@ -38,7 +38,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Email us"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -50,7 +49,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Find us on Google+"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -62,7 +60,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Find us on Facebook page"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -74,7 +71,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Send a message through the app"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />

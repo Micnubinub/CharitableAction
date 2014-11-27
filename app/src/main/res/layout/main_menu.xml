@@ -28,7 +28,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Contribute"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -40,7 +39,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Your vote counts"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -52,7 +50,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Statistics"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -64,7 +61,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Feedback"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -76,7 +72,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Preferences"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -88,7 +83,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="About"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />

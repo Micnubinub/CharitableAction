@@ -17,9 +17,10 @@ import bigshots.charity.views.BannerPopup;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class BannerPopupService extends Service {
     public static boolean isServiceRunning;
-    public static BannerPopup bannerPopup;
+    private static BannerPopup bannerPopup;
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
 

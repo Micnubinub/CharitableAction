@@ -31,7 +31,6 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 
 import java.util.LinkedList;
@@ -48,58 +47,41 @@ import bigshots.charity.schedule_wheel.adapters.WheelViewAdapter;
  */
 public abstract class AbstractWheel extends View {
 
-    /**
-     * Default count of visible items
-     */
-    private static final int DEF_VISIBLE_ITEMS = 4;
-    private static final boolean DEF_IS_CYCLIC = false;
-
     //----------------------------------
     //  Default properties values
     //----------------------------------
     private static int itemID = -1;
     @SuppressWarnings("unused")
     private final String LOG_TAG = AbstractWheel.class.getName() + " #" + (++itemID);
-
+    // Recycle
+    private final WheelRecycler mRecycler = new WheelRecycler(this);
+    // Listeners
+    private final List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
+    private final List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
+    private final List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
     //----------------------------------
     //  Class properties
     //----------------------------------
     protected int mCurrentItemIdx = 0;
-
     // Count of visible items
     protected int mVisibleItems;
     // Should all items be visible
     protected boolean mIsAllVisible;
-
     protected boolean mIsCyclic;
-
     // Scrolling
     protected WheelScroller mScroller;
     protected boolean mIsScrollingPerformed;
     protected int mScrollingOffset;
-
     // Items layout
     protected LinearLayout mItemsLayout;
-
     // The number of first item in layout
     protected int mFirstItemIdx;
-
     // View adapter
     protected WheelViewAdapter mViewAdapter;
-
     protected int mLayoutHeight;
     protected int mLayoutWidth;
 
-    // Recycle
-    private WheelRecycler mRecycler = new WheelRecycler(this);
-
-    // Listeners
-    private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
-    private List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
-    private List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
-
     //XXX: I don't like listeners the way as they are now. -df
-
     // Adapter listener
     private DataSetObserver mDataObserver;
 
@@ -277,22 +259,6 @@ public abstract class AbstractWheel extends View {
     }
 
     /**
-     * Stops scrolling
-     */
-    public void stopScrolling() {
-        mScroller.stopScrolling();
-    }
-
-    /**
-     * Set the the specified scrolling interpolator
-     *
-     * @param interpolator the interpolator
-     */
-    public void setInterpolator(Interpolator interpolator) {
-        mScroller.setInterpolator(interpolator);
-    }
-
-    /**
      * Scroll the spinnerwheel
      *
      * @param itemsToScroll items to scroll
@@ -444,42 +410,12 @@ public abstract class AbstractWheel extends View {
         invalidate();
     }
 
-    /**
-     * Gets count of visible items
-     *
-     * @return the count of visible items
-     */
-    public int getVisibleItems() {
-        return mVisibleItems;
-    }
-
 
     //--------------------------------------------------------------------------
     //
     //  Getters and setters
     //
     //--------------------------------------------------------------------------
-
-    /**
-     * Sets the desired count of visible items.
-     * Actual amount of visible items depends on spinnerwheel layout parameters.
-     * To apply changes and rebuild view call measure().
-     *
-     * @param count the desired count for visible items
-     */
-    public void setVisibleItems(int count) {
-        mVisibleItems = count;
-    }
-
-    /**
-     * Sets all items to have no dim and makes them visible
-     *
-     * @param isAllVisible
-     */
-    public void setAllItemsVisible(boolean isAllVisible) {
-        mIsAllVisible = isAllVisible;
-        invalidateItemsLayout(false);
-    }
 
     /**
      * Gets view adapter
@@ -603,15 +539,6 @@ public abstract class AbstractWheel extends View {
     //--------------------------------------------------------------------------
 
     /**
-     * Removes spinnerwheel changing listener
-     *
-     * @param listener the listener
-     */
-    public void removeChangingListener(OnWheelChangedListener listener) {
-        changingListeners.remove(listener);
-    }
-
-    /**
      * Notifies changing listeners
      *
      * @param oldValue the old spinnerwheel value
@@ -621,24 +548,6 @@ public abstract class AbstractWheel extends View {
         for (OnWheelChangedListener listener : changingListeners) {
             listener.onChanged(this, oldValue, newValue);
         }
-    }
-
-    /**
-     * Adds spinnerwheel scrolling listener
-     *
-     * @param listener the listener
-     */
-    public void addScrollingListener(OnWheelScrollListener listener) {
-        scrollingListeners.add(listener);
-    }
-
-    /**
-     * Removes spinnerwheel scrolling listener
-     *
-     * @param listener the listener
-     */
-    public void removeScrollingListener(OnWheelScrollListener listener) {
-        scrollingListeners.remove(listener);
     }
 
     /**
@@ -657,24 +566,6 @@ public abstract class AbstractWheel extends View {
         for (OnWheelScrollListener listener : scrollingListeners) {
             listener.onScrollingFinished(this);
         }
-    }
-
-    /**
-     * Adds spinnerwheel clicking listener
-     *
-     * @param listener the listener
-     */
-    public void addClickingListener(OnWheelClickedListener listener) {
-        clickingListeners.add(listener);
-    }
-
-    /**
-     * Removes spinnerwheel clicking listener
-     *
-     * @param listener the listener
-     */
-    public void removeClickingListener(OnWheelClickedListener listener) {
-        clickingListeners.remove(listener);
     }
 
     /**

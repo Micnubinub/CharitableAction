@@ -10,6 +10,7 @@ import bigshots.charity.io.Charity;
 /**
  * Created by root on 19/11/14.
  */
+@SuppressWarnings("ALL")
 public class CharityListClickListener implements AdapterView.OnItemClickListener {
 
     private final ArrayList<Charity> charities;

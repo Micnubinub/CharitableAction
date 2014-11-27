@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,11 +24,13 @@ import bigshots.charity.services.BannerPopupService;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
-    private static int duration = 1100, touchSlop;
+    private static final int duration = 1100;
+    private static int touchSlop;
     private static InterstitialAd fullScreenAd;
-    final Intent service = new Intent(getContext(), BannerPopupService.class);
+    private final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -38,6 +39,8 @@ public class BannerPopup extends ViewGroup {
     };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private final WindowManager windowManager;
+    private final float adDistance = 0.625f;
+    private final WindowManager.LayoutParams params;
     private State state;
     private MenuItem closeBanner, openApp, fullScreen, minimise;
     private MainBannerView mainView;
@@ -78,9 +81,7 @@ public class BannerPopup extends ViewGroup {
     };
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
-    private float adDistance = 0.625f;
     private int lastMenuItemDistance, menuItemWidth;
-    private WindowManager.LayoutParams params;
     private float animated_value, unit;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -94,7 +95,7 @@ public class BannerPopup extends ViewGroup {
     //Todo implement x,t
     private int toX, fromX, x, y, padding, adH, adW, w, h, screenHeight, screenWidth;
     private CurrentAnimation[] currentAnimations;
-    private OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
+    private final OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             switch (event.getAction()) {
@@ -150,10 +151,8 @@ public class BannerPopup extends ViewGroup {
         touchSlop = dpToPixels(4);
 
         bannerAdManager = new AdManager(getContext());
-        // fullScreenAdmanager = new AdManager(getContext());
-        //Todo bannerAdManager.loadBannerAd();
+        bannerAdManager.loadBannerAd();
         adView = bannerAdManager.getBannerAd();
-        // fullScreenAdmanager.loadFullscreenAd();
         adView.setPivotX(0);
 
         mainView = new MainBannerView(getContext());
@@ -172,8 +171,6 @@ public class BannerPopup extends ViewGroup {
         openApp = new MenuItem(getContext(), R.drawable.open_app);
         openApp.setId(R.id.open_app);
 
-        //Todo  maxHeight, maxWidth
-        //Todo addView()
         //Todo set direction
 
         setParameters();
@@ -202,19 +199,15 @@ public class BannerPopup extends ViewGroup {
         try {
             addView(closeBanner, new LayoutParams(adH, adH));
             closeBanner.setOnClickListener(clickListener);
-            //  closeBanner.setY(padding);
 
             addView(minimise, new LayoutParams(adH, adH));
             minimise.setOnClickListener(clickListener);
-            //    minimise.setY(padding);
 
             addView(fullScreen, new LayoutParams(adH, adH));
             fullScreen.setOnClickListener(clickListener);
-            //  fullScreen.setY(padding);
 
             addView(openApp, new LayoutParams(adH, adH));
             openApp.setOnClickListener(clickListener);
-            //   openApp.setY(padding);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -305,8 +298,6 @@ public class BannerPopup extends ViewGroup {
 
     private void setParameters() {
         resolveAdSize();
-        //Todo fill in
-
 
     }
 
@@ -387,7 +378,7 @@ public class BannerPopup extends ViewGroup {
     }
 
     public void setToX() {
-        if (direction == direction.LEFT)
+        if (direction == Direction.LEFT)
             toX = -((int) (0.2f * getMeasuredHeight()));
         else
             toX = screenWidth - ((int) (0.8f * getMeasuredHeight()));
@@ -404,8 +395,6 @@ public class BannerPopup extends ViewGroup {
             if ((child instanceof MenuItem) && (state == State.SHOWING_MENU)) {
                 child.layout((int) child.getX(), adViewPadding, (int) child.getX() + adH, getMeasuredHeight() - adViewPadding);
             }
-            if ((int) child.getX() != child.getLeft())
-                Log.e("getX, getLeft", String.format("%d, %d", (int) child.getX(), child.getLeft()));
         }
         if ((state == State.SHOWING_AD) && (adView.getScaleX() > 0.01f))
             adView.layout((int) (getMeasuredHeight() * adDistance), adViewPadding, getMeasuredWidth(), getMeasuredHeight() - adViewPadding);
@@ -424,7 +413,6 @@ public class BannerPopup extends ViewGroup {
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
 
-            //Todo don't measure menu items if not showing menu, don't measure ad if not showing ad
             if (state != State.SHOWING_MENU && child instanceof MenuItem)
                 continue;
 
@@ -519,7 +507,6 @@ public class BannerPopup extends ViewGroup {
     @Override
     public void invalidate() {
         super.invalidate();
-        //Todo fix this
         if (!settingUp)
             switch (state) {
                 case MINIMISED:
@@ -586,9 +573,8 @@ public class BannerPopup extends ViewGroup {
         }
         final float val = animated_value % 0.5f;
         switch (currentAnimation) {
-            //Todo use interpolator from hunid jumps
+            //use interpolator from hunid jumps
             case SHOW_AD:
-                //Todo check
                 adView.setScaleX(val / 0.5f);
                 break;
             case HIDE_AD:

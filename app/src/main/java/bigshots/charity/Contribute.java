@@ -27,6 +27,7 @@ import bigshots.charity.utilities.Utils;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class Contribute extends Activity {
     //Fullscreen ads
     //Video

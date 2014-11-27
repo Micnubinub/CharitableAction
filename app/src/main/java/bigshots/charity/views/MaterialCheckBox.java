@@ -20,6 +20,7 @@ import bigshots.charity.R;
 /**
  * Created by root on 30/09/14.
  */
+@SuppressWarnings("ALL")
 public class MaterialCheckBox extends ViewGroup {
 
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();

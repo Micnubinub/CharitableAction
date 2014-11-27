@@ -26,6 +26,7 @@ import bigshots.charity.R;
 /**
  * Created by root on 21/10/14.
  */
+@SuppressWarnings("ALL")
 public class MaterialSingleLineTextAvatar extends ViewGroup {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();

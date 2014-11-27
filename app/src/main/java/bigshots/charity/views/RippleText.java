@@ -13,10 +13,11 @@ import android.widget.TextView;
 /**
  * Created by root on 27/11/14.
  */
+@SuppressWarnings("ALL")
 public class RippleText extends TextView {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 850;
+    private static final int duration = 850;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private int width;
     private int height;

@@ -36,7 +36,7 @@ public class AsyncConnector {
                 // Log.e("Async", resp);
             } else if (action.equals("GET_CHARITIES")) {
                 // Log.e("Async", resp);
-                ArrayList<Charity> charities = new ArrayList<Charity>();
+                ArrayList<Charity> charities = new ArrayList<>();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
                     String[] tmp1 = resp.split("\\|");

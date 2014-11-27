@@ -1,8 +1,10 @@
 package bigshots.charity.io;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 
+@SuppressLint("Registered")
 public class MainActivity extends Activity {
 
     @Override

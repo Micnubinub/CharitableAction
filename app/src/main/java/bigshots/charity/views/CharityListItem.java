@@ -24,20 +24,32 @@ import bigshots.charity.io.VoteManager;
 /**
  * Created by root on 19/11/14.
  */
+@SuppressWarnings("ALL")
 public class CharityListItem extends ViewGroup {
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
+    private static final VoteManager voteManager = new VoteManager();
     private static int duration = 800;
     private static AccountManager manager;
     private static Account[] accounts;
-    private static VoteManager voteManager = new VoteManager();
     private static String currentVote;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    private final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+    private final OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v instanceof PlusButton) {
+                ((PlusButton) v).click();
+            } else {
+                openLink();
+            }
+
+        }
+    };
     private RippleText textView;
     private PlusButton plusButton;
     private int width;
     private int height;
-    //private float animated_value;
+    //Todo add the progressbar
     private int clickedX, clickedY;
     private String link;
     private boolean touchDown = false, animateRipple, votedFor;//Todo write code for voted for
@@ -94,6 +106,10 @@ public class CharityListItem extends ViewGroup {
         return currentVote;
     }
 
+    public static void setCurrentVote(String currentVote) {
+        CharityListItem.currentVote = currentVote;
+    }
+
     public boolean isVotedFor() {
         return votedFor;
     }
@@ -118,7 +134,7 @@ public class CharityListItem extends ViewGroup {
                 clickedY = (int) event.getY();
                 rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
 
-                animator.start();
+                valueAnimator.start();
 
                 touchDown = true;
                 animateRipple = true;
@@ -127,7 +143,7 @@ public class CharityListItem extends ViewGroup {
             case MotionEvent.ACTION_CANCEL:
                 touchDown = false;
 
-                if (!animator.isRunning()) {
+                if (!valueAnimator.isRunning()) {
                     ripple_animated_value = 0;
                     invalidatePoster();
                 }
@@ -146,7 +162,6 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void init() {
-        //Todo consider 16 and 14 (in the guidelines)
         final int padding = dpToPixels(16);
         final int buttonWidth = dpToPixels(72);
 
@@ -157,17 +172,17 @@ public class CharityListItem extends ViewGroup {
         textView.setMaxLines(1);
         textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setPadding(padding, padding, padding, padding);
-        textView.setText("1,2 testing");
+        textView.setOnClickListener(onClickListener);
 
         plusButton = new PlusButton(getContext());
         plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
         plusButton.setPadding(padding, padding, padding, padding);
 
         setWillNotDraw(false);
-        animator.setInterpolator(interpolator);
-        animator.addUpdateListener(animatorUpdateListener);
-        animator.addListener(animatorListener);
-        animator.setDuration(duration);
+        valueAnimator.setInterpolator(interpolator);
+        valueAnimator.addUpdateListener(animatorUpdateListener);
+        valueAnimator.addListener(animatorListener);
+        valueAnimator.setDuration(duration);
         paint.setColor(0x25000000);
         addView(textView);
         addView(plusButton);
@@ -193,7 +208,7 @@ public class CharityListItem extends ViewGroup {
 
     public void setDuration(int duration) {
         CharityListItem.duration = duration;
-        animator.setDuration(duration);
+        valueAnimator.setDuration(duration);
     }
 
     private void invalidatePoster() {
@@ -288,8 +303,6 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void castVote() {
-        //Todo cast vote
-
         for (Account account : accounts) {
             if (account.name.contains("@gmail")) {
 
@@ -310,7 +323,6 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void openLink() {
-        //Todo open link
         try {
             if (link != null && link.length() > 3) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));//currentCharity));
@@ -356,19 +368,11 @@ public class CharityListItem extends ViewGroup {
                 invalidatePoster();
             }
         };
+
         private int cx, cy;
         private boolean votedFor = false, animateRipple;
         private float ripple_animated_value = 0;
         private int rippleR;
-
-        private OnClickListener listener, onClickListener = new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                click();
-                if (listener != null)
-                    listener.onClick(v);
-            }
-        };
 
         public PlusButton(Context context) {
             super(context);
@@ -387,7 +391,7 @@ public class CharityListItem extends ViewGroup {
 
         private void init() {
             super.setOnClickListener(onClickListener);
-            animator.setDuration(duration);
+            animator.setDuration((int) (duration * 0.75));
             animator.addUpdateListener(animatorUpdateListener);
             animator.addListener(animatorListener);
             animator.setInterpolator(interpolator);
@@ -411,10 +415,10 @@ public class CharityListItem extends ViewGroup {
         @Override
         protected void onDraw(Canvas canvas) {
             if (animateRipple && animator.isRunning()) {
-                paint.setColor(getColor(!votedFor));
-                canvas.drawCircle(cx, cy, rippleR, paint);
                 paint.setColor(getColor(votedFor));
-                canvas.drawCircle(cx, cy, rippleR * ripple_animated_value, paint);
+                canvas.drawCircle(cx, cy, rippleR, paint);
+                paint.setColor(getColor(!votedFor));
+                canvas.drawCircle(cx, cy, rippleR * (1 - ripple_animated_value), paint);
             } else {
                 paint.setColor(getColor(votedFor));
                 canvas.drawCircle(cx, cy, rippleR, paint);
@@ -435,10 +439,6 @@ public class CharityListItem extends ViewGroup {
             paint.setTextSize(rippleR);
         }
 
-        @Override
-        public void setOnClickListener(OnClickListener l) {
-            listener = l;
-        }
 
         public void setIsVotedFor(boolean votedFor) {
             this.votedFor = votedFor;
@@ -455,7 +455,7 @@ public class CharityListItem extends ViewGroup {
         }
 
 
-        private void click() {
+        public void click() {
             setIsVotedFor(!votedFor);
             startAnimator();
             if (isVotedFor())
@@ -472,5 +472,4 @@ public class CharityListItem extends ViewGroup {
             return votedFor ? "-" : "+";
         }
     }
-
 }

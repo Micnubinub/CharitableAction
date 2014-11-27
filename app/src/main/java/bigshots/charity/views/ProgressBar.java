@@ -14,6 +14,7 @@ import bigshots.charity.R;
 /**
  * Created by root on 19/11/14.
  */
+@SuppressWarnings("ALL")
 public class ProgressBar extends View {
     private static final DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private static final int duration = 750;
@@ -57,7 +58,6 @@ public class ProgressBar extends View {
         init();
     }
 
-    //Todo delete after tests
     public ProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();

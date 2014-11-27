@@ -1,11 +1,13 @@
 package bigshots.charity.views;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.widget.ImageView;
 
 /**
  * Created by root on 22/11/14.
  */
+@SuppressWarnings("ALL")
 public class MenuItem extends ImageView {
     private int xPos;
 
@@ -15,9 +17,8 @@ public class MenuItem extends ImageView {
         setImageResource(resID);
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    public MenuItem(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     public void setDistanceScale(float scale) {

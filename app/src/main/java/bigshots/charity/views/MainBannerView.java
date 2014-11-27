@@ -7,17 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import bigshots.charity.R;
 
 /**
  * Created by root on 22/11/14.
  */
+@SuppressWarnings("ALL")
 public class MainBannerView extends ImageView {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static int duration = 1100;
+    private static final int duration = 1100;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private BannerPopup.State state;
     private float animated_value = 0;
@@ -85,23 +85,21 @@ public class MainBannerView extends ImageView {
     }
 
     private void give() {
-//Todo fill in
         setImageResource(R.drawable.icon_orange);
         invalidate();
     }
 
     private void giving() {
-//Todo fill in
         setImageResource(R.drawable.icon_blue);
         invalidate();
     }
 
     private void menu() {
-//Todo fill in
+        setImageResource(R.drawable.back);
+        invalidate();
     }
 
     public void rippleOut() {
-        Toast.makeText(getContext(), "Ripple", Toast.LENGTH_SHORT).show();
         try {
             animator.cancel();
             animator.end();

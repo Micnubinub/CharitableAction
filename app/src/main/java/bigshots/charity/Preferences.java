@@ -7,6 +7,7 @@ import android.view.View;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class Preferences extends Activity {
     //Banner autostart
     @Override

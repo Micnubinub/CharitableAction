@@ -45,7 +45,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Scheduled ads"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 
@@ -57,7 +56,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Full screen ad"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 
@@ -69,7 +67,6 @@
         android:maxLines="1"
         android:padding="10dp"
         android:text="Watch video"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 
@@ -80,7 +77,6 @@
         android:background="@drawable/white_button_selector"
         android:padding="10dp"
         android:text="Link to this months charity (website)"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 </LinearLayout>

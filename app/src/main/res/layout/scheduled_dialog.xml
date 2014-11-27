@@ -43,7 +43,7 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-    <Button
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -51,7 +51,6 @@
             android:maxLines="1"
             android:padding="10dp"
             android:text="Hours"
-            android:textAlignment="center"
             android:textColor="@color/dark_grey_text"
             android:textSize="18sp" />
 
@@ -63,7 +62,6 @@
             android:maxLines="1"
             android:padding="10dp"
             android:text="Minutes"
-            android:textAlignment="center"
             android:textColor="@color/dark_grey_text"
             android:textSize="18sp" />
     </LinearLayout>

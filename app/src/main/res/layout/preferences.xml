@@ -34,11 +34,9 @@
     <bigshots.charity.views.RippleText
         android:layout_width="fill_parent"
         android:layout_height="54dp"
-        android:layout_toLeftOf="@+id/vote"
         android:maxLines="1"
         android:padding="10dp"
         android:text="Popup at start up?"
-        android:textAlignment="center"
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -46,7 +44,6 @@
     <bigshots.charity.views.MaterialSwitch
         android:id="@+id/vote"
         android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_alignParentRight="true" />
+        android:layout_height="54dp" />
 
 </LinearLayout>

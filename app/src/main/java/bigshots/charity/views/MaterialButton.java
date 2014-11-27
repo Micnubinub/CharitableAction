@@ -2,12 +2,14 @@ package bigshots.charity.views;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -22,6 +24,7 @@ import bigshots.charity.R;
 /**
  * Created by root on 17/10/14.
  */
+@SuppressWarnings("ALL")
 public class MaterialButton extends Button {
 
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -137,6 +140,7 @@ public class MaterialButton extends Button {
         paint.setAlpha(alpha);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void init() {
         setWillNotDraw(false);
         animator.setInterpolator(interpolator);

@@ -9,6 +9,7 @@ import android.view.View;
 /**
  * Created by root on 18/11/14.
  */
+@SuppressWarnings("ALL")
 public class About extends Activity {
     //TBS > Giving hunids away (a hunnet percent)
     //Giving users choices
@@ -27,8 +28,7 @@ startActivity(browserIntent);
                     startActivity(browserIntent);
                     break;
                 case R.id.website_link:
-                    //Todo put website
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.thebigshots.net/"));
+                    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.thebigshots.net/"));
                     startActivity(intent);
                     break;
             }
