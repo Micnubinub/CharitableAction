@@ -11,13 +11,7 @@ import android.view.View;
  */
 @SuppressWarnings("ALL")
 public class About extends Activity {
-    //TBS > Giving hunids away (a hunnet percent)
-    //Giving users choices
-
-    /*
-Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-startActivity(browserIntent);
- */
+    //Todo fill in
 
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override

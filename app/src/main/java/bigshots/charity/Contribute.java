@@ -144,13 +144,38 @@ public class Contribute extends Activity {
         frequency.setText(prefix + "20 minutes");
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                frequencyMinutes = (hours.getCurrentItem() * 60) + minutes.getCurrentItem();
-                frequency.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        frequency.setText(prefix + String.valueOf(frequencyMinutes) + " minutes");
-                    }
-                });
+                final StringBuilder text = new StringBuilder();
+
+                int mins = minutes.getCurrentItem();
+                int hr = hours.getCurrentItem();
+                text.append(prefix);
+                if (!(hr == 0)) {
+                    text.append(hr);
+                    text.append(hr == 1 ? " hour" : " hours");
+                    text.append(" and ");
+                }
+
+                if (!(mins == 0)) {
+                    text.append(mins);
+                    text.append(mins == 1 ? " minute" : " minutes");
+                }
+
+                final String out = text.toString();
+
+                if (out.equals(prefix))
+                    frequency.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            frequency.setText("No full screen ads will be scheduled (will remove current schedule)");
+                        }
+                    });
+                else
+                    frequency.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            frequency.setText(out);
+                        }
+                    });
             }
         };
 

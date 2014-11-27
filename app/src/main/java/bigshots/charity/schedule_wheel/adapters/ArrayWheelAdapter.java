@@ -23,6 +23,8 @@
  */
 package bigshots.charity.schedule_wheel.adapters;
 
+import android.content.Context;
+
 /**
  * The simple Array spinnerwheel adapter
  *
@@ -31,7 +33,11 @@ package bigshots.charity.schedule_wheel.adapters;
 public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {
 
     // items
-    private final T[] items;
+    private T[] items;
+
+    protected ArrayWheelAdapter(Context context) {
+        super(context);
+    }
 
     @Override
     public CharSequence getItemText(int index) {

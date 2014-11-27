@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@drawable/icon_blue"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.Holo.NoActionBar">
+        android:theme="@android:style/Theme.NoTitleBar">
         <activity
             android:name="bigshots.charity.MainMenu"
             android:label="@string/app_name">

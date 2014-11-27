@@ -26,6 +26,14 @@ import bigshots.charity.services.BannerPopupService;
  */
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
+
+    //Todo Make Menu less empty (More Information etc)
+    //Todo Fix Banner Horizontal Issue.
+    //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
+    //Todo add intro slides
+    //Todo add scrollviews to all items
+    //Todo add icons
+
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
     private static int touchSlop;
