@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "bigshots.charity"
+        applicationId "bigshots.people_helping_people"
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1

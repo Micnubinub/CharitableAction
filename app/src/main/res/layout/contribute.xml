@@ -17,7 +17,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/white_arrow" />
 
-        <bigshots.charity.views.WhiteRippleText
+        <bigshots.people_helping_people.views.WhiteRippleText
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -32,12 +32,12 @@
     </RelativeLayout>
 
 
-    <bigshots.charity.views.BannerPopupSwitch
+    <bigshots.people_helping_people.views.BannerPopupSwitch
         android:layout_width="fill_parent"
         android:layout_height="54dp"
         android:background="@color/white" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/scheduled_ads"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -48,7 +48,7 @@
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/full_screen"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -59,7 +59,7 @@
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/video_ad"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -70,7 +70,7 @@
         android:textColor="@color/dark_grey_text"
         android:textSize="22sp" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/current_charity"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -17,7 +17,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/white_arrow" />
 
-        <bigshots.charity.views.WhiteRippleText
+        <bigshots.people_helping_people.views.WhiteRippleText
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <bigshots.charity.views.RippleButton
+    <bigshots.people_helping_people.views.RippleButton
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white"

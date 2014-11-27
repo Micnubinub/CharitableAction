@@ -17,7 +17,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/white_arrow" />
 
-        <bigshots.charity.views.WhiteRippleText
+        <bigshots.people_helping_people.views.WhiteRippleText
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/email"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -42,7 +42,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/gplus"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -53,7 +53,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/fb"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -64,7 +64,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/direct"
         android:layout_width="fill_parent"
         android:layout_height="54dp"

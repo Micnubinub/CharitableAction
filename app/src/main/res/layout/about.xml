@@ -17,7 +17,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/white_arrow" />
 
-        <bigshots.charity.views.WhiteRippleText
+        <bigshots.people_helping_people.views.WhiteRippleText
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -31,35 +31,57 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/vote"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:text="Gonna talk about us, what we're doing, post some links that can lead the users to us e.g. playstore account, website..."
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/playstore_link"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/white_button_selector"
-        android:padding="12dp"
-        android:text="Our PlayStore page"
-        android:textColor="@color/material_green"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/website_link"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/white_button_selector"
-        android:padding="12dp"
-        android:text="Our Website page"
-        android:textColor="@color/material_blue"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_button_selector"
+                android:padding="12dp"
+                android:text="Written by Sidney de Vries and Michael Lindelwe Ncube"
+                android:textColor="@color/material_blue"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/vote"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="This app allows users to donate to a charity of their choosing without actually giving money.\n\nHow does it work?\n\nThe app works around the idea that every user watches a couple of advertisements through the app a couple of times a day. And the money generated from those advertisements will go to charity. The potential here is limitless.\n\n95% of the money generated from the viewing of the ads goes toward the charity of the month which is voted by the users. The other 5% goes to expanding our business so we can improve the experience for you guys and provide better services. You will be presented with a couple of ad-solutions to ensure each user can choose how to. These options include watching a fullscreen Ad, a video Ad, using a floating Ad (similar to Facebook Chat Heads) and scheduling ads to show up every once in a while. A lot of charity companies take a large portion of the money you donate to them. In our case we take 5% of the money generated from the advertising so that we can continue to provide the service and cover all the costs involved.\n\nThank you for installing the app, your time and screen real estate will go a long way."
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp" />
+
+            <bigshots.people_helping_people.views.RippleText
+                android:id="@+id/website_link"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_button_selector"
+                android:padding="12dp"
+                android:text="More info"
+                android:textColor="@color/material_blue"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <bigshots.people_helping_people.views.RippleText
+                android:id="@+id/playstore_link"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_button_selector"
+                android:padding="12dp"
+                android:text="More apps by us"
+                android:textColor="@color/material_green"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+    </ScrollView>
 </LinearLayout>

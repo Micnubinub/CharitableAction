@@ -21,7 +21,7 @@
         android:textStyle="bold" />
 
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/contribute"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -32,7 +32,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/vote"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -43,7 +43,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/stats"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -54,7 +54,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/feedback"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -65,7 +65,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/prefs"
         android:layout_width="fill_parent"
         android:layout_height="54dp"
@@ -76,7 +76,7 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
-    <bigshots.charity.views.RippleText
+    <bigshots.people_helping_people.views.RippleText
         android:id="@+id/about"
         android:layout_width="fill_parent"
         android:layout_height="54dp"

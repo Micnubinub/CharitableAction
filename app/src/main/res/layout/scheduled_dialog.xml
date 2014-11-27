@@ -78,7 +78,7 @@
         android:paddingRight="16dp"
         android:paddingTop="4dp">
 
-        <bigshots.charity.schedule_wheel.WheelVerticalView
+        <bigshots.people_helping_people.schedule_wheel.WheelVerticalView
             android:id="@+id/hours"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -86,7 +86,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp" />
 
-        <bigshots.charity.schedule_wheel.WheelVerticalView
+        <bigshots.people_helping_people.schedule_wheel.WheelVerticalView
             android:id="@+id/minutes"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
