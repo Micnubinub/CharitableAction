@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -28,10 +29,10 @@ import bigshots.people_helping_people.services.BannerPopupService;
 public class BannerPopup extends ViewGroup {
     //Todo add intro slides
     //Todo make it minimise when they release it
+    //Todo add second line to listview
     //Fix Banner Horizontal Issue.
     //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
     //Todo make sure animations are doing exactly what they are meant to be doing. Remove view quicky
-    //Todo scheduler
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
@@ -55,6 +56,42 @@ public class BannerPopup extends ViewGroup {
     private long downTime;
     // private BannerPopup popup;
     private Direction direction = Direction.LEFT;
+    private final OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    initialX = params.x;
+                    initialY = params.y;
+                    initialTouchX = (int) event.getRawX();
+                    initialTouchY = (int) event.getRawY();
+                    downTime = System.currentTimeMillis();
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    setXY();
+
+                    if (((System.currentTimeMillis() - downTime) < 180) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop)) {
+                        click(mainView);
+                        mainView.rippleOut();
+                    }
+
+                    if (state == State.MINIMISED)
+                        minimise();
+
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    setPosition((initialX + (int) (event.getRawX() - initialTouchX)), (initialY + (int) (event.getRawY() - initialTouchY)));
+                    if (initialX + (int) (event.getRawX() - initialTouchX) > (screenWidth / 2))
+                        direction = Direction.RIGHT;
+                    else
+                        direction = Direction.LEFT;
+                    break;
+            }
+            invalidate();
+            return true;
+        }
+    };
     private AdManager bannerAdManager;//, fullScreenAdmanager;
     private boolean animationFinished;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
@@ -89,7 +126,7 @@ public class BannerPopup extends ViewGroup {
     private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
     private View adView;
     private int lastMenuItemDistance, menuItemWidth;
-    private float animated_value, unit;
+    private float animated_value, unit, x, y;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
@@ -100,46 +137,8 @@ public class BannerPopup extends ViewGroup {
     };
     private int spacing, initialX, initialY, initialTouchX, initialTouchY;
     //implement x,t
-    private int toX, fromX, x, y, padding, adH, adW, w, h, screenHeight, screenWidth;
+    private int toX, fromX, padding, adH, adW, w, h, screenHeight, screenWidth;
     private CurrentAnimation[] currentAnimations;
-    private final OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    initialX = params.x;
-                    initialY = params.y;
-                    initialTouchX = (int) event.getRawX();
-                    initialTouchY = (int) event.getRawY();
-                    downTime = System.currentTimeMillis();
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    if (((System.currentTimeMillis() - downTime) < 180) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop)) {
-                        click(mainView);
-                        mainView.rippleOut();
-                    }
-
-                    if (state == State.MINIMISED) {
-                        currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO};
-                        setToX();
-                        fromX = x;
-                        startAnimator();
-                        setState(State.MINIMISED);
-                    }
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    setPosition((initialX + (int) (event.getRawX() - initialTouchX)), (initialY + (int) (event.getRawY() - initialTouchY)));
-                    if (initialX + (int) (event.getRawX() - initialTouchX) > (screenWidth / 2))
-                        direction = Direction.RIGHT;
-                    else
-                        direction = Direction.LEFT;
-                    break;
-            }
-            invalidate();
-            return true;
-        }
-    };
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
@@ -306,6 +305,7 @@ public class BannerPopup extends ViewGroup {
     public void setState(State state) {
         this.state = state;
         mainView.setState(state);
+        Toast.makeText(getContext(), String.valueOf(state), Toast.LENGTH_SHORT).show();
     }
 
     private void click(View v) {
@@ -326,7 +326,7 @@ public class BannerPopup extends ViewGroup {
                         setState(State.SHOWING_AD);
                         currentAnimation = CurrentAnimation.SNAP_TO;
                         currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO, CurrentAnimation.SHOW_AD};
-                        toX = x;
+                        toX = getFromX();
                         break;
                 }
                 startAnimator();
@@ -345,17 +345,21 @@ public class BannerPopup extends ViewGroup {
                 getContext().startActivity(intent);
             case R.id.minimise:
                 currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SNAP_TO};
+                setXY();
                 setToX();
-                fromX = x;
+                fromX = getFromX();
                 startAnimator();
                 setState(State.MINIMISED);
                 break;
             case R.id.full_screen:
                 showFullScreenAd();
-
                 break;
         }
 
+    }
+
+    public int getFromX() {//Todo
+        return ((int) (x * screenWidth));
     }
 
     public void setToX() {
@@ -369,10 +373,8 @@ public class BannerPopup extends ViewGroup {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int adViewPadding = (getMeasuredHeight() - adH) / 2;
         adViewPadding = adViewPadding < 0 ? 0 : adViewPadding;
-
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
-
             if ((child instanceof MenuItem) && (state == State.SHOWING_MENU)) {
                 child.layout((int) child.getX(), adViewPadding, (int) child.getX() + adH, getMeasuredHeight() - adViewPadding);
             }
@@ -579,9 +581,13 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void updateMenuItemDistance(float distance) {
+
         distance = Math.abs(distance);
         setMenuItemsX(Math.round(distance * lastMenuItemDistance));
         setDistance();
+        if ((distance < 0.1f) && (currentAnimation == CurrentAnimation.HIDE_MENU))
+            finishAnimation();
+
     }
 
     private void setMenuItemsX(int x) {
@@ -627,6 +633,32 @@ public class BannerPopup extends ViewGroup {
                 Toast.makeText(getContext(), "Failed to load ad", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void rotate(int orientation) {
+        switch (orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+
+                break;
+            default:
+
+                break;
+        }
+    }
+
+    public void minimise() {
+
+        currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO};
+        setToX();
+        fromX = params.x;
+        startAnimator();
+        setState(State.MINIMISED);
+
+    }
+
+    private void setXY() {
+        x = params.x / (float) screenWidth;
+        y = params.y / (float) screenHeight;
     }
 
     public enum State {

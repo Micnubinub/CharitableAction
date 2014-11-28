@@ -140,14 +140,15 @@ public class Contribute extends Activity {
         hours.setCurrentItem(0);
         minutes.setCurrentItem(20);
         final String prefix = "A full screen Ad will be show every : ";
-
         frequency.setText(prefix + "20 minutes");
+        frequencyMinutes = 20;
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 final StringBuilder text = new StringBuilder();
 
                 int mins = minutes.getCurrentItem();
                 int hr = hours.getCurrentItem();
+                frequencyMinutes = (hr * 60) + mins;
                 text.append(prefix);
                 if (!(hr == 0)) {
                     text.append(hr);
@@ -186,6 +187,8 @@ public class Contribute extends Activity {
     }
 
     private void save() {
+        if ((frequencyMinutes != 0) && (frequencyMinutes < 5))
+            frequencyMinutes = 5;
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();

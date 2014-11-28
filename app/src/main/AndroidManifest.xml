@@ -15,9 +15,10 @@
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.NoTitleBar">
         <activity
-                android:name="bigshots.people_helping_people.Intro"
-                android:label="@string/app_name">
-            <intent-filter>
+            android:name="bigshots.people_helping_people.Intro"
+            android:label="@string/app_name"
+            android:noHistory="true">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
@@ -93,19 +94,25 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
 
-        <receiver
-                android:name="bigshots.people_helping_people.services.BannerPopupService$AlarmReceiver"
-                android:enabled="true"/>
+
         <receiver
             android:name="bigshots.people_helping_people.services.BannerPopupService$ConnectionChangeReceiver"
             android:label="NetworkConnection">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name="bigshots.people_helping_people.services.BannerPopupService$AlarmReceiver"
+            android:enabled="true" />
 
-        <service android:name="bigshots.people_helping_people.services.BannerPopupService" />
+        <service android:name="bigshots.people_helping_people.services.BannerPopupService">
+            <intent-filter>
+                <action android:name="android.intent.action.CONFIGURATION_CHANGED" />
+            </intent-filter>
+        </service>
 
     </application>
 
