@@ -44,7 +44,7 @@ public class VoteCharityAdapter extends BaseAdapter {
         this.charities = charities;
         getMax();
         this.context = context;
-        height = dpToPixels(76);
+        height = dpToPixels(68);
         getVotedFor();
     }
 

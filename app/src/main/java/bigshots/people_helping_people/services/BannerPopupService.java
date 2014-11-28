@@ -88,6 +88,11 @@ public class BannerPopupService extends Service {
     @Override
     public boolean stopService(Intent name) {
         isServiceRunning = false;
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return super.stopService(name);
     }
 
@@ -109,6 +114,11 @@ public class BannerPopupService extends Service {
         isServiceRunning = false;
         try {
             windowManager.removeViewImmediate(bannerPopup);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            unregisterReceiver(broadcastReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }

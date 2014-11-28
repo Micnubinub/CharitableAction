@@ -100,8 +100,8 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void init() {
-        final int padding = dpToPixels(16);
-        final int buttonWidth = dpToPixels(72);
+        final int padding = dpToPixels(12);
+        final int buttonWidth = dpToPixels(68);
 
         textView = new MaterialTwoLineText(getContext());
         textView.setPrimaryTextColor(getResources().getColor(R.color.dark_grey_text));
@@ -316,6 +316,7 @@ public class CharityListItem extends ViewGroup {
             animator.setInterpolator(interpolator);
             paint.setTextAlign(Paint.Align.CENTER);
             setWillNotDraw(false);
+            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             setText(getString());
             setTextColor(0xffffffff);
             setBackgroundColor(0x00000000);

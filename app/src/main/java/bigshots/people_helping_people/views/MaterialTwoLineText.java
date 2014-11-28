@@ -133,25 +133,25 @@ public class MaterialTwoLineText extends ViewGroup {
     }
 
     private void init() {
-        final int padding = dpToPixels(16);
+        final int padding = dpToPixels(12);
         final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         primaryTextView = new TextView(getContext());
         primaryTextView.setTextColor(getResources().getColor(R.color.dark_grey));
         primaryTextView.setTypeface(null, Typeface.BOLD);
-        primaryTextView.setTextSize(18);
+        primaryTextView.setTextSize(22);
         primaryTextView.setMaxLines(1);
         primaryTextView.setLayoutParams(params);
         primaryTextView.setEllipsize(TextUtils.TruncateAt.END);
-        primaryTextView.setPadding(padding, padding, padding, padding / 2);
+        primaryTextView.setPadding(padding, 0, 0, 0);
 
         secondaryTextView = new TextView(getContext());
         secondaryTextView.setTextColor(getResources().getColor(R.color.dark_grey_text));
-        secondaryTextView.setTextSize(16);
+        secondaryTextView.setTextSize(18);
         secondaryTextView.setMaxLines(1);
         secondaryTextView.setLayoutParams(params);
         secondaryTextView.setEllipsize(TextUtils.TruncateAt.END);
-        secondaryTextView.setPadding(padding, padding / 2, padding, padding);
+        secondaryTextView.setPadding(padding, 0, 0, 0);
 
         setWillNotDraw(false);
         animator.setInterpolator(interpolator);
@@ -186,7 +186,7 @@ public class MaterialTwoLineText extends ViewGroup {
 
     @Override
     protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
-        final int textViewPadding = ((getMeasuredHeight() - primaryTextView.getMeasuredHeight() - secondaryTextView.getMeasuredHeight()) / 2);
+        final int textViewPadding = ((getMeasuredHeight() - primaryTextView.getMeasuredHeight() - secondaryTextView.getMeasuredHeight()) / 3);
         primaryTextView.layout(getPaddingLeft(), textViewPadding,
                 getMeasuredWidth() - getPaddingRight(),
                 primaryTextView.getMeasuredHeight() + textViewPadding);
@@ -194,7 +194,7 @@ public class MaterialTwoLineText extends ViewGroup {
         checkViewParams(primaryTextView);
 
         secondaryTextView.layout(getPaddingLeft(),
-                getMeasuredHeight() - textViewPadding - secondaryTextView.getMeasuredHeight(),
+                primaryTextView.getMeasuredHeight() + textViewPadding + textViewPadding,
                 getMeasuredWidth() - getPaddingRight(),
                 getMeasuredHeight() - textViewPadding
         );
