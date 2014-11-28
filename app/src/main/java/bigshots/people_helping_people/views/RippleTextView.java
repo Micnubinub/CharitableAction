@@ -64,7 +64,6 @@ public class RippleTextView extends TextView {
     private int rippleColor = 0x22000000;
     private long downTime;
     private OnClickListener listener;
-
     public RippleTextView(Context context) {
         super(context);
         init();
@@ -73,6 +72,11 @@ public class RippleTextView extends TextView {
     public RippleTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+    }
+
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        listener = l;
     }
 
     private void init() {
@@ -148,8 +152,5 @@ public class RippleTextView extends TextView {
         return true;
     }
 
-    @Override
-    public void setOnClickListener(OnClickListener l) {
-        listener = l;
-    }
+
 }

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -34,7 +33,6 @@ public class CharityListItem extends ViewGroup {
     private static Account[] accounts;
     private static String currentVote;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -46,50 +44,14 @@ public class CharityListItem extends ViewGroup {
 
         }
     };
-    private RippleTextView textView;
+    private MaterialTwoLineText textView;
     private PlusButton plusButton;
-    private ProgressBar progressBar;
+    // private ProgressBar progressBar;
     private int width;
     private int height;
     private int clickedX, clickedY;
     private String link;
-    private boolean touchDown = false, animateRipple, votedFor;
-    private float ripple_animated_value = 0;
-    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            ripple_animated_value = (Float) (animation.getAnimatedValue());
-            invalidatePoster();
-        }
-    };
-    private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
-
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            if (!touchDown)
-                ripple_animated_value = 0;
-
-            animateRipple = false;
-            invalidatePoster();
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
-    };
-    private int rippleR;
-    private int rippleColor = 0x25000000;
+    private boolean touchDown = false, votedFor;
     private int pos;
 
     public CharityListItem(Context context) {
@@ -127,34 +89,9 @@ public class CharityListItem extends ViewGroup {
         this.pos = pos;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                clickedX = (int) event.getX();
-                clickedY = (int) event.getY();
-                rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
 
-                valueAnimator.start();
-
-                touchDown = true;
-                animateRipple = true;
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                touchDown = false;
-
-                if (!valueAnimator.isRunning()) {
-                    ripple_animated_value = 0;
-                    invalidatePoster();
-                }
-                break;
-        }
-        return true;
-    }
-
-    public void setText(String text) {
-        textView.setText(text);
+    public void setPrimaryText(String text) {
+        textView.setPrimaryText(text);
         invalidatePoster();
     }
 
@@ -166,29 +103,22 @@ public class CharityListItem extends ViewGroup {
         final int padding = dpToPixels(16);
         final int buttonWidth = dpToPixels(72);
 
-        textView = new RippleTextView(getContext());
-        textView.setTextColor(getResources().getColor(R.color.dark_grey_text));
-        textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-        textView.setTextSize(22);
-        textView.setMaxLines(1);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setPadding(padding, padding, padding, padding);
+        textView = new MaterialTwoLineText(getContext());
+        textView.setPrimaryTextColor(getResources().getColor(R.color.dark_grey_text));
+        textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, buttonWidth));
+        //textView.setPrimaryTextSize(22);
         textView.setOnClickListener(onClickListener);
 
         plusButton = new PlusButton(getContext());
         plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
         plusButton.setPadding(padding, padding, padding, padding);
 
-        progressBar = new ProgressBar(getContext());
-        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 5));
+//        progressBar = new ProgressBar(getContext());
+//        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 5));
 
         setWillNotDraw(false);
-        valueAnimator.setInterpolator(interpolator);
-        valueAnimator.addUpdateListener(animatorUpdateListener);
-        valueAnimator.addListener(animatorListener);
-        valueAnimator.setDuration(duration);
         paint.setColor(0x25000000);
-        addView(progressBar);
+//        addView(progressBar);
         addView(textView);
         addView(plusButton);
 
@@ -198,11 +128,11 @@ public class CharityListItem extends ViewGroup {
     }
 
     public void setPrimaryTextSize(int sp) {
-        textView.setTextSize(sp);
+        textView.setPrimaryTextSize(sp);
     }
 
     public void setPrimaryTextColor(int color) {
-        textView.setTextColor(color);
+        textView.setPrimaryTextColor(color);
     }
 
     @Override
@@ -212,10 +142,6 @@ public class CharityListItem extends ViewGroup {
 
     }
 
-    public void setDuration(int duration) {
-        CharityListItem.duration = duration;
-        valueAnimator.setDuration(duration);
-    }
 
     private void invalidatePoster() {
         this.post(new Runnable() {
@@ -226,18 +152,6 @@ public class CharityListItem extends ViewGroup {
         });
     }
 
-    public void setRippleColor(int color) {
-        rippleColor = color;
-    }
-
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
-        if (animateRipple) {
-            paint.setColor(rippleColor);
-            canvas.drawCircle(clickedX, clickedY, rippleR * ripple_animated_value, paint);
-        }
-    }
 
     @Override
     public void addView(View child, int index, LayoutParams params) {
@@ -270,7 +184,7 @@ public class CharityListItem extends ViewGroup {
 
     @Override
     protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
-        progressBar.layout(0, getHeight() - progressBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
+        //progressBar.layout(0, getHeight() - progressBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
 
         final int imageViewPadding = (getMeasuredHeight() - plusButton.getMeasuredHeight()) / 2;
         plusButton.layout(getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
@@ -280,34 +194,26 @@ public class CharityListItem extends ViewGroup {
         );
 
         final int textViewPadding = (getMeasuredHeight() - textView.getMeasuredHeight()) / 2;
-        textView.layout(getPaddingLeft(), textViewPadding,
+        textView.layout(getPaddingLeft(), 0,
                 getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
-                getMeasuredHeight() - textViewPadding);
+                getMeasuredHeight());
 
-        checkViewParams(textView);
+
     }
 
-    private void checkViewParams(final View view, final int layoutWidth, final int layoutHeight) {
-        final int width = view.getMeasuredWidth();
-        final int height = view.getMeasuredHeight();
-        if ((width > layoutWidth) || (height > layoutHeight)) {
-            view.setLayoutParams(new LayoutParams(layoutWidth, layoutHeight));
-            measureChild(view, MeasureSpec.AT_MOST, MeasureSpec.AT_MOST);
-            view.requestLayout();
-            view.invalidate();
-            requestLayout();
-        }
+    public void setSecondaryText(String text) {
+        textView.setSecondaryText(text);
     }
 
-    public void setProgress(int progress) {
-        progressBar.setProgress(progress);
+    public void setSecondaryText(int text) {
+        String append = text == 1 ? " vote" : " votes";
+        setSecondaryText(String.valueOf(text) + append);
     }
 
-    private void checkViewParams(final View view) {
-        final int layoutWidth = view.getRight() - view.getLeft();
-        final int layoutHeight = view.getBottom() - view.getTop();
-        checkViewParams(view, layoutWidth, layoutHeight);
-    }
+//    public void setProgress(int progress) {
+//        progressBar.setProgress(progress);
+//    }
+
 
     public void setLink(String link) {
         this.link = link;
@@ -449,7 +355,7 @@ public class CharityListItem extends ViewGroup {
             h = h - getPaddingTop() - getPaddingBottom();
 
             rippleR = Math.min(w, h) / 2;
-            paint.setTextSize(rippleR);
+
         }
 
 
@@ -476,6 +382,7 @@ public class CharityListItem extends ViewGroup {
             else
                 castVote();
         }
+
 
         private int getColor(boolean b) {
             return b ? 0xffe51c23 : 0xff42bd41;

@@ -74,12 +74,13 @@ public class MaterialTwoLineText extends ViewGroup {
     };
     private int rippleR;
     private int rippleColor = 0x25000000;
+    private long downTime;
+    private OnClickListener listener;
 
     public MaterialTwoLineText(Context context) {
         super(context);
         init();
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -88,7 +89,7 @@ public class MaterialTwoLineText extends ViewGroup {
                 clickedX = (int) event.getX();
                 clickedY = (int) event.getY();
                 rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
-
+                downTime = System.currentTimeMillis();
                 animator.start();
 
                 touchDown = true;
@@ -101,6 +102,14 @@ public class MaterialTwoLineText extends ViewGroup {
                 if (!animator.isRunning()) {
                     ripple_animated_value = 0;
                     invalidatePoster();
+                }
+
+                try {
+                    if (((System.currentTimeMillis() - downTime) < 180)) {
+                        listener.onClick(this);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
         }
@@ -128,7 +137,7 @@ public class MaterialTwoLineText extends ViewGroup {
         final LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         primaryTextView = new TextView(getContext());
-        primaryTextView.setTextColor(getResources().getColor(R.color.dark_dark_grey));
+        primaryTextView.setTextColor(getResources().getColor(R.color.dark_grey));
         primaryTextView.setTypeface(null, Typeface.BOLD);
         primaryTextView.setTextSize(18);
         primaryTextView.setMaxLines(1);
@@ -137,15 +146,12 @@ public class MaterialTwoLineText extends ViewGroup {
         primaryTextView.setPadding(padding, padding, padding, padding / 2);
 
         secondaryTextView = new TextView(getContext());
-        secondaryTextView.setTextColor(getResources().getColor(R.color.dark_grey));
+        secondaryTextView.setTextColor(getResources().getColor(R.color.dark_grey_text));
         secondaryTextView.setTextSize(16);
         secondaryTextView.setMaxLines(1);
         secondaryTextView.setLayoutParams(params);
         secondaryTextView.setEllipsize(TextUtils.TruncateAt.END);
         secondaryTextView.setPadding(padding, padding / 2, padding, padding);
-
-        primaryTextView.setText("Primary");
-        secondaryTextView.setText("Secondary text dkjsgjkab sjkdg bka sjb gas sdg sj dgjsgjs gj sgdjj jsdgj sdg");
 
         setWillNotDraw(false);
         animator.setInterpolator(interpolator);
@@ -284,14 +290,12 @@ public class MaterialTwoLineText extends ViewGroup {
         }
     }
 
-
     @Override
     public void addView(View child, int index, LayoutParams params) {
         if (getChildCount() >= 2)
             return;
         super.addView(child, index, params);
     }
-
 
     @Override
     protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {
@@ -318,5 +322,10 @@ public class MaterialTwoLineText extends ViewGroup {
                 resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
 
 
+    }
+
+    @Override
+    public void setOnClickListener(OnClickListener l) {
+        listener = l;
     }
 }

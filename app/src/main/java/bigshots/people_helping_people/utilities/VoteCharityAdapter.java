@@ -95,8 +95,9 @@ public class VoteCharityAdapter extends BaseAdapter {
         view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));
         view.setPos(position);
         view.setLink(charities.get(position).getUrl());
-        view.setText(charities.get(position).getName());
-        view.setProgress(charities.get(position).getVotes());
+        view.setPrimaryText(charities.get(position).getName());
+        view.setSecondaryText(charities.get(position).getVotes());
+        //  view.setProgress(charities.get(position).getVotes());
         if (votedFor != null && charities.get(position).getUrl().equals(votedFor))
             view.setVotedFor(true);
         else

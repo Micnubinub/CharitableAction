@@ -1,7 +1,9 @@
 package bigshots.people_helping_people;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,10 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import bigshots.people_helping_people.fragments.Page1;
 import bigshots.people_helping_people.fragments.Page2;
 import bigshots.people_helping_people.fragments.Page3;
 import bigshots.people_helping_people.fragments.Page4;
+import bigshots.people_helping_people.utilities.Utils;
 
 /**
  * Created by root on 28/11/14.
@@ -25,6 +29,8 @@ public class Intro extends FragmentActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.skip:
+                    save();
+                    finish();
                     startActivity(new Intent(Intro.this, MainMenu.class));
                     break;
             }
@@ -38,6 +44,7 @@ public class Intro extends FragmentActivity {
         @Override
         public void onPageScrolled(int i, float v, int i2) {
             if (i == (pages.length - 2) && v > 0.2) {
+                save();
                 finish();
                 if (!appLaunched)
                     startActivity(new Intent(Intro.this, MainMenu.class));
@@ -59,12 +66,22 @@ public class Intro extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utils.INTRO_SHOWN, false)) {
+            finish();
+            startActivity(new Intent(Intro.this, MainMenu.class));
+        }
         setContentView(R.layout.intro);
         button = (Button) findViewById(R.id.skip);
         button.setOnClickListener(listener);
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         pager.setOnPageChangeListener(pageChangeListener);
+    }
+
+    private void save() {
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(Utils.INTRO_SHOWN, true).commit();
     }
 
     class PagerAdapter extends FragmentPagerAdapter {

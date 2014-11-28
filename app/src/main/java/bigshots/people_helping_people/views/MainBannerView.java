@@ -5,7 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 
 import bigshots.people_helping_people.R;
@@ -16,8 +16,8 @@ import bigshots.people_helping_people.R;
 @SuppressWarnings("ALL")
 public class MainBannerView extends ImageView {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
-    private static final int duration = 1100;
+    private static final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+    private static final int duration = 710;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private BannerPopup.State state;
     private float animated_value = 0;

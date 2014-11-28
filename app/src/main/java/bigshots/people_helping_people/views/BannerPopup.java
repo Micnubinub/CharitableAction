@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,12 +28,10 @@ import bigshots.people_helping_people.services.BannerPopupService;
  */
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
-    //Todo add intro slides
-    //Todo make it minimise when they release it
-    //Todo add second line to listview
-    //Fix Banner Horizontal Issue.
-    //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
+    //Todo add intro slides 1/2 done
+    //Todo make it minimise when they release it 1/2 done
     //Todo make sure animations are doing exactly what they are meant to be doing. Remove view quicky
+    //Todo hidemenu-showmenu
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
@@ -54,8 +53,6 @@ public class BannerPopup extends ViewGroup {
     private MainBannerView mainView;
     private boolean settingUp = true;
     private long downTime;
-    // private BannerPopup popup;
-    private Direction direction = Direction.LEFT;
     private final OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -83,24 +80,26 @@ public class BannerPopup extends ViewGroup {
                 case MotionEvent.ACTION_MOVE:
                     setPosition((initialX + (int) (event.getRawX() - initialTouchX)), (initialY + (int) (event.getRawY() - initialTouchY)));
                     if (initialX + (int) (event.getRawX() - initialTouchX) > (screenWidth / 2))
-                        direction = Direction.RIGHT;
+                        setDirection(Direction.RIGHT);
                     else
-                        direction = Direction.LEFT;
+                        setDirection(Direction.LEFT);
                     break;
             }
             invalidate();
             return true;
         }
     };
+    // private BannerPopup popup;
+    private Direction direction = Direction.LEFT;
     private AdManager bannerAdManager;//, fullScreenAdmanager;
     private boolean animationFinished;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
         public void onAnimationStart(Animator animation) {
-
+            Toast.makeText(getContext(), "Started", Toast.LENGTH_SHORT).show();
             animationFinished = false;
             if (state == State.SHOWING_MENU) {
-                adMenuItems();
+                addMenuItems();
             } else if (state == State.SHOWING_AD) {
                 adAdView();
             }
@@ -139,6 +138,7 @@ public class BannerPopup extends ViewGroup {
     //implement x,t
     private int toX, fromX, padding, adH, adW, w, h, screenHeight, screenWidth;
     private CurrentAnimation[] currentAnimations;
+    private int maxX, minX;
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
@@ -197,19 +197,24 @@ public class BannerPopup extends ViewGroup {
         }
     }
 
-    private void adMenuItems() {
+    private void addMenuItems() {
         try {
+            final int menuItemX = mainView.getLeft() + ((mainView.getWidth() - menuItemWidth) / 2);
             addView(closeBanner, new LayoutParams(adH, adH));
             closeBanner.setOnClickListener(clickListener);
+            closeBanner.setX(menuItemX);
 
             addView(minimise, new LayoutParams(adH, adH));
             minimise.setOnClickListener(clickListener);
+            minimise.setX(menuItemX);
 
             addView(fullScreen, new LayoutParams(adH, adH));
             fullScreen.setOnClickListener(clickListener);
+            fullScreen.setX(menuItemX);
 
             addView(openApp, new LayoutParams(adH, adH));
             openApp.setOnClickListener(clickListener);
+            openApp.setX(menuItemX);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -256,14 +261,11 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void resolveAdSize() {
-        final DisplayMetrics metrics = new DisplayMetrics();
-
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-        screenWidth = metrics.widthPixels;
-        screenHeight = metrics.heightPixels;
+        refresh();
 
         h = dpToPixels(mainViewHeight);
         w = dpToPixels(adWidth + (int) (mainViewHeight * adDistance));
+
         adW = dpToPixels(adWidth);
         adH = dpToPixels(adHeight);
 
@@ -280,7 +282,6 @@ public class BannerPopup extends ViewGroup {
         unit = spacing + h;
 
         padding = (h - adH) / 2;
-
         spacing = adH / 4;
         addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         addView(mainView, new LayoutParams(h, h));
@@ -289,6 +290,7 @@ public class BannerPopup extends ViewGroup {
         params.width = w;
         params.height = h;
 
+        refresh();
         update();
     }
 
@@ -305,7 +307,6 @@ public class BannerPopup extends ViewGroup {
     public void setState(State state) {
         this.state = state;
         mainView.setState(state);
-        Toast.makeText(getContext(), String.valueOf(state), Toast.LENGTH_SHORT).show();
     }
 
     private void click(View v) {
@@ -358,15 +359,15 @@ public class BannerPopup extends ViewGroup {
 
     }
 
-    public int getFromX() {//Todo
+    public int getFromX() {
         return ((int) (x * screenWidth));
     }
 
     public void setToX() {
         if (direction == Direction.LEFT)
-            toX = -((int) (0.2f * getMeasuredHeight()));
+            toX = -((int) (0.2f * mainView.getMeasuredWidth()));
         else
-            toX = screenWidth - ((int) (0.8f * getMeasuredHeight()));
+            toX = screenWidth - ((int) (0.8f * mainView.getMeasuredWidth()));
     }
 
     @Override
@@ -379,11 +380,19 @@ public class BannerPopup extends ViewGroup {
                 child.layout((int) child.getX(), adViewPadding, (int) child.getX() + adH, getMeasuredHeight() - adViewPadding);
             }
         }
-        if ((state == State.SHOWING_AD) && (adView.getScaleX() > 0.01f))
-            adView.layout((int) (getMeasuredHeight() * adDistance), adViewPadding, getMeasuredWidth(), getMeasuredHeight() - adViewPadding);
 
-        mainView.layout(0, 0, getMeasuredHeight(), getMeasuredHeight());
-
+        switch (direction) {
+            case LEFT:
+                if ((state == State.SHOWING_AD) && (adView.getScaleX() > 0.01f))
+                    adView.layout((int) (getMeasuredHeight() * adDistance), adViewPadding, getMeasuredWidth(), getMeasuredHeight() - adViewPadding);
+                mainView.layout(0, 0, getMeasuredHeight(), getMeasuredHeight());
+                break;
+            case RIGHT:
+                if ((state == State.SHOWING_AD) && (adView.getScaleX() > 0.01f))
+                    adView.layout(0, adViewPadding, getWidth() - (int) (getMeasuredHeight() * adDistance), getMeasuredHeight() - adViewPadding);
+                mainView.layout(getWidth() - getHeight(), 0, getMeasuredWidth(), getMeasuredHeight());
+                break;
+        }
     }
 
     @Override
@@ -412,20 +421,14 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void resize(int width, int height) {
-//        final LayoutParams params1 = getLayoutParams();
-//        params1.height = height;
-//        params1.width = width;
-//        setLayoutParams(params1);
         params.height = height;
         params.width = width;
-
         update();
     }
 
     public int dpToPixels(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
-
 
     private void invalidatePoster() {
         this.post(new Runnable() {
@@ -459,6 +462,23 @@ public class BannerPopup extends ViewGroup {
         return 0;
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+
+        switch (state) {
+            case SHOWING_AD:
+                currentAnimation = CurrentAnimation.HIDE_AD;
+                currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_AD, CurrentAnimation.SHOW_AD};
+
+                break;
+            case SHOWING_MENU:
+                currentAnimation = CurrentAnimation.HIDE_MENU;
+                currentAnimations = new CurrentAnimation[]{CurrentAnimation.HIDE_MENU, CurrentAnimation.SHOW_MENU};
+
+                break;
+        }
+        startAnimator();
+    }
 
     private void startAnimator() {
         if (animator.isRunning()) {
@@ -477,15 +497,19 @@ public class BannerPopup extends ViewGroup {
     }
 
     private void setPosition(int x, int y) {
-        if (x > -(mainViewHeight * 0.2f) && (x + mainView.getWidth() - (mainViewHeight * 0.2f)) < screenWidth)
-            params.x = x;
+        switch (direction) {
+            case LEFT:
+                params.x = (x >= minX) ? x : minX;
+                break;
+            case RIGHT:
+                params.x = (x <= maxX) ? x : maxX;
+                break;
+        }
 
         if (y > 0 && y + mainView.getHeight() < screenHeight)
             params.y = y;
-
         update();
     }
-
 
     @Override
     public void invalidate() {
@@ -538,7 +562,6 @@ public class BannerPopup extends ViewGroup {
             }
     }
 
-
     private void runAnimations() {
         if (currentAnimations.length > 1) {
             if (animated_value > 0.5f)
@@ -549,9 +572,12 @@ public class BannerPopup extends ViewGroup {
             if (animated_value == 1)
                 animated_value = 0.999f;
         } else {
-            if (animated_value > 0.5f) {
-                animator.cancel();
-                return;
+            currentAnimation = currentAnimations[0];
+            if (animated_value >= 0.5f) {
+                if (animator.isRunning()) {
+                    animator.cancel();
+                }
+                animated_value = 0.4998f;
             }
         }
         final float val = animated_value % 0.5f;
@@ -574,14 +600,15 @@ public class BannerPopup extends ViewGroup {
                 break;
         }
 
+
     }
 
     private void snap(float progress) {
         setPosition(fromX + Math.round((toX - fromX) * progress), params.y);
+        Log.e("snapto", String.format("prog,val : %f, %d", progress, fromX + Math.round((toX - fromX) * progress)));
     }
 
     private void updateMenuItemDistance(float distance) {
-
         distance = Math.abs(distance);
         setMenuItemsX(Math.round(distance * lastMenuItemDistance));
         setDistance();
@@ -624,7 +651,7 @@ public class BannerPopup extends ViewGroup {
             @Override
             public void onAdClosed() {
                 super.onAdClosed();
-                //make reload it
+                //make reload its
             }
 
             @Override
@@ -636,6 +663,7 @@ public class BannerPopup extends ViewGroup {
     }
 
     public void rotate(int orientation) {
+        refresh();
         switch (orientation) {
             case Configuration.ORIENTATION_LANDSCAPE:
 
@@ -646,14 +674,25 @@ public class BannerPopup extends ViewGroup {
         }
     }
 
-    public void minimise() {
+    private void refresh() {
+        final DisplayMetrics metrics = new DisplayMetrics();
 
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+        minX = (int) (0 - (mainView.getWidth() * 0.2f));
+        maxX = (int) (screenWidth - mainView.getWidth() * 0.8f);
+
+        setPosition(((int) (x * screenWidth)), ((int) (y * screenHeight)));
+
+    }
+
+    public void minimise() {
         currentAnimations = new CurrentAnimation[]{CurrentAnimation.SNAP_TO};
         setToX();
-        fromX = params.x;
+        fromX = getFromX();
         startAnimator();
         setState(State.MINIMISED);
-
     }
 
     private void setXY() {

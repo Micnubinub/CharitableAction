@@ -36,7 +36,7 @@ public class AsyncConnector {
                 // Log.e("Async", resp);
             } else if (action.equals("GET_CHARITIES")) {
                 // Log.e("Async", resp);
-                ArrayList<Charity> charities = new ArrayList<>();
+                ArrayList<Charity> charities = new ArrayList<Charity>();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
                     String[] tmp1 = resp.split("\\|");
@@ -84,7 +84,7 @@ public class AsyncConnector {
             } else if (action.equals("CHARITY_CURRENT")) {
                 // Log.e("Async", resp);
                 String charityURL = resp;
-                // TODO
+                // TODO update
             } else if (action.equals("USER_INSERT")) {
                 // Log.e("Async", resp);
             } else {
