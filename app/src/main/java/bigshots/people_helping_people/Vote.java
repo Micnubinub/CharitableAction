@@ -15,7 +15,6 @@ import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
-import bigshots.people_helping_people.views.RippleButton;
 
 /**
  * Created by root on 18/11/14.
@@ -56,7 +55,6 @@ public class Vote extends Activity {
                 showSuggestionDialog();
             }
         });
-        ((RippleButton) findViewById(R.id.fab)).setIsCircle(true);
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

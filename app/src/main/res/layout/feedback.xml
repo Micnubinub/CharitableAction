@@ -10,17 +10,12 @@
         android:layout_height="wrap_content"
         android:background="@color/material_blue">
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="14dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/white_arrow" />
 
-        <bigshots.people_helping_people.views.WhiteRippleText
+        <TextView
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/blue_background"
             android:paddingBottom="16dp"
             android:paddingLeft="69dp"
             android:paddingRight="16dp"
@@ -29,6 +24,13 @@
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="14dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/white_arrow" />
     </RelativeLayout>
 
     <ScrollView
@@ -42,10 +44,11 @@
             android:orientation="vertical">
 
 
-            <bigshots.people_helping_people.views.RippleTextView
+            <TextView
                 android:id="@+id/email"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Email us"
@@ -53,10 +56,11 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-            <bigshots.people_helping_people.views.RippleTextView
+            <TextView
                 android:id="@+id/gplus"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Find us on Google+"
@@ -64,10 +68,11 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-            <bigshots.people_helping_people.views.RippleTextView
+            <TextView
                 android:id="@+id/fb"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Find us on Facebook page"
@@ -75,10 +80,11 @@
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
-            <bigshots.people_helping_people.views.RippleTextView
+            <TextView
                 android:id="@+id/direct"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Send a message through the app"

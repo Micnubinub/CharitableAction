@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,12 +41,10 @@ public class BannerPopupService extends Service {
 
     private static void scheduleNext(Context context) {
         try {
-            final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            int mins = preferences.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
+            int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
 
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             final Intent intent = new Intent(context, AlarmReceiver.class);
-            intent.putExtra(Utils.SCHEDULE, Utils.SCHEDULE);
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             if (mins == 0)
@@ -149,6 +146,7 @@ public class BannerPopupService extends Service {
     public static class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            bannerPopup.showFullScreenAd();
             scheduleNext(context);
         }
     }

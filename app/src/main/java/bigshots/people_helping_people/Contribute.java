@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 
@@ -138,10 +139,10 @@ public class Contribute extends Activity {
         // set current time
 
         hours.setCurrentItem(0);
-        minutes.setCurrentItem(20);
+        minutes.setCurrentItem(PreferenceManager.getDefaultSharedPreferences(this).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20));
         final String prefix = "A full screen Ad will be show every : ";
-        frequency.setText(prefix + "20 minutes");
-        frequencyMinutes = 20;
+        frequency.setText(prefix + String.valueOf(minutes.getCurrentItem()) + " minutes");
+        frequencyMinutes = minutes.getCurrentItem();
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 final StringBuilder text = new StringBuilder();
@@ -182,13 +183,14 @@ public class Contribute extends Activity {
 
         hours.addChangingListener(wheelListener);
         minutes.addChangingListener(wheelListener);
-
         return dialog;
     }
 
     private void save() {
-        if ((frequencyMinutes != 0) && (frequencyMinutes < 5))
-            frequencyMinutes = 5;
+        if ((frequencyMinutes != 0) && (frequencyMinutes < 3)) {
+            frequencyMinutes = 3;
+            Toast.makeText(this, "Set to 3 minutes", Toast.LENGTH_SHORT).show();
+        }
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();

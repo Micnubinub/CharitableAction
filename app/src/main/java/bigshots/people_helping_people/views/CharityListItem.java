@@ -113,7 +113,7 @@ public class CharityListItem extends ViewGroup {
         plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
         plusButton.setPadding(padding, padding, padding, padding);
 
-//        progressBar = new ProgressBar(getContext());
+//        progressBar = new ProgressBar(getContext())   ;
 //        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 5));
 
         setWillNotDraw(false);
