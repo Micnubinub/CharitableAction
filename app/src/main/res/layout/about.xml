@@ -15,7 +15,7 @@
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/blue_background"
+            android:background="@drawable/blue_button_selector"
             android:paddingBottom="16dp"
             android:paddingLeft="69dp"
             android:paddingRight="16dp"

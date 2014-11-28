@@ -20,7 +20,7 @@ public class About extends Activity {
                     startActivity(browserIntent);
                     break;
                 case R.id.website_link:
-                    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.thebigshots.net/"));
+                    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://thebigshots.net/charity/"));
                     startActivity(intent);
                     break;
             }

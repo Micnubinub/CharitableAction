@@ -10,17 +10,12 @@
         android:layout_height="wrap_content"
         android:background="@color/material_blue">
 
-    <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="14dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/white_arrow" />
 
-        <bigshots.people_helping_people.views.WhiteRippleText
+        <TextView
             android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/blue_button_selector"
             android:paddingBottom="16dp"
             android:paddingLeft="69dp"
             android:paddingRight="16dp"
@@ -29,9 +24,16 @@
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="14dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/white_arrow" />
     </RelativeLayout>
 
-    <bigshots.people_helping_people.views.RippleButton
+    <Button
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white"
