@@ -35,28 +35,52 @@ public class Contribute extends Activity {
     //Banner popup
     //Link to this months people_helping_people
 
+    AdListener fullScreen = new AdListener() {
+        @Override
+        public void onAdOpened() {
+            super.onAdOpened();
+            fullScreenClicked = false;
+        }
+
+        @Override
+        public void onAdLoaded() {
+            super.onAdLoaded();
+            if (fullScreenClicked) adManager.getFullscreenAd().show();
+        }
+
+        @Override
+        public void onAdClosed() {
+            super.onAdClosed();
+            adManager.loadFullscreenAd();
+        }
+    };
     private int frequencyMinutes;
     private Dialog dialog;
     private AdManager adManager;
     private String currentCharity;
+    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+        @Override
+        public void onCompleteSingle(Charity charity) {
+            currentCharity = charity.getUrl();
+        }
 
+        @Override
+        public void onCompleteArray(ArrayList<Charity> charities) {
+
+        }
+    };
+    private boolean videoClicked, fullScreenClicked;
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.full_screen:
-                    adManager.getFullscreenAd().setAdListener(new AdListener() {
-                        public void onAdLoaded() {
-                            adManager.getFullscreenAd().show();
-                        }
-                    });
+                    fullScreenClicked = true;
+                    adManager.getFullscreenAd().show();
                     break;
                 case R.id.video_ad:
-                    adManager.getVideoAd().setAdListener(new AdListener() {
-                        public void onAdLoaded() {
-                            adManager.getVideoAd().show();
-                        }
-                    });
+                    videoClicked = true;
+                    adManager.getVideoAd().show();
                     break;
                 case R.id.current_charity:
                     try {
@@ -82,18 +106,28 @@ public class Contribute extends Activity {
             }
         }
     };
-    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+    AdListener video = new AdListener() {
         @Override
-        public void onCompleteSingle(Charity charity) {
-            currentCharity = charity.getUrl();
+        public void onAdOpened() {
+            super.onAdOpened();
+
+            videoClicked = false;
         }
 
         @Override
-        public void onCompleteArray(ArrayList<Charity> charities) {
+        public void onAdLoaded() {
+            super.onAdLoaded();
+            if (videoClicked)
+                adManager.getVideoAd().show();
 
+        }
+
+        @Override
+        public void onAdClosed() {
+            super.onAdClosed();
+            adManager.loadVideoAd();
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +136,8 @@ public class Contribute extends Activity {
         adManager = new AdManager(this);
         adManager.loadFullscreenAd();
         adManager.loadVideoAd();
+        adManager.getFullscreenAd().setAdListener(fullScreen);
+        adManager.getVideoAd().setAdListener(video);
 
         findViewById(R.id.full_screen).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
