@@ -12,9 +12,7 @@
     <color name="dark_dark_grey">#222222</color>
     <color name="black">#000000</color>
     <color name="white_alpha">#aaffffff</color>
-    <color name="material_blue">#6fb5d5</color>
-    <color name="material_blue_darkr">#6fb5d5</color>
+    <color name="material_blue">#738ffe</color>
     <color name="material_green_light">#42bd41</color>
     <color name="material_red">#e84e40</color>
-
 </resources>

@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.InterstitialAd;
+
 import bigshots.people_helping_people.Contribute;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.services.BannerPopupService;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
 
 /**
  * Created by root on 18/11/14.
@@ -25,6 +27,7 @@ import com.google.android.gms.ads.InterstitialAd;
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
     //Todo add intro slides
+    //Todo make it minimise when they release it
     //Fix Banner Horizontal Issue.
     //Todo Fix Voting (It doesnt Vote) and it seems that i can vote for two charities at once
     //Todo make sure animations are doing exactly what they are meant to be doing. Remove view quicky
