@@ -26,7 +26,7 @@
         android:minWidth="110dp"
         android:padding="8dp"
         android:text="Save"
-        android:textColor="@color/extra_high"
+        android:textColor="@color/material_blue"
         android:textSize="18sp" />
 
 </RelativeLayout>

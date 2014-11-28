@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.utilities.Interfaces;
-
-import java.util.ArrayList;
 
 /**
  * Created by root on 18/11/14.
@@ -56,7 +57,7 @@ public class MainMenu extends Activity {
 
         try {
             AccountManager manager = AccountManager.get(this);
-            Account[] accounts = manager.getAccountsByType("com.google");
+            Account[] accounts = manager.getAccounts();
             for (Account account : accounts) {
                 if (account.name.contains("@gmail")) {
                     new UserManager().insertUser(account.name);

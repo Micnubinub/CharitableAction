@@ -17,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
+import android.widget.Toast;
+
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.VoteManager;
 
@@ -192,7 +194,7 @@ public class CharityListItem extends ViewGroup {
 
 
         manager = AccountManager.get(getContext());
-        accounts = manager.getAccountsByType("com.google");
+        accounts = manager.getAccounts();
     }
 
     public void setPrimaryTextSize(int sp) {
@@ -314,9 +316,10 @@ public class CharityListItem extends ViewGroup {
     private void castVote() {
         for (Account account : accounts) {
             if (account.name.contains("@gmail")) {
-
                 removeVote();
-                voteManager.castVote(currentVote, account.name);
+                voteManager.castVote(link, account.name);
+                Toast.makeText(getContext(), "casting :" + link, Toast.LENGTH_SHORT).show();
+                currentVote = link;
                 break;
             }
         }
@@ -326,6 +329,7 @@ public class CharityListItem extends ViewGroup {
         for (Account account : accounts) {
             if (account.name.contains("@gmail")) {
                 voteManager.removeVote(account.name);
+                Toast.makeText(getContext(), "removing :" + account.name, Toast.LENGTH_SHORT).show();
                 break;
             }
         }

@@ -51,7 +51,7 @@ public class VoteCharityAdapter extends BaseAdapter {
     void getVotedFor() {
         AccountManager manager = AccountManager.get(context);
         Account[] accounts;
-        accounts = manager.getAccountsByType("com.google");
+        accounts = manager.getAccounts();
         for (Account account : accounts) {
             if (account.name.contains("@gmail")) {
                 new CharityManager().currentCharity(account.name);

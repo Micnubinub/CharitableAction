@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="vertical"
-                android:background="@color/white"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@+id/skip"/>
+        android:id="@+id/pager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/skip" />
 
     <Button
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:id="@+id/skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/cancel"
-            android:background="@drawable/white_button_selector"
-            android:minWidth="120dp"
-            android:padding="8dp"
-            android:text="Skip"
-            android:textColor="@color/extra_high"
-            android:textSize="22sp"/>
+        android:id="@+id/skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/cancel"
+        android:background="@drawable/white_button_selector"
+        android:minWidth="120dp"
+        android:padding="8dp"
+        android:text="Skip"
+        android:textColor="@color/material_blue_darkr"
+        android:textSize="22sp" />
 </RelativeLayout>

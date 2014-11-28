@@ -325,7 +325,7 @@ public class MaterialCheckBox extends ViewGroup {
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            final int paintColor = isChecked() ? getResources().getColor(R.color.material_green) : getResources().getColor(R.color.material_red);
+            final int paintColor = isChecked() ? getResources().getColor(R.color.material_green_light) : getResources().getColor(R.color.material_red);
 
             paint.setColor(paintColor);
             final int sweepAngle = (int) ((animated_value < 0.75f ? animated_value / 0.75f : 1) * 360);
