@@ -12,19 +12,21 @@ public class VoteManager {
     }
 
     public Charity getCurrentCharity() {
-        return new Charity();
+        Charity charity = new Charity();
+        return charity;
     }
 
     public void castVote(String url, String useremail) {
-        ArrayList<NameValuePair> nvp = new ArrayList<>(2);
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(2);
         nvp.add(new BasicNameValuePair("URL", url));
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
         AsyncConnector.makeConnection(nvp, "VOTE_CAST.php", "VOTE_CAST");
     }
 
-    public void removeVote(String useremail) {
-        ArrayList<NameValuePair> nvp = new ArrayList<>(1);
+    public void removeVote(String url, String useremail) {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(2);
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
+        nvp.add(new BasicNameValuePair("URL", url));
         AsyncConnector.makeConnection(nvp, "VOTE_REMOVE.php", "VOTE_REMOVE");
     }
 

@@ -82,9 +82,10 @@ public class AsyncConnector {
                     Log.e("Async", "Charity of the month not selected yet");
                 }
             } else if (action.equals("CHARITY_CURRENT")) {
-                // Log.e("Async", resp);
-                String charityURL = resp;
-                // TODO update
+                Charity charity = new Charity();
+                charity.setUrl(resp);
+                if (listener != null)
+                    listener.onCompleteSingle(charity);
             } else if (action.equals("USER_INSERT")) {
                 // Log.e("Async", resp);
             } else {

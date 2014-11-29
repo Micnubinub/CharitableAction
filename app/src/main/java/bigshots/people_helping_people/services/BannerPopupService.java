@@ -10,8 +10,10 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -41,29 +43,36 @@ public class BannerPopupService extends Service {
     private static BannerPopup bannerPopup;
     private static PendingIntent alarmIntent;
     private static AlarmManager alarmManager;
+    private static boolean loadAd;
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
 
-    public static void scheduleNext(Context context) {
-
+    public static void scheduleNext(Context context, boolean load) {
+        loadAd = load;
         try {
-            int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
-            long when = System.currentTimeMillis() + (mins * 3000);
-
+            // Toast.makeText(context, "LOAD_AD sched" + String.valueOf(loadAd), Toast.LENGTH_LONG).show();
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            final Intent intent = new Intent(context, AlarmReceiver.class);
-            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-            if (mins == 0) {
-                alarmManager.cancel(alarmIntent);
-                return;
-            } else
-                alarmManager.set(AlarmManager.RTC, when, alarmIntent);
-
-//            Intent i = new Intent(context, AlarmReceiver.class);
-//            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
-//            i.putExtra(Utils.SCHEDULE, Utils.SCHEDULE);
-//            alarmManager.set(AlarmManager.RTC, when - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
+            if (load) {
+                Log.e("Scheduling", String.valueOf(loadAd));
+                int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
+                Intent i = new Intent(context, AlarmReceiver.class);
+                if (mins == 0) {
+                    alarmManager.cancel(alarmIntent);
+                    return;
+                } else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        alarmManager.setExact(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
+                    } else
+                        alarmManager.set(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
+                }
+            } else {
+                final Intent intent = new Intent(context, AlarmReceiver.class);
+                alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
+                } else
+                    alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
+            }
 
 
         } catch (Exception e) {
@@ -180,25 +189,26 @@ public class BannerPopupService extends Service {
     public static class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (isServiceRunning) {
+                try {
+                    Log.e("IntentReceived > should load ad and toast", String.valueOf(loadAd));
+                    if (loadAd) {
+                        Log.e("Loading", "ad");
+                        bannerPopup.loadFullScreenAd();
+                        scheduleNext(context, false);
+                        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
+                            Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
+                        return;
+                    } else {
+                        Log.e("Showing", "Ad");
+                        bannerPopup.showFullScreenAd();
+                        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
+                            scheduleNext(context, true);
+                    }
 
-            try {
-                Toast.makeText(context, "show", Toast.LENGTH_LONG).show();
-                if (intent.getStringExtra(Utils.LOAD_AD).equals(Utils.LOAD_AD)) {
-                    Toast.makeText(context, "load", Toast.LENGTH_LONG).show();
-                    bannerPopup.loadFullScreenAd();
-
-                    if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE))
-                        Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
-                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-
-                bannerPopup.showFullScreenAd();
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
-                    scheduleNext(context);
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
 
         }

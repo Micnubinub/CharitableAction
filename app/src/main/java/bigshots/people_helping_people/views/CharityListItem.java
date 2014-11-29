@@ -225,8 +225,9 @@ public class CharityListItem extends ViewGroup {
 
     private void castVote() {
         for (Account account : accounts) {
-            if (account.name.contains("@gmail")) {
+            if (account.name.contains("@")) {
                 removeVote();
+                Toast.makeText(getContext(), currentVote, Toast.LENGTH_LONG).show();
                 voteManager.castVote(link, account.name);
                 currentVote = link;
                 break;
@@ -236,8 +237,8 @@ public class CharityListItem extends ViewGroup {
 
     private void removeVote() {
         for (Account account : accounts) {
-            if (account.name.contains("@gmail")) {
-                voteManager.removeVote(account.name);
+            if (account.name.contains("@")) {
+                voteManager.removeVote(currentVote, account.name);
                 break;
             }
         }
@@ -380,10 +381,11 @@ public class CharityListItem extends ViewGroup {
             Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
             setIsVotedFor(!votedFor);
 //            startAnimator();
-            if (isVotedFor())
+            if (link.equals(currentVote))
                 removeVote();
             else
                 castVote();
+
             if (voteCharityAdapter != null) {
                 voteCharityAdapter.setVotedFor(link);
                 voteCharityAdapter.notifyDataSetChanged();

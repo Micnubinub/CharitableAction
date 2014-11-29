@@ -12,7 +12,7 @@ public class UserManager {
     }
 
     public void insertUser(String useremail) {
-        ArrayList<NameValuePair> nvp = new ArrayList<>(1);
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
         AsyncConnector
                 .makeConnection(nvp, "USER_INSERT.php", "USER_INSERT");

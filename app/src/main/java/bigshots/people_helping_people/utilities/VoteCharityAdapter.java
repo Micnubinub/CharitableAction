@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.views.CharityListItem;
@@ -23,12 +25,19 @@ import bigshots.people_helping_people.views.ProgressBar;
 public class VoteCharityAdapter extends BaseAdapter {
     private static int max;
     private static String votedFor;
+
+
     private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
             votedFor = charity.getUrl();
             CharityListItem.setCurrentVote(votedFor);
             notifyDataSetChanged();
+            try {
+                Toast.makeText(context, charity.getUrl(), Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -45,11 +54,12 @@ public class VoteCharityAdapter extends BaseAdapter {
         getMax();
         this.context = context;
         height = dpToPixels(68);
+//new VoteCharityAdapter()
         getVotedFor();
     }
 
-    public void setVotedFor(String votedFor) {
-        this.votedFor = votedFor;
+    public static void setVotedFor(String votedFor) {
+        VoteCharityAdapter.votedFor = votedFor;
     }
 
     void getVotedFor() {
@@ -57,12 +67,13 @@ public class VoteCharityAdapter extends BaseAdapter {
         Account[] accounts;
         accounts = manager.getAccounts();
         for (Account account : accounts) {
-            if (account.name.contains("@gmail")) {
+            if (account.name.contains("@")) {
+                Toast.makeText(context, "getVote :" + account.name, Toast.LENGTH_SHORT).show();
                 new CharityManager().currentCharity(account.name);
+                AsyncConnector.setListener(aSyncListener);
                 break;
             }
         }
-
     }
 
     private void getMax() {
@@ -74,7 +85,6 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     @Override
     public void notifyDataSetChanged() {
-        getMax();
         super.notifyDataSetChanged();
     }
 
@@ -101,7 +111,7 @@ public class VoteCharityAdapter extends BaseAdapter {
         view.setLink(charities.get(position).getUrl());
         view.setPrimaryText(charities.get(position).getName());
         view.setSecondaryText(charities.get(position).getVotes());
-        //  view.setProgress(charities.get(position).getVotes());
+
         if ((votedFor != null) && (charities.get(position).getUrl().equals(votedFor)))
             view.setVotedFor(true);
         else

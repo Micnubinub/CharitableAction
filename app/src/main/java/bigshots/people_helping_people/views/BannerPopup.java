@@ -654,12 +654,10 @@ public class BannerPopup extends ViewGroup {
     }
 
     public void loadFullScreenAd() {
-        Toast.makeText(getContext(), "should load", Toast.LENGTH_SHORT).show();
         adManager.loadFullscreenAd();
     }
 
     public void showFullScreenAd() {
-        Toast.makeText(getContext(), "should show", Toast.LENGTH_SHORT).show();
         if (adManager.getFullscreenAd().isLoaded())
             adManager.getFullscreenAd().show();
         else {

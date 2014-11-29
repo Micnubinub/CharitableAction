@@ -12,7 +12,7 @@ public class MessageManager {
     }
 
     public void sendMessage(String msg) {
-        ArrayList<NameValuePair> nvp = new ArrayList<>(1);
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("MESSAGE", msg));
         AsyncConnector.makeConnection(nvp, "SEND_MESSAGE.php", "SEND_MESSAGE");
     }

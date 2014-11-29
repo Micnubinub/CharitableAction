@@ -58,7 +58,7 @@ public class MainMenu extends Activity {
             AccountManager manager = AccountManager.get(this);
             Account[] accounts = manager.getAccounts();
             for (Account account : accounts) {
-                if (account.name.contains("@gmail")) {
+                if (account.name.contains("@")) {
                     new UserManager().insertUser(account.name);
                     break;
                 }
@@ -66,6 +66,7 @@ public class MainMenu extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         findViewById(R.id.about).setOnClickListener(listener);
         findViewById(R.id.prefs).setOnClickListener(listener);
         findViewById(R.id.feedback).setOnClickListener(listener);

@@ -287,7 +287,7 @@ public class Contribute extends Activity {
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
         editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).commit();
 
-        BannerPopupService.scheduleNext(this);
+        BannerPopupService.scheduleNext(this, true);
 
     }
 
