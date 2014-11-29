@@ -22,10 +22,7 @@ import bigshots.people_helping_people.views.ProgressBar;
 @SuppressWarnings("ALL")
 public class VoteCharityAdapter extends BaseAdapter {
     private static int max;
-    private final Context context;
-    private final ArrayList<Charity> charities;
-    private int height = 100;
-    private String votedFor;
+    private static String votedFor;
     private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
@@ -39,6 +36,9 @@ public class VoteCharityAdapter extends BaseAdapter {
 
         }
     };
+    private final Context context;
+    private final ArrayList<Charity> charities;
+    private int height = 100;
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
@@ -46,6 +46,10 @@ public class VoteCharityAdapter extends BaseAdapter {
         this.context = context;
         height = dpToPixels(68);
         getVotedFor();
+    }
+
+    public void setVotedFor(String votedFor) {
+        this.votedFor = votedFor;
     }
 
     void getVotedFor() {
@@ -91,17 +95,18 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final CharityListItem view = new CharityListItem(context);
+        final CharityListItem view = new CharityListItem(context, this);
         view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));
         view.setPos(position);
         view.setLink(charities.get(position).getUrl());
         view.setPrimaryText(charities.get(position).getName());
         view.setSecondaryText(charities.get(position).getVotes());
         //  view.setProgress(charities.get(position).getVotes());
-        if (votedFor != null && charities.get(position).getUrl().equals(votedFor))
+        if ((votedFor != null) && (charities.get(position).getUrl().equals(votedFor)))
             view.setVotedFor(true);
         else
             view.setVotedFor(false);
+
         return view;
     }
 

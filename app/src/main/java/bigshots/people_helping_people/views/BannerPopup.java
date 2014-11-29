@@ -29,7 +29,14 @@ import bigshots.people_helping_people.services.BannerPopupService;
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
     //Todo add intro slides 1/2 done
-    //Todo hidemenu-showmenu in next update
+    //hidemenu-showmenu in next update
+    //Todo ad more toast so users know whats going on
+    //Todo ad toast notification for scheduled ads (checked by default)
+    //Todo ad option for banner at start up
+    //Todo ad checkbox to scheduling dialog for looping
+    //Todo google plus
+    //Todo look for more crashes
+
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
@@ -302,7 +309,7 @@ public class BannerPopup extends ViewGroup {
     }
 
     private float getScale(int screenWidth, int viewWidth, int adWidth) {
-        //TOdo fill in in next update
+        //fill in in next update
         return 1f;
     }
 

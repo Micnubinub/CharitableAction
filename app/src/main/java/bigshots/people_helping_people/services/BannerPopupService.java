@@ -39,19 +39,39 @@ public class BannerPopupService extends Service {
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
 
-    private static void scheduleNext(Context context) {
+    private static void scheduleNext(Context context, boolean toast) {
         try {
             int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
+            long when = System.currentTimeMillis() + (mins * 60000);
 
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             final Intent intent = new Intent(context, AlarmReceiver.class);
+
+
+            //Todo
+            if (toast)
+                intent.putExtra(Utils.SCHEDULE, Utils.SCHEDULE);
+
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE, true)) {
+                if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE)) {
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
+                        scheduleNext(context, false);
+                } else {
+                    scheduleNext(context, true);
+                }
+
+            } else {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
+                    scheduleNext(context, false);
+            }
+
+
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             if (mins == 0)
                 alarmManager.cancel(alarmIntent);
             else
-                alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + (mins * 60000), alarmIntent);
-
+                alarmManager.set(AlarmManager.RTC, when, alarmIntent);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +83,8 @@ public class BannerPopupService extends Service {
         super.onCreate();
         isServiceRunning = true;
 
-        scheduleNext(this);
+        //Todo check
+        scheduleNext(this, false);
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
@@ -147,7 +168,20 @@ public class BannerPopupService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             bannerPopup.showFullScreenAd();
-            scheduleNext(context);
+
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE, true)) {
+                if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE)) {
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
+                        scheduleNext(context, false);
+                } else {
+                    scheduleNext(context, true);
+                }
+
+            } else {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
+                    scheduleNext(context, false);
+            }
+
         }
     }
 }

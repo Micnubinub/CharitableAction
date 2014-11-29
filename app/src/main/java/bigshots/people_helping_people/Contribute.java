@@ -2,6 +2,7 @@ package bigshots.people_helping_people;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.views.MaterialCheckBox;
 
 /**
  * Created by root on 18/11/14.
@@ -35,7 +37,8 @@ public class Contribute extends Activity {
     //Banner popup
     //Link to this months people_helping_people
 
-    AdListener fullScreen = new AdListener() {
+    String prefix;
+    private AdListener fullScreen = new AdListener() {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
@@ -106,7 +109,7 @@ public class Contribute extends Activity {
             }
         }
     };
-    AdListener video = new AdListener() {
+    private AdListener video = new AdListener() {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
@@ -128,11 +131,13 @@ public class Contribute extends Activity {
             adManager.loadVideoAd();
         }
     };
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contribute);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         adManager = new AdManager(this);
         adManager.loadFullscreenAd();
         adManager.loadVideoAd();
@@ -158,9 +163,18 @@ public class Contribute extends Activity {
     private Dialog getScheduledAds() {
         final Dialog dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(R.layout.scheduled_dialog);
+        prefix = prefs.getBoolean(Utils.LOOP_SCHEDULE, true) ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
+
 
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(listener);
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(listener);
+        ((MaterialCheckBox) dialog.findViewById(R.id.loop_checkbox)).setOnCheckedChangeListener(new MaterialCheckBox.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialCheckBox materialCheckBox, boolean isChecked) {
+                prefix = isChecked ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
+
+            }
+        });
 
         final TextView frequency = (TextView) dialog.findViewById(R.id.frequency);
         final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
@@ -175,8 +189,8 @@ public class Contribute extends Activity {
         // set current time
 
         hours.setCurrentItem(0);
-        minutes.setCurrentItem(PreferenceManager.getDefaultSharedPreferences(this).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20));
-        final String prefix = "A full screen Ad will be show every : ";
+        minutes.setCurrentItem(prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20));
+
         frequency.setText(prefix + String.valueOf(minutes.getCurrentItem()) + " minutes");
         frequencyMinutes = minutes.getCurrentItem();
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
@@ -219,16 +233,22 @@ public class Contribute extends Activity {
 
         hours.addChangingListener(wheelListener);
         minutes.addChangingListener(wheelListener);
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Toast.makeText(getApplicationContext(), "Minimum is 3 minutes", Toast.LENGTH_SHORT).show();
+            }
+        });
         return dialog;
     }
 
     private void save() {
-        if ((frequencyMinutes != 0) && (frequencyMinutes < 3)) {
+        if ((frequencyMinutes != 0) && (frequencyMinutes < 3))
             frequencyMinutes = 3;
-            Toast.makeText(this, "Set to 3 minutes", Toast.LENGTH_SHORT).show();
-        }
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
+
+        Toast.makeText(this, String.format("Scheduled for %d minutes", frequencyMinutes), Toast.LENGTH_SHORT).show();
+
+        SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
     }
 }

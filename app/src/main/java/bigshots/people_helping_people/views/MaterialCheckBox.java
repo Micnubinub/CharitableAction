@@ -1,11 +1,11 @@
 package bigshots.people_helping_people.views;
 
-import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -15,6 +15,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
 import bigshots.people_helping_people.R;
+import bigshots.people_helping_people.utilities.Utils;
 
 
 /**
@@ -30,36 +31,9 @@ public class MaterialCheckBox extends ViewGroup {
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private final String text = "";
     private int height;
-    private int rippleR;
-    private float ripple_animated_value = 0;
     private int clickedX, clickedY;
     private boolean touchDown = false, animateRipple;
-    private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animator) {
 
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animator) {
-            if (!touchDown)
-                ripple_animated_value = 0;
-
-            animateRipple = false;
-            invalidatePoster();
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animator) {
-
-
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animator) {
-
-        }
-    };
     private int textSize;
     private CheckBox materialCheckBox;
     private int width;
@@ -69,13 +43,13 @@ public class MaterialCheckBox extends ViewGroup {
         @Override
         public void onAnimationUpdate(ValueAnimator animation) {
             animated_value = (Float) (animation.getAnimatedValue());
-            ripple_animated_value = animated_value;
+
             invalidatePoster();
         }
     };
     private OnCheckedChangedListener listener;
     private TextView textView;
-    private int rippleColor = 0x25000000;
+
 
     public MaterialCheckBox(Context context) {
         super(context);
@@ -214,15 +188,28 @@ public class MaterialCheckBox extends ViewGroup {
 
         addView(textView);
         addView(materialCheckBox);
+        setBackground(getResources().getDrawable(R.drawable.white_button_selector));
 
-        setText(text);
-
+        setText("Loop?");
+        try {
+            setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(Utils.LOOP_SCHEDULE, true));
+        } catch (Exception e) {
+            setChecked(true);
+            e.printStackTrace();
+        }
         paint.setStyle(Paint.Style.FILL);
 
         animator.setInterpolator(interpolator);
         animator.setDuration(duration);
-        animator.addListener(animatorListener);
+        // animator.addListener(animatorListener);
         animator.addUpdateListener(updateListener);
+
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggle();
+            }
+        });
     }
 
     private void animateSwitch() {
@@ -240,31 +227,7 @@ public class MaterialCheckBox extends ViewGroup {
         return false;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                clickedX = (int) event.getX();
-                clickedY = (int) event.getY();
-                rippleR = (int) (Math.sqrt(Math.pow(Math.max(width - clickedX, clickedX), 2) + Math.pow(Math.max(height - clickedY, clickedY), 2)) * 1.15);
 
-                toggle();
-
-                touchDown = true;
-                animateRipple = true;
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                touchDown = false;
-
-                if (!animator.isRunning()) {
-                    ripple_animated_value = 0;
-                    invalidatePoster();
-                }
-                break;
-        }
-        return true;
-    }
 
     public void setDuration(int duration) {
         MaterialCheckBox.duration = duration;
@@ -281,19 +244,6 @@ public class MaterialCheckBox extends ViewGroup {
         this.post(runnable);
         if (materialCheckBox != null) {
             materialCheckBox.invalidate();
-        }
-    }
-
-    public void setRippleColor(int color) {
-        rippleColor = color;
-    }
-
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
-        if (animateRipple) {
-            paint.setColor(rippleColor);
-            canvas.drawCircle(clickedX, clickedY, rippleR * ripple_animated_value, paint);
         }
     }
 
@@ -314,24 +264,26 @@ public class MaterialCheckBox extends ViewGroup {
         private final RectF rectF = new RectF(0, 0, 100, 100);
         private int segments;
         private float leftX, leftY, midX, midY, rightX, rightY;
-        private int inR, cx, cy, outR;
+        private int inR, cx, cy, outR, on, off;
 
         public CheckBox(Context context) {
             super(context);
             invalidate();
+            on = getResources().getColor(R.color.material_blue);
+            off = getResources().getColor(R.color.material_red);
         }
 
 
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-            final int paintColor = isChecked() ? getResources().getColor(R.color.material_green_light) : getResources().getColor(R.color.material_red);
+            final int paintColor = isChecked() ? on : off;
 
             paint.setColor(paintColor);
             final int sweepAngle = (int) ((animated_value < 0.75f ? animated_value / 0.75f : 1) * 360);
             canvas.drawArc(rectF, -90, sweepAngle, true, paint);
 
-            paint.setColor(getResources().getColor(R.color.white));
+            paint.setColor(0xffffffff);
             canvas.drawCircle(cx, cy, inR, paint);
 
             paint.setColor(paintColor);

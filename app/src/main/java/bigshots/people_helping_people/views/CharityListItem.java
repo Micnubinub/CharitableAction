@@ -2,8 +2,6 @@ package bigshots.people_helping_people.views;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -20,6 +18,7 @@ import android.widget.Toast;
 
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.VoteManager;
+import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 
 /**
  * Created by root on 19/11/14.
@@ -32,6 +31,7 @@ public class CharityListItem extends ViewGroup {
     private static AccountManager manager;
     private static Account[] accounts;
     private static String currentVote;
+    private static VoteCharityAdapter voteCharityAdapter;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
@@ -53,9 +53,11 @@ public class CharityListItem extends ViewGroup {
     private String link;
     private boolean touchDown = false, votedFor;
     private int pos;
+    private String name;
 
-    public CharityListItem(Context context) {
+    public CharityListItem(Context context, VoteCharityAdapter voteCharityAdapter) {
         super(context);
+        this.voteCharityAdapter = voteCharityAdapter;
         init();
     }
 
@@ -78,7 +80,8 @@ public class CharityListItem extends ViewGroup {
     }
 
     public void setVotedFor(boolean votedFor) {
-        this.votedFor = votedFor;
+        plusButton.setIsVotedFor(votedFor);
+        invalidatePoster();
     }
 
     public int getPos() {
@@ -89,8 +92,8 @@ public class CharityListItem extends ViewGroup {
         this.pos = pos;
     }
 
-
     public void setPrimaryText(String text) {
+        name = text;
         textView.setPrimaryText(text);
         invalidatePoster();
     }
@@ -147,6 +150,7 @@ public class CharityListItem extends ViewGroup {
         this.post(new Runnable() {
             @Override
             public void run() {
+                plusButton.invalidatePoster();
                 invalidate();
             }
         });
@@ -252,45 +256,45 @@ public class CharityListItem extends ViewGroup {
         }
     }
 
+
     public class PlusButton extends Button {
 
-        private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-        private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-                animateRipple = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-
-                animateRipple = false;
-                invalidatePoster();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        };
-        private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                ripple_animated_value = (Float) (animation.getAnimatedValue());
-
-                invalidatePoster();
-            }
-        };
+//        private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+//        private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animator) {
+//                animateRipple = true;
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animator) {
+//
+//                animateRipple = false;
+//                invalidatePoster();
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animator) {
+//
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animator) {
+//
+//            }
+//        };
+//        private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                ripple_animated_value = (Float) (animation.getAnimatedValue());
+//                invalidatePoster();
+//            }
+//        };
 
         private int cx, cy;
-        private boolean votedFor = false, animateRipple;
-        private float ripple_animated_value = 0;
+        //        private boolean animateRipple;
+//        private float ripple_animated_value = 0;
         private int rippleR;
 
         public PlusButton(Context context) {
@@ -310,11 +314,11 @@ public class CharityListItem extends ViewGroup {
 
         private void init() {
             super.setOnClickListener(onClickListener);
-            animator.setDuration((int) (duration * 0.75));
-            animator.addUpdateListener(animatorUpdateListener);
-            animator.addListener(animatorListener);
-            animator.setInterpolator(interpolator);
-            paint.setTextAlign(Paint.Align.CENTER);
+//            animator.setDuration((int) (duration * 0.75));
+//            animator.addUpdateListener(animatorUpdateListener);
+//            animator.addListener(animatorListener);
+//            animator.setInterpolator(interpolator);
+//            paint.setTextAlign(Paint.Align.CENTER);
             setWillNotDraw(false);
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             setText(getString());
@@ -334,15 +338,15 @@ public class CharityListItem extends ViewGroup {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            if (animateRipple && animator.isRunning()) {
-                paint.setColor(getColor(votedFor));
-                canvas.drawCircle(cx, cy, rippleR, paint);
-                paint.setColor(getColor(!votedFor));
-                canvas.drawCircle(cx, cy, rippleR * (1 - ripple_animated_value), paint);
-            } else {
-                paint.setColor(getColor(votedFor));
-                canvas.drawCircle(cx, cy, rippleR, paint);
-            }
+//            if (animateRipple && animator.isRunning()) {
+//                paint.setColor(getColor(votedFor));
+//                canvas.drawCircle(cx, cy, rippleR, paint);
+//                paint.setColor(getColor(!votedFor));
+//                canvas.drawCircle(cx, cy, rippleR * (1 - ripple_animated_value), paint);
+//            } else {
+            paint.setColor(getColor(votedFor));
+            canvas.drawCircle(cx, cy, rippleR, paint);
+//            }
             super.onDraw(canvas);
         }
 
@@ -360,28 +364,32 @@ public class CharityListItem extends ViewGroup {
         }
 
 
-        public void setIsVotedFor(boolean votedFor) {
-            this.votedFor = votedFor;
+        public void setIsVotedFor(boolean isVotedFor) {
+            votedFor = isVotedFor;
             setText(getString());
         }
 
-        private void startAnimator() {
-            if (animator.isRunning()) {
-                animator.end();
-                animator.cancel();
-            }
-
-            animator.start();
-        }
+//        private void startAnimator() {
+//            if (animator.isRunning()) {
+//                animator.end();
+//                animator.cancel();
+//            }
+//            animator.start();
+//        }
 
 
         public void click() {
+            Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
             setIsVotedFor(!votedFor);
-            startAnimator();
+//            startAnimator();
             if (isVotedFor())
                 removeVote();
             else
                 castVote();
+            if (voteCharityAdapter != null) {
+                voteCharityAdapter.setVotedFor(link);
+                voteCharityAdapter.notifyDataSetChanged();
+            }
         }
 
 
@@ -389,8 +397,15 @@ public class CharityListItem extends ViewGroup {
             return b ? 0xffe51c23 : 0xff42bd41;
         }
 
+        @Override
+        public void invalidate() {
+
+            super.invalidate();
+        }
+
         private String getString() {
             return votedFor ? "-" : "+";
         }
+
     }
 }

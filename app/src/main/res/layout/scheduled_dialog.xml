@@ -35,11 +35,18 @@
         android:textColor="@color/white"
         android:textSize="18sp" />
 
+    <bigshots.people_helping_people.views.MaterialCheckBox
+        android:id="@+id/loop_checkbox"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/frequency"
+        android:paddingLeft="12dp" />
+
     <LinearLayout
         android:id="@+id/subject"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frequency"
+        android:layout_below="@+id/loop_checkbox"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
