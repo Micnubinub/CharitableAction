@@ -36,6 +36,7 @@ public class BannerPopup extends ViewGroup {
     private static final int duration = 1100;
     private static int touchSlop;
     private static InterstitialAd fullScreenAd;
+    private static Runnable runnable;
     private final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
@@ -149,6 +150,10 @@ public class BannerPopup extends ViewGroup {
         init();
     }
 
+    public static void setRunnable(Runnable runnable) {
+        BannerPopup.runnable = runnable;
+    }
+
     private void init() {
         animator.setDuration(duration);
         animator.addUpdateListener(animatorUpdateListener);
@@ -177,6 +182,7 @@ public class BannerPopup extends ViewGroup {
         setParameters();
         invalidate();
         settingUp = false;
+
 
     }
 
@@ -284,12 +290,12 @@ public class BannerPopup extends ViewGroup {
             adH = (int) (adH * scale);
         }
 
-        lastMenuItemDistance = (int) (adH * 3.75f) + (h / 2);
+        lastMenuItemDistance = (int) (adH * 3.5f) + (h / 2);
         menuItemWidth = adH;
         unit = spacing + h;
 
         padding = (h - adH) / 2;
-        spacing = adH / 3;
+        spacing = adH / 5;
         addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         addView(mainView, new LayoutParams(h, h));
         mainView.setOnTouchListener(mainViewOnTouchListener);
@@ -530,6 +536,9 @@ public class BannerPopup extends ViewGroup {
     @Override
     public void invalidate() {
         super.invalidate();
+        if (runnable != null)
+            runnable.run();
+        runnable = null;
         if (!settingUp)
             switch (state) {
                 case MINIMISED:
@@ -701,7 +710,13 @@ public class BannerPopup extends ViewGroup {
         maxX = (int) (screenWidth - mainView.getWidth() * 0.8f);
 
         setPosition(((int) (x * screenWidth)), ((int) (y * screenHeight)));
+    }
 
+    public void forceMinimise() {
+        Toast.makeText(getContext(), "force minimise", Toast.LENGTH_SHORT).show();
+        removeMenuItems();
+        removeAdView();
+        setState(State.MINIMISED);
     }
 
     public void minimise() {

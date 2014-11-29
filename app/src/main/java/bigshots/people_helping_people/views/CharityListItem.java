@@ -380,7 +380,6 @@ public class CharityListItem extends ViewGroup {
         public void click() {
             Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
             setIsVotedFor(!votedFor);
-//            startAnimator();
             if (link.equals(currentVote))
                 removeVote();
             else
@@ -399,7 +398,6 @@ public class CharityListItem extends ViewGroup {
 
         @Override
         public void invalidate() {
-
             super.invalidate();
         }
 

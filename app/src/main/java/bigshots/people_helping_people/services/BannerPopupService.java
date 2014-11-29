@@ -44,8 +44,8 @@ public class BannerPopupService extends Service {
     private static PendingIntent alarmIntent;
     private static AlarmManager alarmManager;
     private static boolean loadAd;
-    private WindowManager windowManager;
-    private WindowManager.LayoutParams params;
+    private static WindowManager windowManager;
+    private static WindowManager.LayoutParams params;
 
     public static void scheduleNext(Context context, boolean load) {
         loadAd = load;
@@ -78,6 +78,10 @@ public class BannerPopupService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static BannerPopup getBannerPopup() {
+        return bannerPopup;
     }
 
     @Override

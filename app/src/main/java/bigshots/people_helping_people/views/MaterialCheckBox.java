@@ -192,7 +192,6 @@ public class MaterialCheckBox extends ViewGroup {
 
         animator.setInterpolator(interpolator);
         animator.setDuration(duration);
-        // animator.addListener(animatorListener);
         animator.addUpdateListener(updateListener);
 
         setOnClickListener(new OnClickListener() {

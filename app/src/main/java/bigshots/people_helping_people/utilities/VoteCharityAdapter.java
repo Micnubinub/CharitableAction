@@ -33,11 +33,11 @@ public class VoteCharityAdapter extends BaseAdapter {
             votedFor = charity.getUrl();
             CharityListItem.setCurrentVote(votedFor);
             notifyDataSetChanged();
-            try {
-                Toast.makeText(context, charity.getUrl(), Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            Toast.makeText(context, charity.getUrl(), Toast.LENGTH_SHORT).show();
+
+            AsyncConnector.setListener(null);
+            notify();
         }
 
         @Override
@@ -45,8 +45,8 @@ public class VoteCharityAdapter extends BaseAdapter {
 
         }
     };
+    private static ArrayList<Charity> charities;
     private final Context context;
-    private final ArrayList<Charity> charities;
     private int height = 100;
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
@@ -56,6 +56,10 @@ public class VoteCharityAdapter extends BaseAdapter {
         height = dpToPixels(68);
 //new VoteCharityAdapter()
         getVotedFor();
+    }
+
+    public static ArrayList<Charity> getCharities() {
+        return charities;
     }
 
     public static void setVotedFor(String votedFor) {
@@ -68,7 +72,6 @@ public class VoteCharityAdapter extends BaseAdapter {
         accounts = manager.getAccounts();
         for (Account account : accounts) {
             if (account.name.contains("@")) {
-                Toast.makeText(context, "getVote :" + account.name, Toast.LENGTH_SHORT).show();
                 new CharityManager().currentCharity(account.name);
                 AsyncConnector.setListener(aSyncListener);
                 break;
@@ -83,10 +86,6 @@ public class VoteCharityAdapter extends BaseAdapter {
         ProgressBar.setMax(max);
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
 
     @Override
     public int getCount() {
@@ -105,6 +104,9 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (votedFor == null)
+            getVotedFor();
+
         final CharityListItem view = new CharityListItem(context, this);
         view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));
         view.setPos(position);
