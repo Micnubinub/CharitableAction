@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="alpha">#00000000</color>
     <color name="view_click_selector">#19000000</color>
     <color name="white">#fff</color>
     <color name="ultra_light_grey">#efefef</color>
     <color name="light_grey">#dcdcdc</color>
     <color name="lite_grey">#ababab</color>
-    <color name="grey">#606060</color>
     <color name="dark_grey_text">#555555</color>
     <color name="dark_grey">#272727</color>
     <color name="dark_dark_grey">#222222</color>
-    <color name="black">#000000</color>
-    <color name="white_alpha">#aaffffff</color>
     <color name="material_blue">#738ffe</color>
     <color name="material_green_light">#42bd41</color>
     <color name="material_red">#e84e40</color>

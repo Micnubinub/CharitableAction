@@ -2,7 +2,6 @@ package bigshots.people_helping_people;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -272,20 +271,17 @@ public class Contribute extends Activity {
 
         hours.addChangingListener(wheelListener);
         minutes.addChangingListener(wheelListener);
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Toast.makeText(getApplicationContext(), "Minimum is 3 minutes", Toast.LENGTH_SHORT).show();
-            }
-        });
         return dialog;
     }
 
     private void save() {
-        if ((frequencyMinutes != 0) && (frequencyMinutes < 3))
-            frequencyMinutes = 3;
-
-        Toast.makeText(this, String.format("Scheduled for %d minutes", frequencyMinutes), Toast.LENGTH_SHORT).show();
+        if (frequencyMinutes > 0)
+            if (frequencyMinutes == 1)
+                Toast.makeText(this, "Scheduled for 1 minute", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, String.format("Scheduled for %d minutes", frequencyMinutes), Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(this, "Schedule cleared", Toast.LENGTH_SHORT).show();
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
@@ -294,4 +290,5 @@ public class Contribute extends Activity {
         BannerPopupService.scheduleNext(this);
 
     }
+
 }

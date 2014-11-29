@@ -228,7 +228,6 @@ public class CharityListItem extends ViewGroup {
             if (account.name.contains("@gmail")) {
                 removeVote();
                 voteManager.castVote(link, account.name);
-                Toast.makeText(getContext(), "casting :" + link, Toast.LENGTH_SHORT).show();
                 currentVote = link;
                 break;
             }
@@ -239,7 +238,6 @@ public class CharityListItem extends ViewGroup {
         for (Account account : accounts) {
             if (account.name.contains("@gmail")) {
                 voteManager.removeVote(account.name);
-                Toast.makeText(getContext(), "removing :" + account.name, Toast.LENGTH_SHORT).show();
                 break;
             }
         }

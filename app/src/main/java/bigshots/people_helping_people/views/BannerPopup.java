@@ -94,7 +94,7 @@ public class BannerPopup extends ViewGroup {
     };
     // private BannerPopup popup;
     private Direction direction = Direction.LEFT;
-    private AdManager bannerAdManager;//, fullScreenAdmanager;
+    private AdManager adManager;//, fullScreenAdmanager;
     private boolean animationFinished;
     private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
         @Override
@@ -156,9 +156,9 @@ public class BannerPopup extends ViewGroup {
 
         touchSlop = dpToPixels(4);
 
-        bannerAdManager = new AdManager(getContext());
-        bannerAdManager.loadBannerAd();
-        adView = bannerAdManager.getBannerAd();
+        adManager = new AdManager(getContext());
+        adManager.loadBannerAd();
+        adView = adManager.getBannerAd();
         adView.setPivotX(0);
 
         mainView = new MainBannerView(getContext());
@@ -222,8 +222,6 @@ public class BannerPopup extends ViewGroup {
             addView(fullScreen, new LayoutParams(adH, adH));
             fullScreen.setOnClickListener(clickListener);
             fullScreen.setX(menuItemX);
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -238,13 +236,14 @@ public class BannerPopup extends ViewGroup {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         mainView.bringToFront();
     }
 
     private void adAdView() {
         try {
+            adView.setScaleX(0);
             addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            adView.setScaleX(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -654,28 +653,32 @@ public class BannerPopup extends ViewGroup {
 
     }
 
+    public void loadFullScreenAd() {
+        Toast.makeText(getContext(), "should load", Toast.LENGTH_SHORT).show();
+        adManager.loadFullscreenAd();
+    }
+
     public void showFullScreenAd() {
-        bannerAdManager.loadFullscreenAd();
-        fullScreenAd = bannerAdManager.getFullscreenAd();
-        fullScreenAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                super.onAdLoaded();
-                fullScreenAd.show();
-            }
+        Toast.makeText(getContext(), "should show", Toast.LENGTH_SHORT).show();
+        if (adManager.getFullscreenAd().isLoaded())
+            adManager.getFullscreenAd().show();
+        else {
+            loadFullScreenAd();
+            fullScreenAd = adManager.getFullscreenAd();
+            fullScreenAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    fullScreenAd.show();
+                }
 
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                //make reload its
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                super.onAdFailedToLoad(errorCode);
-                Toast.makeText(getContext(), "Failed to load ad", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    super.onAdFailedToLoad(errorCode);
+                    Toast.makeText(getContext(), "Failed to load ad", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     public void rotate(int orientation) {

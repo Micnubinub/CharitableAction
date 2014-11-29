@@ -46,13 +46,13 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
      */
     public static final int DEFAULT_TEXT_COLOR = 0xFF555555;
     // Text settings
-    private int textColor = DEFAULT_TEXT_COLOR;
+    private final int textColor = DEFAULT_TEXT_COLOR;
 
     /**
      * Default text size
      */
     public static final int DEFAULT_TEXT_SIZE = 24;
-    private int textSize = DEFAULT_TEXT_SIZE;
+    private final int textSize = DEFAULT_TEXT_SIZE;
     /**
      * No resource constant.
      */
@@ -62,8 +62,8 @@ public abstract class AbstractWheelTextAdapter extends AbstractWheelAdapter {
     // Layout inflater
     protected final LayoutInflater inflater;
     // Items resources
-    protected int itemResourceId;
-    protected int itemTextResourceId;
+    protected final int itemResourceId;
+    protected final int itemTextResourceId;
     // Empty items resources
     protected int emptyItemResourceId;
     /// Custom text typeface

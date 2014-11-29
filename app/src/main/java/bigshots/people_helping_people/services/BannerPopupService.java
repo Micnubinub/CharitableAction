@@ -45,24 +45,26 @@ public class BannerPopupService extends Service {
     private WindowManager.LayoutParams params;
 
     public static void scheduleNext(Context context) {
+
         try {
             int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
-            long when = System.currentTimeMillis() + (mins * 60000);
+            long when = System.currentTimeMillis() + (mins * 3000);
 
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             final Intent intent = new Intent(context, AlarmReceiver.class);
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true)) {
-                intent.putExtra(Utils.SCHEDULE, Utils.SCHEDULE);
-                alarmManager.set(AlarmManager.RTC, when - 10, alarmIntent);
-            }
-
-
-            if (mins == 0)
+            if (mins == 0) {
                 alarmManager.cancel(alarmIntent);
-            else
+                return;
+            } else
                 alarmManager.set(AlarmManager.RTC, when, alarmIntent);
+
+//            Intent i = new Intent(context, AlarmReceiver.class);
+//            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
+//            i.putExtra(Utils.SCHEDULE, Utils.SCHEDULE);
+//            alarmManager.set(AlarmManager.RTC, when - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,24 +95,28 @@ public class BannerPopupService extends Service {
 
     @Override
     public boolean stopService(Intent name) {
+
         isServiceRunning = false;
         try {
             unregisterReceiver(broadcastReceiver);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return super.stopService(name);
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         isServiceRunning = true;
+
         super.onStart(intent, startId);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isServiceRunning = true;
+
         return START_STICKY;
     }
 
@@ -174,11 +180,18 @@ public class BannerPopupService extends Service {
     public static class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             try {
-                if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE)) {
-                    Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "show", Toast.LENGTH_LONG).show();
+                if (intent.getStringExtra(Utils.LOAD_AD).equals(Utils.LOAD_AD)) {
+                    Toast.makeText(context, "load", Toast.LENGTH_LONG).show();
+                    bannerPopup.loadFullScreenAd();
+
+                    if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE))
+                        Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
                     return;
                 }
+
 
                 bannerPopup.showFullScreenAd();
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))

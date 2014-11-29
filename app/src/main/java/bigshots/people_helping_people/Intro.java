@@ -1,7 +1,6 @@
 package bigshots.people_helping_people;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -24,7 +23,7 @@ import bigshots.people_helping_people.utilities.Utils;
  */
 public class Intro extends FragmentActivity {
     private final Fragment[] pages = new Fragment[]{new Page1(), new Page2(), new Page3(), new Page4()};
-    private View.OnClickListener listener = new View.OnClickListener() {
+    private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -37,10 +36,8 @@ public class Intro extends FragmentActivity {
 
         }
     };
-    private Button button;
-    private ViewPager pager;
     private boolean appLaunched;
-    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+    private final ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i2) {
             if (i == (pages.length - 2) && v > 0.2) {
@@ -71,17 +68,15 @@ public class Intro extends FragmentActivity {
             startActivity(new Intent(Intro.this, MainMenu.class));
         }
         setContentView(R.layout.intro);
-        button = (Button) findViewById(R.id.skip);
+        final Button button = (Button) findViewById(R.id.skip);
         button.setOnClickListener(listener);
-        pager = (ViewPager) findViewById(R.id.pager);
+        final ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         pager.setOnPageChangeListener(pageChangeListener);
     }
 
     private void save() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(Utils.INTRO_SHOWN, true).commit();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Utils.INTRO_SHOWN, true).commit();
     }
 
     class PagerAdapter extends FragmentPagerAdapter {
@@ -90,15 +85,10 @@ public class Intro extends FragmentActivity {
             super(fm);
         }
 
-        @Override
-        public int getItemPosition(Object object) {
-            return super.getItemPosition(object);
-        }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            Object obj = super.instantiateItem(container, position);
-            return obj;
+            return super.instantiateItem(container, position);
         }
 
         @Override
