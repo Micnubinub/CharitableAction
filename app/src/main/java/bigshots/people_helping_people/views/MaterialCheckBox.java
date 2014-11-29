@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -15,7 +14,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.TextView;
 
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.utilities.Utils;
 
 
 /**
@@ -190,13 +188,6 @@ public class MaterialCheckBox extends ViewGroup {
         addView(materialCheckBox);
         setBackground(getResources().getDrawable(R.drawable.white_button_selector));
 
-        setText("Loop?");
-        try {
-            setChecked(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(Utils.LOOP_SCHEDULE, true));
-        } catch (Exception e) {
-            setChecked(true);
-            e.printStackTrace();
-        }
         paint.setStyle(Paint.Style.FILL);
 
         animator.setInterpolator(interpolator);
@@ -226,7 +217,6 @@ public class MaterialCheckBox extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent event) {
         return false;
     }
-
 
 
     public void setDuration(int duration) {

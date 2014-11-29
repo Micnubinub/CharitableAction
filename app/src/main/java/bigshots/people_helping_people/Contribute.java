@@ -23,6 +23,7 @@ import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
+import bigshots.people_helping_people.services.BannerPopupService;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.MaterialCheckBox;
@@ -132,6 +133,7 @@ public class Contribute extends Activity {
         }
     };
     private SharedPreferences prefs;
+    private boolean loopBool = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,21 +166,14 @@ public class Contribute extends Activity {
         final Dialog dialog = new Dialog(this, R.style.CustomDialog);
         dialog.setContentView(R.layout.scheduled_dialog);
         prefix = prefs.getBoolean(Utils.LOOP_SCHEDULE, true) ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
-
-
-        dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(listener);
-        dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(listener);
-        ((MaterialCheckBox) dialog.findViewById(R.id.loop_checkbox)).setOnCheckedChangeListener(new MaterialCheckBox.OnCheckedChangedListener() {
-            @Override
-            public void onCheckedChange(MaterialCheckBox materialCheckBox, boolean isChecked) {
-                prefix = isChecked ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
-
-            }
-        });
-
         final TextView frequency = (TextView) dialog.findViewById(R.id.frequency);
         final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
         final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
+        final MaterialCheckBox loop = (MaterialCheckBox) dialog.findViewById(R.id.loop_checkbox);
+
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(listener);
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(listener);
+
 
         hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
         hours.setCyclic(true);
@@ -231,6 +226,50 @@ public class Contribute extends Activity {
             }
         };
 
+        loop.setChecked(prefs.getBoolean(Utils.LOOP_SCHEDULE, true));
+        loop.setText("Repeat?");
+        loop.setOnCheckedChangeListener(new MaterialCheckBox.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialCheckBox materialCheckBox, boolean isChecked) {
+                loopBool = isChecked;
+                prefix = isChecked ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
+                final StringBuilder text = new StringBuilder();
+
+                int mins = minutes.getCurrentItem();
+                int hr = hours.getCurrentItem();
+                frequencyMinutes = (hr * 60) + mins;
+                text.append(prefix);
+                if (!(hr == 0)) {
+                    text.append(hr);
+                    text.append(hr == 1 ? " hour" : " hours");
+                    text.append(" and ");
+                }
+
+                if (!(mins == 0)) {
+                    text.append(mins);
+                    text.append(mins == 1 ? " minute" : " minutes");
+                }
+
+                final String out = text.toString();
+
+                if (out.equals(prefix))
+                    frequency.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            frequency.setText("No full screen ads will be scheduled (will remove current schedule)");
+                        }
+                    });
+                else
+                    frequency.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            frequency.setText(out);
+                        }
+                    });
+
+            }
+        });
+
         hours.addChangingListener(wheelListener);
         minutes.addChangingListener(wheelListener);
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -250,5 +289,9 @@ public class Contribute extends Activity {
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
+        editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).commit();
+
+        BannerPopupService.scheduleNext(this);
+
     }
 }

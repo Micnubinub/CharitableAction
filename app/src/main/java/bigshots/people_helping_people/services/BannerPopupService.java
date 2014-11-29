@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.BannerPopup;
@@ -27,8 +28,12 @@ public class BannerPopupService extends Service {
     public BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent myIntent) {
-            if (myIntent.getAction().equals(ROTATION_BROADCAST)) {
-                bannerPopup.rotate(getResources().getConfiguration().orientation);
+            try {
+                if (myIntent.getAction().equals(ROTATION_BROADCAST)) {
+                    bannerPopup.rotate(getResources().getConfiguration().orientation);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };
@@ -39,34 +44,20 @@ public class BannerPopupService extends Service {
     private WindowManager windowManager;
     private WindowManager.LayoutParams params;
 
-    private static void scheduleNext(Context context, boolean toast) {
+    public static void scheduleNext(Context context) {
         try {
             int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
             long when = System.currentTimeMillis() + (mins * 60000);
 
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             final Intent intent = new Intent(context, AlarmReceiver.class);
+            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
-
-            //Todo
-            if (toast)
+            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true)) {
                 intent.putExtra(Utils.SCHEDULE, Utils.SCHEDULE);
-
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE, true)) {
-                if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE)) {
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
-                        scheduleNext(context, false);
-                } else {
-                    scheduleNext(context, true);
-                }
-
-            } else {
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
-                    scheduleNext(context, false);
+                alarmManager.set(AlarmManager.RTC, when - 10, alarmIntent);
             }
 
-
-            alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
             if (mins == 0)
                 alarmManager.cancel(alarmIntent);
@@ -82,9 +73,6 @@ public class BannerPopupService extends Service {
     public void onCreate() {
         super.onCreate();
         isServiceRunning = true;
-
-        //Todo check
-        scheduleNext(this, false);
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
@@ -150,38 +138,58 @@ public class BannerPopupService extends Service {
     public static class ConnectionChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ConnectivityManager cm =
-                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            try {
+                ConnectivityManager cm =
+                        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null &&
-                    activeNetwork.isConnectedOrConnecting();
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null &&
+                        activeNetwork.isConnectedOrConnecting();
 
-            // boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+                // boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
 
-            //Todo implement this on the next update
-            //Toast.makeText(context, String.format("Connected : %b", isConnected), Toast.LENGTH_SHORT).show();
+                //Todo implement this on the next update
+                //Toast.makeText(context, String.format("Connected : %b", isConnected), Toast.LENGTH_SHORT).show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static class BootUp extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.AUTO_START_BOOL, false)) {
+                    Intent myIntent = new Intent(context, BannerPopupService.class);
+                    context.startService(myIntent);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public static class AlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            bannerPopup.showFullScreenAd();
-
-            if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE, true)) {
+            try {
                 if (intent.getStringExtra(Utils.SCHEDULE).equals(Utils.SCHEDULE)) {
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
-                        scheduleNext(context, false);
-                } else {
-                    scheduleNext(context, true);
+                    Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
+                    return;
                 }
 
-            } else {
+                bannerPopup.showFullScreenAd();
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
-                    scheduleNext(context, false);
+                    scheduleNext(context);
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }
     }
+
+
 }

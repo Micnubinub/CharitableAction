@@ -30,13 +30,7 @@ import bigshots.people_helping_people.services.BannerPopupService;
 public class BannerPopup extends ViewGroup {
     //Todo add intro slides 1/2 done
     //hidemenu-showmenu in next update
-    //Todo ad more toast so users know whats going on
-    //Todo ad toast notification for scheduled ads (checked by default)
-    //Todo ad option for banner at start up
-    //Todo ad checkbox to scheduling dialog for looping
-    //Todo google plus
-    //Todo look for more crashes
-
+    //google plus
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
