@@ -49,6 +49,7 @@ public class CharityListItem extends ViewGroup {
     // private ProgressBar progressBar;
     private int width;
     private int height;
+    private int votes;
     private int clickedX, clickedY;
     private String link;
     private boolean touchDown = false, votedFor;
@@ -73,6 +74,10 @@ public class CharityListItem extends ViewGroup {
 
     public static void setCurrentVote(String currentVote) {
         CharityListItem.currentVote = currentVote;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public boolean isVotedFor() {
@@ -226,7 +231,7 @@ public class CharityListItem extends ViewGroup {
     private void castVote() {
         for (Account account : accounts) {
             if (account.name.contains("@")) {
-                removeVote();
+                removeCurrentVote();
                 voteManager.castVote(link, account.name);
                 Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
                 currentVote = link;
@@ -235,12 +240,21 @@ public class CharityListItem extends ViewGroup {
         }
     }
 
-    private void removeVote() {
+    private void removeThisVote() {
         for (Account account : accounts) {
             if (account.name.contains("@")) {
                 voteManager.removeVote(link, account.name);
                 Toast.makeText(getContext(), "Unvoting for : " + name, Toast.LENGTH_SHORT).show();
 
+                break;
+            }
+        }
+    }
+
+    private void removeCurrentVote() {
+        for (Account account : accounts) {
+            if (account.name.contains("@")) {
+                voteManager.removeVote(currentVote, account.name);
                 break;
             }
         }
@@ -390,13 +404,13 @@ public class CharityListItem extends ViewGroup {
 
         public void click() {
             setIsVotedFor(!votedFor);
-            Toast.makeText(getContext(), link + " v " + currentVote, Toast.LENGTH_LONG).show();
             if (link.equals(currentVote)) {
 
-                removeVote();
+                removeThisVote();
                 setVotedFor(false);
                 try {
-                    textView.setSecondaryText(String.valueOf(Integer.parseInt(textView.getSecondaryText()) - 1));
+                    votes--;
+                    textView.setSecondaryText(String.valueOf(votes));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -407,7 +421,8 @@ public class CharityListItem extends ViewGroup {
                 }
             } else {
                 try {
-                    textView.setSecondaryText(String.valueOf(Integer.parseInt(textView.getSecondaryText()) + 1));
+                    votes++;
+                    textView.setSecondaryText(String.valueOf(votes));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
