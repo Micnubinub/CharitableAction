@@ -22,7 +22,7 @@ public class CurrentCharity extends Activity {
 
     private TextView description, raised, name, linkr;
     private String link;
-    private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(final Charity charity) {
             runOnUiThread(new Runnable() {

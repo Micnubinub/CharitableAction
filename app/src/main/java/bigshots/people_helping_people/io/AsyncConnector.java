@@ -119,7 +119,6 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost("http://cyberkomm.ch/sidney/php/"
                 + this.fileName);
-        String responseString = "";
         try {
             httppost.setEntity(new UrlEncodedFormEntity(this.nvp));
             HttpResponse response = httpclient.execute(httppost);
@@ -132,13 +131,13 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
                 break;
             }
             in.close();
-            responseString = sb.toString();
-
+            String responseString = sb.toString();
+            AsyncConnector.interpretResponse(responseString, this.action);
         } catch (Exception e) {
             Log.e("Async", "Failed to perform action: " + this.action);
             Log.e("Async", "Error:  " + e.toString());
         }
-        AsyncConnector.interpretResponse(responseString, this.action);
+
     }
 
 

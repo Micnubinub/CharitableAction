@@ -70,5 +70,4 @@
         android:textSize="24dp"
         tools:ignore="SpUsage" />
 
-
 </RelativeLayout>

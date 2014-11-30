@@ -7,15 +7,6 @@ import java.util.ArrayList;
 
 public class VoteManager {
 
-    public VoteManager() {
-
-    }
-
-    public Charity getCurrentCharity() {
-        Charity charity = new Charity();
-        return charity;
-    }
-
     public void castVote(String url, String useremail) {
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(2);
         nvp.add(new BasicNameValuePair("URL", url));
