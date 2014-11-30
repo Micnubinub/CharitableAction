@@ -1,5 +1,7 @@
 package bigshots.people_helping_people;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
+import bigshots.people_helping_people.views.CharityListItem;
 
 /**
  * Created by root on 18/11/14.
@@ -27,7 +30,11 @@ public class Vote extends Activity {
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
-
+            VoteCharityAdapter.setVotedFor(charity.getUrl());
+            CharityListItem.setCurrentVote(charity.getUrl());
+            if (adapter != null)
+                adapter.notifyDataSetChanged();
+            listView.invalidate();
         }
 
         @Override
@@ -36,8 +43,7 @@ public class Vote extends Activity {
                 @Override
                 public void run() {
                     adapter = new VoteCharityAdapter(Vote.this, charities);
-                    if (listView != null)
-                        listView.setAdapter(adapter);
+
                 }
             });
 
@@ -45,10 +51,16 @@ public class Vote extends Activity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AsyncConnector.setListener(aSyncListener);
+        getVotedFor();
+
         setContentView(R.layout.vote);
+
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,9 +73,10 @@ public class Vote extends Activity {
                 finish();
             }
         });
+
         listView = (ListView) findViewById(R.id.list);
         new CharityManager().getCharities();
-        AsyncConnector.setListener(aSyncListener);
+
     }
 
 
@@ -97,4 +110,18 @@ public class Vote extends Activity {
 
         dialog.show();
     }
+
+    private void getVotedFor() {
+        AccountManager manager = AccountManager.get(this);
+        Account[] accounts;
+        accounts = manager.getAccounts();
+        for (Account account : accounts) {
+            if (account.name.contains("@")) {
+                new CharityManager().currentCharity(account.name);
+                AsyncConnector.setListener(aSyncListener);
+                break;
+            }
+        }
+    }
+
 }

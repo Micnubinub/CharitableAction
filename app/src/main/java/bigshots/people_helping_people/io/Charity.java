@@ -5,8 +5,10 @@ public class Charity {
     private String name;
     private String url;
     private int votes;
-    private int worth; // Amount of Money Generated: Only for Charity of the
+    private int worth;
+    private String description; // Amount of Money Generated: Only for Charity of the
     // Month
+
 
     public int getWorth() {
         return worth;
@@ -14,6 +16,14 @@ public class Charity {
 
     public void setWorth(int worth) {
         this.worth = worth;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {

@@ -72,16 +72,23 @@ public class AsyncConnector {
                     charity.setName(tmp[0]);
                     charity.setUrl(tmp[1]);
                     try {
-                        charity.setVotes(Integer.valueOf(tmp[2]));
+                        charity.setWorth(Integer.valueOf(tmp[2]));
                     } catch (ClassCastException e) {
-                        charity.setVotes(0);
+                        e.printStackTrace();
                     }
+                    try {
+                        charity.setDescription(tmp[3]);
+                    } catch (ClassCastException e) {
+                        charity.setDescription("No description");
+                    }
+
                     if (listener != null)
                         listener.onCompleteSingle(charity);
                 } else {
                     Log.e("Async", "Charity of the month not selected yet");
                 }
             } else if (action.equals("CHARITY_CURRENT")) {
+                Log.e("resp : ", String.valueOf(resp));
                 Charity charity = new Charity();
                 charity.setUrl(resp);
                 if (listener != null)

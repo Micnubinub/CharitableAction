@@ -50,15 +50,24 @@
                 android:layout_height="54dp"
                 android:background="@color/white" />
 
-            <TextView
-
-                android:id="@+id/scheduled_ads"
+            <bigshots.people_helping_people.views.MaterialSwitch
+                android:id="@+id/enable_scheduled_ads"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/white_button_selector"
                 android:maxLines="1"
                 android:padding="10dp"
-                android:text="Scheduled ads"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/configure_scheduled_ads"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:text="Configure scheduled ads"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="22sp" />
 

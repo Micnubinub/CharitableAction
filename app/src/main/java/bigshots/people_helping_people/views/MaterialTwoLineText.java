@@ -123,10 +123,7 @@ public class MaterialTwoLineText extends ViewGroup {
     private void checkViewParams(final View view) {
         final int layoutWidth = view.getRight() - view.getLeft();
         final int layoutHeight = view.getBottom() - view.getTop();
-
         checkViewParams(view, layoutWidth, layoutHeight);
-
-
     }
 
 

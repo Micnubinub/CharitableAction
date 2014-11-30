@@ -299,6 +299,7 @@ public class BannerPopup extends ViewGroup {
         addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         addView(mainView, new LayoutParams(h, h));
         mainView.setOnTouchListener(mainViewOnTouchListener);
+        setPosition(0, screenHeight - h - spacing - spacing - spacing);
 
         params.width = w;
         params.height = h;

@@ -1,20 +1,15 @@
 package bigshots.people_helping_people.utilities;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
-import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.views.CharityListItem;
 import bigshots.people_helping_people.views.ProgressBar;
 
@@ -27,35 +22,17 @@ public class VoteCharityAdapter extends BaseAdapter {
     private static String votedFor;
 
 
-    private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
-        @Override
-        public void onCompleteSingle(Charity charity) {
-            votedFor = charity.getUrl();
-            CharityListItem.setCurrentVote(votedFor);
-            notifyDataSetChanged();
-
-            Toast.makeText(context, charity.getUrl(), Toast.LENGTH_SHORT).show();
-
-            AsyncConnector.setListener(null);
-            notify();
-        }
-
-        @Override
-        public void onCompleteArray(ArrayList<Charity> charities) {
-
-        }
-    };
     private static ArrayList<Charity> charities;
     private final Context context;
     private int height = 100;
+
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
         getMax();
         this.context = context;
         height = dpToPixels(68);
-//new VoteCharityAdapter()
-        getVotedFor();
+
     }
 
     public static ArrayList<Charity> getCharities() {
@@ -66,18 +43,6 @@ public class VoteCharityAdapter extends BaseAdapter {
         VoteCharityAdapter.votedFor = votedFor;
     }
 
-    void getVotedFor() {
-        AccountManager manager = AccountManager.get(context);
-        Account[] accounts;
-        accounts = manager.getAccounts();
-        for (Account account : accounts) {
-            if (account.name.contains("@")) {
-                new CharityManager().currentCharity(account.name);
-                AsyncConnector.setListener(aSyncListener);
-                break;
-            }
-        }
-    }
 
     private void getMax() {
         for (Charity charity : charities) {
@@ -104,8 +69,6 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (votedFor == null)
-            getVotedFor();
 
         final CharityListItem view = new CharityListItem(context, this);
         view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));

@@ -26,6 +26,7 @@ import bigshots.people_helping_people.services.BannerPopupService;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.MaterialCheckBox;
+import bigshots.people_helping_people.views.MaterialSwitch;
 
 /**
  * Created by root on 18/11/14.
@@ -96,7 +97,7 @@ public class Contribute extends Activity {
                     }
                     break;
 
-                case R.id.scheduled_ads:
+                case R.id.configure_scheduled_ads:
                     dialog = getScheduledAds();
                     dialog.show();
                     break;
@@ -132,7 +133,7 @@ public class Contribute extends Activity {
         }
     };
     private SharedPreferences prefs;
-    private boolean loopBool = true;
+    private boolean loopBool = true, enable_schedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,12 +149,22 @@ public class Contribute extends Activity {
         findViewById(R.id.full_screen).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
         findViewById(R.id.video_ad).setOnClickListener(listener);
-        findViewById(R.id.scheduled_ads).setOnClickListener(listener);
+        findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        MaterialSwitch materialSwitch = (MaterialSwitch) findViewById(R.id.enable_scheduled_ads);
+        materialSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
+        materialSwitch.setText("Enable Scheduled Ads");
+        materialSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                enable_schedule = isChecked;
             }
         });
 
@@ -286,23 +297,25 @@ public class Contribute extends Activity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
         editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).commit();
+        editor.putBoolean(Utils.ENABLE_SCHEDULED_ADS, enable_schedule).commit();
 
-        if (!BannerPopupService.isServiceRunning) {
-            startService(new Intent(this, BannerPopupService.class));
-            try {
+        if (enable_schedule) {
+            if (!BannerPopupService.isServiceRunning) {
+                startService(new Intent(this, BannerPopupService.class));
+                try {
 
-                BannerPopupService.getBannerPopup().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        BannerPopupService.getBannerPopup().minimise();
-                    }
-                }, 500);
-            } catch (Exception e) {
-                e.printStackTrace();
+                    BannerPopupService.getBannerPopup().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+//Todo
+                        }
+                    }, 500);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+            BannerPopupService.scheduleNext(this, true);
         }
-        BannerPopupService.scheduleNext(this, true);
-
     }
 
 }

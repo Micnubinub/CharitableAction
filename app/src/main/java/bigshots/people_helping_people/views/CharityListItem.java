@@ -202,7 +202,7 @@ public class CharityListItem extends ViewGroup {
                 getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
                 getMeasuredHeight());
 
-
+        checkViewParams(textView);
     }
 
     public void setSecondaryText(String text) {
@@ -255,6 +255,24 @@ public class CharityListItem extends ViewGroup {
         }
     }
 
+    private void checkViewParams(final View view, final int layoutWidth, final int layoutHeight) {
+        final int width = view.getMeasuredWidth();
+        final int height = view.getMeasuredHeight();
+        if ((width > layoutWidth) || (height > layoutHeight)) {
+            view.setLayoutParams(new LayoutParams(layoutWidth, layoutHeight));
+            measureChild(view, MeasureSpec.AT_MOST, MeasureSpec.AT_MOST);
+            view.requestLayout();
+            view.invalidate();
+            requestLayout();
+
+        }
+    }
+
+    private void checkViewParams(final View view) {
+        final int layoutWidth = view.getRight() - view.getLeft();
+        final int layoutHeight = view.getBottom() - view.getTop();
+        checkViewParams(view, layoutWidth, layoutHeight);
+    }
 
     public class PlusButton extends Button {
 

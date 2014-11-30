@@ -87,7 +87,6 @@ public class MaterialSwitch extends ViewGroup {
 
     public MaterialSwitch(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         textSize = textSize < 20 ? 20 : textSize;
         init();
     }
@@ -243,7 +242,7 @@ public class MaterialSwitch extends ViewGroup {
         PADDING = dpToPixels(5);
         textView.setPadding(PADDING, PADDING, PADDING, PADDING);
         textView.setTextColor(getResources().getColor(R.color.dark_grey_text));
-        textView.setTextSize(18);
+        textView.setTextSize(22);
         textView.setMaxLines(2);
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
