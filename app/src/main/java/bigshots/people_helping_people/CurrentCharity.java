@@ -20,16 +20,24 @@ import bigshots.people_helping_people.utilities.Interfaces;
  */
 public class CurrentCharity extends Activity {
 
-    private TextView description, raised, name;
+    private TextView description, raised, name, linkr;
     private String link;
     private Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
-        public void onCompleteSingle(Charity charity) {
-            description.setText(charity.getDescription());
-            raised.setText(charity.getWorth());
-            name.setText(charity.getName());
-            link = charity.getUrl();
-            findViewById(R.id.link).setEnabled(true);
+        public void onCompleteSingle(final Charity charity) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    description.setText(charity.getDescription());
+                    raised.setText(String.format("$%d raised", charity.getWorth()));
+                    name.setText(charity.getName());
+                    link = charity.getUrl();
+                    linkr.setText("More Info");
+                    linkr.setEnabled(true);
+                    findViewById(R.id.message).setVisibility(View.GONE);
+                }
+            });
+
         }
 
         @Override
@@ -46,9 +54,16 @@ public class CurrentCharity extends Activity {
         description = (TextView) findViewById(R.id.description);
         raised = (TextView) findViewById(R.id.raised);
         name = (TextView) findViewById(R.id.name);
+        linkr = (TextView) findViewById(R.id.link);
+        findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        findViewById(R.id.link).setEnabled(false);
-        findViewById(R.id.link).setOnClickListener(new View.OnClickListener() {
+        linkr.setEnabled(false);
+        linkr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (link != null && link.length() > 1) {

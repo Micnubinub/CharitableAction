@@ -227,8 +227,8 @@ public class CharityListItem extends ViewGroup {
         for (Account account : accounts) {
             if (account.name.contains("@")) {
                 removeVote();
-                Toast.makeText(getContext(), currentVote, Toast.LENGTH_LONG).show();
                 voteManager.castVote(link, account.name);
+                Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
                 currentVote = link;
                 break;
             }
@@ -238,7 +238,9 @@ public class CharityListItem extends ViewGroup {
     private void removeVote() {
         for (Account account : accounts) {
             if (account.name.contains("@")) {
-                voteManager.removeVote(currentVote, account.name);
+                voteManager.removeVote(link, account.name);
+                Toast.makeText(getContext(), "Unvoting for : " + name, Toast.LENGTH_SHORT).show();
+
                 break;
             }
         }
@@ -386,27 +388,38 @@ public class CharityListItem extends ViewGroup {
             setText(getString());
         }
 
-//        private void startAnimator() {
-//            if (animator.isRunning()) {
-//                animator.end();
-//                animator.cancel();
-//            }
-//            animator.start();
-//        }
-
-
         public void click() {
-            Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
             setIsVotedFor(!votedFor);
-            if (link.equals(currentVote))
-                removeVote();
-            else
-                castVote();
+            Toast.makeText(getContext(), link + " v " + currentVote, Toast.LENGTH_LONG).show();
+            if (link.equals(currentVote)) {
 
-            if (voteCharityAdapter != null) {
-                voteCharityAdapter.setVotedFor(link);
-                voteCharityAdapter.notifyDataSetChanged();
+                removeVote();
+                setVotedFor(false);
+                try {
+                    textView.setSecondaryText(String.valueOf(Integer.parseInt(textView.getSecondaryText()) - 1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (voteCharityAdapter != null) {
+                    voteCharityAdapter.setVotedFor("");
+                    voteCharityAdapter.notifyDataSetChanged();
+                }
+            } else {
+                try {
+                    textView.setSecondaryText(String.valueOf(Integer.parseInt(textView.getSecondaryText()) + 1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                castVote();
+                setVotedFor(true);
+                if (voteCharityAdapter != null) {
+                    voteCharityAdapter.setVotedFor(link);
+                    voteCharityAdapter.notifyDataSetChanged();
+                }
             }
+
+
         }
 
 

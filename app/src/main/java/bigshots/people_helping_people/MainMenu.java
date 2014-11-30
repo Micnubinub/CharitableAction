@@ -42,6 +42,9 @@ public class MainMenu extends Activity {
                 case R.id.statistics:
                     i = new Intent(MainMenu.this, Statistics.class);
                     break;
+                case R.id.current_charity:
+                    i = new Intent(MainMenu.this, CurrentCharity.class);
+                    break;
             }
             startActivity(i);
 
@@ -73,6 +76,7 @@ public class MainMenu extends Activity {
         findViewById(R.id.vote).setOnClickListener(listener);
         findViewById(R.id.contribute).setOnClickListener(listener);
         findViewById(R.id.statistics).setOnClickListener(listener);
+        findViewById(R.id.current_charity).setOnClickListener(listener);
         AsyncConnector.setListener(new Interfaces.ASyncListener() {
             @Override
             public void onCompleteSingle(final Charity charity) {

@@ -32,12 +32,6 @@ public class MaterialTwoLineText extends ViewGroup {
         primaryTextView.setText(text);
     }
 
-    public void setSecondaryText(String text) {
-        secondaryText = text;
-        secondaryTextView.setText(text);
-
-    }
-
     public int dpToPixels(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
@@ -105,6 +99,16 @@ public class MaterialTwoLineText extends ViewGroup {
         );
 
         checkViewParams(secondaryTextView);
+    }
+
+    public String getSecondaryText() {
+        return secondaryText;
+    }
+
+    public void setSecondaryText(String text) {
+        secondaryText = text;
+        secondaryTextView.setText(text);
+
     }
 
     private void checkViewParams(final View view, final int layoutWidth, final int layoutHeight) {

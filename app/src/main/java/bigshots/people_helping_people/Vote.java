@@ -29,12 +29,24 @@ public class Vote extends Activity {
     private VoteCharityAdapter adapter;
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
-        public void onCompleteSingle(Charity charity) {
-            VoteCharityAdapter.setVotedFor(charity.getUrl());
-            CharityListItem.setCurrentVote(charity.getUrl());
-            if (adapter != null)
-                adapter.notifyDataSetChanged();
-            listView.invalidate();
+        public void onCompleteSingle(final Charity charity) {
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    listView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            VoteCharityAdapter.setVotedFor(charity.getUrl());
+                            CharityListItem.setCurrentVote(charity.getUrl());
+                            if (adapter != null)
+                                adapter.notifyDataSetChanged();
+                            listView.invalidate();
+                        }
+                    });
+                }
+            });
         }
 
         @Override
@@ -42,8 +54,14 @@ public class Vote extends Activity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter = new VoteCharityAdapter(Vote.this, charities);
-
+                    listView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            findViewById(R.id.message).setVisibility(View.GONE);
+                            adapter = new VoteCharityAdapter(Vote.this, charities);
+                            listView.setAdapter(adapter);
+                        }
+                    });
                 }
             });
 
