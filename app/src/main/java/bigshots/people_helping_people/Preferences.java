@@ -44,7 +44,7 @@ public class Preferences extends Activity {
 
         toast = (MaterialSwitch) findViewById(R.id.toast_before);
         toast.setText("Fullscreen Ad warning");
-        toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, false));
+        toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, true));
         toast.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {

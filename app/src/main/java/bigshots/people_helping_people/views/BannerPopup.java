@@ -177,7 +177,7 @@ public class BannerPopup extends ViewGroup {
         fullScreen = new MenuItem(getContext(), R.drawable.full_screen_ad);
         fullScreen.setId(R.id.full_screen);
 
-        openApp = new MenuItem(getContext(), R.drawable.full_screen_ad);
+        openApp = new MenuItem(getContext(), R.drawable.open_app);
         openApp.setId(R.id.open_app);
 
         setParameters();
@@ -296,12 +296,13 @@ public class BannerPopup extends ViewGroup {
             adH = (int) (adH * scale);
         }
 
-        lastMenuItemDistance = (int) (adH * 3.5f) + (h / 2);
+        padding = (h - adH) / 2;
+        spacing = adH / 5;
+        lastMenuItemDistance = (int) (adH * 5f) + (h / 2);
         menuItemWidth = adH;
         unit = spacing + h;
 
-        padding = (h - adH) / 2;
-        spacing = adH / 5;
+
         addView(adView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         addView(mainView, new LayoutParams(h, h));
         mainView.setOnTouchListener(mainViewOnTouchListener);
@@ -556,7 +557,7 @@ public class BannerPopup extends ViewGroup {
                     resize((int) ((mainView.getWidth() * adDistance) + adView.getWidth()), mainView.getHeight());
                     break;
                 case SHOWING_MENU:
-                    resize(mainView.getWidth() + ((spacing + minimise.getWidth()) * 3), getHeight());
+                    resize(mainView.getWidth() + ((spacing + minimise.getWidth()) * 4), getHeight());
                     break;
             }
     }
@@ -633,7 +634,6 @@ public class BannerPopup extends ViewGroup {
                 break;
         }
 
-
     }
 
     private void snap(float progress) {
@@ -655,10 +655,10 @@ public class BannerPopup extends ViewGroup {
 //        switch (direction) {
 //            case LEFT:
         int left = (mainView.getWidth() / 2) + x - menuItemWidth;
-        closeBanner.setX(left - spacing - menuItemWidth);
-        openApp.setX(left - spacing - menuItemWidth - spacing - menuItemWidth);
-        fullScreen.setX(left - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
-        minimise.setX(left - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
+        closeBanner.setX(left - spacing);
+        fullScreen.setX(left - spacing - menuItemWidth - spacing);
+        minimise.setX(left - spacing - menuItemWidth - spacing - menuItemWidth - spacing);
+        openApp.setX(left - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth - spacing);
 
 //                break;
 //            case RIGHT:
