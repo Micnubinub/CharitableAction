@@ -77,11 +77,7 @@ public class VoteCharityAdapter extends BaseAdapter {
         view.setPrimaryText(charities.get(position).getName());
         view.setVotes(charities.get(position).getVotes());
         view.setSecondaryText(charities.get(position).getVotes());
-
-        if ((votedFor != null) && (charities.get(position).getUrl().equals(votedFor)))
-            view.setVotedFor(true);
-        else
-            view.setVotedFor(false);
+        view.setVotedFor((votedFor != null) && (charities.get(position).getUrl().equals(votedFor)));
 
         return view;
     }

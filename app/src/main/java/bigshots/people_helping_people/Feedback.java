@@ -28,15 +28,14 @@ public class Feedback extends Activity {
                 case R.id.email:
                     showEmailDialog();
                     break;
+                case R.id.rate:
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=bigshots.people_helping_people")));
+                    break;
                 case R.id.gplus:
-                    //Todo make gPlus age
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://plus.google.com"));
-                    startActivity(browserIntent);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://plus.google.com/b/117110729119624919274/117110729119624919274/posts")));
                     break;
                 case R.id.fb:
-                    //Todo make facebook page
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
-                    startActivity(intent);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/theBigShotsForThePeople?ref=bookmarks")));
                     break;
                 case R.id.direct:
                     showDirectMessageDialog();

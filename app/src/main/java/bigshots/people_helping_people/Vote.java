@@ -25,6 +25,7 @@ import bigshots.people_helping_people.views.CharityListItem;
 @SuppressWarnings("ALL")
 public class Vote extends Activity {
 
+    private static CharityManager charityManager;
     private ListView listView;
     private VoteCharityAdapter adapter;
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
@@ -73,7 +74,6 @@ public class Vote extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         AsyncConnector.setListener(aSyncListener);
         getVotedFor();
 
@@ -93,7 +93,8 @@ public class Vote extends Activity {
         });
 
         listView = (ListView) findViewById(R.id.list);
-        new CharityManager().getCharities();
+        charityManager = new CharityManager();
+        charityManager.getCharities();
 
     }
 

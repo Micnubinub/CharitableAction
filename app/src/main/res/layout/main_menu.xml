@@ -39,7 +39,7 @@
                     android:paddingLeft="52dp"
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
-                    android:text="Donate"
+                    android:text="Free Donation"
                     android:textColor="@color/dark_grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />

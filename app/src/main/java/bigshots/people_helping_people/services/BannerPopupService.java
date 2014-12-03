@@ -104,6 +104,9 @@ public class BannerPopupService extends Service {
         filter.addAction(ROTATION_BROADCAST);
         registerReceiver(broadcastReceiver, filter);
 
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utils.LOOP_SCHEDULE, false) &&
+                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utils.ENABLE_SCHEDULED_ADS, false))
+            scheduleNext(this, true);
     }
 
     @Override
@@ -195,16 +198,13 @@ public class BannerPopupService extends Service {
         public void onReceive(Context context, Intent intent) {
             if (isServiceRunning) {
                 try {
-                    Log.e("IntentReceived > should load ad and toast", String.valueOf(loadAd));
                     if (loadAd) {
-                        Log.e("Loading", "ad");
                         bannerPopup.loadFullScreenAd();
                         scheduleNext(context, false);
                         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
                             Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
                         return;
                     } else {
-                        Log.e("Showing", "Ad");
                         bannerPopup.showFullScreenAd();
                         if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
                             scheduleNext(context, true);

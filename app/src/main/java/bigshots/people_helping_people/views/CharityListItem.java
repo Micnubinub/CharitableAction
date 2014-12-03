@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
-import android.widget.Toast;
 
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.VoteManager;
@@ -233,7 +232,6 @@ public class CharityListItem extends ViewGroup {
             if (account.name.contains("@")) {
                 removeCurrentVote();
                 voteManager.castVote(link, account.name);
-                Toast.makeText(getContext(), "Voting for : " + name, Toast.LENGTH_SHORT).show();
                 currentVote = link;
                 break;
             }
@@ -244,8 +242,6 @@ public class CharityListItem extends ViewGroup {
         for (Account account : accounts) {
             if (account.name.contains("@")) {
                 voteManager.removeVote(link, account.name);
-                Toast.makeText(getContext(), "Unvoting for : " + name, Toast.LENGTH_SHORT).show();
-
                 break;
             }
         }
@@ -433,8 +429,10 @@ public class CharityListItem extends ViewGroup {
                     voteCharityAdapter.notifyDataSetChanged();
                 }
             }
-
-
+            CharityListItem.this.invalidatePoster();
+            if (voteCharityAdapter != null) {
+                voteCharityAdapter.notifyDataSetChanged();
+            }
         }
 
 

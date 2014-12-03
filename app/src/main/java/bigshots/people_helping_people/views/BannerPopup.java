@@ -49,7 +49,7 @@ public class BannerPopup extends ViewGroup {
     private final float adDistance = 0.625f;
     private final WindowManager.LayoutParams params;
     private State state;
-    private MenuItem closeBanner, fullScreen, minimise;
+    private MenuItem closeBanner, fullScreen, minimise, openApp;
     private MainBannerView mainView;
     private boolean settingUp = true;
     private long downTime;
@@ -70,12 +70,10 @@ public class BannerPopup extends ViewGroup {
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
                     setXY();
-
                     if (((System.currentTimeMillis() - downTime) < 180) && ((event.getRawX() - initialTouchX) < touchSlop) && ((event.getRawY() - initialTouchY) < touchSlop)) {
                         click(mainView);
                         mainView.rippleOut();
                     }
-
                     if (state == State.MINIMISED)
                         minimise();
 
@@ -179,6 +177,9 @@ public class BannerPopup extends ViewGroup {
         fullScreen = new MenuItem(getContext(), R.drawable.full_screen_ad);
         fullScreen.setId(R.id.full_screen);
 
+        openApp = new MenuItem(getContext(), R.drawable.full_screen_ad);
+        openApp.setId(R.id.open_app);
+
         setParameters();
         invalidate();
         settingUp = false;
@@ -228,6 +229,10 @@ public class BannerPopup extends ViewGroup {
             addView(fullScreen, new LayoutParams(adH, adH));
             fullScreen.setOnClickListener(clickListener);
             fullScreen.setX(menuItemX);
+
+            addView(openApp, new LayoutParams(adH, adH));
+            openApp.setOnClickListener(clickListener);
+            openApp.setX(menuItemX);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,6 +244,7 @@ public class BannerPopup extends ViewGroup {
             removeView(closeBanner);
             removeView(minimise);
             removeView(fullScreen);
+            removeView(openApp);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -463,6 +469,7 @@ public class BannerPopup extends ViewGroup {
             closeBanner.setDistanceScale(getDistance(closeBanner));
             minimise.setDistanceScale(getDistance(minimise));
             fullScreen.setDistanceScale(getDistance(fullScreen));
+            openApp.setDistanceScale(getDistance(openApp));
         }
     }
 
@@ -648,9 +655,11 @@ public class BannerPopup extends ViewGroup {
 //        switch (direction) {
 //            case LEFT:
         int left = (mainView.getWidth() / 2) + x - menuItemWidth;
-        closeBanner.setX(left);
-        fullScreen.setX(left - spacing - menuItemWidth);
-        minimise.setX(left - spacing - menuItemWidth - spacing - menuItemWidth);
+        closeBanner.setX(left - spacing - menuItemWidth);
+        openApp.setX(left - spacing - menuItemWidth - spacing - menuItemWidth);
+        fullScreen.setX(left - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
+        minimise.setX(left - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth - spacing - menuItemWidth);
+
 //                break;
 //            case RIGHT:
 //                int right = (mainView.getLeft() + (mainView.getWidth() / 2)) - x;

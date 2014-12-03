@@ -43,12 +43,25 @@
             android:background="@color/white"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/rate"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:text="Rate"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/email"
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/white_button_selector"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Email us"
@@ -61,6 +74,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/white_button_selector"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Find us on Google+"
@@ -73,6 +87,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/white_button_selector"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Find us on Facebook page"
@@ -85,6 +100,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/white_button_selector"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Send a message through the app"
