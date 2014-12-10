@@ -22,7 +22,7 @@ import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
-import bigshots.people_helping_people.services.BannerPopupService;
+import bigshots.people_helping_people.services.ScheduledAdsManager;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.MaterialCheckBox;
@@ -164,7 +164,11 @@ public class Contribute extends Activity {
         materialSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
-                enable_schedule = isChecked;
+                prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).commit();
+                if (isChecked)
+                    ScheduledAdsManager.showNotification(Contribute.this);
+                else
+                    ScheduledAdsManager.cancelNotification(Contribute.this);
             }
         });
 
@@ -183,7 +187,6 @@ public class Contribute extends Activity {
 
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(listener);
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(listener);
-
 
         hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
         hours.setCyclic(true);
@@ -297,24 +300,12 @@ public class Contribute extends Activity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
         editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).commit();
-        editor.putBoolean(Utils.ENABLE_SCHEDULED_ADS, enable_schedule).commit();
 
-        if (enable_schedule) {
-            if (!BannerPopupService.isServiceRunning) {
-                startService(new Intent(this, BannerPopupService.class));
-                try {
-
-                    BannerPopupService.getBannerPopup().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-//Todo
-                        }
-                    }, 500);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false)) {
+            if (!ScheduledAdsManager.isServiceRunning()) {
+                startService(new Intent(this, ScheduledAdsManager.class));
             }
-            BannerPopupService.scheduleNext(this, true);
+            ScheduledAdsManager.scheduleNext(this, true);
         }
     }
 

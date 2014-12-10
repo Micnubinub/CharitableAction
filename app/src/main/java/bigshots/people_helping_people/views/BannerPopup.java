@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
 
-import bigshots.people_helping_people.Contribute;
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.services.BannerPopupService;
@@ -363,7 +363,7 @@ public class BannerPopup extends ViewGroup {
                 }
                 break;
             case R.id.open_app:
-                final Intent intent = new Intent(getContext(), Contribute.class);
+                final Intent intent = new Intent(getContext(), MainMenu.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(intent);
             case R.id.minimise:

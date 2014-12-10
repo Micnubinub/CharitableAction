@@ -52,6 +52,7 @@ public class Feedback extends Activity {
         findViewById(R.id.gplus).setOnClickListener(listener);
         findViewById(R.id.fb).setOnClickListener(listener);
         findViewById(R.id.direct).setOnClickListener(listener);
+        findViewById(R.id.rate).setOnClickListener(listener);
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

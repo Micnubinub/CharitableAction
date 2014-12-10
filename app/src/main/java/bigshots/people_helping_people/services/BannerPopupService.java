@@ -1,7 +1,5 @@
 package bigshots.people_helping_people.services;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,13 +8,10 @@ import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.BannerPopup;
@@ -41,44 +36,9 @@ public class BannerPopupService extends Service {
     };
     public static boolean isServiceRunning;
     private static BannerPopup bannerPopup;
-    private static PendingIntent alarmIntent;
-    private static AlarmManager alarmManager;
-    private static boolean loadAd;
     private static WindowManager windowManager;
     private static WindowManager.LayoutParams params;
 
-    public static void scheduleNext(Context context, boolean load) {
-        loadAd = load;
-        try {
-            // Toast.makeText(context, "LOAD_AD sched" + String.valueOf(loadAd), Toast.LENGTH_LONG).show();
-            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            if (load) {
-                Log.e("Scheduling", String.valueOf(loadAd));
-                int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
-                Intent i = new Intent(context, AlarmReceiver.class);
-                if (mins == 0) {
-                    alarmManager.cancel(alarmIntent);
-                    return;
-                } else {
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
-                    } else
-                        alarmManager.set(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
-                }
-            } else {
-                final Intent intent = new Intent(context, AlarmReceiver.class);
-                alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
-                } else
-                    alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static BannerPopup getBannerPopup() {
         return bannerPopup;
@@ -104,14 +64,11 @@ public class BannerPopupService extends Service {
         filter.addAction(ROTATION_BROADCAST);
         registerReceiver(broadcastReceiver, filter);
 
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utils.LOOP_SCHEDULE, false) &&
-                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utils.ENABLE_SCHEDULED_ADS, false))
-            scheduleNext(this, true);
+
     }
 
     @Override
     public boolean stopService(Intent name) {
-
         isServiceRunning = false;
         try {
             unregisterReceiver(broadcastReceiver);
@@ -125,16 +82,15 @@ public class BannerPopupService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         isServiceRunning = true;
-
         super.onStart(intent, startId);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isServiceRunning = true;
-
         return START_STICKY;
     }
+
 
     @Override
     public void onDestroy() {
@@ -186,35 +142,16 @@ public class BannerPopupService extends Service {
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.AUTO_START_BOOL, false)) {
                     Intent myIntent = new Intent(context, BannerPopupService.class);
                     context.startService(myIntent);
+
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false) &&
+                            PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_SCHEDULED_ADS, false))
+                        ScheduledAdsManager.scheduleNext(context, true);
                 }
+
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    public static class AlarmReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isServiceRunning) {
-                try {
-                    if (loadAd) {
-                        bannerPopup.loadFullScreenAd();
-                        scheduleNext(context, false);
-                        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
-                            Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
-                        return;
-                    } else {
-                        bannerPopup.showFullScreenAd();
-                        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
-                            scheduleNext(context, true);
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
         }
     }
 
