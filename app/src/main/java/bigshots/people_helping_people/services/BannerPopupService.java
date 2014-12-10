@@ -117,12 +117,9 @@ public class BannerPopupService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
-                ConnectivityManager cm =
-                        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-                boolean isConnected = activeNetwork != null &&
-                        activeNetwork.isConnectedOrConnecting();
+                boolean isConnected = (activeNetwork != null) && (activeNetwork.isConnectedOrConnecting());
 
                 // boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
 
@@ -140,12 +137,12 @@ public class BannerPopupService extends Service {
         public void onReceive(Context context, Intent intent) {
             try {
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.AUTO_START_BOOL, false)) {
-                    Intent myIntent = new Intent(context, BannerPopupService.class);
-                    context.startService(myIntent);
-
+                    context.startService(new Intent(context, BannerPopupService.class));
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false) &&
-                            PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_SCHEDULED_ADS, false))
+                            PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_SCHEDULED_ADS, false)) {
+                        ScheduledAdsManager.showNotification(context);
                         ScheduledAdsManager.scheduleNext(context, true);
+                    }
                 }
 
 

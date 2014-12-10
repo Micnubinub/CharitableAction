@@ -77,7 +77,7 @@ public class ScheduledAdsManager extends Service {
                 int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
                 Intent i = new Intent(context, AlarmReceiver.class);
                 if (mins == 0) {
-                    alarmManager.cancel(alarmIntent);
+                    cancelNotification(context);
                     return;
                 } else {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -109,7 +109,9 @@ public class ScheduledAdsManager extends Service {
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.icon_blue)
                             .setContentTitle("Scheduled Ads Active")
-                            .setContentText("Click to manage");
+                            .setContentText("Click to manage")
+                            .setOngoing(true);
+
             final Intent intent = new Intent(context, Contribute.class);
             builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, builder.build());
@@ -122,6 +124,9 @@ public class ScheduledAdsManager extends Service {
         try {
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
             context.stopService(new Intent(context, ScheduledAdsManager.class));
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, AlarmReceiver.class), 0);
+            alarmManager.cancel(alarmIntent);
         } catch (Exception e) {
             e.printStackTrace();
         }

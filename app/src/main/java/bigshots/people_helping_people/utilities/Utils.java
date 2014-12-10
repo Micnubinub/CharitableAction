@@ -12,6 +12,7 @@ public class Utils {
     public static final String SCHEDULE = "SCHEDULE";
     public static final String AUTO_START_BOOL = "AUTO_START_BOOL";
     public static final String LOOP_SCHEDULE = "LOOP_SCHEDULE";
+    //public static final String LOOP_SCHEDULE = "LOOP_SCHEDULE";
     public static final String TOAST_BEFORE_BOOL = "TOAST_BEFORE_BOOL";
     public static final String TOAST_TIME_SECS = "TOAST_TIME_SECS";
 }

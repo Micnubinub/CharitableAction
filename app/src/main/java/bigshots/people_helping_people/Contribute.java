@@ -165,9 +165,10 @@ public class Contribute extends Activity {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
                 prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).commit();
-                if (isChecked)
+                if (isChecked) {
                     ScheduledAdsManager.showNotification(Contribute.this);
-                else
+                    ScheduledAdsManager.scheduleNext(Contribute.this, true);
+                } else
                     ScheduledAdsManager.cancelNotification(Contribute.this);
             }
         });
