@@ -32,8 +32,8 @@ public class ScheduledAdsManager extends Service {
     private static AdManager adManager;
     private static boolean loadAd;
     private static Context context;
-
-    private static int NOTIFICATION_ID = 455129802;
+    private static int SCHEDULED_ADS_NOTIFICATION_ID = 455129802;
+    private static int REMINDER_NOTIFICATION_ID = 455129854;
     private static boolean serviceRunning = false;
 
     public static void loadFullScreenAd() {
@@ -75,7 +75,7 @@ public class ScheduledAdsManager extends Service {
             if (load) {
                 Log.e("Scheduling", String.valueOf(loadAd));
                 int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
-                Intent i = new Intent(context, AlarmReceiver.class);
+                Intent i = new Intent(context, AdAlarmReceiver.class);
                 if (mins == 0) {
                     cancelNotification(context);
                     return;
@@ -86,7 +86,7 @@ public class ScheduledAdsManager extends Service {
                         alarmManager.set(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
                 }
             } else {
-                final Intent intent = new Intent(context, AlarmReceiver.class);
+                final Intent intent = new Intent(context, AdAlarmReceiver.class);
                 alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
@@ -107,14 +107,14 @@ public class ScheduledAdsManager extends Service {
 
             final NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.icon_blue)
+                            .setSmallIcon(R.drawable.notification_icon)
                             .setContentTitle("Scheduled Ads Active")
                             .setContentText("Click to manage")
                             .setOngoing(true);
 
             final Intent intent = new Intent(context, Contribute.class);
             builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
-            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, builder.build());
+            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(SCHEDULED_ADS_NOTIFICATION_ID, builder.build());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,10 +122,10 @@ public class ScheduledAdsManager extends Service {
 
     public static void cancelNotification(Context context) {
         try {
-            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(NOTIFICATION_ID);
+            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(SCHEDULED_ADS_NOTIFICATION_ID);
             context.stopService(new Intent(context, ScheduledAdsManager.class));
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, AlarmReceiver.class), 0);
+            alarmIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, AdAlarmReceiver.class), 0);
             alarmManager.cancel(alarmIntent);
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,6 +144,56 @@ public class ScheduledAdsManager extends Service {
 
     public static boolean isServiceRunning() {
         return serviceRunning;
+    }
+
+    public static void scheduleNextReminder(Context context) {
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_REMINDER, false))
+            return;
+        final Intent i = new Intent(context, ReminderAlarmReceiver.class);
+        final int hr = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.REMINDER_TIME_HOURS_INT, 12);
+        final int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.REMINDER_TIME_MINS_INT, 30);
+
+        final long now = System.currentTimeMillis();
+        final int nowHr = Utils.getHours(now);
+        final int nowMin = Utils.getMinutes(now);
+
+        final int difHr = (hr >= nowHr ? hr - nowHr : hr - nowHr + 24) * 60;
+        final int difMin = (mins > nowMin ? mins - nowMin : mins - nowMin + 60);
+
+        final long time = System.currentTimeMillis() + (difHr + difMin) * 60000;
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, i, 0));
+        } else
+            alarmManager.set(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, i, 0));
+
+    }
+
+    private static void showReminder(Context context) {
+        if (!serviceRunning)
+            context.startService(new Intent(context, ScheduledAdsManager.class));
+
+        final NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.notification_icon)
+                        .setContentTitle("People helping people")
+                        .setContentText("Donation reminder")
+                        .setOngoing(false);
+
+        final Intent intent = new Intent(context, Contribute.class);
+        builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(REMINDER_NOTIFICATION_ID, builder.build());
+    }
+
+    public static void cancelReminder(Context context) {
+        try {
+            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(REMINDER_NOTIFICATION_ID);
+            alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, ReminderAlarmReceiver.class), 0);
+            alarmManager.cancel(alarmIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -179,7 +229,15 @@ public class ScheduledAdsManager extends Service {
         return null;
     }
 
-    public static class AlarmReceiver extends BroadcastReceiver {
+    public static class ReminderAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showReminder(context);
+            scheduleNextReminder(context);
+        }
+    }
+
+    public static class AdAlarmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             showNotification(context);

@@ -114,7 +114,10 @@
         </receiver>
 
         <receiver
-            android:name="bigshots.people_helping_people.services.ScheduledAdsManager$AlarmReceiver"
+            android:name=".services.ScheduledAdsManager$ReminderAlarmReceiver"
+            android:enabled="true" />
+        <receiver
+            android:name=".services.ScheduledAdsManager$AdAlarmReceiver"
             android:enabled="true" />
 
         <service android:name="bigshots.people_helping_people.services.BannerPopupService">

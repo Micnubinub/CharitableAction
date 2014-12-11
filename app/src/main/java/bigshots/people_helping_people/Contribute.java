@@ -158,10 +158,10 @@ public class Contribute extends Activity {
             }
         });
 
-        MaterialSwitch materialSwitch = (MaterialSwitch) findViewById(R.id.enable_scheduled_ads);
-        materialSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
-        materialSwitch.setText("Enable Scheduled Ads");
-        materialSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+        MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) findViewById(R.id.enable_scheduled_ads);
+        scheduledAdsSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
+        scheduledAdsSwitch.setText("Enable Scheduled Ads");
+        scheduledAdsSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
                 prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).commit();
@@ -173,8 +173,61 @@ public class Contribute extends Activity {
             }
         });
 
+        MaterialSwitch reminderSwitch = (MaterialSwitch) findViewById(R.id.enable_reminders);
+        reminderSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_REMINDER, false));
+        reminderSwitch.setText("Enable reminders");
+        reminderSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, isChecked).commit();
+                if (isChecked) {
+                    getReminderDialog().show();
+                } else
+                    ScheduledAdsManager.cancelReminder(Contribute.this);
+
+
+            }
+        });
+
+
         AsyncConnector.setListener(aSyncListener);
         new Connector().getCharityManager().monthlyCharity();
+    }
+
+    private Dialog getReminderDialog() {
+        final Dialog dialog = new Dialog(this, R.style.CustomDialog);
+        dialog.setContentView(R.layout.reminder);
+        final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
+        final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
+        final MaterialCheckBox loop = (MaterialCheckBox) dialog.findViewById(R.id.loop_checkbox);
+
+        hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        hours.setCyclic(true);
+
+        minutes.setViewAdapter(new NumericWheelAdapter(this, 0, 59));
+        minutes.setCyclic(true);
+
+        hours.setCurrentItem(12);
+        minutes.setCurrentItem(prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 30));
+
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefs.edit().putInt(Utils.REMINDER_TIME_MINS_INT, minutes.getCurrentItem());
+                prefs.edit().putInt(Utils.REMINDER_TIME_HOURS_INT, hours.getCurrentItem());
+                ScheduledAdsManager.scheduleNextReminder(Contribute.this);
+            }
+        });
+
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).commit();
+            }
+        });
+
+
+        return dialog;
     }
 
     private Dialog getScheduledAds() {

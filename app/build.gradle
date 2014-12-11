@@ -8,7 +8,7 @@ android {
         applicationId "bigshots.people_helping_people"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 2
+        versionCode 3
         versionName "1.0.1"
     }
     buildTypes {
