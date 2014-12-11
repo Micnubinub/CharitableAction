@@ -184,8 +184,6 @@ public class Contribute extends Activity {
                     getReminderDialog().show();
                 } else
                     ScheduledAdsManager.cancelReminder(Contribute.this);
-
-
             }
         });
 
@@ -199,7 +197,6 @@ public class Contribute extends Activity {
         dialog.setContentView(R.layout.reminder);
         final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
         final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
-        final MaterialCheckBox loop = (MaterialCheckBox) dialog.findViewById(R.id.loop_checkbox);
 
         hours.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
         hours.setCyclic(true);
@@ -207,15 +204,22 @@ public class Contribute extends Activity {
         minutes.setViewAdapter(new NumericWheelAdapter(this, 0, 59));
         minutes.setCyclic(true);
 
-        hours.setCurrentItem(12);
-        minutes.setCurrentItem(prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 30));
+        hours.setCurrentItem(prefs.getInt(Utils.REMINDER_TIME_HOURS_INT, 12));
+        minutes.setCurrentItem(prefs.getInt(Utils.REMINDER_TIME_MINS_INT, 30));
 
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefs.edit().putInt(Utils.REMINDER_TIME_MINS_INT, minutes.getCurrentItem());
-                prefs.edit().putInt(Utils.REMINDER_TIME_HOURS_INT, hours.getCurrentItem());
+                try {
+                    ScheduledAdsManager.cancelReminder(Contribute.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                prefs.edit().putInt(Utils.REMINDER_TIME_MINS_INT, minutes.getCurrentItem()).commit();
+                prefs.edit().putInt(Utils.REMINDER_TIME_HOURS_INT, hours.getCurrentItem()).commit();
                 ScheduledAdsManager.scheduleNextReminder(Contribute.this);
+                Toast.makeText(Contribute.this, String.format("Scheduled for : %d:%d", hours.getCurrentItem(), minutes.getCurrentItem()), Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         });
 
@@ -223,10 +227,9 @@ public class Contribute extends Activity {
             @Override
             public void onClick(View v) {
                 prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).commit();
+                dialog.dismiss();
             }
         });
-
-
         return dialog;
     }
 

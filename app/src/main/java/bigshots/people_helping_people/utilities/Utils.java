@@ -20,13 +20,14 @@ public class Utils {
     public static final String TOAST_BEFORE_BOOL = "TOAST_BEFORE_BOOL";
     public static final String TOAST_TIME_SECS = "TOAST_TIME_SECS";
     public static final String ENABLE_REMINDER = "ENABLE_REMINDER";
-    public static final String REMINDER_TIME_MINS_INT = "REMINDER_TIME_INT";
-    public static final String REMINDER_TIME_HOURS_INT = "REMINDER_TIME_INT";
+    public static final String REMINDER_TIME_MINS_INT = "REMINDER_TIME_MINS_INT";
+    public static final String REMINDER_TIME_HOURS_INT = "REMINDER_TIME_HOURS_INT";
 
     public static int getHours(long date) {
         final Calendar calendar = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat("hh");
+        DateFormat formatter = new SimpleDateFormat("HH");
         calendar.setTimeInMillis(date);
+
         return Integer.parseInt(formatter.format(calendar.getTime()));
     }
 
@@ -36,4 +37,16 @@ public class Utils {
         calendar.setTimeInMillis(date);
         return Integer.parseInt(formatter.format(calendar.getTime()));
     }
+
+    public static int getDif(long date) {
+        final Calendar calendar = Calendar.getInstance();
+        DateFormat formatter = new SimpleDateFormat("ss");
+        calendar.setTimeInMillis(date);
+        int sec = Integer.parseInt(formatter.format(calendar.getTime()));
+        formatter = new SimpleDateFormat("SSS");
+        int milli = Integer.parseInt(formatter.format(calendar.getTime()));
+        return milli + sec;
+    }
+
+
 }

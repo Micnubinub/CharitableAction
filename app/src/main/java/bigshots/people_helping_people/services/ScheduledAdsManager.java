@@ -149,7 +149,7 @@ public class ScheduledAdsManager extends Service {
     public static void scheduleNextReminder(Context context) {
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_REMINDER, false))
             return;
-        final Intent i = new Intent(context, ReminderAlarmReceiver.class);
+
         final int hr = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.REMINDER_TIME_HOURS_INT, 12);
         final int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.REMINDER_TIME_MINS_INT, 30);
 
@@ -157,15 +157,34 @@ public class ScheduledAdsManager extends Service {
         final int nowHr = Utils.getHours(now);
         final int nowMin = Utils.getMinutes(now);
 
-        final int difHr = (hr >= nowHr ? hr - nowHr : hr - nowHr + 24) * 60;
-        final int difMin = (mins > nowMin ? mins - nowMin : mins - nowMin + 60);
+        final boolean hrLessThan = (hr < nowHr);
+        final boolean minLessThan = (mins <= nowMin);
+        int difHr, difMin;
 
-        final long time = System.currentTimeMillis() + (difHr + difMin) * 60000;
+        if (hrLessThan && minLessThan) {
+            difHr = (hr - nowHr + 24) * 60;
+            difMin = (mins - nowMin + 60);
+        } else if (hrLessThan) {
+            difHr = (hr - nowHr + 24) * 60;
+            difMin = (mins - nowMin);
+        } else if (minLessThan) {
+            difHr = (hr - nowHr) * 60;
+            difMin = (mins - nowMin + 60);
+        } else {
+            difHr = (hr - nowHr) * 60;
+            difMin = (mins - nowMin);
+        }
+
+        final long time = System.currentTimeMillis() - Utils.getDif(now) + (difHr + difMin) * 60000;
+
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        final Intent inten = new Intent(context, ReminderAlarmReceiver.class);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, i, 0));
+            alarmManager.setExact(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, inten, 0));
         } else
-            alarmManager.set(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, i, 0));
+            alarmManager.set(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, inten, 0));
+
 
     }
 
@@ -199,7 +218,6 @@ public class ScheduledAdsManager extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "service started", Toast.LENGTH_LONG).show();
         serviceRunning = true;
         context = this;
         getAds();
