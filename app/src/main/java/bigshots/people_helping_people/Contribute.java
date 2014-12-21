@@ -2,6 +2,7 @@ package bigshots.people_helping_people;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -59,6 +60,7 @@ public class Contribute extends Activity {
         }
     };
     private int frequencyMinutes;
+    private MaterialSwitch reminderSwitch;
     private Dialog dialog;
     private AdManager adManager;
     private String currentCharity;
@@ -173,7 +175,7 @@ public class Contribute extends Activity {
             }
         });
 
-        MaterialSwitch reminderSwitch = (MaterialSwitch) findViewById(R.id.enable_reminders);
+        reminderSwitch = (MaterialSwitch) findViewById(R.id.enable_reminders);
         reminderSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_REMINDER, false));
         reminderSwitch.setText("Enable reminders");
         reminderSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
@@ -223,6 +225,14 @@ public class Contribute extends Activity {
             }
         });
 
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).commit();
+                reminderSwitch.setChecked(false);
+            }
+        });
+
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -252,9 +262,10 @@ public class Contribute extends Activity {
         minutes.setCyclic(true);
 
         // set current time
+        final int totalMinutes = prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20);
 
-        hours.setCurrentItem(0);
-        minutes.setCurrentItem(prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20));
+        hours.setCurrentItem(totalMinutes / 60);
+        minutes.setCurrentItem(totalMinutes % 60);
 
         frequency.setText(prefix + String.valueOf(minutes.getCurrentItem()) + " minutes");
         frequencyMinutes = minutes.getCurrentItem();

@@ -107,7 +107,7 @@ public class ScheduledAdsManager extends Service {
 
             final NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
-                            .setSmallIcon(R.drawable.notification_icon)
+                            .setSmallIcon(R.drawable.small_notification_icon)
                             .setContentTitle("Scheduled Ads Active")
                             .setContentText("Click to manage")
                             .setOngoing(true);
@@ -189,8 +189,6 @@ public class ScheduledAdsManager extends Service {
     }
 
     private static void showReminder(Context context) {
-        if (!serviceRunning)
-            context.startService(new Intent(context, ScheduledAdsManager.class));
 
         final NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)

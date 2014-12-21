@@ -32,7 +32,7 @@
                 <TextView
                     android:id="@+id/contribute"
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"
@@ -63,7 +63,7 @@
                 <TextView
                     android:id="@+id/vote"
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"
@@ -92,7 +92,7 @@
                 <TextView
                     android:id="@+id/current_charity"
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"
@@ -123,7 +123,7 @@
                 <TextView
                     android:id="@+id/statistics"
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"
@@ -153,7 +153,7 @@
                 <TextView
                     android:id="@+id/feedback"
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"
@@ -183,9 +183,8 @@
 
                 <TextView
                     android:id="@+id/prefs"
-
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"
@@ -214,7 +213,7 @@
                 <TextView
                     android:id="@+id/about"
                     android:layout_width="fill_parent"
-                    android:layout_height="54dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/white_button_selector"
                     android:maxLines="1"
                     android:paddingBottom="14dp"

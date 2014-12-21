@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#333333">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/notification_icon" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_toRightOf="@+id/icon"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="4dp"
+        android:text="Scheduled Ads Active"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/icon"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="4dp"
+        android:text="Click to manage"
+        android:textColor="#bdbdbd"
+        android:textSize="16sp" />
+
+</RelativeLayout>

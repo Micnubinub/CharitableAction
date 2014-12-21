@@ -10,6 +10,8 @@ import android.widget.ImageView;
 @SuppressWarnings("ALL")
 public class MenuItem extends ImageView {
     //Todo longclick message in next update
+    //Todo fix material check box
+    //Todo stats
     private int xPos;
 
     public MenuItem(Context context, int resID) {
