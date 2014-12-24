@@ -15,6 +15,7 @@ import bigshots.people_helping_people.graph.models.BarModel;
 public class LeaderBoard extends Activity {
 
     private static BarChart myStatsBarGraph, globalStatsBarGraph;
+    int blue;
 
 
     @Override
@@ -29,6 +30,7 @@ public class LeaderBoard extends Activity {
         });
         myStatsBarGraph = (BarChart) findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) findViewById(R.id.global_stats);
+        blue = getResources().getColor(R.color.material_blue);
         //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
         //Todo new UserManager().getLeaderboardListRate(5);
         //Todo new UserManager().getLeaderboardListScore(5);
@@ -66,7 +68,7 @@ public class LeaderBoard extends Activity {
     private void addMyStatsBar(String label, float value) {
         int color = 1;
         if (value > 5) {
-            color = getResources().getColor(R.color.material_blue);
+            color = blue;
         } else if (value > 3) {
             color = getResources().getColor(R.color.material_green_light);
         } else {
@@ -76,14 +78,6 @@ public class LeaderBoard extends Activity {
     }
 
     private void addGlobalStatsBar(String label, float value) {
-        int color = 1;
-        if (value > 5) {
-            color = getResources().getColor(R.color.material_blue);
-        } else if (value > 3) {
-            color = getResources().getColor(R.color.material_green_light);
-        } else {
-            color = getResources().getColor(R.color.material_red);
-        }
-        globalStatsBarGraph.addBar(new BarModel(label, value, color));
+        globalStatsBarGraph.addBar(new BarModel(label, value, blue));
     }
 }

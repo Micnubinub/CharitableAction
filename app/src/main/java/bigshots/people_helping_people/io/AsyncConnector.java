@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import bigshots.people_helping_people.utilities.Interfaces;
+
 public class AsyncConnector {
     static Interfaces.ASyncListener listener;
 
@@ -55,7 +56,6 @@ public class AsyncConnector {
                 }
                 if (listener != null)
                     listener.onCompleteArray(charities);
-
             } else if (action.equals("VOTE_CAST")) {
                 Log.e("Async", resp);
             } else if (action.equals("VOTE_REMOVE")) {
@@ -79,7 +79,7 @@ public class AsyncConnector {
                     try {
                         // charity.setDescription(tmp[3]);
                     } catch (ClassCastException e) {
-                        // charity.setDescription("No description");
+                        // charity.setDescription("No description"); // todo MICHAEL
                     }
 
                     if (listener != null)
@@ -123,10 +123,18 @@ public class AsyncConnector {
                         users.add(user);
                     }
                 }
-                System.out.println(users.get(0).getName() + " has Raised "
-                        + users.get(0).getRaised() + "$");
-                // if (listener != null)
-                // listener.onCompleteArray(users);
+                if (listener != null)
+                    listener.onCompleteLeaderBoardList(users);
+
+            } else if (action.equals("GET_RANK")) {
+                Log.e("Async", resp);
+                int rank = 0;
+                try {
+                    rank = Integer.valueOf(resp);
+                } catch (ClassCastException e) {
+
+                }
+                listener.onCompleteRank(rank); //
             } else {
                 Log.e("Async", "Invalid Action specified!");
             }
@@ -163,7 +171,11 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
             }
             in.close();
             String responseString = sb.toString();
-            AsyncConnector.interpretResponse(responseString, this.action);
+            if (responseString.length() > 0) {
+                AsyncConnector.interpretResponse(responseString, this.action);
+            } else {
+                Log.e("Async", "No Response. Empty String");
+            }
         } catch (Exception e) {
             Log.e("Async", "Failed to perform action: " + this.action);
             Log.e("Async", "Error:  " + e.toString());

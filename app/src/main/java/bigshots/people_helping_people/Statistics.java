@@ -85,4 +85,8 @@ public class Statistics extends Activity {
         }
         globalStatsBarGraph.addBar(new BarModel(label, value, color));
     }
+
+    public enum Mode {
+        DAY, WEEK, MONTH, YEAR
+    }
 }
