@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import bigshots.people_helping_people.utilities.Interfaces;
-
 public class AsyncConnector {
     static Interfaces.ASyncListener listener;
 
@@ -23,7 +22,8 @@ public class AsyncConnector {
         AsyncConnector.listener = listener;
     }
 
-    public static void makeConnection(ArrayList<NameValuePair> pairs, String nm, String act) {
+    public static void makeConnection(ArrayList<NameValuePair> pairs,
+                                      String nm, String act) {
         new ConnectorTask(act, pairs, nm).execute();
     }
 
@@ -33,9 +33,9 @@ public class AsyncConnector {
             Log.e("Async", "Original Error Message: " + resp);
         } else {
             if (action.equals("SEND_MESSAGE")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
             } else if (action.equals("GET_CHARITIES")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
                 ArrayList<Charity> charities = new ArrayList<Charity>();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
@@ -57,13 +57,13 @@ public class AsyncConnector {
                     listener.onCompleteArray(charities);
 
             } else if (action.equals("VOTE_CAST")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
             } else if (action.equals("VOTE_REMOVE")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
             } else if (action.equals("CHARITY_SUGGEST")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
             } else if (action.equals("CHARITY_MONTH")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
                 Charity charity = new Charity();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
@@ -77,9 +77,9 @@ public class AsyncConnector {
                         e.printStackTrace();
                     }
                     try {
-                        charity.setDescription(tmp[3]);
+                        // charity.setDescription(tmp[3]);
                     } catch (ClassCastException e) {
-                        charity.setDescription("No description");
+                        // charity.setDescription("No description");
                     }
 
                     if (listener != null)
@@ -94,13 +94,44 @@ public class AsyncConnector {
                 if (listener != null)
                     listener.onCompleteSingle(charity);
             } else if (action.equals("USER_INSERT")) {
-                // Log.e("Async", resp);
+                Log.e("Async", resp);
+            } else if (action.equals("USER_STATS")) {
+                Log.e("Async", resp);
+            } else if (action.equals("GET_LEADER")) {
+                Log.e("Async", resp);
+                ArrayList<UserStats> users = new ArrayList<UserStats>();
+                if (!resp.equals("")) {
+                    resp = resp.substring(0, resp.length() - 1);
+                    String[] tmp1 = resp.split("\\|");
+                    int inc = 1;
+                    for (String s : tmp1) {
+                        String[] tmp = s.split("\\^", -1);
+                        UserStats user = new UserStats();
+                        user.setEmail(tmp[0]);
+                        user.setRank(inc);
+                        try {
+                            user.setScore(Integer.valueOf(tmp[1]));
+                        } catch (ClassCastException e) {
+                            user.setScore(0);
+                        }
+                        try {
+                            user.setRate(Float.valueOf(tmp[2]));
+                        } catch (ClassCastException e) {
+                            user.setRate(0);
+                        }
+                        inc += 1;
+                        users.add(user);
+                    }
+                }
+                System.out.println(users.get(0).getName() + " has Raised "
+                        + users.get(0).getRaised() + "$");
+                // if (listener != null)
+                // listener.onCompleteArray(users);
             } else {
                 Log.e("Async", "Invalid Action specified!");
             }
         }
     }
-
 }
 
 class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
@@ -140,12 +171,10 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
 
     }
 
-
     @Override
     protected Boolean doInBackground(Void... params) {
         postData();
         return null;
     }
-
 
 }

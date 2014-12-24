@@ -44,11 +44,98 @@ import bigshots.people_helping_people.graph.models.ValueLinePoint;
 import bigshots.people_helping_people.graph.models.ValueLineSeries;
 import bigshots.people_helping_people.graph.utils.Utils;
 
+
 /**
  * A LineChart which displays various line series with one value and the remaining information is
  * calculated dynamically. It is possible to draw normal and cubic lines.
  */
 public class ValueLineChart extends BaseChart {
+
+    public static final boolean DEF_USE_CUBIC = false;
+    public static final boolean DEF_USE_OVERLAP_FILL = false;
+    public static final float DEF_LINE_STROKE = 5f;
+    public static final float DEF_FIRST_MULTIPLIER = 0.33f;
+    public static final boolean DEF_SHOW_INDICATOR = true;
+    public static final float DEF_INDICATOR_WIDTH = 2f;
+    public static final int DEF_INDICATOR_COLOR = 0xFF0000FF;
+    // will be interpreted as sp value
+    public static final float DEF_INDICATOR_TEXT_SIZE = 15.f;
+    public static final float DEF_INDICATOR_LEFT_PADDING = 4.f;
+    public static final float DEF_INDICATOR_TOP_PADDING = 4.f;
+    public static final boolean DEF_SHOW_STANDARD_VALUE = true;
+    public static final float DEF_X_AXIS_STROKE = 2f;
+    public static final float DEF_LEGEND_STROKE = 2f;
+    public static final boolean DEF_ACTIVATE_INDICATOR_SHADOW = false;
+    // dimension value
+    public static final float DEF_INDICATOR_SHADOW_STRENGTH = 0.7f;
+    public static final int DEF_INDICATOR_SHADOW_COLOR = 0xFF676767;
+    public static final String DEF_INDICATOR_TEXT_UNIT = "";
+    public static final boolean DEF_SHOW_LEGEND_BENEATH_INDICATOR = false;
+    public static final boolean DEF_USE_DYNAMIC_SCALING = false;
+    public static final float DEF_SCALING_FACTOR = 0.96f;
+    private static final String LOG_TAG = ValueLineChart.class.getSimpleName();
+    protected Matrix mScale = new Matrix();
+    private Paint mLinePaint;
+    private Paint mLegendPaint;
+    private Paint mIndicatorPaint;
+    private List<ValueLineSeries> mSeries;
+    private List<LegendModel> mLegendList;
+    private boolean mHasNegativeValues = false;
+    private float mNegativeValue = 0.f;
+    private float mNegativeOffset = 0.f;
+    private IOnPointFocusedListener mListener = null;
+    private float mFirstMultiplier;
+    private float mSecondMultiplier;
+    private boolean mUseCustomLegend = false;
+    private Point2D mTouchedArea = new Point2D(0, 0);
+    private ValueLinePoint mFocusedPoint = null;
+    private float mValueTextHeight;
+    // GraphOverlay vars
+    private ValueLinePoint mLastPoint = null;
+    private int mValueLabelX = 0;
+    private int mValueLabelY = 0;
+    private int mLegendLabelX = 0;
+    private int mLegendLabelY = 0;
+    private List<StandardValue> mStandardValues = new ArrayList<StandardValue>();
+    /**
+     * Indicates to fill the bottom area of a series with its given color.
+     */
+    private boolean mUseOverlapFill;
+    private boolean mUseCubic;
+    private float mLineStroke;
+    private boolean mShowIndicator;
+    private float mIndicatorWidth;
+    private int mIndicatorLineColor;
+    private int mIndicatorTextColor;
+    private float mIndicatorTextSize;
+    private float mIndicatorLeftPadding;
+    private float mIndicatorTopPadding;
+    private boolean mShowStandardValues;
+    private float mXAxisStroke;
+
+    // ---------------------------------------------------------------------------------------------
+    //                          Override methods from view layers
+    // ---------------------------------------------------------------------------------------------
+    private boolean mActivateIndicatorShadow;
+    private float mIndicatorShadowStrength;
+    private int mIndicatorShadowColor;
+    private String mIndicatorTextUnit;
+
+
+    //##############################################################################################
+    // Variables
+    //##############################################################################################
+    private boolean mShowLegendBeneathIndicator;
+    /**
+     * Enabling this when only positive and big values are present and only have little fluctuations,
+     * a y-axis scaling takes place to see a better difference between the values.
+     */
+    private boolean mUseDynamicScaling;
+    /**
+     * The factor for the dynamic scaling, which determines how many percent of the minimum value
+     * should be subtracted to achieve the scaling.
+     */
+    private float mScalingFactor;
 
     /**
      * Simple constructor to use when creating a view from code.
@@ -84,7 +171,22 @@ public class ValueLineChart extends BaseChart {
         initializeGraph();
     }
 
-
+    /**
+     * Constructor that is called when inflating a view from XML. This is called
+     * when a view is being constructed from an XML file, supplying attributes
+     * that were specified in the XML file. This version uses a default style of
+     * 0, so the only attribute values applied are those in the Context's Theme
+     * and the given AttributeSet.
+     * <p/>
+     * <p/>
+     * The method onFinishInflate() will be called after all children have been
+     * added.
+     *
+     * @param context The Context the view is running in, through which it can
+     *                access the current theme, resources, etc.
+     * @param attrs   The attributes of the XML tag that is inflating the view.
+     * @see #View(android.content.Context, android.util.AttributeSet, int)
+     */
     public ValueLineChart(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -933,11 +1035,6 @@ public class ValueLineChart extends BaseChart {
         return mSeries;
     }
 
-    // ---------------------------------------------------------------------------------------------
-    //                          Override methods from view layers
-    // ---------------------------------------------------------------------------------------------
-
-
     @Override
     protected void onGraphDraw(Canvas _Canvas) {
         super.onGraphDraw(_Canvas);
@@ -1138,173 +1235,4 @@ public class ValueLineChart extends BaseChart {
         }
         return true;
     }
-
-
-    //##############################################################################################
-    // Variables
-    //##############################################################################################
-
-    private static final String LOG_TAG = ValueLineChart.class.getSimpleName();
-
-    public static final boolean DEF_USE_CUBIC = false;
-    public static final boolean DEF_USE_OVERLAP_FILL = false;
-    public static final float DEF_LINE_STROKE = 5f;
-    public static final float DEF_FIRST_MULTIPLIER = 0.33f;
-    public static final boolean DEF_SHOW_INDICATOR = true;
-    public static final float DEF_INDICATOR_WIDTH = 2f;
-    public static final int DEF_INDICATOR_COLOR = 0xFF0000FF;
-    // will be interpreted as sp value
-    public static final float DEF_INDICATOR_TEXT_SIZE = 15.f;
-    public static final float DEF_INDICATOR_LEFT_PADDING = 4.f;
-    public static final float DEF_INDICATOR_TOP_PADDING = 4.f;
-
-    public static final boolean DEF_SHOW_STANDARD_VALUE = true;
-    public static final float DEF_X_AXIS_STROKE = 2f;
-    public static final float DEF_LEGEND_STROKE = 2f;
-    public static final boolean DEF_ACTIVATE_INDICATOR_SHADOW = false;
-    // dimension value
-    public static final float DEF_INDICATOR_SHADOW_STRENGTH = 0.7f;
-    public static final int DEF_INDICATOR_SHADOW_COLOR = 0xFF676767;
-    public static final String DEF_INDICATOR_TEXT_UNIT = "";
-    public static final boolean DEF_SHOW_LEGEND_BENEATH_INDICATOR = false;
-    public static final boolean DEF_USE_DYNAMIC_SCALING = false;
-    public static final float DEF_SCALING_FACTOR = 0.96f;
-
-    private Paint mLinePaint;
-    private Paint mLegendPaint;
-    private Paint mIndicatorPaint;
-
-    private List<ValueLineSeries> mSeries;
-    private List<LegendModel> mLegendList;
-
-    private boolean mHasNegativeValues = false;
-    private float mNegativeValue = 0.f;
-    private float mNegativeOffset = 0.f;
-
-    private IOnPointFocusedListener mListener = null;
-
-    private float mFirstMultiplier;
-    private float mSecondMultiplier;
-
-    private boolean mUseCustomLegend = false;
-    private Point2D mTouchedArea = new Point2D(0, 0);
-    private ValueLinePoint mFocusedPoint = null;
-    private float mValueTextHeight;
-
-    // GraphOverlay vars
-    private ValueLinePoint mLastPoint = null;
-    private int mValueLabelX = 0;
-    private int mValueLabelY = 0;
-    private int mLegendLabelX = 0;
-    private int mLegendLabelY = 0;
-
-    private List<StandardValue> mStandardValues = new ArrayList<StandardValue>();
-
-    /**
-     * Indicates to fill the bottom area of a series with its given color.
-     */
-    private boolean mUseOverlapFill;
-    private boolean mUseCubic;
-    private float mLineStroke;
-    private boolean mShowIndicator;
-    private float mIndicatorWidth;
-    private int mIndicatorLineColor;
-    private int mIndicatorTextColor;
-    private float mIndicatorTextSize;
-    private float mIndicatorLeftPadding;
-    private float mIndicatorTopPadding;
-    private boolean mShowStandardValues;
-    private float mXAxisStroke;
-    private boolean mActivateIndicatorShadow;
-    private float mIndicatorShadowStrength;
-    private int mIndicatorShadowColor;
-    private String mIndicatorTextUnit;
-    private boolean mShowLegendBeneathIndicator;
-    /**
-     * Enabling this when only positive and big values are present and only have little fluctuations,
-     * a y-axis scaling takes place to see a better difference between the values.
-     */
-    private boolean mUseDynamicScaling;
-    /**
-     * The factor for the dynamic scaling, which determines how many percent of the minimum value
-     * should be subtracted to achieve the scaling.
-     */
-    private float mScalingFactor;
-
-    @Override
-    protected boolean onGraphOverlayTouchEvent(MotionEvent _Event) {
-
-        super.onGraphOverlayTouchEvent(_Event);
-
-        float newX = _Event.getX();
-        float newY = _Event.getY();
-
-        switch (_Event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-
-                return true;
-        }
-
-        if (mShowIndicator && mSeries.size() == 1) {
-            int size = mSeries.get(0).getSeries().size();
-
-            for (int i = 0; i < size; i++) {
-
-                // check if touchedX equals one the points
-                if (mSeries.get(0).getSeries().get(i).getCoordinates().getX() == newX) {
-                    mFocusedPoint = mSeries.get(0).getSeries().get(i);
-                    break;
-                } else {
-                    // check if we reached the last when --> (true) use last point
-                    if (i == size - 1) {
-                        mFocusedPoint = mSeries.get(0).getSeries().get(i);
-                        break;
-                    } else {
-                        float x = mSeries.get(0).getSeries().get(i).getCoordinates().getX();
-                        float nextX = mSeries.get(0).getSeries().get(i + 1).getCoordinates().getX();
-
-                        // check if touchedX is between two points
-                        if (newX > x && newX < nextX) {
-                            // check which distance between touchedX and the two points is smaller
-                            if (newX - x > nextX - newX) {
-                                mFocusedPoint = mSeries.get(0).getSeries().get(i + 1);
-                                break;
-                            } else {
-                                mFocusedPoint = mSeries.get(0).getSeries().get(i);
-                                break;
-                            }
-                        }
-                        //check if touchedX distance between the points is equal -> choose first Point
-                        else if (newX > x && newX < nextX) {
-                            mFocusedPoint = mSeries.get(0).getSeries().get(i);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (mFocusedPoint != null) {
-                mTouchedArea = mFocusedPoint.getCoordinates();
-
-            } else {
-                mTouchedArea.setX(newX);
-                mTouchedArea.setY(newY);
-            }
-
-            if (mLastPoint != mFocusedPoint) {
-                mLastPoint = mFocusedPoint;
-
-                calculateValueTextHeight();
-
-                if (mListener != null) {
-                    mListener.onPointFocused(mSeries.get(0).getSeries().indexOf(mFocusedPoint));
-                }
-            }
-
-            invalidateGlobal();
-        }
-        return true;
-    }
-
-    protected Matrix mScale = new Matrix();
 }

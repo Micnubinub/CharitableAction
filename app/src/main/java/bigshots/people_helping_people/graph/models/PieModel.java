@@ -20,6 +20,27 @@ package bigshots.people_helping_people.graph.models;
 
 public class PieModel extends BaseModel implements Comparable {
 
+    /**
+     * Value of the Pie Slice
+     */
+    private float mValue;
+    /**
+     * The color in which the pie slice will be drawn.
+     */
+    private int mColor;
+    /**
+     * The highlighted mColor value.
+     */
+    private int mHighlightedColor;
+    /**
+     * Start angle in the PieChart
+     */
+    private int mStartAngle;
+    /**
+     * End angle in the PieChart
+     */
+    private int mEndAngle;
+
     public PieModel(String _legendLabel, float _value, int _color) {
         super(_legendLabel);
         mValue = _value;
@@ -86,42 +107,5 @@ public class PieModel extends BaseModel implements Comparable {
             return -1;
         }
     }
-
-    /**
-     * Value of the Pie Slice
-     */
-    private float mValue;
-
-    /**
-     * The color in which the pie slice will be drawn.
-     */
-    private int mColor;
-
-    /**
-     * The highlighted mColor value.
-     */
-    private int mHighlightedColor;
-
-    /**
-     * Start angle in the PieChart
-     */
-    private int mStartAngle;
-
-    @Override
-    public int compareTo(Object o) {
-        PieModel pie = (PieModel) o;
-        if (this.mValue > pie.getValue()) {
-            return 1;
-        } else if (this.mValue == pie.getValue()) {
-            return 0;
-        } else {
-            return -1;
-        }
-    }
-
-    /**
-     * End angle in the PieChart
-     */
-    private int mEndAngle;
 
 }

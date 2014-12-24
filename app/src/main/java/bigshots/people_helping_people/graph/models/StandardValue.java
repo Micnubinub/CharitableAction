@@ -25,6 +25,17 @@ import bigshots.people_helping_people.graph.utils.Utils;
  */
 public class StandardValue {
 
+    public static final float DEF_STANDARD_VALUE_INDICATOR_STROKE = 2f;
+    public static final int DEF_STANDARD_VALUE_COLOR = 0xFF00FF00;
+    private int mColor;
+    private float mValue;
+    private int mY;
+    /**
+     * @param _stroke The stroke height in dp
+     */
+
+    private float mStroke;
+
     /**
      * @param _color
      * @param _value
@@ -76,20 +87,4 @@ public class StandardValue {
     public void setStroke(float _stroke) {
         mStroke = Utils.dpToPx(_stroke);
     }
-
-    public static final float DEF_STANDARD_VALUE_INDICATOR_STROKE = 2f;
-    public static final int DEF_STANDARD_VALUE_COLOR = 0xFF00FF00;
-
-    private int mColor;
-    private float mValue;
-    private int mY;
-
-    /**
-     * @param _stroke The stroke height in dp
-     */
-    public void setStroke(float _stroke) {
-        mStroke = Utils.dpToPx(_stroke);
-    }
-
-    private float mStroke;
 }

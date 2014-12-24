@@ -14,7 +14,26 @@ public class UserManager {
     public void insertUser(String useremail) {
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
-        AsyncConnector
-                .makeConnection(nvp, "USER_INSERT.php", "USER_INSERT");
+        AsyncConnector.makeConnection(nvp, "USER_INSERT.php", "USER_INSERT");
+    }
+
+    public void postStats(String useremail, int score, float rate) {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(3);
+        nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
+        nvp.add(new BasicNameValuePair("USER_SCORE", String.valueOf(score)));
+        nvp.add(new BasicNameValuePair("USER_RATE", String.valueOf(rate)));
+        AsyncConnector.makeConnection(nvp, "USER_STATS.php", "USER_STATS");
+    }
+
+    public void getLeaderboardListScore(int amount) {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+        nvp.add(new BasicNameValuePair("AMOUNT", String.valueOf(amount)));
+        AsyncConnector.makeConnection(nvp, "GET_LEADER_S.php", "GET_LEADER");
+    }
+
+    public void getLeaderboardListRate(int amount) {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+        nvp.add(new BasicNameValuePair("AMOUNT", String.valueOf(amount)));
+        AsyncConnector.makeConnection(nvp, "GET_LEADER_R.php", "GET_LEADER");
     }
 }

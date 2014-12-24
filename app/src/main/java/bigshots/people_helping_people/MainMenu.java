@@ -14,6 +14,7 @@ import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.utilities.Interfaces;
+import bigshots.people_helping_people.views.LeaderBoard;
 
 /**
  * Created by root on 18/11/14.
@@ -41,6 +42,9 @@ public class MainMenu extends Activity {
                     break;
                 case R.id.statistics:
                     i = new Intent(MainMenu.this, Statistics.class);
+                    break;
+                case R.id.leader_board:
+                    i = new Intent(MainMenu.this, LeaderBoard.class);
                     break;
                 case R.id.current_charity:
                     i = new Intent(MainMenu.this, CurrentCharity.class);
@@ -76,6 +80,7 @@ public class MainMenu extends Activity {
         findViewById(R.id.vote).setOnClickListener(listener);
         findViewById(R.id.contribute).setOnClickListener(listener);
         findViewById(R.id.statistics).setOnClickListener(listener);
+        findViewById(R.id.leader_board).setOnClickListener(listener);
         findViewById(R.id.current_charity).setOnClickListener(listener);
         AsyncConnector.setListener(new Interfaces.ASyncListener() {
             @Override

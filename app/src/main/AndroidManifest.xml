@@ -68,6 +68,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="bigshots.people_helping_people.views.LeaderBoard"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="bigshots.people_helping_people.Preferences"
             android:label="@string/app_name">
             <intent-filter>

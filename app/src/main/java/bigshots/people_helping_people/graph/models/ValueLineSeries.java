@@ -25,6 +25,23 @@ import java.util.List;
 
 public class ValueLineSeries {
 
+    /**
+     * The list of points, which will be concatenated as a Path.
+     */
+    private List<ValueLinePoint> mSeries;
+    /**
+     * The generated Path based on the mSeries points.
+     */
+    private Path mPath;
+    /**
+     * The color of the path.
+     */
+    private int mColor;
+    /**
+     * Indicates the offset between each point in the series. This is calculated dynamically.
+     */
+    private float mWidthOffset;
+
     public ValueLineSeries(List<ValueLinePoint> _series) {
         mSeries = _series;
         mPath = new Path();
@@ -51,11 +68,6 @@ public class ValueLineSeries {
         return mColor;
     }
 
-
-    public int getColor() {
-        return mColor;
-    }
-
     public void setColor(int _color) {
         mColor = _color;
     }
@@ -64,35 +76,15 @@ public class ValueLineSeries {
         return mPath;
     }
 
-    /**
-     * The list of points, which will be concatenated as a Path.
-     */
-    private List<ValueLinePoint> mSeries;
-
     public void setPath(Path _path) {
         mPath = _path;
     }
-
-    /**
-     * The generated Path based on the mSeries points.
-     */
-    private Path mPath;
 
     public float getWidthOffset() {
         return mWidthOffset;
     }
 
-    /**
-     * The color of the path.
-     */
-    private int mColor;
-
     public void setWidthOffset(float _widthOffset) {
         mWidthOffset = _widthOffset;
     }
-
-    /**
-     * Indicates the offset between each point in the series. This is calculated dynamically.
-     */
-    private float mWidthOffset;
 }

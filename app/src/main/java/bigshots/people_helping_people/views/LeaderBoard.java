@@ -1,9 +1,10 @@
-package bigshots.people_helping_people;
+package bigshots.people_helping_people.views;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
 
@@ -11,7 +12,7 @@ import bigshots.people_helping_people.graph.models.BarModel;
  * Created by root on 18/11/14.
  */
 @SuppressWarnings("ALL")
-public class Statistics extends Activity {
+public class LeaderBoard extends Activity {
 
     private static BarChart myStatsBarGraph, globalStatsBarGraph;
 
@@ -19,7 +20,7 @@ public class Statistics extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.statistics);
+        setContentView(R.layout.leader_board);
         findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
