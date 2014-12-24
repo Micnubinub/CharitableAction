@@ -927,7 +927,6 @@ public class PieChart extends BaseChart {
 
                 mGraphPaint.setColor(model.getColor());
 
-                // TODO: put calculation in the animation onUpdate method and provide an animated value
                 float startAngle;
                 float sweepAngle = (model.getEndAngle() - model.getStartAngle()) * mRevealValue;
 
@@ -1013,7 +1012,6 @@ public class PieChart extends BaseChart {
             PieModel model = mPieData.get(mCurrentItem);
 
             // center text in view
-            // TODO: move the boundary calculation out of onDraw
             mLegendPaint.getTextBounds(model.getLegendLabel(), 0, model.getLegendLabel().length(), mTextBounds);
             _Canvas.drawText(
                     model.getLegendLabel(),

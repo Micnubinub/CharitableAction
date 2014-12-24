@@ -20,6 +20,7 @@ import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.Connector;
+import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
@@ -72,6 +73,16 @@ public class Contribute extends Activity {
 
         @Override
         public void onCompleteArray(ArrayList<Charity> charities) {
+
+        }
+
+        @Override
+        public void onCompleteRank(int rank) {
+
+        }
+
+        @Override
+        public void onCompleteLeaderBoardList(ArrayList<UserStats> stats) {
 
         }
     };

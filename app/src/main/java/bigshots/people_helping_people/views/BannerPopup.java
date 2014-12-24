@@ -28,7 +28,6 @@ import bigshots.people_helping_people.services.BannerPopupService;
  */
 @SuppressWarnings("ALL")
 public class BannerPopup extends ViewGroup {
-    //Todo add intro slides 1/2 done
     //hidemenu-showmenu in next update
     //google plus
 

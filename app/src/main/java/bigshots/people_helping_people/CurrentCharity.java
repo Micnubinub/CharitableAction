@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
+import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 /**
@@ -42,6 +43,16 @@ public class CurrentCharity extends Activity {
 
         @Override
         public void onCompleteArray(ArrayList<Charity> charities) {
+
+        }
+
+        @Override
+        public void onCompleteRank(int rank) {
+
+        }
+
+        @Override
+        public void onCompleteLeaderBoardList(ArrayList<UserStats> stats) {
 
         }
     };

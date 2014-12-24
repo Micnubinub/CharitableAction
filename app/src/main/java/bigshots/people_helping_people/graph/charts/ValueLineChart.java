@@ -1092,7 +1092,6 @@ public class ValueLineChart extends BaseChart {
         }
 
         // draw touch indicator
-        // TODO: if mShowIndicator is true, then check all series not only if one series is inserted
         if (mShowIndicator && mSeries.size() == 1) {
             mIndicatorPaint.setColor(mIndicatorLineColor);
             mIndicatorPaint.setStrokeWidth(mIndicatorWidth);
