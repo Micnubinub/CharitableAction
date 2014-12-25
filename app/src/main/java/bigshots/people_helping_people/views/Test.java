@@ -22,7 +22,7 @@ public class Test extends View {
 
     public Test(Context context) {
         super(context);
-        // Toast.makeText(getContext(), Utils.getTotal(getContext()), Toast.LENGTH_LONG).show();
+        // Toast.makeText(getContext(), Utils.getTotalScore(getContext()), Toast.LENGTH_LONG).show();
         setBackgroundColor(getResources().getColor(R.color.material_red));
         paint.setColor(getResources().getColor(R.color.white));
     }
@@ -37,9 +37,8 @@ public class Test extends View {
             Canvas canvas, boolean left, int w, int h, int x, int y,
             int spikesYOffset, int spikeW, int spikeH, int spikeNum
     ) {
-
+        x = left ? x : x - spikeW;
         canvas.drawLine(left ? x : x + spikeW, y, left ? x + w : x + spikeW + w, y, paint);
-
         canvas.drawLine(left ? x + w : x + spikeW, y, left ? x + w : x + spikeW, y + spikesYOffset, paint);
         //Todo draw spikes
 

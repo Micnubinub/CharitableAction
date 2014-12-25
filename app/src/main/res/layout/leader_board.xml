@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/material_blue">
@@ -20,7 +20,7 @@
             android:paddingLeft="69dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:text="Leaderboard"
+            android:text="Leader board"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -33,121 +33,26 @@
             android:src="@drawable/white_arrow" />
     </RelativeLayout>
 
-    <ScrollView
+    <ListView
+        android:id="@+id/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/rl"
+        android:dividerHeight="0px" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/message"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/rl"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/white_button_selector"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingBottom="14dp"
-                android:text="My stats"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="3dp">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/white_button_selector"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:padding="8dp"
-                        android:paddingBottom="14dp"
-                        android:text="$18 raised at 90c a day"
-                        android:textColor="@color/dark_grey_text"
-                        android:textSize="18sp" />
-
-                    <bigshots.people_helping_people.graph.charts.BarChart
-                        android:id="@+id/my_stats"
-                        android:layout_width="match_parent"
-                        android:layout_height="256dp"
-                        android:layout_margin="10dp"
-                        app:egBarMargin="10dp"
-                        app:egBarWidth="22dp"
-                        app:egEnableScroll="true"
-                        app:egFixedBarWidth="true"
-                        app:egLegendHeight="40sp"
-                        app:egLegendTextSize="14sp"
-                        app:egShowDecimal="true"
-                        app:egShowValues="true" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/white_button_selector"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingBottom="14dp"
-                android:text="Global stats"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="3dp">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/white_button_selector"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:padding="8dp"
-                        android:paddingBottom="14dp"
-                        android:text="$12 032 raised at $524 a day"
-                        android:textColor="@color/dark_grey_text"
-                        android:textSize="18sp" />
-
-                    <bigshots.people_helping_people.graph.charts.BarChart
-                        android:id="@+id/global_stats"
-                        android:layout_width="match_parent"
-                        android:layout_height="256dp"
-                        android:layout_margin="10dp"
-                        app:egBarMargin="10dp"
-                        app:egBarWidth="22dp"
-                        app:egEnableScroll="true"
-                        app:egFixedBarWidth="true"
-                        app:egLegendHeight="40sp"
-                        app:egLegendTextSize="14sp"
-                        app:egShowDecimal="true"
-                        app:egShowValues="true" />
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+            android:layout_centerInParent="true"
+            android:text="Loading..."
+            android:textColor="@color/dark_grey_text"
+            android:textSize="28sp" />
+    </RelativeLayout>
+</RelativeLayout>

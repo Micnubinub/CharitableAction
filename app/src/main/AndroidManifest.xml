@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="bigshots.people_helping_people.views.LeaderBoard"
+            android:name=".LeaderBoard"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

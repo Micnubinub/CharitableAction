@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.utilities.Interfaces;
-import bigshots.people_helping_people.views.LeaderBoard;
+import bigshots.people_helping_people.utilities.Utils;
 
 /**
  * Created by root on 18/11/14.
@@ -63,11 +64,14 @@ public class MainMenu extends Activity {
         setContentView(R.layout.main_menu);
 
         try {
-            AccountManager manager = AccountManager.get(this);
-            Account[] accounts = manager.getAccounts();
+            final AccountManager manager = AccountManager.get(this);
+            final Account[] accounts = manager.getAccounts();
             for (Account account : accounts) {
                 if (account.name.contains("@")) {
-                    new UserManager().insertUser(account.name);
+                    final UserManager manager1 = new UserManager();
+                    manager1.insertUser(account.name);
+                    manager1.postStats(account.name, Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this));
+                    Toast.makeText(this, String.format("posit: %d, %f", Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this)), Toast.LENGTH_LONG).show();
                     break;
                 }
             }
@@ -109,7 +113,6 @@ public class MainMenu extends Activity {
 
             }
         });
-
 
     }
 

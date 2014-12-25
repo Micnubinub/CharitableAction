@@ -88,7 +88,7 @@ public class Utils {
         return Statistics.Mode.DAY;
     }
 
-    public static String getTotal(Context context) {
+    public static String getTotalScore(Context context) {
         int total = 0;
         try {
             final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
@@ -105,6 +105,33 @@ public class Utils {
             e.printStackTrace();
         }
         return String.valueOf(total);
+    }
+
+    public static float getRate(Context context) {
+        float rate = 0;
+        float total = 0;
+        float first, last;
+        try {
+            final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
+            final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
+
+            final Cursor cursor = statsDB.query(StatsDBHelper.STATS_TABLE, new String[]{StatsDBHelper.POINTS_INT, StatsDBHelper.TIME_LONG}, null, null, null, null, null);
+            cursor.moveToFirst();
+            first = Long.parseLong(cursor.getString(1));
+            while (!cursor.isAfterLast()) {
+                total += Integer.parseInt(cursor.getString(0));
+                cursor.moveToNext();
+            }
+
+            cursor.moveToLast();
+            last = Long.parseLong(cursor.getString(1));
+            rate = total / (last - first);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return rate;
     }
 
     public static void addScore(Context context, int points) {
