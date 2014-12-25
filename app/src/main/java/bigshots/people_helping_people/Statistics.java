@@ -2,16 +2,10 @@ package bigshots.people_helping_people;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdView;
 
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
-import bigshots.people_helping_people.io.AdManager;
 
 /**
  * Created by root on 18/11/14.
@@ -20,7 +14,7 @@ import bigshots.people_helping_people.io.AdManager;
 public class Statistics extends Activity {
 
     private static BarChart myStatsBarGraph, globalStatsBarGraph;
-    int show = 0;
+    int shown = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,27 +26,13 @@ public class Statistics extends Activity {
                 finish();
             }
         });
+
         myStatsBarGraph = (BarChart) findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) findViewById(R.id.global_stats);
         //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
         //Todo new UserManager().getLeaderboardListRate(5);
         //Todo new UserManager().getLeaderboardListScore(5);
         addValues();
-        testAds();
-    }
-
-    private void testAds() {
-        AdManager adManager = new AdManager(this);
-        AdView bannerAd = adManager.getBannerAd();
-        bannerAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdOpened() {
-                super.onAdOpened();
-                show++;
-                Log.e("shown, showVal", String.format("%d, %d", System.currentTimeMillis() / 1000, show));
-            }
-        });
-        ((LinearLayout) findViewById(R.id.test)).addView(bannerAd);
     }
 
     private void addValues() {

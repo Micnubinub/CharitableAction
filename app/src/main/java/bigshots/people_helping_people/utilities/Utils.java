@@ -1,6 +1,8 @@
 package bigshots.people_helping_people.utilities;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.text.DateFormat;
@@ -31,15 +33,14 @@ public class Utils {
 
     public static int getHours(long date) {
         final Calendar calendar = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat("HH");
+        final DateFormat formatter = new SimpleDateFormat("HH");
         calendar.setTimeInMillis(date);
-
         return Integer.parseInt(formatter.format(calendar.getTime()));
     }
 
     public static int getMinutes(long date) {
         final Calendar calendar = Calendar.getInstance();
-        DateFormat formatter = new SimpleDateFormat("mm");
+        final DateFormat formatter = new SimpleDateFormat("mm");
         calendar.setTimeInMillis(date);
         return Integer.parseInt(formatter.format(calendar.getTime()));
     }
@@ -59,6 +60,12 @@ public class Utils {
     }
 
     public static Statistics.Mode getScope(Context context) {
+        final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
+        final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
+
+        final Cursor cursor = statsDB.query(StatsDBHelper.STATS_TABLE, new String[]{StatsDBHelper.ID, StatsDBHelper.TIME_LONG, StatsDBHelper.POINTS_INT}, null, null, null, null, null);
+        cursor.moveToFirst();
+
         Statistics.Mode mode = Statistics.Mode.DAY;
         //Todo read db and use the first and last alues to determine the scope using minus
         //day == 86400000, week == 604800000, month == 2419200000
@@ -66,12 +73,36 @@ public class Utils {
         return mode;
     }
 
+    public static String getTotal(Context context) {
+        int total = 0;
+        try {
+            final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
+            final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
+
+            final Cursor cursor = statsDB.query(StatsDBHelper.STATS_TABLE, new String[]{StatsDBHelper.POINTS_INT}, null, null, null, null, null);
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) {
+                total += Integer.parseInt(cursor.getString(0));
+                cursor.moveToNext();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return String.valueOf(total);
+    }
+
     public static void addScore(Context context, int points) {
         final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
-        final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
+        final SQLiteDatabase statsDB = statsDBHelper.getWritableDatabase();
+        final String time = String.valueOf(System.currentTimeMillis());
+        final String pointsString = String.valueOf(points);
 
-//        final Cursor cursor = statsDB.query(StatsDBHelper.PROFILE_TABLE, new String[]{StatsDBHelper.ID, StatsDBHelper.PRIORITY, StatsDBHelper.PROFILE_NAME, ProfileDBHelper.TRIGGERS, ProfileDBHelper.COMMANDS}, null, null, null, null, null);
-//        cursor.moveToFirst();
+        ContentValues values = new ContentValues();
+        values.put(StatsDBHelper.POINTS_INT, pointsString);
+        values.put(StatsDBHelper.TIME_LONG, time);
+
+        statsDB.insert(StatsDBHelper.STATS_TABLE, "", values);
     }
 
 

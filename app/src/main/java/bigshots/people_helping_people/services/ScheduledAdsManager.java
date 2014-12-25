@@ -44,15 +44,21 @@ public class ScheduledAdsManager extends Service {
         if (adManager == null)
             getAds();
 
-        if (adManager.getFullscreenAd().isLoaded())
+        if (adManager.getFullscreenAd().isLoaded()) {
             adManager.getFullscreenAd().show();
-        else {
+            Utils.addScore(context, 15);
+        } else {
             loadFullScreenAd();
             fullScreenAd = adManager.getFullscreenAd();
             fullScreenAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdLoaded() {
                     super.onAdLoaded();
+                    try {
+                        Utils.addScore(context, 15);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     fullScreenAd.show();
                 }
 

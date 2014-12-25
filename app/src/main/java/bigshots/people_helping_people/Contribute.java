@@ -51,7 +51,10 @@ public class Contribute extends Activity {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
-            if (fullScreenClicked) adManager.getFullscreenAd().show();
+            if (fullScreenClicked) {
+                adManager.getFullscreenAd().show();
+                Utils.addScore(Contribute.this, 15);
+            }
         }
 
         @Override
@@ -94,10 +97,12 @@ public class Contribute extends Activity {
                 case R.id.full_screen:
                     fullScreenClicked = true;
                     adManager.getFullscreenAd().show();
+                    Utils.addScore(Contribute.this, 15);
                     break;
                 case R.id.video_ad:
                     videoClicked = true;
                     adManager.getVideoAd().show();
+                    Utils.addScore(Contribute.this, 20);
                     break;
                 case R.id.current_charity:
                     try {
@@ -134,8 +139,10 @@ public class Contribute extends Activity {
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
-            if (videoClicked)
+            if (videoClicked) {
                 adManager.getVideoAd().show();
+                Utils.addScore(Contribute.this, 20);
+            }
 
         }
 
@@ -179,6 +186,9 @@ public class Contribute extends Activity {
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
                 prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).commit();
                 if (isChecked) {
+                    if (!ScheduledAdsManager.isServiceRunning()) {
+                        startService(new Intent(Contribute.this, ScheduledAdsManager.class));
+                    }
                     ScheduledAdsManager.showNotification(Contribute.this);
                     ScheduledAdsManager.scheduleNext(Contribute.this, true);
                 } else

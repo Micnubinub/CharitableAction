@@ -16,12 +16,14 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.services.BannerPopupService;
+import bigshots.people_helping_people.utilities.Utils;
 
 /**
  * Created by root on 18/11/14.
@@ -159,8 +161,16 @@ public class BannerPopup extends ViewGroup {
         touchSlop = dpToPixels(4);
 
         adManager = new AdManager(getContext());
+        adManager = new AdManager(getContext());
         adManager.loadBannerAd();
         adView = adManager.getBannerAd();
+        ((AdView) adView).setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                Utils.addScore(getContext(), 1);
+            }
+        });
         adView.setPivotX(0);
 
         mainView = new MainBannerView(getContext());
