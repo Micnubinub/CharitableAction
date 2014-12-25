@@ -69,6 +69,8 @@ public class Utils {
             cursor.moveToLast();
             long last = Long.parseLong(cursor.getString(0));
 
+            statsDB.close();
+
             long diff = last - first;
 
             if (diff <= 86400000l)
@@ -101,6 +103,9 @@ public class Utils {
                 total += Integer.parseInt(cursor.getString(0));
                 cursor.moveToNext();
             }
+
+            statsDB.close();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -125,6 +130,9 @@ public class Utils {
 
             cursor.moveToLast();
             last = Long.parseLong(cursor.getString(1));
+
+            statsDB.close();
+
             rate = total / (last - first);
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,36 +148,84 @@ public class Utils {
         final String time = String.valueOf(System.currentTimeMillis());
         final String pointsString = String.valueOf(points);
 
-        ContentValues values = new ContentValues();
+        final ContentValues values = new ContentValues();
         values.put(StatsDBHelper.POINTS_INT, pointsString);
         values.put(StatsDBHelper.TIME_LONG, time);
-
         statsDB.insert(StatsDBHelper.STATS_TABLE, "", values);
+
+        statsDB.close();
     }
 
 
     public static ArrayList<Point> getPoints(Context context) {
         final ArrayList<Point> graphPoints = new ArrayList<Point>();
         final Statistics.Mode mode = getScope(context);
+        String lengend = "";
+        long steps = 0;
 //Todo use scope to detemine legend and points y ** lots of work to be done
         switch (mode) {
             case DAY:
-
+                lengend = "hour";
+                steps = 3600000l;
                 break;
             case WEEK:
-
+                lengend = "day";
+                steps = 86400000l;
                 break;
 
             case MONTH:
-
+                lengend = "week";
+                steps = 6048000000l;
                 break;
 
             case YEAR:
-
+                lengend = "month";
+                steps = 24192000000l;
                 break;
 
         }
+        final ArrayList<DataEntry> entries = new ArrayList<DataEntry>();
+        try {
+            final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
+            final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
+
+            final Cursor cursor = statsDB.query(StatsDBHelper.STATS_TABLE, new String[]{StatsDBHelper.POINTS_INT, StatsDBHelper.TIME_LONG}, null, null, null, null, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                entries.add(new DataEntry(Long.parseLong(cursor.getString(1)), Integer.parseInt(cursor.getString(0))));
+                cursor.moveToNext();
+            }
+            statsDB.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        long currTime = entries.get(0).getDate();
+        long stopTime = entries.get(entries.size() - 1).getDate();
+        while (currTime <= stopTime) {
+            graphPoints.add(new Point(lengend, addFromTo(entries, currTime, currTime + steps)));
+            currTime += steps;
+        }
+
         return graphPoints;
+    }
+
+    private static int addFromTo(final ArrayList<DataEntry> entries, long from, long to) {
+        int total = 0;
+        for (int i = 0; i < entries.size(); i++) {
+            final int points = entries.get(i).getPoints();
+            final long date = entries.get(i).getDate();
+
+            if (date < from)
+                continue;
+
+            total += points;
+
+            if (date >= to)
+                break;
+        }
+
+        return total;
     }
 
 }
