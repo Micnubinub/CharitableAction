@@ -55,22 +55,37 @@ public class Utils {
         return milli + sec;
     }
 
-    public static void addShown(int points) {
-
-    }
 
     public static Statistics.Mode getScope(Context context) {
-        final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
-        final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
+        try {
+            final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
+            final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
 
-        final Cursor cursor = statsDB.query(StatsDBHelper.STATS_TABLE, new String[]{StatsDBHelper.ID, StatsDBHelper.TIME_LONG, StatsDBHelper.POINTS_INT}, null, null, null, null, null);
-        cursor.moveToFirst();
+            final Cursor cursor = statsDB.query(StatsDBHelper.STATS_TABLE, new String[]{StatsDBHelper.TIME_LONG}, null, null, null, null, null);
 
-        Statistics.Mode mode = Statistics.Mode.DAY;
-        //Todo read db and use the first and last alues to determine the scope using minus
-        //day == 86400000, week == 604800000, month == 2419200000
+            cursor.moveToFirst();
+            long first = Long.parseLong(cursor.getString(0));
 
-        return mode;
+            cursor.moveToLast();
+            long last = Long.parseLong(cursor.getString(0));
+
+            long diff = last - first;
+
+            if (diff <= 86400000l)
+                return Statistics.Mode.DAY;
+
+            if (diff <= 604800000l)
+                return Statistics.Mode.WEEK;
+
+            if (diff < 2419200000l)
+                return Statistics.Mode.MONTH;
+
+            return Statistics.Mode.YEAR;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Statistics.Mode.DAY;
     }
 
     public static String getTotal(Context context) {
@@ -108,8 +123,25 @@ public class Utils {
 
     public static ArrayList<Point> getPoints(Context context) {
         final ArrayList<Point> graphPoints = new ArrayList<Point>();
+        final Statistics.Mode mode = getScope(context);
 //Todo use scope to detemine legend and points y ** lots of work to be done
+        switch (mode) {
+            case DAY:
 
+                break;
+            case WEEK:
+
+                break;
+
+            case MONTH:
+
+                break;
+
+            case YEAR:
+
+                break;
+
+        }
         return graphPoints;
     }
 

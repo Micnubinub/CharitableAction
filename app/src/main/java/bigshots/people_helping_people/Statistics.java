@@ -3,9 +3,11 @@ package bigshots.people_helping_people;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
+import bigshots.people_helping_people.utilities.Utils;
 
 /**
  * Created by root on 18/11/14.
@@ -26,7 +28,7 @@ public class Statistics extends Activity {
                 finish();
             }
         });
-
+        Toast.makeText(this, String.valueOf(Utils.getScope(this)), Toast.LENGTH_LONG).show();
         myStatsBarGraph = (BarChart) findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) findViewById(R.id.global_stats);
         //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
