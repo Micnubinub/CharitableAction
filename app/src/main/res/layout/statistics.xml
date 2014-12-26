@@ -33,7 +33,7 @@
             android:src="@drawable/white_arrow" />
     </RelativeLayout>
 
-    <ScrollView
+    <bigshots.people_helping_people.views.CustomScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
@@ -81,11 +81,23 @@
                         android:textColor="@color/dark_grey_text"
                         android:textSize="18sp" />
 
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:padding="8dp"
+                        android:text="Graph of points over time"
+                        android:textColor="@color/dark_grey_text"
+                        android:textSize="16sp" />
+
                     <bigshots.people_helping_people.graph.charts.BarChart
                         android:id="@+id/my_stats"
                         android:layout_width="match_parent"
                         android:layout_height="256dp"
-                        android:layout_margin="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="2dp"
                         app:egBarMargin="10dp"
                         app:egBarWidth="22dp"
                         app:egEnableScroll="true"
@@ -153,8 +165,8 @@
                             app:egFixedBarWidth="true"
                             app:egLegendHeight="40sp"
                             app:egLegendTextSize="14sp"
-                        app:egShowDecimal="true"
-                        app:egShowValues="true" />
+                            app:egShowDecimal="true"
+                            app:egShowValues="true" />
 
                         <View
                             android:layout_width="match_parent"
@@ -173,5 +185,5 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+    </bigshots.people_helping_people.views.CustomScrollView>
 </LinearLayout>

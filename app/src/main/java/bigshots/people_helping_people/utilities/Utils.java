@@ -200,6 +200,10 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (entries.size() < 1)
+            return graphPoints;
+
         long currTime = entries.get(0).getDate();
         long stopTime = entries.get(entries.size() - 1).getDate();
         while (currTime <= stopTime) {

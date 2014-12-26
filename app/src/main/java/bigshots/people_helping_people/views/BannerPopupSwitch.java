@@ -239,7 +239,7 @@ public class BannerPopupSwitch extends ViewGroup {
         textView.setTextSize(22);
         textView.setMaxLines(2);
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-        textView.setText("Floating banner");
+        textView.setText("Floating banner (1 point per min)");
 
 
         addView(textView);

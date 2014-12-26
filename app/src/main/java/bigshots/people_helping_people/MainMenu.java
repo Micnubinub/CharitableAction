@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -71,7 +70,6 @@ public class MainMenu extends Activity {
                     final UserManager manager1 = new UserManager();
                     manager1.insertUser(account.name);
                     manager1.postStats(account.name, Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this));
-                    Toast.makeText(this, String.format("posit: %d, %f", Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this)), Toast.LENGTH_LONG).show();
                     break;
                 }
             }
@@ -105,7 +103,7 @@ public class MainMenu extends Activity {
 
             @Override
             public void onCompleteRank(int rank) {
-                
+
             }
 
             @Override

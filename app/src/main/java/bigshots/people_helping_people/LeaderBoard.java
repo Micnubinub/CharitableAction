@@ -1,11 +1,14 @@
 package bigshots.people_helping_people;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
+import bigshots.people_helping_people.utilities.Utils;
 
 /**
  * Created by root on 18/11/14.
@@ -64,6 +68,22 @@ public class LeaderBoard extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.leader_board);
+        try {
+            final AccountManager manager = AccountManager.get(this);
+            final Account[] accounts = manager.getAccounts();
+            for (Account account : accounts) {
+                if (account.name.contains("@")) {
+                    final UserManager manager1 = new UserManager();
+                    manager1.postStats(account.name, Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this));
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        final int points = Integer.parseInt(Utils.getTotalScore(this));
+        ((TextView) findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.0025f))));
         AsyncConnector.setListener(aSyncListener);
         getScoreLeaderBoard();
 

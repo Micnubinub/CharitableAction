@@ -31,9 +31,9 @@ public class Statistics extends Activity {
                 finish();
             }
         });
-        Toast.makeText(this, String.valueOf(Utils.getScope(this)), Toast.LENGTH_LONG).show();
         myStatsBarGraph = (BarChart) findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) findViewById(R.id.global_stats);
+
         //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
         //Todo new UserManager().getLeaderboardListRate(5);
         //Todo new UserManager().getLeaderboardListScore(5);
@@ -45,17 +45,20 @@ public class Statistics extends Activity {
 
         addGlobalStatsBar("mon", 36.9f);
         addGlobalStatsBar("tue", 23.41f);
-        addGlobalStatsBar("wed", 52.4f);
+        addGlobalStatsBar("wed", 42.4f);
         addGlobalStatsBar("thur", 20.3f);
         addGlobalStatsBar("fri", 9.4f);
         addGlobalStatsBar("sat", 52.2f);
         addGlobalStatsBar("sun", 11.4f);
-        addGlobalStatsBar("mon", 22.7f);
 
     }
 
     private void plotMyStatsPoints() {
         final ArrayList<Point> points = Utils.getPoints(this);
+        if (points.size() < 1) {
+            Toast.makeText(this, "No data to display", Toast.LENGTH_LONG).show();
+            return;
+        }
         for (int i = 0; i < points.size(); i++) {
             final Point point = points.get(i);
             addMyStatsBar(point.getLegendTitle() + String.valueOf(i + 1), point.getY());
@@ -64,7 +67,6 @@ public class Statistics extends Activity {
 
     private void addMyStatsBar(String label, float value) {
         int color = color = getResources().getColor(R.color.material_blue);
-        ;
 //        if (value > 5) {
 //
 //        } else if (value > 3) {

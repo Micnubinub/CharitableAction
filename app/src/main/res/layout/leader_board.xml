@@ -33,11 +33,73 @@
             android:src="@drawable/white_arrow" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/me"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:paddingBottom="14dp"
+        android:text="My rank"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/me"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/points_money"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="8dp"
+            android:paddingBottom="14dp"
+            android:text="Me"
+            android:textColor="@color/dark_grey_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/points_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:padding="8dp"
+            android:paddingBottom="14dp"
+            android:text="100pts | $12.3"
+            android:textColor="@color/dark_grey_text"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/global_stats"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/body"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:paddingBottom="14dp"
+        android:text="Global ranks"
+        android:textColor="@color/dark_grey_text"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/rl"
+        android:layout_below="@+id/global_stats"
         android:dividerHeight="0px" />
 
     <RelativeLayout
@@ -45,9 +107,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/rl"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
-        <TextView
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
