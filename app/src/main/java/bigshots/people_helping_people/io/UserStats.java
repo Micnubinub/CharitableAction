@@ -46,7 +46,7 @@ public class UserStats {
     }
 
     public float getRaised() {
-        float r = (float) (score) * (0.0025f);
+        float r = (float) (score) * (0.000625f);
         return r;
     }
 }

@@ -13,7 +13,7 @@
         android:maxLines="1"
         android:padding="8dp"
         android:paddingBottom="14dp"
-        android:textColor="@color/dark_grey_text"
+        android:textColor="@color/grey_text"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -27,6 +27,6 @@
         android:padding="8dp"
         android:paddingBottom="14dp"
         android:text="100pts | $12.3"
-        android:textColor="@color/dark_grey_text"
+        android:textColor="@color/grey_text"
         android:textSize="18sp" />
 </RelativeLayout>

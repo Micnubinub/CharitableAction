@@ -31,11 +31,36 @@ public class Utils {
     public static final String REMINDER_TIME_MINS_INT = "REMINDER_TIME_MINS_INT";
     public static final String REMINDER_TIME_HOURS_INT = "REMINDER_TIME_HOURS_INT";
 
+    public static String getDay(long date) {
+        final Calendar calendar = Calendar.getInstance();
+        final DateFormat formatter = new SimpleDateFormat("ddd");
+        calendar.setTimeInMillis(date);
+        return formatter.format(calendar.getTime());
+    }
+
+    public static String getMonth(long date) {
+        final Calendar calendar = Calendar.getInstance();
+        final DateFormat formatter = new SimpleDateFormat("MMM");
+        calendar.setTimeInMillis(date);
+        return formatter.format(calendar.getTime());
+    }
+
     public static int getHours(long date) {
         final Calendar calendar = Calendar.getInstance();
         final DateFormat formatter = new SimpleDateFormat("HH");
         calendar.setTimeInMillis(date);
         return Integer.parseInt(formatter.format(calendar.getTime()));
+    }
+
+    public static String getHour(long date) {
+        final Calendar calendar = Calendar.getInstance();
+        final DateFormat formatter = new SimpleDateFormat("hhaa");
+        calendar.setTimeInMillis(date);
+        String out = formatter.format(calendar.getTime());
+        if (out.startsWith("0")) {
+            out = out.split("0")[1];
+        }
+        return out;
     }
 
     public static int getMinutes(long date) {
@@ -207,6 +232,18 @@ public class Utils {
         long currTime = entries.get(0).getDate();
         long stopTime = entries.get(entries.size() - 1).getDate();
         while (currTime <= stopTime) {
+            switch (mode) {
+                case DAY:
+                    lengend = getHour(currTime);
+                    break;
+                case WEEK:
+                    lengend = getDay(currTime);
+                    break;
+
+                case YEAR:
+                    lengend = getMonth(currTime);
+                    break;
+            }
             graphPoints.add(new Point(lengend, addFromTo(entries, currTime, currTime + steps)));
             currTime += steps;
         }
@@ -223,10 +260,10 @@ public class Utils {
             if (date < from)
                 continue;
 
-            total += points;
-
-            if (date >= to)
+            if (date > to)
                 break;
+
+            total += points;
         }
 
         return total;

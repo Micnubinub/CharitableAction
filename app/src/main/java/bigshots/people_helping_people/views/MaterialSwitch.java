@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -244,8 +245,8 @@ public class MaterialSwitch extends ViewGroup {
         textView.setTextColor(getResources().getColor(R.color.dark_grey_text));
         textView.setTextSize(22);
         textView.setMaxLines(2);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-
 
         setText(text);
         addView(textView);

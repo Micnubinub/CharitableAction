@@ -28,6 +28,7 @@ import bigshots.people_helping_people.utilities.Utils;
 @SuppressWarnings("ALL")
 public class LeaderBoard extends Activity {
     private static final UserManager userManager = new UserManager();
+    int rank;
     private ListView listView;
     private LeaderBoardAdapter adapter;
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
@@ -41,8 +42,19 @@ public class LeaderBoard extends Activity {
         }
 
         @Override
-        public void onCompleteRank(int rank) {
-
+        public void onCompleteRank(final int rank) {
+            LeaderBoard.this.rank = rank + 1;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.my_rank).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((TextView) findViewById(R.id.my_rank)).setText(String.format("%d. Me", rank + 1));
+                        }
+                    });
+                }
+            });
         }
 
         @Override
@@ -74,6 +86,7 @@ public class LeaderBoard extends Activity {
             for (Account account : accounts) {
                 if (account.name.contains("@")) {
                     final UserManager manager1 = new UserManager();
+                    userManager.getScoreRank(account.name);
                     manager1.postStats(account.name, Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this));
                     break;
                 }
@@ -83,6 +96,7 @@ public class LeaderBoard extends Activity {
         }
 
         final int points = Integer.parseInt(Utils.getTotalScore(this));
+        ((TextView) findViewById(R.id.my_rank)).setText(String.format("%d. Me", rank));
         ((TextView) findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.0025f))));
         AsyncConnector.setListener(aSyncListener);
         getScoreLeaderBoard();
@@ -131,7 +145,7 @@ public class LeaderBoard extends Activity {
     }
 
     private void getScoreLeaderBoard() {
-        userManager.getLeaderboardListScore(20);
+        userManager.getLeaderboardListScore(25);
     }
 
 }

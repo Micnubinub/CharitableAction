@@ -77,9 +77,9 @@ public class AsyncConnector {
                         e.printStackTrace();
                     }
                     try {
-                        // charity.setDescription(tmp[3]);
+                        charity.setDescription(tmp[3]);
                     } catch (ClassCastException e) {
-                        // charity.setDescription("No description"); // todo MICHAEL
+                        charity.setDescription("No description");
                     }
 
                     if (listener != null)

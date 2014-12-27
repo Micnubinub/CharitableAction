@@ -20,7 +20,7 @@
             android:paddingLeft="69dp"
             android:paddingRight="16dp"
             android:paddingTop="16dp"
-            android:text="Leader board"
+            android:text="Leaderboard"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -55,6 +55,7 @@
         android:background="@color/white">
 
         <TextView
+            android:id="@+id/my_rank"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/points_money"
@@ -63,7 +64,7 @@
             android:padding="8dp"
             android:paddingBottom="14dp"
             android:text="Me"
-            android:textColor="@color/dark_grey_text"
+            android:textColor="@color/grey_text"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -77,7 +78,7 @@
             android:padding="8dp"
             android:paddingBottom="14dp"
             android:text="100pts | $12.3"
-            android:textColor="@color/dark_grey_text"
+            android:textColor="@color/grey_text"
             android:textSize="18sp" />
     </RelativeLayout>
 
@@ -107,8 +108,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/rl"
-        android:background="@color/white"
-        android:visibility="gone">
+        android:background="@color/white">
 
     <TextView
             android:layout_width="wrap_content"

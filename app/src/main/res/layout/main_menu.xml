@@ -41,7 +41,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Free Donation"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -73,7 +73,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Vote"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -103,7 +103,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Current Charity"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -135,7 +135,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Statistics"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -166,7 +166,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Leaderboard"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -198,7 +198,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Feedback"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -230,7 +230,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="Preferences"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
@@ -260,7 +260,7 @@
                     android:paddingRight="14dp"
                     android:paddingTop="14dp"
                     android:text="About"
-                    android:textColor="@color/dark_grey_text"
+                    android:textColor="@color/grey_text"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
