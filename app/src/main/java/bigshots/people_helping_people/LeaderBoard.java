@@ -80,6 +80,7 @@ public class LeaderBoard extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.leader_board);
+        final int points = Integer.parseInt(Utils.getTotalScore(this));
         try {
             final AccountManager manager = AccountManager.get(this);
             final Account[] accounts = manager.getAccounts();
@@ -87,7 +88,7 @@ public class LeaderBoard extends Activity {
                 if (account.name.contains("@")) {
                     final UserManager manager1 = new UserManager();
                     userManager.getScoreRank(account.name);
-                    manager1.postStats(account.name, Integer.parseInt(Utils.getTotalScore(this)), Utils.getRate(this));
+                    manager1.postStats(account.name, points, Utils.getRate(this));
                     break;
                 }
             }
@@ -95,9 +96,7 @@ public class LeaderBoard extends Activity {
             e.printStackTrace();
         }
 
-        final int points = Integer.parseInt(Utils.getTotalScore(this));
-        ((TextView) findViewById(R.id.my_rank)).setText(String.format("%d. Me", rank));
-        ((TextView) findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.0025f))));
+        ((TextView) findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.000625f))));
         AsyncConnector.setListener(aSyncListener);
         getScoreLeaderBoard();
 

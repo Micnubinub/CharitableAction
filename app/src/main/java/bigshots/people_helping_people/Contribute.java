@@ -97,12 +97,10 @@ public class Contribute extends Activity {
                 case R.id.full_screen:
                     fullScreenClicked = true;
                     adManager.getFullscreenAd().show();
-                    Utils.addScore(Contribute.this, 15);
                     break;
                 case R.id.video_ad:
                     videoClicked = true;
                     adManager.getVideoAd().show();
-                    Utils.addScore(Contribute.this, 20);
                     break;
                 case R.id.current_charity:
                     try {
