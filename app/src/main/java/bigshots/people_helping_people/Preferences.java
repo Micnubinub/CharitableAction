@@ -15,7 +15,7 @@ import bigshots.people_helping_people.views.MaterialSwitch;
 @SuppressWarnings("ALL")
 public class Preferences extends Activity {
     //Banner autostart
-    private MaterialSwitch autoStart, toast;
+    private MaterialSwitch autoStart, toast, adsAtBoot;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
@@ -49,6 +49,16 @@ public class Preferences extends Activity {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
                 editor.putBoolean(Utils.TOAST_BEFORE_BOOL, isChecked).commit();
+            }
+        });
+
+        adsAtBoot = (MaterialSwitch) findViewById(R.id.scheduled_ads_at_boot);
+        adsAtBoot.setText("Scheduled ads at boot");
+        adsAtBoot.setChecked(prefs.getBoolean(Utils.ADS_AT_START_BOOL, true));
+        adsAtBoot.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                editor.putBoolean(Utils.ADS_AT_START_BOOL, isChecked).commit();
             }
         });
     }

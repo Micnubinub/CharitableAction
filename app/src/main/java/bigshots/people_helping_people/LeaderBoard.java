@@ -96,7 +96,7 @@ public class LeaderBoard extends Activity {
             e.printStackTrace();
         }
 
-        ((TextView) findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.000625f))));
+        ((TextView) findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.0001875f))));
         AsyncConnector.setListener(aSyncListener);
         getScoreLeaderBoard();
 

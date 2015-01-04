@@ -25,11 +25,11 @@ import bigshots.people_helping_people.services.BannerPopupService;
 @SuppressWarnings("ALL")
 public class BannerPopupSwitch extends ViewGroup {
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private static int PADDING = 2;
     private static int duration = 700;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final DecelerateInterpolator interpolator = new DecelerateInterpolator();
-    private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private int height;
     private int rippleR;
     private float ripple_animated_value = 0;
@@ -96,6 +96,12 @@ public class BannerPopupSwitch extends ViewGroup {
     public BannerPopupSwitch(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+    }
+
+    private static void animateSwitch() {
+        if (animator.isRunning() || animator.isStarted())
+            animator.cancel();
+        animator.start();
     }
 
     private int dpToPixels(int dp) {
@@ -177,7 +183,6 @@ public class BannerPopupSwitch extends ViewGroup {
             getContext().stopService(service);
     }
 
-
     public void toggle() {
         setChecked(!isChecked());
     }
@@ -253,12 +258,6 @@ public class BannerPopupSwitch extends ViewGroup {
         animator.addListener(animatorListener);
         animator.addUpdateListener(updateListener);
         checked = BannerPopupService.isServiceRunning;
-    }
-
-    private void animateSwitch() {
-        if (animator.isRunning() || animator.isStarted())
-            animator.cancel();
-        animator.start();
     }
 
     public void setOnCheckedChangeListener(OnCheckedChangedListener listener) {

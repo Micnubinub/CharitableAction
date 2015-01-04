@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -138,14 +139,20 @@ public class BannerPopupService extends Service {
             try {
                 if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.AUTO_START_BOOL, false)) {
                     context.startService(new Intent(context, BannerPopupService.class));
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false) &&
-                            PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_SCHEDULED_ADS, false)) {
-                        ScheduledAdsManager.showNotification(context);
-                        ScheduledAdsManager.scheduleNext(context, true);
-                    }
                 }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            try {
+                final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                if (prefs.getBoolean(Utils.ADS_AT_START_BOOL, true) && prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false) && prefs.getBoolean(Utils.LOOP_SCHEDULE, true)) {
+                    if (!ScheduledAdsManager.isServiceRunning()) {
+                        context.startService(new Intent(context, ScheduledAdsManager.class));
+                    }
+                    ScheduledAdsManager.scheduleNext(context, true);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

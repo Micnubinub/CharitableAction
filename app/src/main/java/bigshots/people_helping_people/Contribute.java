@@ -281,13 +281,13 @@ public class Contribute extends Activity {
         minutes.setCyclic(true);
 
         // set current time
-        final int totalMinutes = prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20);
+        frequencyMinutes = prefs.getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 20);
 
-        hours.setCurrentItem(totalMinutes / 60);
-        minutes.setCurrentItem(totalMinutes % 60);
+        hours.setCurrentItem(frequencyMinutes / 60);
+        minutes.setCurrentItem(frequencyMinutes % 60);
 
-        frequency.setText(prefix + String.valueOf(minutes.getCurrentItem()) + " minutes");
-        frequencyMinutes = minutes.getCurrentItem();
+        frequency.setText(prefix + (frequencyMinutes == 1 ? " minute" : frequencyMinutes + " minutes"));
+
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 final StringBuilder text = new StringBuilder();
@@ -384,7 +384,7 @@ public class Contribute extends Activity {
         else
             Toast.makeText(this, "Schedule cleared", Toast.LENGTH_SHORT).show();
 
-        SharedPreferences.Editor editor = prefs.edit();
+        final SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
         editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).commit();
 

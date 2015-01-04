@@ -23,8 +23,8 @@ public class Utils {
     public static final String ENABLE_SCHEDULED_ADS = "ENABLE_SCHEDULED_ADS";
     public static final String SCHEDULE = "SCHEDULE";
     public static final String AUTO_START_BOOL = "AUTO_START_BOOL";
+    public static final String ADS_AT_START_BOOL = "ADS_AT_START_BOOL";
     public static final String LOOP_SCHEDULE = "LOOP_SCHEDULE";
-    //public static final String LOOP_SCHEDULE = "LOOP_SCHEDULE";
     public static final String TOAST_BEFORE_BOOL = "TOAST_BEFORE_BOOL";
     public static final String TOAST_TIME_SECS = "TOAST_TIME_SECS";
     public static final String ENABLE_REMINDER = "ENABLE_REMINDER";
@@ -33,7 +33,7 @@ public class Utils {
 
     public static String getDay(long date) {
         final Calendar calendar = Calendar.getInstance();
-        final DateFormat formatter = new SimpleDateFormat("ddd");
+        final DateFormat formatter = new SimpleDateFormat("EEE");
         calendar.setTimeInMillis(date);
         return formatter.format(calendar.getTime());
     }
