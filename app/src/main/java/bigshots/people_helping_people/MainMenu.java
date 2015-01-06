@@ -3,6 +3,7 @@ package bigshots.people_helping_people;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import bigshots.people_helping_people.utilities.Utils;
  */
 @SuppressWarnings("ALL")
 public class MainMenu extends Activity {
+    public static Context context;
     private final View.OnClickListener listener = new View.OnClickListener() {
 
         @Override
@@ -56,11 +58,11 @@ public class MainMenu extends Activity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        context = this;
 
         try {
             final AccountManager manager = AccountManager.get(this);
