@@ -6,9 +6,11 @@
 
     <bigshots.people_helping_people.views.ParallaxScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:background="#ffffff">
 
         <LinearLayout
+
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
@@ -46,8 +48,7 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#fffffff" />
+                android:layout_height="fill_parent" />
         </LinearLayout>
     </bigshots.people_helping_people.views.ParallaxScrollView>
 
