@@ -131,7 +131,7 @@ public class MainMenu extends FragmentActivity {
 
             }
         });
-
+        setUpFragments();
     }
 
     private void setUpFragments() {

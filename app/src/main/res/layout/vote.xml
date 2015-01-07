@@ -6,34 +6,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/rl"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/material_blue">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/blue_button_selector"
-            android:paddingBottom="16dp"
-            android:paddingLeft="69dp"
-            android:paddingRight="16dp"
-            android:paddingTop="16dp"
-            android:text="Vote"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:padding="14dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/white_arrow" />
-    </RelativeLayout>
-
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
