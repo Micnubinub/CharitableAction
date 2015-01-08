@@ -26,7 +26,7 @@
         android:maxLines="1"
         android:padding="8dp"
         android:paddingBottom="14dp"
-        android:text="100pts | $12.3"
+        android:text="100pts"
         android:textColor="@color/grey_text"
         android:textSize="18sp" />
 </RelativeLayout>

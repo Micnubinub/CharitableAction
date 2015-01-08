@@ -3,15 +3,16 @@ package bigshots.people_helping_people.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 
 import bigshots.people_helping_people.R;
+import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
 
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends ScrollTabHolderFragment {
 
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
@@ -31,6 +32,18 @@ public class AboutFragment extends Fragment {
 
     public AboutFragment() {
     }
+
+    @Override
+    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+        if (mScrollTabHolder != null)
+            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+    }
+
+    @Override
+    public void adjustScroll(int scrollHeight) {
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

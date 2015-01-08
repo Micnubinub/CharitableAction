@@ -68,7 +68,7 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <ListView
+    <bigshots.people_helping_people.scroll_iew_lib.ParallaxListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

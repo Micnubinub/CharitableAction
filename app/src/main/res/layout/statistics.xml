@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <bigshots.people_helping_people.views.CustomScrollView
+    <bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
@@ -159,5 +159,5 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
-    </bigshots.people_helping_people.views.CustomScrollView>
+    </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
 </LinearLayout>

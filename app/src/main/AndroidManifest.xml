@@ -14,7 +14,7 @@
         android:icon="@drawable/icon_blue"
         android:label="@string/app_name"
         android:screenOrientation="portrait"
-        android:theme="@android:style/Theme.NoTitleBar">
+        android:theme="@style/Theme.AppCompat.Light">
         <activity
             android:name="bigshots.people_helping_people.Intro"
             android:label="@string/app_name"

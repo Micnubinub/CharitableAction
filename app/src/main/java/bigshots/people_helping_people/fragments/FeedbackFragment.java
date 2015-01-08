@@ -4,19 +4,20 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Connector;
+import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
 
 
-public class FeedbackFragment extends Fragment {
+public class FeedbackFragment extends ScrollTabHolderFragment {
 
     private static final Connector connector = new Connector();
 
@@ -73,6 +74,17 @@ public class FeedbackFragment extends Fragment {
         dialog.findViewById(R.id.send_cancel).findViewById(R.id.send).setOnClickListener(directMessageListener);
         dialog.findViewById(R.id.send_cancel).findViewById(R.id.cancel).setOnClickListener(directMessageListener);
         dialog.show();
+    }
+
+    @Override
+    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+        if (mScrollTabHolder != null)
+            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+    }
+
+    @Override
+    public void adjustScroll(int scrollHeight) {
+
     }
 
     private void showEmailDialog() {

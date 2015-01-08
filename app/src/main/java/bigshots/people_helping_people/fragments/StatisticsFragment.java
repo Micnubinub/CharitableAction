@@ -1,10 +1,10 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -13,11 +13,12 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
+import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
 import bigshots.people_helping_people.utilities.Point;
 import bigshots.people_helping_people.utilities.Utils;
 
 
-public class StatisticsFragment extends Fragment {
+public class StatisticsFragment extends ScrollTabHolderFragment {
 
     private static BarChart myStatsBarGraph, globalStatsBarGraph;
     int shown = 0;
@@ -83,6 +84,17 @@ public class StatisticsFragment extends Fragment {
 //            color = getResources().getColor(R.color.material_red);
 //        }
         myStatsBarGraph.addBar(new BarModel(label, value, color));
+    }
+
+    @Override
+    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+        if (mScrollTabHolder != null)
+            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+    }
+
+    @Override
+    public void adjustScroll(int scrollHeight) {
+
     }
 
     private void addGlobalStatsBar(String label, float value) {

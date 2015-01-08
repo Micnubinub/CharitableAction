@@ -3,10 +3,10 @@ package bigshots.people_helping_people.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +18,11 @@ import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserStats;
+import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 
-public class CurrentCharityFragment extends Fragment {
+public class CurrentCharityFragment extends ScrollTabHolderFragment {
 
 
     private TextView description, raised, name, linkr;
@@ -62,6 +63,17 @@ public class CurrentCharityFragment extends Fragment {
 
 
     public CurrentCharityFragment() {
+    }
+
+    @Override
+    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+        if (mScrollTabHolder != null)
+            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+    }
+
+    @Override
+    public void adjustScroll(int scrollHeight) {
+
     }
 
     @Override

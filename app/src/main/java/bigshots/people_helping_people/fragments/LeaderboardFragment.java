@@ -4,12 +4,13 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +23,13 @@ import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
+import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
 import bigshots.people_helping_people.utilities.Utils;
 
 
-public class LeaderboardFragment extends Fragment {
+public class LeaderboardFragment extends ScrollTabHolderFragment {
 
     private static final UserManager userManager = new UserManager();
     private static ListView listView;
@@ -67,6 +69,7 @@ public class LeaderboardFragment extends Fragment {
                     listView.post(new Runnable() {
                         @Override
                         public void run() {
+                            Log.e("complete", "leaderboard");
                             getView().findViewById(R.id.message).setVisibility(View.GONE);
                             adapter = new LeaderBoardAdapter(MainMenu.context, stats, false);
                             listView.setAdapter(adapter);
@@ -80,6 +83,16 @@ public class LeaderboardFragment extends Fragment {
     public LeaderboardFragment() {
     }
 
+    @Override
+    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+        if (mScrollTabHolder != null)
+            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+    }
+
+    @Override
+    public void adjustScroll(int scrollHeight) {
+
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
