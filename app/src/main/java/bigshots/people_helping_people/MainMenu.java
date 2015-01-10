@@ -39,7 +39,7 @@ import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.new_ui.flavienlaurent.notboringactionbar.AlphaForegroundColorSpan;
 import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolder;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView;
 import bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip;
 import bigshots.people_helping_people.utilities.Interfaces;
@@ -348,7 +348,7 @@ public class MainMenu extends ActionBarActivity implements ScrollTabHolder, View
 
         @Override
         public Fragment getItem(int position) {
-            ScrollTabHolderFragment fragment = (ScrollTabHolderFragment) fragments[position];
+            BaseFragment fragment = (BaseFragment) fragments[position];
 
             scrollTabHolders.put(position, fragment);
             if (listener != null) {

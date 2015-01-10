@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,11 +17,12 @@ import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserStats;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 
-public class CurrentCharityFragment extends ScrollTabHolderFragment {
+public class CurrentCharityFragment extends BaseFragment {
 
 
     private TextView description, raised, name, linkr;
@@ -66,17 +66,6 @@ public class CurrentCharityFragment extends ScrollTabHolderFragment {
     }
 
     @Override
-    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mScrollTabHolder != null)
-            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-    }
-
-    @Override
-    public void adjustScroll(int scrollHeight) {
-
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -85,6 +74,7 @@ public class CurrentCharityFragment extends ScrollTabHolderFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.current_charity, container, false);
         description = (TextView) view.findViewById(R.id.description);
+        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         raised = (TextView) view.findViewById(R.id.raised);
         name = (TextView) view.findViewById(R.id.name);
         linkr = (TextView) view.findViewById(R.id.link);

@@ -5,7 +5,8 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <ScrollView
+    <bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
@@ -84,5 +85,5 @@
                 android:textColor="@color/dark_grey_text"
                 android:textSize="22sp" />
         </LinearLayout>
-    </ScrollView>
+    </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
 </LinearLayout>

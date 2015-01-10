@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 
 
-public class AboutFragment extends ScrollTabHolderFragment {
+public class AboutFragment extends BaseFragment {
 
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
@@ -33,16 +33,16 @@ public class AboutFragment extends ScrollTabHolderFragment {
     public AboutFragment() {
     }
 
-    @Override
-    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mScrollTabHolder != null)
-            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-    }
-
-    @Override
-    public void adjustScroll(int scrollHeight) {
-
-    }
+//    @Override
+//    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+//        if (mScrollTabHolder != null)
+//            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+//    }
+//
+//    @Override
+//    public void adjustScroll(int scrollHeight) {
+//
+//    }
 
 
     @Override
@@ -55,6 +55,7 @@ public class AboutFragment extends ScrollTabHolderFragment {
         final View view = inflater.inflate(R.layout.about, container, false);
         view.findViewById(R.id.playstore_link).setOnClickListener(listener);
         view.findViewById(R.id.website_link).setOnClickListener(listener);
+        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         return view;
     }
 

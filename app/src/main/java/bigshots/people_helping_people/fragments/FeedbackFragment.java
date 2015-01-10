@@ -8,16 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Connector;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 
 
-public class FeedbackFragment extends ScrollTabHolderFragment {
+public class FeedbackFragment extends BaseFragment {
 
     private static final Connector connector = new Connector();
 
@@ -76,17 +76,6 @@ public class FeedbackFragment extends ScrollTabHolderFragment {
         dialog.show();
     }
 
-    @Override
-    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mScrollTabHolder != null)
-            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-    }
-
-    @Override
-    public void adjustScroll(int scrollHeight) {
-
-    }
-
     private void showEmailDialog() {
         //Todo might have to use a fragment Dialog
         final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
@@ -115,12 +104,12 @@ public class FeedbackFragment extends ScrollTabHolderFragment {
     }
 
     private void sendMessage(String subject, String body) {
-        Intent emailintent = new Intent(android.content.Intent.ACTION_SEND);
-        emailintent.setType("plain/text");
-        emailintent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"sidney@cyberkomm.ch", "lindelwencube.ln@gmail.com"});
-        emailintent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
-        emailintent.putExtra(android.content.Intent.EXTRA_TEXT, body);
-        startActivity(Intent.createChooser(emailintent, "Send mail..."));
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"sidney@cyberkomm.ch", "lindelwencube.ln@gmail.com"});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, body);
+        startActivity(Intent.createChooser(emailIntent, "Send mail..."));
     }
 
     @Override
@@ -131,6 +120,7 @@ public class FeedbackFragment extends ScrollTabHolderFragment {
         view.findViewById(R.id.fb).setOnClickListener(listener);
         view.findViewById(R.id.direct).setOnClickListener(listener);
         view.findViewById(R.id.rate).setOnClickListener(listener);
+        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         return view;
     }
 }

@@ -54,14 +54,6 @@ public class KenBurnsSupportView extends FrameLayout {
         fillImageViews();
     }
 
-    private Runnable mSwapImageRunnable = new Runnable() {
-        @Override
-        public void run() {
-            swapImage();
-            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
-        }
-    };
-
     private void swapImage() {
         Log.d(TAG, "swapImage active=" + mActiveImageIndex);
         if (mActiveImageIndex == -1) {
@@ -139,6 +131,14 @@ public class KenBurnsSupportView extends FrameLayout {
     private void startKenBurnsAnimation() {
         mHandler.post(mSwapImageRunnable);
     }
+
+    private Runnable mSwapImageRunnable = new Runnable() {
+        @Override
+        public void run() {
+            swapImage();
+            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
+        }
+    };
 
     @Override
     protected void onFinishInflate() {

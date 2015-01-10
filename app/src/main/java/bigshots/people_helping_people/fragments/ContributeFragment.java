@@ -10,8 +10,6 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +24,11 @@ import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.io.UserStats;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 import bigshots.people_helping_people.services.ScheduledAdsManager;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
@@ -37,10 +36,8 @@ import bigshots.people_helping_people.views.MaterialCheckBox;
 import bigshots.people_helping_people.views.MaterialSwitch;
 
 
-public class ContributeFragment extends ScrollTabHolderFragment {
-
-    private static ListView listView;
-    String prefix;
+public class ContributeFragment extends BaseFragment {
+    private String prefix;
     private AdListener fullScreen = new AdListener() {
         @Override
         public void onAdOpened() {
@@ -154,16 +151,6 @@ public class ContributeFragment extends ScrollTabHolderFragment {
     private boolean loopBool = true, enable_schedule;
 
     public ContributeFragment() {
-    }
-
-    @Override
-    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mScrollTabHolder != null)
-            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-    }
-
-    @Override
-    public void adjustScroll(int scrollHeight) {
 
     }
 
@@ -183,6 +170,8 @@ public class ContributeFragment extends ScrollTabHolderFragment {
         view.findViewById(R.id.video_ad).setOnClickListener(listener);
         view.findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
         view.findViewById(R.id.current_charity).setOnClickListener(listener);
+
+        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
 
         MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) view.findViewById(R.id.enable_scheduled_ads);
         scheduledAdsSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
@@ -222,8 +211,6 @@ public class ContributeFragment extends ScrollTabHolderFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         AsyncConnector.setListener(aSyncListener);
         new Connector().getCharityManager().monthlyCharity();
     }

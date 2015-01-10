@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,16 +21,17 @@ import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
 import bigshots.people_helping_people.utilities.Utils;
 
 
-public class LeaderboardFragment extends ScrollTabHolderFragment {
+public class LeaderboardFragment extends BaseFragment {
 
     private static final UserManager userManager = new UserManager();
-    private static ListView listView;
+    private static ParallaxListView listView;
     int rank;
     private LeaderBoardAdapter adapter;
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
@@ -83,16 +82,7 @@ public class LeaderboardFragment extends ScrollTabHolderFragment {
     public LeaderboardFragment() {
     }
 
-    @Override
-    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mScrollTabHolder != null)
-            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-    }
 
-    @Override
-    public void adjustScroll(int scrollHeight) {
-
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +91,8 @@ public class LeaderboardFragment extends ScrollTabHolderFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.leader_board, container, false);
-        listView = (ListView) view.findViewById(R.id.list);
+        listView = (ParallaxListView) view.findViewById(R.id.list);
+        listView.setScrollListener(scrollListener);
         final int points = Integer.parseInt(Utils.getTotalScore(MainMenu.context));
         try {
             final AccountManager manager = AccountManager.get(MainMenu.context);

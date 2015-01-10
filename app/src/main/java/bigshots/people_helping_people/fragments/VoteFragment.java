@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,14 +18,15 @@ import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserStats;
-import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 import bigshots.people_helping_people.views.CharityListItem;
 
-public class VoteFragment extends ScrollTabHolderFragment {
+public class VoteFragment extends BaseFragment {
     private static CharityManager charityManager;
-    private ListView listView;
+    private ParallaxListView listView;
     private VoteCharityAdapter adapter;
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
@@ -98,7 +97,8 @@ public class VoteFragment extends ScrollTabHolderFragment {
         });
 
 
-        listView = (ListView) view.findViewById(R.id.list);
+        listView = (ParallaxListView) view.findViewById(R.id.list);
+        listView.setScrollListener(scrollListener);
         charityManager = new CharityManager();
         charityManager.getCharities();
         return view;
@@ -133,17 +133,6 @@ public class VoteFragment extends ScrollTabHolderFragment {
         dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
 
         dialog.show();
-    }
-
-    @Override
-    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-        if (mScrollTabHolder != null)
-            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-    }
-
-    @Override
-    public void adjustScroll(int scrollHeight) {
-
     }
 
     private void getVotedFor() {
