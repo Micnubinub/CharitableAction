@@ -37,11 +37,11 @@ import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
-import bigshots.people_helping_people.new_ui.astuetz.PagerSlidingTabStrip;
 import bigshots.people_helping_people.new_ui.flavienlaurent.notboringactionbar.AlphaForegroundColorSpan;
-import bigshots.people_helping_people.new_ui.flavienlaurent.notboringactionbar.KenBurnsSupportView;
 import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolder;
 import bigshots.people_helping_people.new_ui.kmshack.newsstand.ScrollTabHolderFragment;
+import bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView;
+import bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
 

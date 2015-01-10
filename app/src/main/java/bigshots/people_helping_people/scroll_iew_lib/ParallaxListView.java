@@ -9,14 +9,13 @@ import android.widget.ListView;
 /**
  * Created by root on 8/01/15.
  */
-public class ParallaxListView extends ListView implements Scrollable {
-    protected final int[] firstVisibleChildVals = new int[2];
-    private Scrollable scrollListener;
+public class ParallaxListView extends ListView implements ScrollListener {
+    //protected final int[] firstVisibleChildVals = new int[2];
+    private ScrollListener scrollListener;
 
     public ParallaxListView(Context context) {
         super(context);
         init();
-
 
     }
 
@@ -38,7 +37,7 @@ public class ParallaxListView extends ListView implements Scrollable {
                     return;
                 Log.e("fvi :" + firstVisibleItem, "after :" + view.getChildAt(0).getTop());
                 // getFirstVisibleChildVals();
-                onScrollY(getTop(), firstVisibleItem, view.getChildAt(0).getTop(), view.getScrollY());
+                onScrollY(getTop(), firstVisibleItem, view.getChildAt(0).getTop(), -view.getScrollY());
             }
         });
     }
@@ -81,7 +80,7 @@ public class ParallaxListView extends ListView implements Scrollable {
             scrollListener.onScrollY(scrollViewTop, firstVisibleChildPos, firstVisibleChildTop, scrollY);
     }
 
-    public void setScrollListener(Scrollable scrollListener) {
+    public void setScrollListener(ScrollListener scrollListener) {
         this.scrollListener = scrollListener;
     }
 }

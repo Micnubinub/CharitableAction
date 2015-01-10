@@ -3,12 +3,13 @@ package bigshots.people_helping_people.scroll_iew_lib;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 
 /**
  * Created by root on 8/01/15.
  */
 public class ParallaxViewPager extends ViewPager {
-    private Scrollable scrollListener;
+    private ScrollListener scrollListener;
 
     public ParallaxViewPager(Context context) {
         super(context);
@@ -21,11 +22,12 @@ public class ParallaxViewPager extends ViewPager {
     @Override
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
         super.onPageScrolled(position, offset, offsetPixels);
+        Log.e("page :" + position, "offset :" + offset);
         if (scrollListener != null)
             scrollListener.onScrollX(position, offset);
     }
 
-    public void setScrollListener(Scrollable scrollListener) {
+    public void setScrollListener(ScrollListener scrollListener) {
         this.scrollListener = scrollListener;
     }
 

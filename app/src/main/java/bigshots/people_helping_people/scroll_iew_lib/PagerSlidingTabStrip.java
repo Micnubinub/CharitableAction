@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package bigshots.people_helping_people.new_ui.astuetz;
+package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

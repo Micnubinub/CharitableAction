@@ -9,9 +9,9 @@ import android.widget.ScrollView;
 /**
  * Created by root on 8/01/15.
  */
-public class ParallaxScrollView extends ScrollView implements Scrollable {
+public class ParallaxScrollView extends ScrollView implements ScrollListener {
     protected final int[] firstVisibleChildVals = new int[2];
-    private Scrollable scrollListener;
+    private ScrollListener scrollListener;
 
     //Todo fill in
     public ParallaxScrollView(Context context) {
@@ -58,7 +58,7 @@ public class ParallaxScrollView extends ScrollView implements Scrollable {
             scrollListener.onScrollY(scrollViewTop, firstVisibleChildPos, firstVisibleChildTop, scrollY);
     }
 
-    public void setScrollListener(Scrollable scrollListener) {
+    public void setScrollListener(ScrollListener scrollListener) {
         this.scrollListener = scrollListener;
     }
 

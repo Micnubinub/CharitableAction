@@ -1,4 +1,4 @@
-package bigshots.people_helping_people.new_ui.flavienlaurent.notboringactionbar;
+package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.content.Context;
 import android.os.Handler;
@@ -40,14 +40,6 @@ public class KenBurnsSupportView extends FrameLayout {
         this(context, null);
     }
 
-    private Runnable mSwapImageRunnable = new Runnable() {
-        @Override
-        public void run() {
-            swapImage();
-            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
-        }
-    };
-
     public KenBurnsSupportView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -61,6 +53,14 @@ public class KenBurnsSupportView extends FrameLayout {
         mResourceIds = resourceIds;
         fillImageViews();
     }
+
+    private Runnable mSwapImageRunnable = new Runnable() {
+        @Override
+        public void run() {
+            swapImage();
+            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
+        }
+    };
 
     private void swapImage() {
         Log.d(TAG, "swapImage active=" + mActiveImageIndex);
