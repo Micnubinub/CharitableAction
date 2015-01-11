@@ -253,6 +253,7 @@ public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
             super(fm);
         }
 
+
         @Override
         public CharSequence getPageTitle(int position) {
             return TITLES[position];
