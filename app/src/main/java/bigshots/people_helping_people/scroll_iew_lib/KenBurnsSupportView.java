@@ -13,6 +13,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import bigshots.people_helping_people.R;
@@ -51,34 +52,41 @@ public class KenBurnsSupportView extends FrameLayout {
 
     public void setResourceIds(int... resourceIds) {
         mResourceIds = resourceIds;
+        mImageViews = new ImageView[2];
+        Log.e("resIds", Arrays.toString(mResourceIds));
+
         fillImageViews();
     }
 
     private void swapImage() {
-        Log.d(TAG, "swapImage active=" + mActiveImageIndex);
-        if (mActiveImageIndex == -1) {
-            mActiveImageIndex = 1;
-            animate(mImageViews[mActiveImageIndex]);
-            return;
+        try {
+            Log.d(TAG, "swapImage active=" + mActiveImageIndex);
+            if (mActiveImageIndex == -1) {
+                mActiveImageIndex = 1;
+                animate(mImageViews[mActiveImageIndex]);
+                return;
+            }
+
+            int inactiveIndex = mActiveImageIndex;
+            mActiveImageIndex = (1 + mActiveImageIndex) % mImageViews.length;
+            Log.d(TAG, "new active=" + mActiveImageIndex);
+
+            final ImageView activeImageView = mImageViews[mActiveImageIndex];
+            ViewHelper.setAlpha(activeImageView, 0.0f);
+            ImageView inactiveImageView = mImageViews[inactiveIndex];
+
+            animate(activeImageView);
+
+            AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.setDuration(mFadeInOutMs);
+            animatorSet.playTogether(
+                    ObjectAnimator.ofFloat(inactiveImageView, "alpha", 1.0f, 0.0f),
+                    ObjectAnimator.ofFloat(activeImageView, "alpha", 0.0f, 1.0f)
+            );
+            animatorSet.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        int inactiveIndex = mActiveImageIndex;
-        mActiveImageIndex = (1 + mActiveImageIndex) % mImageViews.length;
-        Log.d(TAG, "new active=" + mActiveImageIndex);
-
-        final ImageView activeImageView = mImageViews[mActiveImageIndex];
-        ViewHelper.setAlpha(activeImageView, 0.0f);
-        ImageView inactiveImageView = mImageViews[inactiveIndex];
-
-        animate(activeImageView);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.setDuration(mFadeInOutMs);
-        animatorSet.playTogether(
-                ObjectAnimator.ofFloat(inactiveImageView, "alpha", 1.0f, 0.0f),
-                ObjectAnimator.ofFloat(activeImageView, "alpha", 0.0f, 1.0f)
-        );
-        animatorSet.start();
     }
 
     private void start(View view, long duration, float fromScale, float toScale, float fromTranslationX, float fromTranslationY, float toTranslationX, float toTranslationY) {
@@ -132,14 +140,6 @@ public class KenBurnsSupportView extends FrameLayout {
         mHandler.post(mSwapImageRunnable);
     }
 
-    private Runnable mSwapImageRunnable = new Runnable() {
-        @Override
-        public void run() {
-            swapImage();
-            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
-        }
-    };
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -148,6 +148,8 @@ public class KenBurnsSupportView extends FrameLayout {
         mImageViews = new ImageView[2];
         mImageViews[0] = (ImageView) view.findViewById(R.id.image0);
         mImageViews[1] = (ImageView) view.findViewById(R.id.image1);
+        //Todo add more images
+        setResourceIds(R.drawable.people, R.drawable.logo);
     }
 
     private void fillImageViews() {
@@ -155,6 +157,14 @@ public class KenBurnsSupportView extends FrameLayout {
             mImageViews[i].setImageResource(mResourceIds[i]);
         }
     }
+
+    private Runnable mSwapImageRunnable = new Runnable() {
+        @Override
+        public void run() {
+            swapImage();
+            mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
+        }
+    };
 
 
 }

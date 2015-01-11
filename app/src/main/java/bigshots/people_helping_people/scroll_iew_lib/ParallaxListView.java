@@ -2,7 +2,6 @@ package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -35,7 +34,6 @@ public class ParallaxListView extends ListView implements ScrollListener {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (getChildCount() < 1)
                     return;
-                Log.e("fvi :" + firstVisibleItem, "after :" + view.getChildAt(0).getTop());
                 // getFirstVisibleChildVals();
                 onScrollY(getTop(), firstVisibleItem, view.getChildAt(0).getTop(), -view.getScrollY());
             }

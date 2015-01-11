@@ -2,7 +2,6 @@ package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 
@@ -30,7 +29,6 @@ public class ParallaxScrollView extends ScrollView implements ScrollListener {
     @Override
     protected void onScrollChanged(int horizontalScroll, int verticalScroll, int oldHorizontalScroll, int oldVerticalScroll) {
         super.onScrollChanged(horizontalScroll, verticalScroll, oldHorizontalScroll, oldVerticalScroll);
-        Log.e("before :" + oldVerticalScroll, "after :" + verticalScroll);
         getFirstVisibleChildVals();
         onScrollY(getTop(), firstVisibleChildVals[0], firstVisibleChildVals[1], verticalScroll);
 

@@ -22,7 +22,6 @@ public class ParallaxViewPager extends ViewPager {
     @Override
     protected void onPageScrolled(int position, float offset, int offsetPixels) {
         super.onPageScrolled(position, offset, offsetPixels);
-        Log.e("page :" + position, "offset :" + offset);
         if (scrollListener != null)
             scrollListener.onScrollX(position, offset);
     }
@@ -32,7 +31,8 @@ public class ParallaxViewPager extends ViewPager {
     }
 
     @Override
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        super.onScrollChanged(l, t, oldl, oldt);
+    public void setCurrentItem(int item) {
+        super.setCurrentItem(item);
+        Log.e("received", "set:" + item);
     }
 }

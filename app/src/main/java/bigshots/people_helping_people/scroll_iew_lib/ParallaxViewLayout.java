@@ -5,13 +5,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nineoldandroids.view.ViewHelper;
 
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.AboutFragment;
 import bigshots.people_helping_people.fragments.ContributeFragment;
@@ -26,22 +30,24 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  */
 public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
 
+    private static final int logoBackground = 0xaa000000;
+    private static int w, h;
+    private final Fragment[] fragments = new Fragment[7];
     //Don't need nothing
     private int scrollY;
     private int currentCharityLogoHeight;
     private int currentPos;
-
     //Already have set up methods
     private ParallaxViewPager pager;
-    private Fragment[] fragments;
-    private FragmentPagerAdapter fragmentPagerAdapter;
+    private MyPagerAdapter fragmentPagerAdapter;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private KenBurnsSupportView kenBurnsSupportView;
+    private int scrollYMax;
 
     //Todo need setUpMethods
     private TitleTextButton title;
     private ImageView currentCharityLogo;
-    private int scrollYMax;
+    private LayoutParams pagerParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
     public ParallaxViewLayout(Context context) {
         super(context);
@@ -54,12 +60,38 @@ public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
     }
 
     private void init() {
-
+        getYScrollMax();
+        setUpTitle();
+        setUpKenBurnsSupportView();
+        setUpFragments();
+        setUpCurrentCharityLogo();
+        addViews();
+        scrollY = scrollYMax;
     }
 
-    public void setScrollListeners() {
-        //Todo
-        pager.setScrollListener(this);
+    private void getYScrollMax() {
+        scrollYMax = dpToPixels(250);
+        final DisplayMetrics metrics = new DisplayMetrics();
+        MainMenu.fragmentActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        w = metrics.widthPixels;
+        h = metrics.heightPixels;
+        scrollYMax = Math.min(h / 2, scrollYMax);
+        Log.e("ScrollYMax", String.valueOf(scrollYMax));
+    }
+
+    public void setUpCurrentCharityLogo() {
+        currentCharityLogo = new ImageView(getContext());
+        currentCharityLogo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        currentCharityLogo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Open Current Charity", Toast.LENGTH_LONG).show();
+            }
+        });
+        final int p = dpToPixels(8);
+        currentCharityLogo.setPadding(p, p, p, p);
+        currentCharityLogo.setBackgroundColor(logoBackground);
+        currentCharityLogo.setImageResource(R.drawable.logo);
     }
 
     public void setUpFragments() {
@@ -73,38 +105,57 @@ public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
         fragments[4] = new LeaderboardFragment();
         fragments[5] = new FeedbackFragment();
         fragments[6] = new AboutFragment();
+
+//        fragments[0] = new AboutFragment();
+//        fragments[1] = new AboutFragment();
+//        fragments[2] = new AboutFragment();
+//        fragments[3] = new AboutFragment();
+//        fragments[4] = new AboutFragment();
+//        fragments[5] = new AboutFragment();
+//        fragments[6] = new AboutFragment();
+
+        setUpPagerAndAdapter();
     }
 
     public void setUpKenBurnsSupportView() {
-        //Todo
         kenBurnsSupportView = new KenBurnsSupportView(getContext());
-        kenBurnsSupportView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, dpToPixels(240)));
-        //Todo add more
-        kenBurnsSupportView.setResourceIds(R.drawable.people);
+        kenBurnsSupportView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, scrollYMax));
     }
 
-    public void setUpPagerAdapter() {
+    public void setUpPagerAndAdapter() {
         //Todo
-        pager = new ParallaxViewPager(getContext());
-        pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(8);
-
+        fragmentPagerAdapter = new MyPagerAdapter(MainMenu.fragmentActivity.getSupportFragmentManager());
+        setUpPager();
     }
 
     public void setUpPager() {
         //Todo
-
+        pager = new ParallaxViewPager(getContext());
+        pager.setAdapter(fragmentPagerAdapter);
+        pager.setOffscreenPageLimit(8);
+        pager.setScrollListener(this);
+        pager.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, h - scrollYMax));
+        setUpPagerSlidingTabStrip();
     }
 
     public void setUpPagerSlidingTabStrip() {
         //Todo
         pagerSlidingTabStrip = new PagerSlidingTabStrip(getContext());
         pagerSlidingTabStrip.setViewPager(pager);
-
+        pagerSlidingTabStrip.setBackgroundColor(logoBackground);
+        pagerSlidingTabStrip.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, dpToPixels(56)));
+        pagerSlidingTabStrip.setTextColor(0xfffffff);
+        final int fourDP = dpToPixels(4);
+        pagerSlidingTabStrip.setPadding(fourDP, fourDP, fourDP, fourDP);
     }
 
-    public void setUpFragmentPagerAdapter() {
-        //Todo
+    public void setUpTitle() {
+        title = new TitleTextButton(getContext());
+        final View titleView = title.getView();
+        titleView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, dpToPixels(52)));
+        final int eDP = dpToPixels(8);
+        titleView.setPadding(eDP, eDP, eDP, eDP);
+        //Todo make drawable that turn brighter pink when clicked titleView.setBackground();
     }
 
     private int dpToPixels(int dp) {
@@ -121,9 +172,15 @@ public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
         pagerSlidingTabStripY = clamp(pagerSlidingTabStripY, titleBottom, scrollYMax - pagerSlidingTabStrip.getMeasuredHeight());
         pagerSlidingTabStrip.layout(0, pagerSlidingTabStripY, getMeasuredWidth(), pagerSlidingTabStripY + pagerSlidingTabStrip.getMeasuredHeight());
         kenBurnsSupportView.layout(0, 0, getMeasuredWidth(), scrollYMax);
-        currentCharityLogo.layout(0, titleBottom, getMeasuredWidth(), titleBottom + getCurrentCharityLogoHeight());
+        currentCharityLogo.layout(0, titleBottom, getMeasuredWidth(), pagerSlidingTabStrip.getTop());
         pager.layout(0, scrollY, getMeasuredWidth(), getMeasuredHeight());
+        invalidatePager();
+    }
 
+    private void invalidatePager() {
+        pagerParams.width = w;
+        pagerParams.height = Math.abs(pager.getTop() - pager.getBottom());
+        pager.setLayoutParams(pagerParams);
     }
 
     private int clamp(int val, int min, int max) {
@@ -150,19 +207,13 @@ public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
                 resolveSizeAndState(measuredHeight, heightMeasureSpec, 0));
 
     }
-
-    public int getCurrentCharityLogoHeight() {
-        currentCharityLogoHeight = scrollY - title.getView().getHeight();
-        currentCharityLogoHeight = currentCharityLogoHeight > scrollYMax - title.getView().getHeight() ? scrollYMax - title.getView().getHeight() : currentCharityLogoHeight;
-        return currentCharityLogoHeight;
-    }
-
     @Override
     public void onScrollX(int posX, float amount) {
         if (posX != currentPos)
             //Todo
             ;
         currentPos = posX;
+        Log.e("scrollX", String.valueOf(posX + amount));
     }
 
     @Override
@@ -176,13 +227,21 @@ public class ParallaxViewLayout extends ViewGroup implements ScrollListener {
         scrollY = scrollY <= scrollYMax ? scrollY : scrollYMax;
         this.scrollY = scrollY;
         setViewsY();
-
+        Log.e("setScrollY", String.valueOf(scrollY));
     }
 
     private void setViewsY() {
         //Todo
         ViewHelper.setTranslationY(kenBurnsSupportView, scrollY - scrollYMax);
 
+    }
+
+    private void addViews() {
+        addView(kenBurnsSupportView);
+        addView(pager);
+        addView(pagerSlidingTabStrip);
+        addView(currentCharityLogo);
+        addView(title.getView());
     }
 
 
