@@ -41,7 +41,6 @@ public class ParallaxViewLayout implements ScrollListener {
     private static PagerSlidingTabStrip pagerSlidingTabStrip;
     //    private static KenBurnsSupportView kenBurnsSupportView;
     private static int scrollYMax;
-    //Todo need setUpMethods
     private static TextView title;
     private static Context context;
     private static ImageView currentCharityLogo;
@@ -103,7 +102,6 @@ public class ParallaxViewLayout implements ScrollListener {
     }
 
     public void setUpFragments() {
-        //Todo
         BaseFragment.scrollListener = this;
         fragments[0] = new ContributeFragment();
         fragments[1] = new VoteFragment();
@@ -113,14 +111,6 @@ public class ParallaxViewLayout implements ScrollListener {
         fragments[5] = new FeedbackFragment();
         fragments[6] = new AboutFragment();
 
-//        fragments[0] = new AboutFragment();
-//        fragments[1] = new AboutFragment();
-//        fragments[2] = new AboutFragment();
-//        fragments[3] = new AboutFragment();
-//        fragments[4] = new AboutFragment();
-//        fragments[5] = new AboutFragment();
-//        fragments[6] = new AboutFragment();
-
         setUpPagerAndAdapter();
     }
 
@@ -129,13 +119,11 @@ public class ParallaxViewLayout implements ScrollListener {
     }
 
     public void setUpPagerAndAdapter() {
-        //Todo
         fragmentPagerAdapter = new MyPagerAdapter(MainMenu.getFragManager());
         setUpPager();
     }
 
     public void setUpPager() {
-        //Todo
         pager = (ParallaxViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
         pager.setOffscreenPageLimit(8);
@@ -144,7 +132,6 @@ public class ParallaxViewLayout implements ScrollListener {
     }
 
     public void setUpPagerSlidingTabStrip() {
-        //Todo
         pagerSlidingTabStrip = (PagerSlidingTabStrip) main.findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(pager);
         pagerSlidingTabStrip.setTextColor(0xfffffff);
@@ -152,7 +139,6 @@ public class ParallaxViewLayout implements ScrollListener {
 
     public void setUpTitle() {
         title = (TextView) main.findViewById(R.id.title);
-        //Todo make drawable that turn brighter pink when clicked titleView.setBackground();
     }
 
     private int dpToPixels(int dp) {
@@ -161,22 +147,17 @@ public class ParallaxViewLayout implements ScrollListener {
 
     @Override
     public void onScrollX(int posX, float amount) {
-        if (posX != currentPos)
-            //Todo
-            ;
         currentPos = posX;
     }
 
     @Override
     public void onScrollY(int scrollViewTop, int firstVisibleChildPos, int firstVisibleChildTop, int scrollY) {
-//Todo
-
         setScrollY(scrollYMax - scrollY);
         setSidePageTranslation();
     }
 
     private void setViewsY() {
-//        //Todo
+//
 //        float scaleY = (scrollY - titleBottom) / (float) (scrollYMax - titleBottom);
 //        scaleY = scaleY > 1 ? 1 : scaleY;
 //        scaleY = scaleY < 0 ? 0 : scaleY;

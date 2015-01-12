@@ -124,7 +124,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         indicatorColor = getResources().getColor(R.color.current_charity_color);
         underlineColor = getResources().getColor(R.color.current_charity_color);
-        dividerColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsDividerColor, dividerColor);
+        dividerColor = 0xffffffff;
         indicatorHeight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsIndicatorHeight, indicatorHeight);
         underlineHeight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsUnderlineHeight, underlineHeight);
         dividerPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsDividerPadding, dividerPadding);
@@ -236,19 +236,26 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         tabsContainer.addView(tab, position, shouldExpand ? expandedTabLayoutParams : defaultTabLayoutParams);
     }
 
+    private void updateTextColor() {
+        for (int i = 0; i < tabCount; i++) {
+            final View v = tabsContainer.getChildAt(i);
+            v.setBackgroundResource(tabBackgroundResId);
+            if (v instanceof TextView) {
+                ((TextView) v).setTextColor(i == currentPosition ? underlineColor : 0xffffffff);
+            }
+        }
+
+    }
+
     private void updateTabStyles() {
         for (int i = 0; i < tabCount; i++) {
             View v = tabsContainer.getChildAt(i);
             v.setBackgroundResource(tabBackgroundResId);
 
             if (v instanceof TextView) {
-
                 TextView tab = (TextView) v;
                 tab.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
                 tab.setTypeface(tabTypeface, tabTypefaceStyle);
-                //Todo tab.setTextColor(tabTextColor);
-                tab.setTextColor(0xffffffff);
-
                 // setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
                 // pre-ICS-build
                 if (textAllCaps) {
@@ -326,7 +333,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             View tab = tabsContainer.getChildAt(i);
             canvas.drawLine(tab.getRight(), dividerPadding, tab.getRight(), height - dividerPadding, dividerPaint);
         }
+
+        updateTextColor();
     }
+
 
     public void setIndicatorColorResource(int resId) {
         this.indicatorColor = getResources().getColor(resId);

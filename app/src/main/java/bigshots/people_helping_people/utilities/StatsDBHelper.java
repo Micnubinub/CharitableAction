@@ -23,8 +23,7 @@ public class StatsDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase profiledb) {
-        //Todo prohibit
-        String sqlStatement = "create table " + STATS_TABLE
+        final String sqlStatement = "create table " + STATS_TABLE
                 + " (" + ID + " integer primary key autoincrement,"
                 + TIME_LONG + " string,"
                 + POINTS_INT + " string"

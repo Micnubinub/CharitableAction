@@ -44,7 +44,6 @@ public class KenBurnsSupportView extends FrameLayout {
     public KenBurnsSupportView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mHandler = new Handler();
-        //Todo add more images
         setResourceIds(R.drawable.people, R.drawable.people1, R.drawable.people2, R.drawable.people3);
     }
 

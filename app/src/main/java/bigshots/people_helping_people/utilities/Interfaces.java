@@ -12,10 +12,6 @@ import bigshots.people_helping_people.io.UserStats;
  */
 @SuppressWarnings("ALL")
 public class Interfaces {
-//Todo userManager.postStats("sidney@cyberkomm.ch", 500, 2.15f);
-//Todo userManager.getLeaderboardListRate(5);
-//Todo serManager.getLeaderboardListScore(5);
-//Todo userManager.getScoreRank("lindelwe.ncube@my.jcu.edu.au");
 
     public interface ASyncListener {
         void onCompleteSingle(Charity charity);

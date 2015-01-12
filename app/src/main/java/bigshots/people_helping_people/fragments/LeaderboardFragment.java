@@ -29,7 +29,6 @@ import bigshots.people_helping_people.utilities.Utils;
 
 
 public class LeaderboardFragment extends BaseFragment {
-    //Todo add to on opened
     private static final UserManager userManager = new UserManager();
     private static ParallaxListView listView;
     int rank;
@@ -113,7 +112,6 @@ public class LeaderboardFragment extends BaseFragment {
         AsyncConnector.setListener(aSyncListener);
         getScoreLeaderBoard();
 
-        //Todo userManager.getLeaderboardListRate(5);
         return view;
     }
 
@@ -133,7 +131,6 @@ public class LeaderboardFragment extends BaseFragment {
                             Toast.makeText(MainMenu.context, "Thank you for your suggestion.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
-
                         break;
                     case R.id.cancel:
                         dialog.dismiss();
@@ -152,4 +149,8 @@ public class LeaderboardFragment extends BaseFragment {
         userManager.getLeaderboardListScore(25);
     }
 
+    @Override
+    protected void update() {
+        //Todo
+    }
 }

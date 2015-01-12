@@ -77,7 +77,6 @@ public class FeedbackFragment extends BaseFragment {
     }
 
     private void showEmailDialog() {
-        //Todo might have to use a fragment Dialog
         final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.email);
         final EditText subject = (EditText) dialog.findViewById(R.id.subject);

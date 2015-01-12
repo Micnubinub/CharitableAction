@@ -15,7 +15,7 @@ import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 
 
-public class AboutFragment extends BaseFragment {
+public class Preferences extends BaseFragment {
 
     private final View.OnClickListener listener = new View.OnClickListener() {
         @Override
@@ -33,7 +33,7 @@ public class AboutFragment extends BaseFragment {
         }
     };
 
-    public AboutFragment() {
+    public Preferences() {
     }
 
 //    @Override

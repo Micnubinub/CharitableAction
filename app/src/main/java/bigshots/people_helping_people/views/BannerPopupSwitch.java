@@ -24,7 +24,6 @@ import bigshots.people_helping_people.services.BannerPopupService;
  */
 @SuppressWarnings("ALL")
 public class BannerPopupSwitch extends ViewGroup {
-    //Todo remove ripples
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private static int PADDING = 2;

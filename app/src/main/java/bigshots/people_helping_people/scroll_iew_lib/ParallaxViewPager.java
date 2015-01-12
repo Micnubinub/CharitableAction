@@ -3,7 +3,6 @@ package bigshots.people_helping_people.scroll_iew_lib;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 
 /**
  * Created by root on 8/01/15.
@@ -26,11 +25,10 @@ public class ParallaxViewPager extends ViewPager {
             scrollListener.onScrollX(position, offset);
     }
 
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.e("pagerSizeChanged", String.format("%d, %d, %d, %d", oldw, oldh, w, h));
+//        Log.e("pagerSizeChanged", String.format("%d, %d, %d, %d", oldw, oldh, w, h));
     }
 
     @Override
@@ -48,6 +46,6 @@ public class ParallaxViewPager extends ViewPager {
     @Override
     public void setCurrentItem(int item) {
         super.setCurrentItem(item);
-        Log.e("received", "set:" + item);
+//        Log.e("received", "set:" + item);
     }
 }

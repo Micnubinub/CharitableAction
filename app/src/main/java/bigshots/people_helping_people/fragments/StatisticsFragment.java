@@ -23,6 +23,7 @@ public class StatisticsFragment extends BaseFragment {
     private static BarChart myStatsBarGraph, globalStatsBarGraph;
     private static int color;
     int shown = 0;
+
     public StatisticsFragment() {
     }
 
@@ -38,10 +39,6 @@ public class StatisticsFragment extends BaseFragment {
         myStatsBarGraph = (BarChart) view.findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) view.findViewById(R.id.global_stats);
         // ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
-        //Todo stat_description android:text="$18 raised at 90c a day"
-        //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
-        //Todo new UserManager().getLeaderboardListRate(5);
-        //Todo new UserManager().getLeaderboardListScore(5);
         addValues();
         return view;
     }

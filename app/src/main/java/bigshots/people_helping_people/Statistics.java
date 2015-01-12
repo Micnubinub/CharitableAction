@@ -28,10 +28,6 @@ public class Statistics extends Activity {
         });
         myStatsBarGraph = (BarChart) findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) findViewById(R.id.global_stats);
-        //Todo stat_description android:text="$18 raised at 90c a day"
-        //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
-        //Todo new UserManager().getLeaderboardListRate(5);
-        //Todo new UserManager().getLeaderboardListScore(5);
         addValues();
     }
 

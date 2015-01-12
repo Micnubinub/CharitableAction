@@ -108,7 +108,6 @@ public class LeaderBoard extends Activity {
         });
 
         listView = (ListView) findViewById(R.id.list);
-        //Todo userManager.getLeaderboardListRate(5);
     }
 
 
