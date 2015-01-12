@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -37,7 +38,7 @@ public class ParallaxViewLayout implements ScrollListener {
     private static int w, h;
     //Don't need nothing
     private static int scrollY, titleBottom;
-    private static int currentCharityLogoHeight;
+    private static int currentCharityLogoMaxHeight, tabStripHeight;
     private static int currentPos;
     //Already have set up methods
     private static ParallaxViewPager pager;
@@ -49,18 +50,8 @@ public class ParallaxViewLayout implements ScrollListener {
     private static TitleTextButton title;
     private static Context context;
     private static ImageView currentCharityLogo;
-    //    private static LayoutParams pagerParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-//    private static LayoutParams logoParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-//    private static LayoutParams titleParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-//    private static LayoutParams kenBurnsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-//    private static LayoutParams tabsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     private static View main;
-    private static View.OnLayoutChangeListener layoutChangeListener = new View.OnLayoutChangeListener() {
-        @Override
-        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-            onLayout();
-        }
-    };
+
 
     public ParallaxViewLayout(Context context, View view) {
         main = view;
@@ -71,7 +62,6 @@ public class ParallaxViewLayout implements ScrollListener {
         setUpKenBurnsSupportView();
         setUpFragments();
         setUpCurrentCharityLogo();
-        setLayoutListener();
         scrollY = scrollYMax;
     }
 
@@ -79,59 +69,18 @@ public class ParallaxViewLayout implements ScrollListener {
         return context;
     }
 
-    private static void onLayout() {
-//        int titleBottom = title.getView().getMeasuredHeight();
-//        //Todo
-//        layout(title.getView(),0, 0, w, titleBottom);
-//        //Todo
-//        int pagerSlidingTabStripY = scrollY - pagerSlidingTabStrip.getMeasuredHeight();
-//        pagerSlidingTabStripY = clamp(pagerSlidingTabStripY, titleBottom, scrollYMax - pagerSlidingTabStrip.getMeasuredHeight());
-//        layout(pagerSlidingTabStrip, 0, pagerSlidingTabStripY, w, pagerSlidingTabStripY + pagerSlidingTabStrip.getMeasuredHeight());
-//        layout(kenBurnsSupportView, 0, 0, w, scrollYMax);
-////        layout(currentCharityLogo, 0, titleBottom, w, pagerSlidingTabStrip.getTop());
-//        layout(pager, 0, scrollY, w, h);
-//        invalidatePager();
-    }
-
-    private static void layout(View view, int left, int top, int right, int bottom) {
-//    view.setX(left);
-//    view.setY(top);
-////
-//    LayoutParams params = null;
-////    if (view instanceof KenBurnsSupportView) {
-////        params = kenBurnsParams;
-////    } else if (view instanceof ParallaxViewPager) {
-//        params = pagerParams;
-////    } else if (view instanceof PagerSlidingTabStrip) {
-////        params = tabsParams;
-////    } else if (view instanceof ImageView) {
-////        params = logoParams;
-////    } else {
-////        params = titleParams;
-////    }
-////
-//    params.width = Math.abs(right - left);
-//    params.height = Math.abs(bottom - top);
-//    Log.e("params", params.toString());
-        //   view.setLayoutParams(params);
-//    }
-//
-//    private static void invalidatePager() {
-//        pagerParams.width = w;
-//        pagerParams.height = Math.abs(pager.getTop() - pager.getBottom());
-//        pager.setLayoutParams(pagerParams);
-    }
-
     private static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(max, val));
     }
 
-    private static void setLayoutListener() {
-        kenBurnsSupportView.addOnLayoutChangeListener(layoutChangeListener);
-        pager.addOnLayoutChangeListener(layoutChangeListener);
-        pagerSlidingTabStrip.addOnLayoutChangeListener(layoutChangeListener);
-        currentCharityLogo.addOnLayoutChangeListener(layoutChangeListener);
-        title.getView().addOnLayoutChangeListener(layoutChangeListener);
+    public static int getScrollY() {
+        return scrollY;
+    }
+
+    public void setScrollY(int scrollY) {
+        scrollY = scrollY < scrollYMax ? scrollY : scrollYMax;
+        this.scrollY = scrollY;
+        setViewsY();
     }
 
     private void getYScrollMax() {
@@ -139,15 +88,16 @@ public class ParallaxViewLayout implements ScrollListener {
         final DisplayMetrics metrics = new DisplayMetrics();
         MainMenu.fragmentActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         titleBottom = dpToPixels(56);
+        tabStripHeight = titleBottom;
         w = metrics.widthPixels;
         h = metrics.heightPixels;
         scrollYMax = Math.min(h / 2, scrollYMax);
-
+        currentCharityLogoMaxHeight = scrollYMax - titleBottom - tabStripHeight;
         Log.e("ScrollYMax", String.valueOf(scrollYMax));
     }
 
     public void setUpCurrentCharityLogo() {
-        currentCharityLogo = new ImageView(getContext());
+        currentCharityLogo = (ImageView) main.findViewById(R.id.logo);
         currentCharityLogo.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         currentCharityLogo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +151,6 @@ public class ParallaxViewLayout implements ScrollListener {
         pager.setOffscreenPageLimit(8);
         pager.setScrollListener(this);
         setUpPagerSlidingTabStrip();
-        ViewHelper.setTranslationY(pager, scrollYMax);
     }
 
     public void setUpPagerSlidingTabStrip() {
@@ -229,33 +178,40 @@ public class ParallaxViewLayout implements ScrollListener {
             //Todo
             ;
         currentPos = posX;
-        Log.e("scrollX", String.valueOf(posX + amount));
     }
 
     @Override
     public void onScrollY(int scrollViewTop, int firstVisibleChildPos, int firstVisibleChildTop, int scrollY) {
 //Todo
-        setScrollY(scrollYMax - scrollY);
-    }
 
-    public void setScrollY(int scrollY) {
-        scrollY = scrollY <= scrollYMax ? scrollY : scrollYMax;
-        this.scrollY = scrollY;
-        setViewsY();
-        Log.e("setScrollY", String.valueOf(scrollY));
+        setScrollY(clamp(scrollYMax - scrollY, titleBottom, scrollYMax - tabStripHeight));
     }
 
     private void setViewsY() {
         //Todo
-        ViewHelper.setTranslationY(kenBurnsSupportView, scrollY - scrollYMax);
         float scaleY = (scrollY - titleBottom) / (float) (scrollYMax - titleBottom);
         scaleY = scaleY > 1 ? 1 : scaleY;
         scaleY = scaleY < 0 ? 0 : scaleY;
-        ViewHelper.setY(currentCharityLogo, scaleY);
-        Log.e("scle", String.valueOf(scaleY));
-        currentCharityLogo.invalidate();
-        ViewHelper.setTranslationY(pagerSlidingTabStrip, scrollY - scrollYMax);
+        final int imageH = Math.round(scaleY * currentCharityLogoMaxHeight);
+        resizeView(currentCharityLogo, 0, imageH);
+        // resizeView(pager, scrollY + tabStripHeight, h - tabStripHeight - titleBottom - imageH);
 
+        int pagerSlidingTabStripY = titleBottom + imageH;
+        pagerSlidingTabStripY = pagerSlidingTabStripY - (scrollYMax - tabStripHeight);
+
+        ViewHelper.setTranslationY(kenBurnsSupportView, pagerSlidingTabStripY);
+
+        currentCharityLogo.invalidate();
+        ViewHelper.setTranslationY(pagerSlidingTabStrip, pagerSlidingTabStripY);
+
+    }
+
+    private void resizeView(View view, int y, int height) {
+        final ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = height;
+        view.setLayoutParams(params);
+        view.setY(y);
+        view.requestLayout();
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {

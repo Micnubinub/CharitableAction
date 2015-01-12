@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView
         android:id="@+id/ken_burns"
         android:layout_width="fill_parent"
@@ -21,12 +20,11 @@
         android:layout_height="180dp"
         android:layout_below="@+id/title_with_button">
 
-    <ImageView
+        <ImageView
                 android:id="@+id/logo"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_above="@+id/tabs"
-                android:background="#ab000000"
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
@@ -36,7 +34,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="56dp"
                 android:layout_alignParentBottom="true"
-                android:background="#ab000000"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp" />
         </RelativeLayout>
@@ -44,5 +41,7 @@
         <bigshots.people_helping_people.scroll_iew_lib.ParallaxViewPager
             android:id="@+id/pager"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" />
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/rl" />
 </RelativeLayout>
