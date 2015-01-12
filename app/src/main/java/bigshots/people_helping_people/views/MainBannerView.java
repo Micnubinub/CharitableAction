@@ -44,13 +44,10 @@ public class MainBannerView extends ImageView {
 
         @Override
         public void onAnimationCancel(Animator animator) {
-
-
         }
 
         @Override
         public void onAnimationRepeat(Animator animator) {
-
         }
     };
     private int rippleR, cx, cy;

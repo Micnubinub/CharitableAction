@@ -20,7 +20,7 @@ import bigshots.people_helping_people.utilities.Utils;
 
 public class StatisticsFragment extends BaseFragment {
 
-    private static BarChart myStatsBarGraph, globalStatsBarGraph;
+    private static BarChart myStatsBarGraph;
     private static int color;
     int shown = 0;
 
@@ -37,24 +37,12 @@ public class StatisticsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.statistics, container, false);
         myStatsBarGraph = (BarChart) view.findViewById(R.id.my_stats);
-        globalStatsBarGraph = (BarChart) view.findViewById(R.id.global_stats);
         // ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
-        addValues();
+        plotMyStatsPoints();
         return view;
     }
 
-    private void addValues() {
-        plotMyStatsPoints();
 
-        addGlobalStatsBar("mon", 36.9f);
-        addGlobalStatsBar("tue", 23.41f);
-        addGlobalStatsBar("wed", 42.4f);
-        addGlobalStatsBar("thur", 20.3f);
-        addGlobalStatsBar("fri", 9.4f);
-        addGlobalStatsBar("sat", 52.2f);
-        addGlobalStatsBar("sun", 11.4f);
-
-    }
 
     private void plotMyStatsPoints() {
         final ArrayList<Point> points = Utils.getPoints(MainMenu.context);
@@ -62,7 +50,7 @@ public class StatisticsFragment extends BaseFragment {
             Toast.makeText(MainMenu.context, "No data to display", Toast.LENGTH_LONG).show();
             return;
         }
-        Mode mode = Utils.getScope(MainMenu.context);
+        final Mode mode = Utils.getScope(MainMenu.context);
         for (int i = 0; i < points.size(); i++) {
             final Point point = points.get(i);
             if (mode == Mode.MONTH)
@@ -74,15 +62,11 @@ public class StatisticsFragment extends BaseFragment {
     }
 
     private void addMyStatsBar(String label, float value) {
-        Log.e("adding", label);
+        if (value == 0)
+            return;
         myStatsBarGraph.addBar(new BarModel(label, value, color));
     }
 
-
-    private void addGlobalStatsBar(String label, float value) {
-        int color = color = getResources().getColor(R.color.material_blue);
-        globalStatsBarGraph.addBar(new BarModel(label, value, color));
-    }
 
     @Override
     protected void update() {

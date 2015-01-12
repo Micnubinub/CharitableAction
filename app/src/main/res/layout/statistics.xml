@@ -75,7 +75,7 @@
                         android:layout_marginTop="2dp"
                         app:egBarMargin="10dp"
                         app:egBarWidth="22dp"
-                        app:egEnableScroll="true"
+                        app:egEnableScroll="false"
                         app:egFixedBarWidth="true"
                         app:egLegendHeight="40sp"
                         app:egLegendTextSize="14sp"
@@ -102,63 +102,6 @@
                 android:textColor="@color/dark_grey_text"
                 android:textSize="22sp" />
 
-            <android.support.v7.widget.CardView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="3dp">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/white_button_selector"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:padding="8dp"
-                        android:paddingBottom="14dp"
-                        android:text="$1032 raised"
-                        android:textColor="@color/dark_grey_text"
-                        android:textSize="18sp" />
-
-                    <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
-                        <!--"enableScroll -->
-                        <bigshots.people_helping_people.graph.charts.BarChart
-                            android:id="@+id/global_stats"
-                            android:layout_width="match_parent"
-                            android:layout_height="256dp"
-                            android:layout_margin="10dp"
-                            app:egBarMargin="10dp"
-                            app:egBarWidth="22dp"
-                            app:egEnableScroll="false"
-                            app:egFixedBarWidth="true"
-                            app:egLegendHeight="40sp"
-                            app:egLegendTextSize="14sp"
-                            app:egShowDecimal="true"
-                            app:egShowValues="true" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="256dp"
-                            android:background="#99000000"
-                            android:clickable="true" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Coming Soon"
-                            android:textColor="@color/white"
-                            android:textSize="22sp" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
         </LinearLayout>
     </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
 </LinearLayout>
