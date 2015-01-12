@@ -1,38 +1,55 @@
-package bigshots.people_helping_people;
+package bigshots.people_helping_people.fragments;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.R;
+import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.MaterialSwitch;
 
-/**
- * Created by root on 18/11/14.
- */
-@SuppressWarnings("ALL")
-public class Preferences extends Activity {
-    //Banner autostart
+
+public class PreferencesFragment extends BaseFragment {
     private MaterialSwitch autoStart, toast, adsAtBoot;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
+
+    public PreferencesFragment() {
+    }
+
+//    @Override
+//    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
+//        if (mScrollTabHolder != null)
+//            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
+//    }
+//
+//    @Override
+//    public void adjustScroll(int scrollHeight) {
+//
+//    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.preferences);
-        findViewById(R.id.title).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        final View view = inflater.inflate(R.layout.preferences, container, false);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.context);
         editor = prefs.edit();
 
-        autoStart = (MaterialSwitch) findViewById(R.id.auto_start_boot);
+        autoStart = (MaterialSwitch) view.findViewById(R.id.auto_start_boot);
         autoStart.setText("Banner at startup");
         autoStart.setChecked(prefs.getBoolean(Utils.AUTO_START_BOOL, false));
         autoStart.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
@@ -42,7 +59,7 @@ public class Preferences extends Activity {
             }
         });
 
-        toast = (MaterialSwitch) findViewById(R.id.toast_before);
+        toast = (MaterialSwitch) view.findViewById(R.id.toast_before);
         toast.setText("Fullscreen Ad warning");
         toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, true));
         toast.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
@@ -52,7 +69,7 @@ public class Preferences extends Activity {
             }
         });
 
-        adsAtBoot = (MaterialSwitch) findViewById(R.id.scheduled_ads_at_boot);
+        adsAtBoot = (MaterialSwitch) view.findViewById(R.id.scheduled_ads_at_boot);
         adsAtBoot.setText("Scheduled ads at boot");
         adsAtBoot.setChecked(prefs.getBoolean(Utils.ADS_AT_START_BOOL, true));
         adsAtBoot.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
@@ -61,7 +78,20 @@ public class Preferences extends Activity {
                 editor.putBoolean(Utils.ADS_AT_START_BOOL, isChecked).commit();
             }
         });
+        return view;
     }
 
 
+
+    @Override
+    protected void update() {
+        try {
+            autoStart.setChecked(prefs.getBoolean(Utils.AUTO_START_BOOL, false));
+            toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, true));
+            adsAtBoot.setChecked(prefs.getBoolean(Utils.ADS_AT_START_BOOL, true));
+
+        } catch (Exception e) {
+
+        }
+    }
 }

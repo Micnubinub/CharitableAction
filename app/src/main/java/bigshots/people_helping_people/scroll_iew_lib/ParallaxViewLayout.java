@@ -1,16 +1,16 @@
 package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
@@ -19,6 +19,7 @@ import bigshots.people_helping_people.fragments.ContributeFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.FeedbackFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
+import bigshots.people_helping_people.fragments.PreferencesFragment;
 import bigshots.people_helping_people.fragments.StatisticsFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
 
@@ -27,7 +28,7 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  */
 public class ParallaxViewLayout implements ScrollListener {
 
-    private static final Fragment[] fragments = new Fragment[7];
+    private static final Fragment[] fragments = new Fragment[8];
     //    private static final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
 //    private static final DecelerateInterpolator decel = new DecelerateInterpolator();
     private static int w, h;
@@ -77,6 +78,15 @@ public class ParallaxViewLayout implements ScrollListener {
         setViewsY();
     }
 
+    public static void selectPage(int page) {
+        try {
+            if (pager != null)
+                pager.setCurrentItem(page);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void getYScrollMax() {
         scrollYMax = dpToPixels(250);
         final DisplayMetrics metrics = new DisplayMetrics();
@@ -96,7 +106,7 @@ public class ParallaxViewLayout implements ScrollListener {
         currentCharityLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Open Current Charity", Toast.LENGTH_LONG).show();
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.nbcf.org.au")));
             }
         });
     }
@@ -109,7 +119,8 @@ public class ParallaxViewLayout implements ScrollListener {
         fragments[3] = new StatisticsFragment();
         fragments[4] = new LeaderboardFragment();
         fragments[5] = new FeedbackFragment();
-        fragments[6] = new AboutFragment();
+        fragments[6] = new PreferencesFragment();
+        fragments[7] = new AboutFragment();
 
         setUpPagerAndAdapter();
     }
@@ -126,7 +137,7 @@ public class ParallaxViewLayout implements ScrollListener {
     public void setUpPager() {
         pager = (ParallaxViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(8);
+        pager.setOffscreenPageLimit(1);
         pager.setScrollListener(this);
         setUpPagerSlidingTabStrip();
     }
@@ -135,6 +146,7 @@ public class ParallaxViewLayout implements ScrollListener {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) main.findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(pager);
         pagerSlidingTabStrip.setTextColor(0xfffffff);
+        updatePages();
     }
 
     public void setUpTitle() {
@@ -147,6 +159,9 @@ public class ParallaxViewLayout implements ScrollListener {
 
     @Override
     public void onScrollX(int posX, float amount) {
+        if (posX != currentPos)
+            updatePages();
+
         currentPos = posX;
     }
 
@@ -190,17 +205,29 @@ public class ParallaxViewLayout implements ScrollListener {
 //        ViewHelper.setTranslationY(((MyPagerAdapter) pager.getAdapter()).getItem(item).getView(), translation);
     }
 
-    private void resizeView(View view, int y, int height) {
-        final ViewGroup.LayoutParams params = view.getLayoutParams();
-        params.height = height;
-        view.setLayoutParams(params);
-        view.setY(y);
-        view.requestLayout();
+//    private void resizeView(View view, int y, int height) {
+//        final ViewGroup.LayoutParams params = view.getLayoutParams();
+//        params.height = height;
+//        view.setLayoutParams(params);
+//        view.setY(y);
+//        view.requestLayout();
+//    }
+
+    private void updatePages() {
+        int item = pager.getCurrentItem();
+        if (item - 1 >= 0) {
+            ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(item - 1)).update();
+        }
+
+        if (item + 1 < pager.getAdapter().getCount()) {
+            ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(item + 1)).update();
+        }
+
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
         private final String[] TITLES = {"Free Donation", "Vote", "Current Charity",
-                "Statistics", "Leaderboard", "Feedback", "About"};
+                "Statistics", "Leaderboard", "Feedback", "Preferences", "About"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);

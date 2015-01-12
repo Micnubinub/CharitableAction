@@ -75,15 +75,6 @@
                 android:textColor="@color/dark_grey_text"
                 android:textSize="22sp" />
 
-            <TextView
-                android:id="@+id/current_charity"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/white_button_selector"
-                android:padding="10dp"
-                android:text="Link to this months charity (website)"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
         </LinearLayout>
     </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
 </LinearLayout>

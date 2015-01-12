@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.InterstitialAd;
 
-import bigshots.people_helping_people.Contribute;
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.utilities.Utils;
@@ -61,6 +61,12 @@ public class ScheduledAdsManager extends Service {
                         e.printStackTrace();
                     }
                     fullScreenAd.show();
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+                    Log.e("schedules", "opened");
                 }
 
                 @Override
@@ -119,7 +125,7 @@ public class ScheduledAdsManager extends Service {
                             .setContentText("Click to manage")
                             .setOngoing(true);
 
-            final Intent intent = new Intent(context, Contribute.class);
+            final Intent intent = new Intent(context, MainMenu.class);
             builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(SCHEDULED_ADS_NOTIFICATION_ID, builder.build());
         } catch (Exception e) {
@@ -204,7 +210,7 @@ public class ScheduledAdsManager extends Service {
                         .setContentText("Donation reminder")
                         .setOngoing(false);
 
-        final Intent intent = new Intent(context, Contribute.class);
+        final Intent intent = new Intent(context, MainMenu.class);
         builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(REMINDER_NOTIFICATION_ID, builder.build());
     }

@@ -87,6 +87,7 @@ public class StatisticsFragment extends BaseFragment {
     @Override
     protected void update() {
         //Todo
+        Log.e("update() :", getClass().getName());
     }
 
     public enum Mode {

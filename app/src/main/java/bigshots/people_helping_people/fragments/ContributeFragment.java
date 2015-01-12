@@ -4,9 +4,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,16 +101,6 @@ public class ContributeFragment extends BaseFragment {
                     videoClicked = true;
                     adManager.getVideoAd().show();
                     break;
-                case R.id.current_charity:
-                    try {
-                        if (currentCharity != null && currentCharity.length() > 3) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.savethechildren.org.au/"));//currentCharity));
-                            startActivity(browserIntent);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    break;
 
                 case R.id.configure_scheduled_ads:
                     dialog = getScheduledAds();
@@ -169,14 +159,12 @@ public class ContributeFragment extends BaseFragment {
         adManager.getVideoAd().setAdListener(video);
 
         view.findViewById(R.id.full_screen).setOnClickListener(listener);
-        view.findViewById(R.id.current_charity).setOnClickListener(listener);
         view.findViewById(R.id.video_ad).setOnClickListener(listener);
         view.findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
-        view.findViewById(R.id.current_charity).setOnClickListener(listener);
 
         ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
 
-        MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) view.findViewById(R.id.enable_scheduled_ads);
+        final MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) view.findViewById(R.id.enable_scheduled_ads);
         scheduledAdsSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
         scheduledAdsSwitch.setText("Enable Scheduled Ads");
         scheduledAdsSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
@@ -404,5 +392,6 @@ public class ContributeFragment extends BaseFragment {
     @Override
     protected void update() {
         //Todo
+        Log.e("update() :", getClass().getName());
     }
 }

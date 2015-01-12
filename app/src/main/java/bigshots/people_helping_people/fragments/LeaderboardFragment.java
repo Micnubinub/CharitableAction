@@ -152,5 +152,7 @@ public class LeaderboardFragment extends BaseFragment {
     @Override
     protected void update() {
         //Todo
+        Log.e("update() :", getClass().getName());
+
     }
 }
