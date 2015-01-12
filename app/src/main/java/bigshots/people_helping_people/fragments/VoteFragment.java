@@ -147,4 +147,9 @@ public class VoteFragment extends BaseFragment {
             }
         }
     }
+
+    @Override
+    protected void update() {
+        //Todo
+    }
 }

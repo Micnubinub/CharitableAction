@@ -99,4 +99,9 @@ public class AboutFragment extends BaseFragment {
         super.onAttach(activity);
         Log.e("about", "attach");
     }
+
+    @Override
+    protected void update() {
+
+    }
 }

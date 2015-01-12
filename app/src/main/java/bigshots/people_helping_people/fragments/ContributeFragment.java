@@ -42,12 +42,14 @@ public class ContributeFragment extends BaseFragment {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
+            Toast.makeText(MainMenu.context, "Opened", Toast.LENGTH_SHORT).show();
             fullScreenClicked = false;
         }
 
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
+            Toast.makeText(MainMenu.context, "Loaded", Toast.LENGTH_SHORT).show();
             if (fullScreenClicked) {
                 adManager.getFullscreenAd().show();
                 Utils.addScore(MainMenu.context, 15);
@@ -127,13 +129,14 @@ public class ContributeFragment extends BaseFragment {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
-
+            Toast.makeText(MainMenu.context, "Opened", Toast.LENGTH_SHORT).show();
             videoClicked = false;
         }
 
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
+            Toast.makeText(MainMenu.context, "loaded", Toast.LENGTH_SHORT).show();
             if (videoClicked) {
                 adManager.getVideoAd().show();
                 Utils.addScore(MainMenu.context, 20);
@@ -396,5 +399,10 @@ public class ContributeFragment extends BaseFragment {
             }
             ScheduledAdsManager.scheduleNext(MainMenu.context, true);
         }
+    }
+
+    @Override
+    protected void update() {
+        //Todo
     }
 }

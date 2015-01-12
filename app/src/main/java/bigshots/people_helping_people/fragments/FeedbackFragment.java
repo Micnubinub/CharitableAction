@@ -123,4 +123,9 @@ public class FeedbackFragment extends BaseFragment {
         ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         return view;
     }
+
+    @Override
+    protected void update() {
+        //Todo
+    }
 }

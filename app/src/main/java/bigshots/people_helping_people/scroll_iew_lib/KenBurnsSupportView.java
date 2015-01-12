@@ -1,8 +1,6 @@
 package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,7 +21,6 @@ import bigshots.people_helping_people.R;
  */
 
 public class KenBurnsSupportView extends FrameLayout {
-    private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Handler mHandler;
     private final Random random = new Random();
     private int[] mResourceIds;
@@ -46,14 +43,12 @@ public class KenBurnsSupportView extends FrameLayout {
 
     public KenBurnsSupportView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        paint.setColor(0xaa000000);
         mHandler = new Handler();
         //Todo add more images
-        setResourceIds(R.drawable.people, R.drawable.people);
+        setResourceIds(R.drawable.people, R.drawable.people1, R.drawable.people2, R.drawable.people3);
     }
 
     public void setResourceIds(int... resourceIds) {
-        paint.setColor(0xaa000000);
         mResourceIds = resourceIds;
         fillImageViews();
     }
@@ -142,9 +137,11 @@ public class KenBurnsSupportView extends FrameLayout {
         super.onFinishInflate();
         View view = inflate(getContext(), R.layout.view_kenburns, this);
 
-        mImageViews = new ImageView[2];
+        mImageViews = new ImageView[4];
         mImageViews[0] = (ImageView) view.findViewById(R.id.image0);
         mImageViews[1] = (ImageView) view.findViewById(R.id.image1);
+        mImageViews[2] = (ImageView) view.findViewById(R.id.image2);
+        mImageViews[3] = (ImageView) view.findViewById(R.id.image3);
         fillImageViews();
     }
 
@@ -158,21 +155,13 @@ public class KenBurnsSupportView extends FrameLayout {
         }
     }
 
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
-        canvas.drawPaint(paint);
-    }    private Runnable mSwapImageRunnable = new Runnable() {
+    private Runnable mSwapImageRunnable = new Runnable() {
         @Override
         public void run() {
             swapImage();
             mHandler.postDelayed(mSwapImageRunnable, mSwapMs - mFadeInOutMs * 2);
         }
     };
-
-
-
-    
 
 
 }

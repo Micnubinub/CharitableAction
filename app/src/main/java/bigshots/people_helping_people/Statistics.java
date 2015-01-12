@@ -3,14 +3,9 @@ package bigshots.people_helping_people;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
-import bigshots.people_helping_people.utilities.Point;
-import bigshots.people_helping_people.utilities.Utils;
 
 /**
  * Created by root on 18/11/14.
@@ -54,20 +49,20 @@ public class Statistics extends Activity {
     }
 
     private void plotMyStatsPoints() {
-        final ArrayList<Point> points = Utils.getPoints(this);
-        if (points.size() < 1) {
-            Toast.makeText(this, "No data to display", Toast.LENGTH_LONG).show();
-            return;
-        }
-        Mode mode = Utils.getScope(this);
-        for (int i = 0; i < points.size(); i++) {
-            final Point point = points.get(i);
-            if (mode == Mode.MONTH)
-                addMyStatsBar(point.getLegendTitle() + String.valueOf(i + 1), point.getY());
-            else
-                addMyStatsBar(point.getLegendTitle(), point.getY());
-
-        }
+//        final ArrayList<Point> points = Utils.getPoints(this);
+//        if (points.size() < 1) {
+//            Toast.makeText(this, "No data to display", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        Mode mode = Utils.getScope(this);
+//        for (int i = 0; i < points.size(); i++) {
+//            final Point point = points.get(i);
+//            if (mode == Mode.MONTH)
+//                addMyStatsBar(point.getLegendTitle() + String.valueOf(i + 1), point.getY());
+//            else
+//                addMyStatsBar(point.getLegendTitle(), point.getY());
+//
+//        }
     }
 
     private void addMyStatsBar(String label, float value) {

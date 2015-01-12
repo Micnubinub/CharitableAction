@@ -1,14 +1,16 @@
 package bigshots.people_helping_people.views;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import bigshots.people_helping_people.R;
@@ -19,15 +21,43 @@ import bigshots.people_helping_people.R;
  */
 @SuppressWarnings("ALL")
 public class MaterialSwitch extends ViewGroup {
+
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static int PADDING = 2;
     private static int duration = 600;
+    private final DecelerateInterpolator interpolator = new DecelerateInterpolator();
+    private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private int height;
-    private int rippleR;
+    //    private int rippleR;
     private float ripple_animated_value = 0;
-    private int clickedX, clickedY;
+    //    private int clickedX, clickedY;
     private boolean touchDown = false, animateRipple;
+    private ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
 
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            if (!touchDown)
+                ripple_animated_value = 0;
+
+            animateRipple = false;
+            invalidatePoster();
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {
+
+        }
+    };
     private int textSize;
     private String text = "";
     private Switch materialSwitch;
@@ -37,10 +67,17 @@ public class MaterialSwitch extends ViewGroup {
     private boolean updating = false;
     private boolean checked = false;
     private float animated_value = 0;
+    private final ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            animated_value = (Float) (animation.getAnimatedValue());
+            ripple_animated_value = animated_value;
+            invalidatePoster();
+        }
+    };
     private OnCheckedChangedListener listener;
     private TextView textView;
     private int width;
-    private int rippleColor = 0x25000000;
 
     public MaterialSwitch(Context context) {
         super(context);
@@ -136,6 +173,7 @@ public class MaterialSwitch extends ViewGroup {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+        animateSwitch();
         notifyListener();
     }
 
@@ -169,6 +207,11 @@ public class MaterialSwitch extends ViewGroup {
 
     public void setUpdating(boolean updating) {
         this.updating = updating;
+    }
+
+    public void setAnimationDuration(int duration) {
+        MaterialSwitch.duration = duration;
+        animator.setDuration(duration);
     }
 
     public void setText(String text) {
@@ -210,30 +253,36 @@ public class MaterialSwitch extends ViewGroup {
 
         setText(text);
 
+        animator.setInterpolator(interpolator);
+        animator.setDuration(duration);
+        animator.addListener(animatorListener);
+        animator.addUpdateListener(updateListener);
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggle();
             }
         });
+
         setBackgroundResource(R.drawable.white_button_selector);
     }
 
+    private void animateSwitch() {
+        if (animator.isRunning() || animator.isStarted())
+            animator.cancel();
+        animator.start();
+    }
 
     public void setOnCheckedChangeListener(OnCheckedChangedListener listener) {
         this.listener = listener;
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent event) {
-        return false;
+
+    public void setDuration(int duration) {
+        MaterialSwitch.duration = duration;
+        animator.setDuration(duration);
     }
-
-
-    public void setRippleColor(int color) {
-        rippleColor = color;
-    }
-
 
     private void invalidatePoster() {
         final Runnable runnable = new Runnable() {
@@ -246,6 +295,11 @@ public class MaterialSwitch extends ViewGroup {
         if (materialSwitch != null) {
             materialSwitch.invalidate();
         }
+    }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
     }
 
     @Override

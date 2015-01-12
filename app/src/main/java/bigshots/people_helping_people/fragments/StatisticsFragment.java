@@ -1,6 +1,7 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 import bigshots.people_helping_people.utilities.Point;
 import bigshots.people_helping_people.utilities.Utils;
 
@@ -21,14 +21,15 @@ import bigshots.people_helping_people.utilities.Utils;
 public class StatisticsFragment extends BaseFragment {
 
     private static BarChart myStatsBarGraph, globalStatsBarGraph;
+    private static int color;
     int shown = 0;
-
     public StatisticsFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        color = getResources().getColor(R.color.current_charity_color);
     }
 
     @Override
@@ -36,7 +37,7 @@ public class StatisticsFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.statistics, container, false);
         myStatsBarGraph = (BarChart) view.findViewById(R.id.my_stats);
         globalStatsBarGraph = (BarChart) view.findViewById(R.id.global_stats);
-        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
+        // ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         //Todo stat_description android:text="$18 raised at 90c a day"
         //Todo new UserManager().postStats("sidney@cyberkomm.ch", 500, 2.15f);
         //Todo new UserManager().getLeaderboardListRate(5);
@@ -64,26 +65,19 @@ public class StatisticsFragment extends BaseFragment {
             Toast.makeText(MainMenu.context, "No data to display", Toast.LENGTH_LONG).show();
             return;
         }
-        //Mode mode = Utils.getScope(MainMenu.context);
-//        for (int i = 0; i < points.size(); i++) {
-//            final Point point = points.get(i);
-//            if (mode == Mode.MONTH)
-//                addMyStatsBar(point.getLegendTitle() + String.valueOf(i + 1), point.getY());
-//            else
-//                addMyStatsBar(point.getLegendTitle(), point.getY());
-//
-//        }
+        Mode mode = Utils.getScope(MainMenu.context);
+        for (int i = 0; i < points.size(); i++) {
+            final Point point = points.get(i);
+            if (mode == Mode.MONTH)
+                addMyStatsBar(point.getLegendTitle() + String.valueOf(i + 1), point.getY());
+            else
+                addMyStatsBar(point.getLegendTitle(), point.getY());
+
+        }
     }
 
     private void addMyStatsBar(String label, float value) {
-        int color = color = getResources().getColor(R.color.material_blue);
-//        if (value > 5) {
-//
-//        } else if (value > 3) {
-//            color = getResources().getColor(R.color.material_green_light);
-//        } else {
-//            color = getResources().getColor(R.color.material_red);
-//        }
+        Log.e("adding", label);
         myStatsBarGraph.addBar(new BarModel(label, value, color));
     }
 
@@ -91,6 +85,11 @@ public class StatisticsFragment extends BaseFragment {
     private void addGlobalStatsBar(String label, float value) {
         int color = color = getResources().getColor(R.color.material_blue);
         globalStatsBarGraph.addBar(new BarModel(label, value, color));
+    }
+
+    @Override
+    protected void update() {
+        //Todo
     }
 
     public enum Mode {

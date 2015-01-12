@@ -97,6 +97,10 @@ public class CurrentCharityFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    protected void update() {
+        //Todo
+    }
 
 }
 

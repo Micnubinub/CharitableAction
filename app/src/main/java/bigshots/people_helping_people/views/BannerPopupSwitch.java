@@ -1,5 +1,7 @@
 package bigshots.people_helping_people.views;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -7,8 +9,10 @@ import android.graphics.Paint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import bigshots.people_helping_people.R;
@@ -20,16 +24,44 @@ import bigshots.people_helping_people.services.BannerPopupService;
  */
 @SuppressWarnings("ALL")
 public class BannerPopupSwitch extends ViewGroup {
+    //Todo remove ripples
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private static final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private static int PADDING = 2;
     private static int duration = 700;
     final Intent service = new Intent(getContext(), BannerPopupService.class);
+    private final DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private int height;
-    private int rippleR;
+    //    private int rippleR;
     private float ripple_animated_value = 0;
-    private int clickedX, clickedY;
+    //    private int clickedX, clickedY;
     private boolean touchDown = false, animateRipple;
+    private ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
 
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            if (!touchDown)
+                ripple_animated_value = 0;
+
+            animateRipple = false;
+            invalidatePoster();
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {
+
+        }
+    };
     private int textSize;
     private String text = "";
     private Switch materialSwitch;
@@ -39,11 +71,17 @@ public class BannerPopupSwitch extends ViewGroup {
     private boolean updating = false;
     private boolean checked = false;
     private float animated_value = 0;
-
+    private final ValueAnimator.AnimatorUpdateListener updateListener = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            animated_value = (Float) (animation.getAnimatedValue());
+            ripple_animated_value = animated_value;
+            invalidatePoster();
+        }
+    };
     private OnCheckedChangedListener listener;
     private TextView textView;
     private int width;
-    private int rippleColor = 0x25000000;
 
     public BannerPopupSwitch(Context context) {
         super(context);
@@ -58,6 +96,12 @@ public class BannerPopupSwitch extends ViewGroup {
     public BannerPopupSwitch(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
+    }
+
+    private static void animateSwitch() {
+        if (animator.isRunning() || animator.isStarted())
+            animator.cancel();
+        animator.start();
     }
 
     private int dpToPixels(int dp) {
@@ -131,6 +175,7 @@ public class BannerPopupSwitch extends ViewGroup {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+        animateSwitch();
         notifyListener();
         if (checked)
             getContext().startService(service);
@@ -170,6 +215,10 @@ public class BannerPopupSwitch extends ViewGroup {
         this.updating = updating;
     }
 
+    public void setAnimationDuration(int duration) {
+        BannerPopupSwitch.duration = duration;
+        animator.setDuration(duration);
+    }
 
     private void init() {
         setWillNotDraw(false);
@@ -199,9 +248,15 @@ public class BannerPopupSwitch extends ViewGroup {
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         textView.setText("Floating banner (1 point per min)");
 
+
         addView(textView);
         addView(materialSwitch);
         materialSwitch.invalidate();
+
+        animator.setInterpolator(interpolator);
+        animator.setDuration(duration);
+        animator.addListener(animatorListener);
+        animator.addUpdateListener(updateListener);
 
         setOnClickListener(new OnClickListener() {
             @Override
@@ -209,7 +264,7 @@ public class BannerPopupSwitch extends ViewGroup {
                 toggle();
             }
         });
-        setBackgroundResource(R.drawable.white_button_selector);
+
         checked = BannerPopupService.isServiceRunning;
     }
 
@@ -217,10 +272,15 @@ public class BannerPopupSwitch extends ViewGroup {
         this.listener = listener;
     }
 
-    public void setRippleColor(int color) {
-        rippleColor = color;
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        return false;
     }
 
+    public void setDuration(int duration) {
+        BannerPopupSwitch.duration = duration;
+        animator.setDuration(duration);
+    }
 
     private void invalidatePoster() {
         final Runnable runnable = new Runnable() {
@@ -234,6 +294,7 @@ public class BannerPopupSwitch extends ViewGroup {
             materialSwitch.invalidate();
         }
     }
+
 
     @Override
     protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {

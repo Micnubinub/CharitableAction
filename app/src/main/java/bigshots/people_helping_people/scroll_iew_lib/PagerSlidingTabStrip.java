@@ -44,7 +44,6 @@ import java.util.Locale;
 import bigshots.people_helping_people.R;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
-
     // @formatter:off
     private static final int[] ATTRS = new int[]{
             android.R.attr.textSize,
@@ -123,8 +122,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         a = context.obtainStyledAttributes(attrs, R.styleable.PagerSlidingTabStrip);
 
-        indicatorColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsIndicatorColor, indicatorColor);
-        underlineColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsUnderlineColor, underlineColor);
+        indicatorColor = getResources().getColor(R.color.current_charity_color);
+        underlineColor = getResources().getColor(R.color.current_charity_color);
         dividerColor = a.getColor(R.styleable.PagerSlidingTabStrip_pstsDividerColor, dividerColor);
         indicatorHeight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsIndicatorHeight, indicatorHeight);
         underlineHeight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsUnderlineHeight, underlineHeight);
@@ -217,7 +216,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     private void addIconTab(final int position, int resId) {
-
         ImageButton tab = new ImageButton(getContext());
         tab.setImageResource(resId);
 
@@ -239,11 +237,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     }
 
     private void updateTabStyles() {
-
         for (int i = 0; i < tabCount; i++) {
-
             View v = tabsContainer.getChildAt(i);
-
             v.setBackgroundResource(tabBackgroundResId);
 
             if (v instanceof TextView) {

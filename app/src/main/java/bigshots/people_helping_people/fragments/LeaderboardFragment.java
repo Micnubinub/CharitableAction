@@ -29,7 +29,7 @@ import bigshots.people_helping_people.utilities.Utils;
 
 
 public class LeaderboardFragment extends BaseFragment {
-
+    //Todo add to on opened
     private static final UserManager userManager = new UserManager();
     private static ParallaxListView listView;
     int rank;
@@ -109,7 +109,7 @@ public class LeaderboardFragment extends BaseFragment {
             e.printStackTrace();
         }
 
-        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", points, (points * (0.0001875f))));
+        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%dpts", points, (points * (0.0001875f))));
         AsyncConnector.setListener(aSyncListener);
         getScoreLeaderBoard();
 

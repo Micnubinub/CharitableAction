@@ -54,6 +54,7 @@ public class ScheduledAdsManager extends Service {
                 @Override
                 public void onAdLoaded() {
                     super.onAdLoaded();
+                    //Todo move to opened
                     try {
                         Utils.addScore(context, 15);
                     } catch (Exception e) {

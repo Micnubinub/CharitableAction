@@ -48,11 +48,11 @@ public class LeaderBoardAdapter extends BaseAdapter {
         final UserStats stat = stats.get(position);
 
         ((TextView) view.findViewById(R.id.name_pos)).setText(String.format("%d. %s", position + 1, stat.getName()));
-
-        if (isRate)
-            ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%.3fpts | $%.2f", stat.getRate(), stat.getRaised()));
-        else
-            ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%dpts | $%.2f", stat.getScore(), stat.getRaised()));
+//
+//        if (isRate)
+//            ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%.3fpts", stat.getRate()));
+//        else
+        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%dpts", stat.getScore()));
 
         return view;
     }

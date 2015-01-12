@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import bigshots.people_helping_people.Statistics;
+import bigshots.people_helping_people.fragments.StatisticsFragment;
 
 /**
  * Created by root on 27/11/14.
@@ -81,7 +81,7 @@ public class Utils {
     }
 
 
-    public static Statistics.Mode getScope(Context context) {
+    public static StatisticsFragment.Mode getScope(Context context) {
         try {
             final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
             final SQLiteDatabase statsDB = statsDBHelper.getReadableDatabase();
@@ -99,20 +99,20 @@ public class Utils {
             long diff = last - first;
 
             if (diff <= 86400000l)
-                return Statistics.Mode.DAY;
+                return StatisticsFragment.Mode.DAY;
 
             if (diff <= 604800000l)
-                return Statistics.Mode.WEEK;
+                return StatisticsFragment.Mode.WEEK;
 
             if (diff < 2419200000l)
-                return Statistics.Mode.MONTH;
+                return StatisticsFragment.Mode.MONTH;
 
-            return Statistics.Mode.YEAR;
+            return StatisticsFragment.Mode.YEAR;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Statistics.Mode.DAY;
+        return StatisticsFragment.Mode.DAY;
     }
 
     public static String getTotalScore(Context context) {
@@ -184,7 +184,7 @@ public class Utils {
 
     public static ArrayList<Point> getPoints(Context context) {
         final ArrayList<Point> graphPoints = new ArrayList<Point>();
-        final Statistics.Mode mode = getScope(context);
+        final StatisticsFragment.Mode mode = getScope(context);
         String lengend = "";
         long steps = 0;
 //Todo use scope to detemine legend and points y ** lots of work to be done
