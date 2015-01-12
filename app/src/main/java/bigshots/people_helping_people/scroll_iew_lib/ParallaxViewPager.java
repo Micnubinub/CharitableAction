@@ -26,6 +26,21 @@ public class ParallaxViewPager extends ViewPager {
             scrollListener.onScrollX(position, offset);
     }
 
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        Log.e("pagerSizeChanged", String.format("%d, %d, %d, %d", oldw, oldh, w, h));
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+//        Log.e("invalidate", String.format("x,y : %f, %f...\n" +
+//                "childCound, currentItem %d, %d", getX(), getY(),
+//                ((ParallaxViewLayout.MyPagerAdapter)getAdapter()).getItem(getCurrentItem()).getView().getHeight(), getCurrentItem()));
+    }
+
     public void setScrollListener(ScrollListener scrollListener) {
         this.scrollListener = scrollListener;
     }

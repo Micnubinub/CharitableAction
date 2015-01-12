@@ -3,7 +3,6 @@ package bigshots.people_helping_people.scroll_iew_lib;
 import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import bigshots.people_helping_people.R;
@@ -24,7 +22,6 @@ import bigshots.people_helping_people.R;
 
 public class KenBurnsSupportView extends FrameLayout {
 
-    private static final String TAG = "KenBurnsView";
 
     private final Handler mHandler;
     private final Random random = new Random();
@@ -48,19 +45,17 @@ public class KenBurnsSupportView extends FrameLayout {
     public KenBurnsSupportView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mHandler = new Handler();
+        //Todo add more images
+        setResourceIds(R.drawable.people, R.drawable.people);
     }
 
     public void setResourceIds(int... resourceIds) {
         mResourceIds = resourceIds;
-        mImageViews = new ImageView[2];
-        Log.e("resIds", Arrays.toString(mResourceIds));
-
         fillImageViews();
     }
 
     private void swapImage() {
         try {
-            Log.d(TAG, "swapImage active=" + mActiveImageIndex);
             if (mActiveImageIndex == -1) {
                 mActiveImageIndex = 1;
                 animate(mImageViews[mActiveImageIndex]);
@@ -69,7 +64,6 @@ public class KenBurnsSupportView extends FrameLayout {
 
             int inactiveIndex = mActiveImageIndex;
             mActiveImageIndex = (1 + mActiveImageIndex) % mImageViews.length;
-            Log.d(TAG, "new active=" + mActiveImageIndex);
 
             final ImageView activeImageView = mImageViews[mActiveImageIndex];
             ViewHelper.setAlpha(activeImageView, 0.0f);
@@ -103,7 +97,6 @@ public class KenBurnsSupportView extends FrameLayout {
                 .setDuration(duration);
 
         propertyAnimator.start();
-        Log.d(TAG, "starting Ken Burns animation " + propertyAnimator);
     }
 
     private float pickScale() {
@@ -148,13 +141,16 @@ public class KenBurnsSupportView extends FrameLayout {
         mImageViews = new ImageView[2];
         mImageViews[0] = (ImageView) view.findViewById(R.id.image0);
         mImageViews[1] = (ImageView) view.findViewById(R.id.image1);
-        //Todo add more images
-        setResourceIds(R.drawable.people, R.drawable.logo);
+        fillImageViews();
     }
 
     private void fillImageViews() {
-        for (int i = 0; i < mImageViews.length; i++) {
-            mImageViews[i].setImageResource(mResourceIds[i]);
+        try {
+            for (int i = 0; i < mImageViews.length; i++) {
+                mImageViews[i].setImageResource(mResourceIds[i]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

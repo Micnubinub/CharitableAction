@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/title_with_button"
+        layout="@layout/title_with_button"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp" />
 
     <RelativeLayout
-
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@+id/title"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -16,13 +21,13 @@
             android:layout_width="fill_parent"
             android:layout_height="180dp">
 
-            <ImageView
+            <bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView
+                android:id="@+id/ken_burns"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@drawable/people" />
+                android:layout_height="240dp" />
 
             <ImageView
+                android:id="@+id/logo"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_above="@+id/tabs"
@@ -32,7 +37,7 @@
                 android:src="@drawable/logo" />
 
 
-            <bigshots.people_helping_people.views.PagerSlidingTabStrip
+            <bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip
                 android:id="@+id/tabs"
                 android:layout_width="fill_parent"
                 android:layout_height="56dp"
@@ -42,11 +47,11 @@
                 android:paddingRight="5dp" />
         </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
+        <bigshots.people_helping_people.scroll_iew_lib.ParallaxViewPager
             android:id="@+id/pager"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/rl" />
     </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>

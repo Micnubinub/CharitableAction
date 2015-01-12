@@ -3,7 +3,6 @@ package bigshots.people_helping_people.scroll_iew_lib;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -13,17 +12,17 @@ import bigshots.people_helping_people.R;
  * Created by root on 10/01/15.
  */
 public class TitleTextButton {
-    private View view;
+    private static View view;
     private TextView title;
     private FrameLayout container;
     private Context context;
 
-    public TitleTextButton(Context context) {
+    public TitleTextButton(Context context, View view) {
         this.context = context;
-        view = View.inflate(context, R.layout.title_with_button, null);
+        TitleTextButton.view = view;
         title = (TextView) view.findViewById(R.id.title);
         container = (FrameLayout) view.findViewById(R.id.container);
-        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, dpToPixels(56)));
+        //view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, dpToPixels(56)));
     }
 
     public View getView() {
