@@ -11,7 +11,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.nineoldandroids.view.ViewHelper;
@@ -19,6 +18,12 @@ import com.nineoldandroids.view.ViewHelper;
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.AboutFragment;
+import bigshots.people_helping_people.fragments.ContributeFragment;
+import bigshots.people_helping_people.fragments.CurrentCharityFragment;
+import bigshots.people_helping_people.fragments.FeedbackFragment;
+import bigshots.people_helping_people.fragments.LeaderboardFragment;
+import bigshots.people_helping_people.fragments.StatisticsFragment;
+import bigshots.people_helping_people.fragments.VoteFragment;
 
 /**
  * Created by root on 10/01/15.
@@ -31,7 +36,7 @@ public class ParallaxViewLayout implements ScrollListener {
     private static final DecelerateInterpolator decel = new DecelerateInterpolator();
     private static int w, h;
     //Don't need nothing
-    private static int scrollY;
+    private static int scrollY, titleBottom;
     private static int currentCharityLogoHeight;
     private static int currentPos;
     //Already have set up methods
@@ -44,11 +49,11 @@ public class ParallaxViewLayout implements ScrollListener {
     private static TitleTextButton title;
     private static Context context;
     private static ImageView currentCharityLogo;
-    private static LayoutParams pagerParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-    private static LayoutParams logoParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-    private static LayoutParams titleParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-    private static LayoutParams kenBurnsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-    private static LayoutParams tabsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+    //    private static LayoutParams pagerParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//    private static LayoutParams logoParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//    private static LayoutParams titleParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//    private static LayoutParams kenBurnsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+//    private static LayoutParams tabsParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
     private static View main;
     private static View.OnLayoutChangeListener layoutChangeListener = new View.OnLayoutChangeListener() {
         @Override
@@ -83,7 +88,7 @@ public class ParallaxViewLayout implements ScrollListener {
 //        pagerSlidingTabStripY = clamp(pagerSlidingTabStripY, titleBottom, scrollYMax - pagerSlidingTabStrip.getMeasuredHeight());
 //        layout(pagerSlidingTabStrip, 0, pagerSlidingTabStripY, w, pagerSlidingTabStripY + pagerSlidingTabStrip.getMeasuredHeight());
 //        layout(kenBurnsSupportView, 0, 0, w, scrollYMax);
-//        layout(currentCharityLogo, 0, titleBottom, w, pagerSlidingTabStrip.getTop());
+////        layout(currentCharityLogo, 0, titleBottom, w, pagerSlidingTabStrip.getTop());
 //        layout(pager, 0, scrollY, w, h);
 //        invalidatePager();
     }
@@ -91,29 +96,29 @@ public class ParallaxViewLayout implements ScrollListener {
     private static void layout(View view, int left, int top, int right, int bottom) {
 //    view.setX(left);
 //    view.setY(top);
-//
+////
 //    LayoutParams params = null;
-//    if (view instanceof KenBurnsSupportView) {
-//        params = kenBurnsParams;
-//    } else if (view instanceof ParallaxViewPager) {
+////    if (view instanceof KenBurnsSupportView) {
+////        params = kenBurnsParams;
+////    } else if (view instanceof ParallaxViewPager) {
 //        params = pagerParams;
-//    } else if (view instanceof PagerSlidingTabStrip) {
-//        params = tabsParams;
-//    } else if (view instanceof ImageView) {
-//        params = logoParams;
-//    } else {
-//        params = titleParams;
-//    }
-//
+////    } else if (view instanceof PagerSlidingTabStrip) {
+////        params = tabsParams;
+////    } else if (view instanceof ImageView) {
+////        params = logoParams;
+////    } else {
+////        params = titleParams;
+////    }
+////
 //    params.width = Math.abs(right - left);
 //    params.height = Math.abs(bottom - top);
+//    Log.e("params", params.toString());
+        //   view.setLayoutParams(params);
+//    }
 //
-//    view.setLayoutParams(params);
-    }
-
-    private static void invalidatePager() {
-        pagerParams.width = w;
-        pagerParams.height = Math.abs(pager.getTop() - pager.getBottom());
+//    private static void invalidatePager() {
+//        pagerParams.width = w;
+//        pagerParams.height = Math.abs(pager.getTop() - pager.getBottom());
 //        pager.setLayoutParams(pagerParams);
     }
 
@@ -133,9 +138,11 @@ public class ParallaxViewLayout implements ScrollListener {
         scrollYMax = dpToPixels(250);
         final DisplayMetrics metrics = new DisplayMetrics();
         MainMenu.fragmentActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        titleBottom = dpToPixels(56);
         w = metrics.widthPixels;
         h = metrics.heightPixels;
         scrollYMax = Math.min(h / 2, scrollYMax);
+
         Log.e("ScrollYMax", String.valueOf(scrollYMax));
     }
 
@@ -158,21 +165,21 @@ public class ParallaxViewLayout implements ScrollListener {
         //Todo
         BaseFragment.scrollListener = this;
 
-//        fragments[0] = new ContributeFragment();
-//        fragments[1] = new VoteFragment();
-//        fragments[2] = new CurrentCharityFragment();
-//        fragments[3] = new StatisticsFragment();
-//        fragments[4] = new LeaderboardFragment();
-//        fragments[5] = new FeedbackFragment();
-//        fragments[6] = new AboutFragment();
-
-        fragments[0] = new AboutFragment();
-        fragments[1] = new AboutFragment();
-        fragments[2] = new AboutFragment();
-        fragments[3] = new AboutFragment();
-        fragments[4] = new AboutFragment();
-        fragments[5] = new AboutFragment();
+        fragments[0] = new ContributeFragment();
+        fragments[1] = new VoteFragment();
+        fragments[2] = new CurrentCharityFragment();
+        fragments[3] = new StatisticsFragment();
+        fragments[4] = new LeaderboardFragment();
+        fragments[5] = new FeedbackFragment();
         fragments[6] = new AboutFragment();
+
+//        fragments[0] = new AboutFragment();
+//        fragments[1] = new AboutFragment();
+//        fragments[2] = new AboutFragment();
+//        fragments[3] = new AboutFragment();
+//        fragments[4] = new AboutFragment();
+//        fragments[5] = new AboutFragment();
+//        fragments[6] = new AboutFragment();
 
         setUpPagerAndAdapter();
     }
@@ -194,6 +201,7 @@ public class ParallaxViewLayout implements ScrollListener {
         pager.setOffscreenPageLimit(8);
         pager.setScrollListener(this);
         setUpPagerSlidingTabStrip();
+        ViewHelper.setTranslationY(pager, scrollYMax);
     }
 
     public void setUpPagerSlidingTabStrip() {
@@ -240,6 +248,13 @@ public class ParallaxViewLayout implements ScrollListener {
     private void setViewsY() {
         //Todo
         ViewHelper.setTranslationY(kenBurnsSupportView, scrollY - scrollYMax);
+        float scaleY = (scrollY - titleBottom) / (float) (scrollYMax - titleBottom);
+        scaleY = scaleY > 1 ? 1 : scaleY;
+        scaleY = scaleY < 0 ? 0 : scaleY;
+        ViewHelper.setY(currentCharityLogo, scaleY);
+        Log.e("scle", String.valueOf(scaleY));
+        currentCharityLogo.invalidate();
+        ViewHelper.setTranslationY(pagerSlidingTabStrip, scrollY - scrollYMax);
 
     }
 

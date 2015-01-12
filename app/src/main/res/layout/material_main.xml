@@ -4,29 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView
+        android:id="@+id/ken_burns"
+        android:layout_width="fill_parent"
+        android:layout_height="240dp" />
+
     <include
         android:id="@+id/title_with_button"
         layout="@layout/title_with_button"
         android:layout_width="fill_parent"
-        android:layout_height="48dp" />
+        android:layout_height="56dp" />
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/title"
-        android:orientation="vertical">
-
-        <RelativeLayout
             android:id="@+id/rl"
             android:layout_width="fill_parent"
-            android:layout_height="180dp">
+        android:layout_height="180dp"
+        android:layout_below="@+id/title_with_button">
 
-            <bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView
-                android:id="@+id/ken_burns"
-                android:layout_width="fill_parent"
-                android:layout_height="240dp" />
-
-            <ImageView
+    <ImageView
                 android:id="@+id/logo"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -35,7 +30,6 @@
                 android:padding="20dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/logo" />
-
 
             <bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip
                 android:id="@+id/tabs"
@@ -50,8 +44,5 @@
         <bigshots.people_helping_people.scroll_iew_lib.ParallaxViewPager
             android:id="@+id/pager"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/rl" />
-    </RelativeLayout>
+            android:layout_height="fill_parent" />
 </RelativeLayout>
