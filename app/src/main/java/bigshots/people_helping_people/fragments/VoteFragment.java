@@ -143,5 +143,7 @@ public class VoteFragment extends BaseFragment {
                 }
             }
         });
+
+        getView().invalidate();
     }
 }

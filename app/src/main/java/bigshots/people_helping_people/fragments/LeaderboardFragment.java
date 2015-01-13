@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Charity;
-import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
@@ -21,7 +20,6 @@ import bigshots.people_helping_people.utilities.Utils;
 
 
 public class LeaderboardFragment extends BaseFragment {
-    private static final UserManager userManager = new UserManager();
     private static ParallaxListView listView;
     private static int rank;
     private static View message;
@@ -142,5 +140,10 @@ public class LeaderboardFragment extends BaseFragment {
 
         if (points != null)
             points.setText(String.format("%dpts", Integer.parseInt(Utils.getTotalScore(MainMenu.context))));
+
+        if (myRank != null)
+            myRank.setText(String.format("%d. Me", rank));
+
+        getView().invalidate();
     }
 }

@@ -139,7 +139,7 @@ public class ParallaxViewLayout implements ScrollListener {
     public void setUpPager() {
         pager = (ParallaxViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(4);
+        pager.setOffscreenPageLimit(9);
         pager.setScrollListener(this);
         setUpPagerSlidingTabStrip();
     }
