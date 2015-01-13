@@ -124,7 +124,6 @@ public class BannerPopupService extends Service {
 
                 // boolean isWiFi = activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
 
-                //Todo implement this on the next update
                 //Toast.makeText(context, String.format("Connected : %b", isConnected), Toast.LENGTH_SHORT).show();
 
             } catch (Exception e) {

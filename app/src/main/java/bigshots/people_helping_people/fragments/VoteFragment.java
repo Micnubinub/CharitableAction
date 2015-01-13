@@ -138,12 +138,12 @@ public class VoteFragment extends BaseFragment {
 
                     VoteCharityAdapter.setVotedFor(charity.getUrl());
                     CharityListItem.setCurrentVote(charity.getUrl());
+
                     adapter.notifyDataSetChanged();
-                    listView.invalidate();
+                    listView.invalidateViews();
                 }
             }
         });
 
-        getView().invalidate();
     }
 }

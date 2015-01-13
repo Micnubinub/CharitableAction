@@ -30,7 +30,7 @@
                 android:maxLines="1"
                 android:padding="10dp"
                 android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <bigshots.people_helping_people.views.MaterialSwitch
                 android:id="@+id/enable_reminders"
@@ -40,7 +40,7 @@
                 android:maxLines="1"
                 android:padding="10dp"
                 android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/configure_scheduled_ads"
@@ -51,7 +51,7 @@
                 android:padding="10dp"
                 android:text="Configure scheduled ads"
                 android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/full_screen"
@@ -62,7 +62,7 @@
                 android:padding="10dp"
                 android:text="Full screen ad (15 points)"
                 android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/video_ad"
@@ -73,7 +73,7 @@
                 android:padding="10dp"
                 android:text="Watch video (20 points)"
                 android:textColor="@color/dark_grey_text"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
     </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>

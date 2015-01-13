@@ -180,7 +180,7 @@ public class MaterialCheckBox extends ViewGroup {
         PADDING = dpToPixels(5);
         textView.setPadding(PADDING, PADDING, PADDING, PADDING);
         textView.setTextColor(getResources().getColor(R.color.dark_grey_text));
-        textView.setTextSize(22);
+        textView.setTextSize(20);
         textView.setMaxLines(2);
         textView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 

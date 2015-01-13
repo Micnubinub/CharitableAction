@@ -19,7 +19,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
-        android:layout_toRightOf="@+id/cancel"
         android:background="@drawable/white_button_selector"
         android:minWidth="120dp"
         android:padding="8dp"

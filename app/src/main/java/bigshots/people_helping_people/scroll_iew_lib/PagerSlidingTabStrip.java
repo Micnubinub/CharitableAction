@@ -50,17 +50,17 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
             android.R.attr.textColor
     };
     private final PageListener pageListener = new PageListener();
+    private final LinearLayout.LayoutParams defaultTabLayoutParams;
+    private final LinearLayout.LayoutParams expandedTabLayoutParams;
+    private final LinearLayout tabsContainer;
+    private final Paint rectPaint;
+    private final Paint dividerPaint;
     // @formatter:on
     public OnPageChangeListener delegatePageListener;
-    private LinearLayout.LayoutParams defaultTabLayoutParams;
-    private LinearLayout.LayoutParams expandedTabLayoutParams;
-    private LinearLayout tabsContainer;
     private ViewPager pager;
     private int tabCount;
     private int currentPosition = 0;
     private float currentPositionOffset = 0f;
-    private Paint rectPaint;
-    private Paint dividerPaint;
     private int indicatorColor = 0xEEFFFFFF;
     private int underlineColor = 0x33FFFFFF;
     private int dividerColor = 0xAAFFFFFF;

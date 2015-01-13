@@ -133,7 +133,7 @@ public class LeaderboardFragment extends BaseFragment {
                 if (listView != null) {
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                    listView.invalidate();
+                    listView.invalidateViews();
                 }
             }
         });

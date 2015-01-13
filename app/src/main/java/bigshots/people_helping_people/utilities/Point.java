@@ -4,8 +4,8 @@ package bigshots.people_helping_people.utilities;
  * Created by root on 25/12/14.
  */
 public class Point {
-    private String legendTitle;
-    private int y;
+    private final String legendTitle;
+    private final int y;
 
     public Point(String legendTitle, int y) {
         this.legendTitle = legendTitle;

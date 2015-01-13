@@ -23,14 +23,13 @@ import bigshots.people_helping_people.R;
 public class KenBurnsSupportView extends FrameLayout {
     private final Handler mHandler;
     private final Random random = new Random();
+    private final int mSwapMs = 10000;
+    private final int mFadeInOutMs = 400;
+    private final float maxScaleFactor = 1.5F;
+    private final float minScaleFactor = 1.2F;
     private int[] mResourceIds;
     private ImageView[] mImageViews;
     private int mActiveImageIndex = -1;
-    private int mSwapMs = 10000;
-    private int mFadeInOutMs = 400;
-
-    private float maxScaleFactor = 1.5F;
-    private float minScaleFactor = 1.2F;
 
     public KenBurnsSupportView(Context context) {
         this(context, null);
@@ -154,7 +153,7 @@ public class KenBurnsSupportView extends FrameLayout {
         }
     }
 
-    private Runnable mSwapImageRunnable = new Runnable() {
+    private final Runnable mSwapImageRunnable = new Runnable() {
         @Override
         public void run() {
             swapImage();

@@ -8,7 +8,7 @@
         android:id="@+id/ken_burns"
         android:layout_width="fill_parent"
         android:layout_height="240dp"
-        android:foreground="#90000000" />
+        android:foreground="#86000000" />
 
     <RelativeLayout
         android:id="@+id/action_bar"
@@ -26,7 +26,7 @@
             android:padding="8dp"
             android:text="People Helping People"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <RelativeLayout

@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 
 
 public class FeedbackFragment extends BaseFragment {
@@ -44,7 +42,6 @@ public class FeedbackFragment extends BaseFragment {
             }
         }
     };
-
 
     public FeedbackFragment() {
     }
@@ -120,13 +117,11 @@ public class FeedbackFragment extends BaseFragment {
         view.findViewById(R.id.fb).setOnClickListener(listener);
         view.findViewById(R.id.direct).setOnClickListener(listener);
         view.findViewById(R.id.rate).setOnClickListener(listener);
-        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
+        //((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         return view;
     }
 
     @Override
     protected void update() {
-        //Todo
-        Log.e("update() :", getClass().getName());
     }
 }

@@ -51,6 +51,7 @@ public abstract class BaseChart extends ViewGroup {
     public static final int DEF_ANIMATION_TIME = 2000;
     public static final boolean DEF_SHOW_DECIMAL = false;
     protected final static NumberFormat mFormatter = NumberFormat.getInstance(Locale.getDefault());
+    protected final float mLegendTopPadding = Utils.dpToPx(4.f);
     protected Graph mGraph;
     protected GraphOverlay mGraphOverlay;
     protected Legend mLegend;
@@ -67,8 +68,6 @@ public abstract class BaseChart extends ViewGroup {
     protected int mRightPadding;
     protected int mBottomPadding;
     protected float mMaxFontHeight;
-    protected float mLegendTopPadding = Utils.dpToPx(4.f);
-
     // ---------------------------------------------------------------------------------------------
     //                          Override methods from view layers
     // ---------------------------------------------------------------------------------------------
@@ -329,9 +328,9 @@ public abstract class BaseChart extends ViewGroup {
     // Graph
     //##############################################################################################
     protected class Graph extends View {
+        private final Matrix mTransform = new Matrix();
+        private final PointF mPivot = new PointF();
         private float mRotation = 0;
-        private Matrix mTransform = new Matrix();
-        private PointF mPivot = new PointF();
 
         /**
          * Simple constructor to use when creating a view from code.

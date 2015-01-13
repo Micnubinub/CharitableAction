@@ -26,14 +26,14 @@ import bigshots.people_helping_people.utilities.Utils;
  * Created by root on 11/12/14.
  */
 public class ScheduledAdsManager extends Service {
+    private static final int SCHEDULED_ADS_NOTIFICATION_ID = 455129802;
+    private static final int REMINDER_NOTIFICATION_ID = 455129854;
     private static PendingIntent alarmIntent;
     private static AlarmManager alarmManager;
     private static InterstitialAd fullScreenAd;
     private static AdManager adManager;
     private static boolean loadAd;
     private static Context context;
-    private static int SCHEDULED_ADS_NOTIFICATION_ID = 455129802;
-    private static int REMINDER_NOTIFICATION_ID = 455129854;
     private static boolean serviceRunning = false;
 
     public static void loadFullScreenAd() {

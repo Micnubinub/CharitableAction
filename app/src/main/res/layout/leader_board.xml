@@ -9,7 +9,6 @@
         android:id="@+id/me"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl"
         android:ellipsize="end"
         android:maxLines="1"
         android:padding="8dp"
@@ -23,8 +22,7 @@
         android:id="@+id/body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/me"
-        android:background="@color/white">
+        android:layout_below="@+id/me">
 
         <TextView
             android:id="@+id/my_rank"
@@ -78,7 +76,6 @@
         android:id="@+id/message"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/rl"
         android:background="@color/white">
 
         <TextView

@@ -19,35 +19,19 @@ public class PreferencesFragment extends BaseFragment {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
-
     public PreferencesFragment() {
     }
-
-//    @Override
-//    public void onScroll(ScrollView view, int firstVisibleItem, int visibleItemCount, int totalItemCount, int pagePosition) {
-//        if (mScrollTabHolder != null)
-//            mScrollTabHolder.onScroll(view, firstVisibleItem, visibleItemCount, totalItemCount, pagePosition);
-//    }
-//
-//    @Override
-//    public void adjustScroll(int scrollHeight) {
-//
-//    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.context);
+        editor = prefs.edit();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         final View view = inflater.inflate(R.layout.preferences, container, false);
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.context);
-        editor = prefs.edit();
 
         autoStart = (MaterialSwitch) view.findViewById(R.id.auto_start_boot);
         autoStart.setText("Banner at startup");
@@ -88,7 +72,6 @@ public class PreferencesFragment extends BaseFragment {
             autoStart.setChecked(prefs.getBoolean(Utils.AUTO_START_BOOL, false));
             toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, true));
             adsAtBoot.setChecked(prefs.getBoolean(Utils.ADS_AT_START_BOOL, true));
-
         } catch (Exception e) {
 
         }

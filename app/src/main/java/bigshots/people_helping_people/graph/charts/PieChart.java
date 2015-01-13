@@ -100,6 +100,15 @@ public class PieChart extends BaseChart {
     public static final int FLING_VELOCITY_DOWNSCALE = 4;
     public static final int AUTOCENTER_ANIM_DURATION = 250;
     private static final String LOG_TAG = PieChart.class.getSimpleName();
+    // Inner Value stuff
+    private final Rect mValueTextBounds = new Rect();
+    // Legend stuff
+    private final float mIndicatorSize = Utils.dpToPx(8);
+    private final float mIndicatorTopMargin = Utils.dpToPx(6);
+    private final float mIndicatorBottomMargin = Utils.dpToPx(4);
+    private final Rect mTextBounds = new Rect();
+    // Indicator is located at the bottom
+    private final int mIndicatorAngle = 90;
     private List<PieModel> mPieData;
     private Paint mGraphPaint;
     private Paint mLegendPaint;
@@ -107,14 +116,7 @@ public class PieChart extends BaseChart {
     private RectF mGraphBounds;
     private RectF mInnerBounds;
     private RectF mInnerOutlineBounds;
-    // Inner Value stuff
-    private Rect mValueTextBounds = new Rect();
-    // Legend stuff
-    private float mIndicatorSize = Utils.dpToPx(8);
-    private float mIndicatorTopMargin = Utils.dpToPx(6);
-    private float mIndicatorBottomMargin = Utils.dpToPx(4);
     private Path mTriangle;
-    private Rect mTextBounds = new Rect();
     private float mPieDiameter;
     private float mPieRadius;
     private float mTotalValue;
@@ -136,8 +138,6 @@ public class PieChart extends BaseChart {
     private float mCalculatedInnerPadding;
     private float mCalculatedInnerPaddingOutline;
     private int mPieRotation;
-    // Indicator is located at the bottom
-    private int mIndicatorAngle = 90;
     private int mCurrentItem = 0;
     private ObjectAnimator mAutoCenterAnimator;
     private Scroller mScroller;

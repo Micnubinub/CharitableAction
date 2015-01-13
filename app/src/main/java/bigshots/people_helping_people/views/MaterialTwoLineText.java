@@ -43,7 +43,7 @@ public class MaterialTwoLineText extends ViewGroup {
         primaryTextView = new TextView(getContext());
         primaryTextView.setTextColor(getResources().getColor(R.color.dark_grey));
         primaryTextView.setTypeface(null, Typeface.BOLD);
-        primaryTextView.setTextSize(22);
+        primaryTextView.setTextSize(20);
         primaryTextView.setMaxLines(1);
         primaryTextView.setLayoutParams(params);
         primaryTextView.setEllipsize(TextUtils.TruncateAt.END);

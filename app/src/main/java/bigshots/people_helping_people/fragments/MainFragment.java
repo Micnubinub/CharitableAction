@@ -14,7 +14,6 @@ import bigshots.people_helping_people.scroll_iew_lib.ParallaxViewLayout;
  * Created by root on 12/01/15.
  */
 public class MainFragment extends Fragment {
-    //Todo fix long loading times issue
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.material_main, null);

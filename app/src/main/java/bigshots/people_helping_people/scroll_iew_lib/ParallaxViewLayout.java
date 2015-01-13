@@ -11,7 +11,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
@@ -35,7 +34,7 @@ public class ParallaxViewLayout implements ScrollListener {
     private static int w, h;
     //Don't need nothing
     private static int scrollY, titleBottom;
-    private static int currentCharityLogoMaxHeight, tabStripHeight;
+    private static int tabStripHeight;
     private static int currentPos;
     //Already have set up methods
     private static ParallaxViewPager pager;
@@ -43,7 +42,7 @@ public class ParallaxViewLayout implements ScrollListener {
     private static PagerSlidingTabStrip pagerSlidingTabStrip;
     //    private static KenBurnsSupportView kenBurnsSupportView;
     private static int scrollYMax;
-    private static TextView title;
+    //    private static TextView title;
     private static Context context;
     private static ImageView currentCharityLogo;
     private static View main;
@@ -75,7 +74,7 @@ public class ParallaxViewLayout implements ScrollListener {
 
     public void setScrollY(int scrollY) {
         scrollY = scrollY < scrollYMax ? scrollY : scrollYMax;
-        this.scrollY = scrollY;
+        ParallaxViewLayout.scrollY = scrollY;
         setViewsY();
     }
 
@@ -97,7 +96,7 @@ public class ParallaxViewLayout implements ScrollListener {
         w = metrics.widthPixels;
         h = metrics.heightPixels;
         scrollYMax = Math.min(h / 2, scrollYMax);
-        currentCharityLogoMaxHeight = scrollYMax - titleBottom - tabStripHeight;
+//        currentCharityLogoMaxHeight = scrollYMax - titleBottom - tabStripHeight;
 //        Log.e("ScrollYMax", String.valueOf(scrollYMax));
     }
 
@@ -152,7 +151,7 @@ public class ParallaxViewLayout implements ScrollListener {
     }
 
     public void setUpTitle() {
-        title = (TextView) main.findViewById(R.id.title);
+//        title = (TextView) main.findViewById(R.id.title);
     }
 
     private int dpToPixels(int dp) {

@@ -74,7 +74,8 @@ public class ValueLineChart extends BaseChart {
     public static final boolean DEF_USE_DYNAMIC_SCALING = false;
     public static final float DEF_SCALING_FACTOR = 0.96f;
     private static final String LOG_TAG = ValueLineChart.class.getSimpleName();
-    protected Matrix mScale = new Matrix();
+    protected final Matrix mScale = new Matrix();
+    private final List<StandardValue> mStandardValues = new ArrayList<StandardValue>();
     private Paint mLinePaint;
     private Paint mLegendPaint;
     private Paint mIndicatorPaint;
@@ -96,7 +97,6 @@ public class ValueLineChart extends BaseChart {
     private int mValueLabelY = 0;
     private int mLegendLabelX = 0;
     private int mLegendLabelY = 0;
-    private List<StandardValue> mStandardValues = new ArrayList<StandardValue>();
     /**
      * Indicates to fill the bottom area of a series with its given color.
      */

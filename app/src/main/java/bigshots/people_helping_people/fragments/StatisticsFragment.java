@@ -1,11 +1,9 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,10 +17,14 @@ import bigshots.people_helping_people.utilities.Utils;
 
 
 public class StatisticsFragment extends BaseFragment {
+    //Todo investigate quirky list behavior
+    //Todo refresh votes on swipe in, and click
+    //Todo redo vote button
+    //Todo share button
+    //Todo redesign vote button
 
     private static BarChart myStatsBarGraph;
     private static int color;
-    int shown = 0;
 
     public StatisticsFragment() {
     }
@@ -46,7 +48,7 @@ public class StatisticsFragment extends BaseFragment {
     private void plotMyStatsPoints() {
         final ArrayList<Point> points = Utils.getPoints(MainMenu.context);
         if (points.size() < 1) {
-            Toast.makeText(MainMenu.context, "No data to display", Toast.LENGTH_LONG).show();
+            //Todo Toast.makeText(MainMenu.context, "No data to display", Toast.LENGTH_LONG).show();
             return;
         }
         final Mode mode = Utils.getScope(MainMenu.context);
@@ -69,8 +71,6 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        //Todo
-        Log.e("update() :", getClass().getName());
     }
 
     public enum Mode {

@@ -36,8 +36,7 @@ import bigshots.people_helping_people.views.MaterialSwitch;
 
 
 public class ContributeFragment extends BaseFragment {
-    private String prefix;
-    private AdListener fullScreen = new AdListener() {
+    private final AdListener fullScreen = new AdListener() {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
@@ -59,6 +58,7 @@ public class ContributeFragment extends BaseFragment {
             adManager.loadFullscreenAd();
         }
     };
+    private String prefix;
     private int frequencyMinutes;
     private MaterialSwitch reminderSwitch;
     private Dialog dialog;
@@ -112,7 +112,7 @@ public class ContributeFragment extends BaseFragment {
             }
         }
     };
-    private AdListener video = new AdListener() {
+    private final AdListener video = new AdListener() {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
@@ -167,7 +167,7 @@ public class ContributeFragment extends BaseFragment {
         scheduledAdsSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
-                prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).commit();
+                prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).apply();
                 if (isChecked) {
                     if (!ScheduledAdsManager.isServiceRunning()) {
                         MainMenu.context.startService(new Intent(MainMenu.context, ScheduledAdsManager.class));
@@ -185,7 +185,7 @@ public class ContributeFragment extends BaseFragment {
         reminderSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
             @Override
             public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
-                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, isChecked).commit();
+                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, isChecked).apply();
                 if (isChecked) {
                     getReminderDialog().show();
                 } else
@@ -237,7 +237,7 @@ public class ContributeFragment extends BaseFragment {
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).commit();
+                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).apply();
                 reminderSwitch.setChecked(false);
             }
         });
@@ -245,7 +245,7 @@ public class ContributeFragment extends BaseFragment {
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).commit();
+                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).apply();
                 dialog.dismiss();
             }
         });
@@ -375,8 +375,8 @@ public class ContributeFragment extends BaseFragment {
             Toast.makeText(MainMenu.context, "Schedule cleared", Toast.LENGTH_SHORT).show();
 
         final SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).commit();
-        editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).commit();
+        editor.putInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).apply();
+        editor.putBoolean(Utils.LOOP_SCHEDULE, loopBool).apply();
 
         if (prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false)) {
             if (!ScheduledAdsManager.isServiceRunning()) {
@@ -388,6 +388,5 @@ public class ContributeFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        //Todo
     }
 }

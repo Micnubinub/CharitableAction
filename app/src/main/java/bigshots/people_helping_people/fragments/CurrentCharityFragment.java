@@ -102,7 +102,6 @@ public class CurrentCharityFragment extends BaseFragment {
             return;
         }
         setCharityDescription();
-        getView().invalidate();
     }
 
 }

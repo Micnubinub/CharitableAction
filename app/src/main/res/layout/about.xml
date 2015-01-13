@@ -19,10 +19,9 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white_button_selector"
                 android:padding="12dp"
                 android:text="Written by Sidney de Vries and Michael Lindelwe Ncube"
-                android:textColor="@color/material_blue"
+                android:textColor="@color/current_charity_color"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -42,8 +41,8 @@
                 android:background="@drawable/white_button_selector"
                 android:padding="12dp"
                 android:text="More info"
-                android:textColor="@color/material_blue"
-                android:textSize="22sp"
+                android:textColor="@color/current_charity_color"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -54,8 +53,8 @@
                 android:background="@drawable/white_button_selector"
                 android:padding="12dp"
                 android:text="More apps by us"
-                android:textColor="@color/material_green_light"
-                android:textSize="22sp"
+                android:textColor="@color/current_charity_color"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -65,7 +64,7 @@
                 android:background="@drawable/white_button_selector"
                 android:padding="12dp"
                 android:text="Credit - PagerSlidingTabStrip"
-                android:textColor="@color/material_green_light"
+                android:textColor="@color/current_charity_color"
                 android:textSize="20sp" />
 
             <TextView
@@ -75,11 +74,10 @@
                 android:background="@drawable/white_button_selector"
                 android:padding="12dp"
                 android:text="Credit - KenBurnsView"
-                android:textColor="@color/material_green_light"
+                android:textColor="@color/current_charity_color"
                 android:textSize="20sp" />
 
         </LinearLayout>
-
 
     </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
 </LinearLayout>
