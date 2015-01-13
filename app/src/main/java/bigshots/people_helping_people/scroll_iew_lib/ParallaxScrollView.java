@@ -2,7 +2,6 @@ package bigshots.people_helping_people.scroll_iew_lib;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ScrollView;
@@ -79,7 +78,7 @@ public class ParallaxScrollView extends ScrollView implements ScrollListener {
     @Override
     protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
         super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
-        Log.e("overScrolledBy:", "" + scrollY + ", " + (currX - initX));
+        //Log.e("overScrolledBy:", "" + scrollY + ", " + (currX - initX));
     }
 
 }
