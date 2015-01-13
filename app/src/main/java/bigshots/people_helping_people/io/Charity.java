@@ -7,8 +7,13 @@ public class Charity {
     private int votes;
     private int worth;
     private String description; // Amount of Money Generated: Only for Charity of the
-    // Month
+    // Month']
 
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
     public int getWorth() {
         return worth;

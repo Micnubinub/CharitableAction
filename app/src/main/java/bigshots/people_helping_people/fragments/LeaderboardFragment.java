@@ -1,7 +1,6 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ public class LeaderboardFragment extends BaseFragment {
         @Override
         public void onCompleteRank(final int rank) {
             LeaderboardFragment.rank = rank + 1;
-            Log.e("rankComplete", "" + rank);
             listView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -53,7 +51,6 @@ public class LeaderboardFragment extends BaseFragment {
 
         @Override
         public void onCompleteLeaderBoardList(final ArrayList<UserStats> stats) {
-            Log.e("leaderBComplete", "" + stats.size());
             if (listView != null)
                 listView.post(new Runnable() {
                     @Override
@@ -82,6 +79,7 @@ public class LeaderboardFragment extends BaseFragment {
         message = view.findViewById(R.id.message);
         listView = (ParallaxListView) view.findViewById(R.id.list);
         points = (TextView) view.findViewById(R.id.points_money);
+        points.setText(String.format("%dpts", Integer.parseInt(Utils.getTotalScore(MainMenu.context))));
         // listView.setScrollListener(scrollListener);
         return view;
     }

@@ -14,12 +14,9 @@ import java.util.ArrayList;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
-import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 
@@ -31,6 +28,7 @@ public class CurrentCharityFragment extends BaseFragment {
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(final Charity charity) {
+            Log.e("currentCharity", charity.toString());
             CurrentCharityFragment.charity = charity;
             setCharityDescription();
         }
@@ -57,16 +55,16 @@ public class CurrentCharityFragment extends BaseFragment {
     }
 
     private static void setCharityDescription() {
-        if (charity == null)
+        if (charity == null) {
             return;
-
+        }
+        message.setVisibility(View.GONE);
         description.setText(charity.getDescription());
         raised.setText(String.format("$%d raised", charity.getWorth()));
         name.setText(charity.getName());
         link = charity.getUrl();
         linkr.setText("More Info");
         linkr.setEnabled(true);
-        message.setVisibility(View.GONE);
     }
 
     @Override
@@ -78,7 +76,7 @@ public class CurrentCharityFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.current_charity, container, false);
         description = (TextView) view.findViewById(R.id.description);
-        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
+        // ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         raised = (TextView) view.findViewById(R.id.raised);
         name = (TextView) view.findViewById(R.id.name);
         linkr = (TextView) view.findViewById(R.id.link);
@@ -96,15 +94,18 @@ public class CurrentCharityFragment extends BaseFragment {
             }
         });
 
-        AsyncConnector.setListener(aSyncListener);
-        new CharityManager().monthlyCharity();
         return view;
     }
 
     @Override
     protected void update() {
-        //Todo
-        Log.e("update() :", getClass().getName());
+        if (charity == null) {
+            MainMenu.setUpCurrentCharity();
+            return;
+        }
+
+        setCharityDescription();
+
     }
 
 }

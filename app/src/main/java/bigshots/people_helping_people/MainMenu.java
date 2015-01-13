@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
@@ -23,17 +24,23 @@ import bigshots.people_helping_people.utilities.Utils;
  */
 @SuppressWarnings("ALL")
 public class MainMenu extends FragmentActivity {
-    public static Context context;
-    public static FragmentActivity fragmentActivity;
-    private static CharityManager charityManager;
-    private static final Runnable charitySetUp = new Runnable() {
+    private static final Runnable voteCharitySetUp = new Runnable() {
         @Override
         public void run() {
             getVotedFor();
-            charityManager = new CharityManager();
-            charityManager.getCharities();
+            new CharityManager().getCharities();
         }
     };
+    private static final Runnable currentCharitySetUp = new Runnable() {
+        @Override
+        public void run() {
+            AsyncConnector.setListener(CurrentCharityFragment.aSyncListener);
+            new CharityManager().monthlyCharity();
+        }
+    };
+    public static Context context;
+    public static FragmentActivity fragmentActivity;
+    private static CharityManager charityManager;
     private static Fragment fragment;
     private static View view;
     private static String email;
@@ -59,8 +66,8 @@ public class MainMenu extends FragmentActivity {
 
     public static void setUpCharities() {
         if (view != null)
-            view.post(charitySetUp);
-        else new Thread(charitySetUp).start();
+            view.post(voteCharitySetUp);
+        else new Thread(voteCharitySetUp).start();
     }
 
     private static void getVotedFor() {
@@ -74,6 +81,12 @@ public class MainMenu extends FragmentActivity {
         else new Thread(leaderboardSetUp).start();
     }
 
+    public static void setUpCurrentCharity() {
+        if (view != null)
+            view.post(currentCharitySetUp);
+        else new Thread(currentCharitySetUp).start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +94,7 @@ public class MainMenu extends FragmentActivity {
         setUpFragment();
         setUpCharities();
         setUpLeaderBoard();
+        setUpCurrentCharity();
     }
 
     private void init() {

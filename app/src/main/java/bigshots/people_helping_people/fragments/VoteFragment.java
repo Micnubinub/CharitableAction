@@ -22,13 +22,14 @@ import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 import bigshots.people_helping_people.views.CharityListItem;
 
 public class VoteFragment extends BaseFragment {
-
     private static ParallaxListView listView;
     private static VoteCharityAdapter adapter;
+    private static View message;
+    private static Charity charity;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(final Charity charity) {
-
+            VoteFragment.charity = charity;
             listView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -64,8 +65,6 @@ public class VoteFragment extends BaseFragment {
 
         }
     };
-    private static View message;
-    private static Charity charity;
 
     public VoteFragment() {
     }
@@ -110,10 +109,8 @@ public class VoteFragment extends BaseFragment {
                 }
             }
         };
-
         dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setOnClickListener(onClickListener);
         dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
-
         dialog.show();
     }
 
