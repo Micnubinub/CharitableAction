@@ -14,6 +14,7 @@ public class ParallaxListView extends ListView implements ScrollListener {
     //protected final int[] firstVisibleChildVals = new int[2];
     private ScrollListener scrollListener;
     private int initX, currX;
+
     public ParallaxListView(Context context) {
         super(context);
         init();

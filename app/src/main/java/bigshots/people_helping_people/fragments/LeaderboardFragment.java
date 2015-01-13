@@ -1,24 +1,17 @@
 package bigshots.people_helping_people.fragments;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
-import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
@@ -31,9 +24,11 @@ import bigshots.people_helping_people.utilities.Utils;
 public class LeaderboardFragment extends BaseFragment {
     private static final UserManager userManager = new UserManager();
     private static ParallaxListView listView;
-    int rank;
-    private LeaderBoardAdapter adapter;
-    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+    private static int rank;
+    private static View message;
+    private static TextView myRank, points;
+    private static LeaderBoardAdapter adapter;
+    public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(final Charity charity) {
         }
@@ -45,36 +40,29 @@ public class LeaderboardFragment extends BaseFragment {
 
         @Override
         public void onCompleteRank(final int rank) {
-            LeaderboardFragment.this.rank = rank + 1;
+            LeaderboardFragment.rank = rank + 1;
+            Log.e("rankComplete", "" + rank);
             listView.post(new Runnable() {
                 @Override
                 public void run() {
-                    getView().findViewById(R.id.my_rank).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            ((TextView) getView().findViewById(R.id.my_rank)).setText(String.format("%d. Me", rank + 1));
-                        }
-                    });
+                    if (myRank != null)
+                        myRank.setText(String.format("%d. Me", rank + 1));
                 }
             });
         }
 
         @Override
         public void onCompleteLeaderBoardList(final ArrayList<UserStats> stats) {
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    listView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.e("complete", "leaderboard");
-                            getView().findViewById(R.id.message).setVisibility(View.GONE);
-                            adapter = new LeaderBoardAdapter(MainMenu.context, stats, false);
-                            listView.setAdapter(adapter);
-                        }
-                    });
-                }
-            });
+            Log.e("leaderBComplete", "" + stats.size());
+            if (listView != null)
+                listView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        message.setVisibility(View.GONE);
+                        adapter = new LeaderBoardAdapter(MainMenu.context, stats, false);
+                        listView.setAdapter(adapter);
+                    }
+                });
         }
     };
 
@@ -90,69 +78,71 @@ public class LeaderboardFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.leader_board, container, false);
+        myRank = (TextView) view.findViewById(R.id.my_rank);
+        message = view.findViewById(R.id.message);
         listView = (ParallaxListView) view.findViewById(R.id.list);
-        listView.setScrollListener(scrollListener);
-        final int points = Integer.parseInt(Utils.getTotalScore(MainMenu.context));
-        try {
-            final AccountManager manager = AccountManager.get(MainMenu.context);
-            final Account[] accounts = manager.getAccounts();
-            for (Account account : accounts) {
-                if (account.name.contains("@")) {
-                    final UserManager manager1 = new UserManager();
-                    userManager.getScoreRank(account.name);
-                    manager1.postStats(account.name, points, Utils.getRate(MainMenu.context));
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%dpts", points, (points * (0.0001875f))));
-        AsyncConnector.setListener(aSyncListener);
-        getScoreLeaderBoard();
-
+        points = (TextView) view.findViewById(R.id.points_money);
+        // listView.setScrollListener(scrollListener);
         return view;
     }
 
-    private void showSuggestionDialog() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
-        dialog.setContentView(R.layout.suggest_charity);
-        final EditText charity = (EditText) dialog.findViewById(R.id.suggested_charity);
-
-        final View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.submit:
-                        String charityName = charity.getText().toString();
-                        if (charityName != null && charityName.length() > 3) {
-                            new CharityManager().suggestCharity(charityName);
-                            Toast.makeText(MainMenu.context, "Thank you for your suggestion.", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
-                        break;
-                    case R.id.cancel:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-
-        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setOnClickListener(onClickListener);
-        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
-
-        dialog.show();
-    }
-
-    private void getScoreLeaderBoard() {
-        userManager.getLeaderboardListScore(25);
-    }
+//    private void showSuggestionDialog() {
+//        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+//        dialog.setContentView(R.layout.suggest_charity);
+//        final EditText charity = (EditText) dialog.findViewById(R.id.suggested_charity);
+//
+//        final View.OnClickListener onClickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (v.getId()) {
+//                    case R.id.submit:
+//                        String charityName = charity.getText().toString();
+//                        if (charityName != null && charityName.length() > 3) {
+//                            new CharityManager().suggestCharity(charityName);
+//                            Toast.makeText(MainMenu.context, "Thank you for your suggestion.", Toast.LENGTH_SHORT).show();
+//                            dialog.dismiss();
+//                        }
+//                        break;
+//                    case R.id.cancel:
+//                        dialog.dismiss();
+//                        break;
+//                }
+//            }
+//        };
+//
+//        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setOnClickListener(onClickListener);
+//        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
+//
+//        dialog.show();
+//    }
 
     @Override
     protected void update() {
-        //Todo
-        Log.e("update() :", getClass().getName());
+        if (adapter == null) {
+            MainMenu.setUpLeaderBoard();
+            return;
+        }
 
+        if (listView == null) {
+            try {
+                listView = (ParallaxListView) getView().findViewById(R.id.list);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (listView != null) {
+                    listView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    listView.invalidate();
+                }
+            }
+        });
+
+        if (points != null)
+            points.setText(String.format("%dpts", Integer.parseInt(Utils.getTotalScore(MainMenu.context))));
     }
 }

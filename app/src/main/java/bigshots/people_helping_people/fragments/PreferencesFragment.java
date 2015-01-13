@@ -82,7 +82,6 @@ public class PreferencesFragment extends BaseFragment {
     }
 
 
-
     @Override
     protected void update() {
         try {

@@ -43,7 +43,6 @@ public class StatisticsFragment extends BaseFragment {
     }
 
 
-
     private void plotMyStatsPoints() {
         final ArrayList<Point> points = Utils.getPoints(MainMenu.context);
         if (points.size() < 1) {

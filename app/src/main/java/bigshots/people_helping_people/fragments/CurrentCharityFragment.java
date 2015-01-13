@@ -25,25 +25,14 @@ import bigshots.people_helping_people.utilities.Interfaces;
 
 public class CurrentCharityFragment extends BaseFragment {
 
-
-    private TextView description, raised, name, linkr;
-    private String link;
-    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+    private static TextView description, raised, name, linkr;
+    private static String link;
+    private static Charity charity;
+    public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(final Charity charity) {
-            getView().post(new Runnable() {
-                @Override
-                public void run() {
-                    description.setText(charity.getDescription());
-                    raised.setText(String.format("$%d raised", charity.getWorth()));
-                    name.setText(charity.getName());
-                    link = charity.getUrl();
-                    linkr.setText("More Info");
-                    linkr.setEnabled(true);
-                    getView().findViewById(R.id.message).setVisibility(View.GONE);
-                }
-            });
-
+            CurrentCharityFragment.charity = charity;
+            setCharityDescription();
         }
 
         @Override
@@ -61,9 +50,23 @@ public class CurrentCharityFragment extends BaseFragment {
 
         }
     };
+    private static View message;
 
 
     public CurrentCharityFragment() {
+    }
+
+    private static void setCharityDescription() {
+        if (charity == null)
+            return;
+
+        description.setText(charity.getDescription());
+        raised.setText(String.format("$%d raised", charity.getWorth()));
+        name.setText(charity.getName());
+        link = charity.getUrl();
+        linkr.setText("More Info");
+        linkr.setEnabled(true);
+        message.setVisibility(View.GONE);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class CurrentCharityFragment extends BaseFragment {
         raised = (TextView) view.findViewById(R.id.raised);
         name = (TextView) view.findViewById(R.id.name);
         linkr = (TextView) view.findViewById(R.id.link);
-
+        message = view.findViewById(R.id.message);
         linkr.setEnabled(false);
         linkr.setOnClickListener(new View.OnClickListener() {
             @Override
