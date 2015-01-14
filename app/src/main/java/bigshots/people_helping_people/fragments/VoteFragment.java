@@ -16,7 +16,6 @@ import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 
 public class VoteFragment extends BaseFragment {
-    //Todo fix the tabstrip
     private static ParallaxListView listView;
     private static VoteCharityAdapter adapter;
     private static View message;
@@ -26,8 +25,10 @@ public class VoteFragment extends BaseFragment {
 
     public static void refreshList() {
         //Todo test
+        Toast.makeText(MainMenu.context, "refreshVF", Toast.LENGTH_LONG).show();
         message.setVisibility(View.GONE);
         adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
+        listView.setAdapter(adapter);
     }
 
     @Override

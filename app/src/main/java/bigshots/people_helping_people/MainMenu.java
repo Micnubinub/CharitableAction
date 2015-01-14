@@ -31,6 +31,7 @@ import bigshots.people_helping_people.views.CharityListItem;
  */
 @SuppressWarnings("ALL")
 public class MainMenu extends FragmentActivity {
+    //Todo consider making curent charity hard coded
     private static final Runnable voteCharitySetUp = new Runnable() {
         @Override
         public void run() {

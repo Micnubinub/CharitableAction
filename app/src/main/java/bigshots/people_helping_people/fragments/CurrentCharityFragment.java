@@ -53,6 +53,7 @@ public class CurrentCharityFragment extends BaseFragment {
     }
 
     private static void setCharityDescription() {
+        charity = MainMenu.charity;
         if (charity == null) {
             return;
         }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
@@ -25,8 +26,10 @@ public class LeaderboardFragment extends BaseFragment {
 
     public static void refreshList() {
         //Todo test
+        Toast.makeText(MainMenu.context, "refreshLB", Toast.LENGTH_LONG).show();
         message.setVisibility(View.GONE);
         adapter = new LeaderBoardAdapter(MainMenu.context, MainMenu.stats, false);
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -52,7 +55,6 @@ public class LeaderboardFragment extends BaseFragment {
             MainMenu.setUpLeaderBoard();
             return;
         }
-
         if (listView == null) {
             try {
                 listView = (ParallaxListView) getView().findViewById(R.id.list);
