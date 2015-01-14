@@ -24,7 +24,7 @@ public class LeaderboardFragment extends BaseFragment {
     }
 
     public static void refreshList() {
-        //Todo
+        //Todo test
         message.setVisibility(View.GONE);
         adapter = new LeaderBoardAdapter(MainMenu.context, MainMenu.stats, false);
     }

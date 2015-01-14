@@ -71,7 +71,6 @@ public class ContributeFragment extends BaseFragment {
                     adManager.getVideoAd().show();
                     break;
                 case R.id.share_app:
-                    //Todo
                     final Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out People Helping People : https://play.google.com/store/apps/details?id=bigshots.people_helping_people");
                     sendIntent.setType("text/plain");
