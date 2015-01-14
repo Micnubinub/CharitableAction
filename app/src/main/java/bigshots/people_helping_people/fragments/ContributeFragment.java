@@ -14,29 +14,23 @@ import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 
-import java.util.ArrayList;
-
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
-import bigshots.people_helping_people.io.AsyncConnector;
-import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.Connector;
-import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 import bigshots.people_helping_people.services.ScheduledAdsManager;
-import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
 import bigshots.people_helping_people.views.MaterialCheckBox;
 import bigshots.people_helping_people.views.MaterialSwitch;
 
 
 public class ContributeFragment extends BaseFragment {
-    private final AdListener fullScreen = new AdListener() {
+    private static final AdListener fullScreen = new AdListener() {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
@@ -48,7 +42,7 @@ public class ContributeFragment extends BaseFragment {
             super.onAdLoaded();
             if (fullScreenClicked) {
                 adManager.getFullscreenAd().show();
-                Utils.addScore(getActivity(), 15);
+                Utils.addScore(MainMenu.context, 15);
             }
         }
 
@@ -58,36 +52,13 @@ public class ContributeFragment extends BaseFragment {
             adManager.loadFullscreenAd();
         }
     };
-    private String prefix;
-    private int frequencyMinutes;
-    private MaterialSwitch reminderSwitch;
-    private Dialog dialog;
-    private AdManager adManager;
-    private String currentCharity;
-    //Todo share
-    private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
-        @Override
-        public void onCompleteSingle(Charity charity) {
-            currentCharity = charity.getUrl();
-        }
-
-        @Override
-        public void onCompleteArray(ArrayList<Charity> charities) {
-
-        }
-
-        @Override
-        public void onCompleteRank(int rank) {
-
-        }
-
-        @Override
-        public void onCompleteLeaderBoardList(ArrayList<UserStats> stats) {
-
-        }
-    };
-    private boolean videoClicked, fullScreenClicked;
-    private final View.OnClickListener listener = new View.OnClickListener() {
+    private static String prefix;
+    private static int frequencyMinutes;
+    private static MaterialSwitch reminderSwitch;
+    private static Dialog dialog;
+    private static AdManager adManager;
+    private static boolean videoClicked, fullScreenClicked;
+    private static final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -104,7 +75,7 @@ public class ContributeFragment extends BaseFragment {
                     final Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out People Helping People : https://play.google.com/store/apps/details?id=bigshots.people_helping_people");
                     sendIntent.setType("text/plain");
-                    startActivity(sendIntent);
+                    MainMenu.context.startActivity(sendIntent);
                     break;
                 case R.id.configure_scheduled_ads:
                     dialog = getScheduledAds();
@@ -141,123 +112,16 @@ public class ContributeFragment extends BaseFragment {
             adManager.loadVideoAd();
         }
     };
-    private SharedPreferences prefs;
-    private boolean loopBool = true, enable_schedule;
+    private static MaterialSwitch autoStart, toast, adsAtBoot;
+    private static SharedPreferences.Editor editor;
+    private static SharedPreferences prefs;
+    private static boolean loopBool = true, enable_schedule;
 
     public ContributeFragment() {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.contribute, container, false);
-
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.context);
-        adManager = new AdManager(MainMenu.context);
-        adManager.loadFullscreenAd();
-        adManager.loadVideoAd();
-        adManager.getFullscreenAd().setAdListener(fullScreen);
-        adManager.getVideoAd().setAdListener(video);
-
-        view.findViewById(R.id.full_screen).setOnClickListener(listener);
-        view.findViewById(R.id.video_ad).setOnClickListener(listener);
-        view.findViewById(R.id.share_app).setOnClickListener(listener);
-        view.findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
-
-        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
-
-        final MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) view.findViewById(R.id.enable_scheduled_ads);
-        scheduledAdsSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
-        scheduledAdsSwitch.setText("Enable Scheduled Ads");
-        scheduledAdsSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
-            @Override
-            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
-                prefs.edit().putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).apply();
-                if (isChecked) {
-                    if (!ScheduledAdsManager.isServiceRunning()) {
-                        MainMenu.context.startService(new Intent(MainMenu.context, ScheduledAdsManager.class));
-                    }
-                    ScheduledAdsManager.showNotification(MainMenu.context);
-                    ScheduledAdsManager.scheduleNext(MainMenu.context, true);
-                } else
-                    ScheduledAdsManager.cancelNotification(MainMenu.context);
-            }
-        });
-
-        reminderSwitch = (MaterialSwitch) view.findViewById(R.id.enable_reminders);
-        reminderSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_REMINDER, false));
-        reminderSwitch.setText("Enable reminders");
-        reminderSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
-            @Override
-            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
-                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, isChecked).apply();
-                if (isChecked) {
-                    getReminderDialog().show();
-                } else
-                    ScheduledAdsManager.cancelReminder(MainMenu.context);
-            }
-        });
-
-        return view;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        AsyncConnector.setListener(aSyncListener);
-        new Connector().getCharityManager().monthlyCharity();
-    }
-
-    private Dialog getReminderDialog() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
-        dialog.setContentView(R.layout.reminder);
-        final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
-        final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
-
-        hours.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 23));
-        hours.setCyclic(true);
-
-        minutes.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 59));
-        minutes.setCyclic(true);
-
-        hours.setCurrentItem(prefs.getInt(Utils.REMINDER_TIME_HOURS_INT, 12));
-        minutes.setCurrentItem(prefs.getInt(Utils.REMINDER_TIME_MINS_INT, 30));
-
-        dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    ScheduledAdsManager.cancelReminder(MainMenu.context);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                prefs.edit().putInt(Utils.REMINDER_TIME_MINS_INT, minutes.getCurrentItem()).commit();
-                prefs.edit().putInt(Utils.REMINDER_TIME_HOURS_INT, hours.getCurrentItem()).commit();
-                ScheduledAdsManager.scheduleNextReminder(MainMenu.context);
-                Toast.makeText(MainMenu.context, String.format("Scheduled for : %d:%d", hours.getCurrentItem(), minutes.getCurrentItem()), Toast.LENGTH_LONG).show();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).apply();
-                reminderSwitch.setChecked(false);
-            }
-        });
-
-        dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                prefs.edit().putBoolean(Utils.ENABLE_REMINDER, false).apply();
-                dialog.dismiss();
-            }
-        });
-        return dialog;
-    }
-
-    private Dialog getScheduledAds() {
+    private static Dialog getScheduledAds() {
         final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.scheduled_dialog);
         prefix = prefs.getBoolean(Utils.LOOP_SCHEDULE, true) ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
@@ -370,7 +234,7 @@ public class ContributeFragment extends BaseFragment {
         return dialog;
     }
 
-    private void save() {
+    private static void save() {
         if (frequencyMinutes > 0)
             if (frequencyMinutes == 1)
                 Toast.makeText(MainMenu.context, "Scheduled for 1 minute", Toast.LENGTH_SHORT).show();
@@ -392,6 +256,151 @@ public class ContributeFragment extends BaseFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.contribute, container, false);
+
+        adManager = new AdManager(MainMenu.context);
+        adManager.loadFullscreenAd();
+        adManager.loadVideoAd();
+        adManager.getFullscreenAd().setAdListener(fullScreen);
+        adManager.getVideoAd().setAdListener(video);
+
+        view.findViewById(R.id.full_screen).setOnClickListener(listener);
+        view.findViewById(R.id.video_ad).setOnClickListener(listener);
+        view.findViewById(R.id.share_app).setOnClickListener(listener);
+        view.findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
+
+        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
+
+        final MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) view.findViewById(R.id.enable_scheduled_ads);
+        scheduledAdsSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false));
+        scheduledAdsSwitch.setText("Enable Scheduled Ads");
+        scheduledAdsSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                editor.putBoolean(Utils.ENABLE_SCHEDULED_ADS, isChecked).apply();
+                if (isChecked) {
+                    if (!ScheduledAdsManager.isServiceRunning()) {
+                        MainMenu.context.startService(new Intent(MainMenu.context, ScheduledAdsManager.class));
+                    }
+                    ScheduledAdsManager.showNotification(MainMenu.context);
+                    ScheduledAdsManager.scheduleNext(MainMenu.context, true);
+                } else
+                    ScheduledAdsManager.cancelNotification(MainMenu.context);
+            }
+        });
+
+        reminderSwitch = (MaterialSwitch) view.findViewById(R.id.enable_reminders);
+        reminderSwitch.setChecked(prefs.getBoolean(Utils.ENABLE_REMINDER, false));
+        reminderSwitch.setText("Enable reminders");
+        reminderSwitch.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                editor.putBoolean(Utils.ENABLE_REMINDER, isChecked).apply();
+                if (isChecked) {
+                    getReminderDialog().show();
+                } else
+                    ScheduledAdsManager.cancelReminder(MainMenu.context);
+            }
+        });
+
+        autoStart = (MaterialSwitch) view.findViewById(R.id.auto_start_boot);
+        autoStart.setText("Banner at startup");
+        autoStart.setChecked(prefs.getBoolean(Utils.AUTO_START_BOOL, false));
+        autoStart.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                editor.putBoolean(Utils.AUTO_START_BOOL, isChecked).commit();
+            }
+        });
+
+        toast = (MaterialSwitch) view.findViewById(R.id.toast_before);
+        toast.setText("Fullscreen Ad warning");
+        toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, true));
+        toast.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                editor.putBoolean(Utils.TOAST_BEFORE_BOOL, isChecked).commit();
+            }
+        });
+
+        adsAtBoot = (MaterialSwitch) view.findViewById(R.id.scheduled_ads_at_boot);
+        adsAtBoot.setText("Scheduled ads at boot");
+        adsAtBoot.setChecked(prefs.getBoolean(Utils.ADS_AT_START_BOOL, true));
+        adsAtBoot.setOnCheckedChangeListener(new MaterialSwitch.OnCheckedChangedListener() {
+            @Override
+            public void onCheckedChange(MaterialSwitch materialSwitch, boolean isChecked) {
+                editor.putBoolean(Utils.ADS_AT_START_BOOL, isChecked).commit();
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        new Connector().getCharityManager().monthlyCharity();
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.context);
+        editor = prefs.edit();
+    }
+
+    private Dialog getReminderDialog() {
+        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+        dialog.setContentView(R.layout.reminder);
+        final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
+        final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
+
+        hours.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 23));
+        hours.setCyclic(true);
+
+        minutes.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 59));
+        minutes.setCyclic(true);
+
+        hours.setCurrentItem(prefs.getInt(Utils.REMINDER_TIME_HOURS_INT, 12));
+        minutes.setCurrentItem(prefs.getInt(Utils.REMINDER_TIME_MINS_INT, 30));
+
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    ScheduledAdsManager.cancelReminder(MainMenu.context);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                editor.putInt(Utils.REMINDER_TIME_MINS_INT, minutes.getCurrentItem()).commit();
+                editor.putInt(Utils.REMINDER_TIME_HOURS_INT, hours.getCurrentItem()).commit();
+                ScheduledAdsManager.scheduleNextReminder(MainMenu.context);
+                Toast.makeText(MainMenu.context, String.format("Scheduled for : %d:%d", hours.getCurrentItem(), minutes.getCurrentItem()), Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                editor.putBoolean(Utils.ENABLE_REMINDER, false).apply();
+                reminderSwitch.setChecked(false);
+            }
+        });
+
+        dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.putBoolean(Utils.ENABLE_REMINDER, false).apply();
+                dialog.dismiss();
+            }
+        });
+        return dialog;
+    }
+
+    @Override
     protected void update() {
+        try {
+            autoStart.setChecked(prefs.getBoolean(Utils.AUTO_START_BOOL, false));
+            toast.setChecked(prefs.getBoolean(Utils.TOAST_BEFORE_BOOL, true));
+            adsAtBoot.setChecked(prefs.getBoolean(Utils.ADS_AT_START_BOOL, true));
+        } catch (Exception e) {
+
+        }
     }
 }

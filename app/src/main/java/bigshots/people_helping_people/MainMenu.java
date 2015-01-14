@@ -10,14 +10,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 
+import java.util.ArrayList;
+
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
 import bigshots.people_helping_people.io.AsyncConnector;
+import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserManager;
+import bigshots.people_helping_people.io.UserStats;
+import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.VoteCharityAdapter;
+import bigshots.people_helping_people.views.CharityListItem;
 
 /**
  * Created by root on 18/11/14.
@@ -40,6 +47,38 @@ public class MainMenu extends FragmentActivity {
     };
     public static Context context;
     public static FragmentActivity fragmentActivity;
+    public static int rank;
+    public static ArrayList<Charity> charities;
+    public static ArrayList<UserStats> stats;
+    public static Charity charity;
+    public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
+        @Override
+        public void onCompleteSingle(final Charity charity) {
+            MainMenu.charity = charity;
+            VoteCharityAdapter.setVotedFor(charity.getUrl());
+            CharityListItem.setCurrentVote(charity.getUrl());
+            VoteFragment.refreshList();
+        }
+
+        @Override
+        public void onCompleteArray(final ArrayList<Charity> charities) {
+            MainMenu.charities = charities;
+            VoteFragment.refreshList();
+        }
+
+        @Override
+        public void onCompleteRank(final int rank) {
+            MainMenu.rank = rank + 1;
+            LeaderboardFragment.refreshList();
+        }
+
+
+        @Override
+        public void onCompleteLeaderBoardList(final ArrayList<UserStats> stats) {
+            MainMenu.stats = stats;
+            LeaderboardFragment.refreshList();
+        }
+    };
     private static CharityManager charityManager;
     private static Fragment fragment;
     private static View view;
@@ -47,7 +86,6 @@ public class MainMenu extends FragmentActivity {
     private static final Runnable leaderboardSetUp = new Runnable() {
         @Override
         public void run() {
-            AsyncConnector.setListener(LeaderboardFragment.aSyncListener);
             try {
                 final UserManager manager1 = new UserManager();
                 userManager.getScoreRank(email);
@@ -72,7 +110,6 @@ public class MainMenu extends FragmentActivity {
 
     private static void getVotedFor() {
         new CharityManager().currentCharity(email);
-        AsyncConnector.setListener(VoteFragment.aSyncListener);
     }
 
     public static void setUpLeaderBoard() {
@@ -103,6 +140,8 @@ public class MainMenu extends FragmentActivity {
         getEmail();
         fragmentActivity = this;
         userManager = new UserManager();
+        AsyncConnector.setListener(aSyncListener);
+
     }
 
     private void setUpFragment() {

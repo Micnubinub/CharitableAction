@@ -39,11 +39,10 @@ public class StatisticsFragment extends BaseFragment {
         return view;
     }
 
-
     private void plotMyStatsPoints() {
+        myStatsBarGraph.clearChart();
         final ArrayList<Point> points = Utils.getPoints(MainMenu.context);
         if (points.size() < 1) {
-            //Todo Toast.makeText(MainMenu.context, "No data to display", Toast.LENGTH_LONG).show();
             return;
         }
         final Mode mode = Utils.getScope(MainMenu.context);
@@ -66,6 +65,7 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
+        plotMyStatsPoints();
     }
 
     public enum Mode {

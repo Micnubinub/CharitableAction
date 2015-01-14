@@ -8,65 +8,28 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
-import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
-import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
-import bigshots.people_helping_people.views.CharityListItem;
 
 public class VoteFragment extends BaseFragment {
+    //Todo move all the stuff into main activity
+    //Todo fix the tabstrip
+    //Todo elaborate the abouts
     private static ParallaxListView listView;
     private static VoteCharityAdapter adapter;
     private static View message;
-    private static Charity charity;
-    public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
-        @Override
-        public void onCompleteSingle(final Charity charity) {
-            VoteFragment.charity = charity;
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    VoteCharityAdapter.setVotedFor(charity.getUrl());
-                    CharityListItem.setCurrentVote(charity.getUrl());
-                    if (adapter != null)
-                        adapter.notifyDataSetChanged();
-                    listView.invalidate();
-                }
-            });
-        }
-
-        @Override
-        public void onCompleteArray(final ArrayList<Charity> charities) {
-
-            listView.post(new Runnable() {
-                @Override
-                public void run() {
-                    message.setVisibility(View.GONE);
-                    adapter = new VoteCharityAdapter(MainMenu.context, charities);
-                    listView.setAdapter(adapter);
-                }
-            });
-        }
-
-        @Override
-        public void onCompleteRank(int rank) {
-
-        }
-
-        @Override
-        public void onCompleteLeaderBoardList(ArrayList<UserStats> stats) {
-
-        }
-    };
 
     public VoteFragment() {
+    }
+
+    public static void refreshList() {
+        //Todo
+        message.setVisibility(View.GONE);
+        adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
     }
 
     @Override
@@ -81,7 +44,6 @@ public class VoteFragment extends BaseFragment {
         });
         listView = (ParallaxListView) view.findViewById(R.id.list);
         //listView.setScrollListener(scrollListener);
-
         return view;
     }
 
@@ -114,10 +76,9 @@ public class VoteFragment extends BaseFragment {
         dialog.show();
     }
 
-
     @Override
     protected void update() {
-        if (adapter == null || charity == null) {
+        if (adapter == null || MainMenu.charity == null) {
             MainMenu.setUpCharities();
             return;
         }
@@ -133,12 +94,6 @@ public class VoteFragment extends BaseFragment {
         listView.post(new Runnable() {
             @Override
             public void run() {
-
-                VoteCharityAdapter.setVotedFor(charity.getUrl());
-                CharityListItem.setCurrentVote(charity.getUrl());
-
-                listView.removeAllViews();
-                listView.setAdapter(null);
                 listView.setAdapter(adapter);
             }
 

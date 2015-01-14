@@ -286,7 +286,6 @@ public class CharityListItem extends ViewGroup {
     }
 
     public class PlusButton extends ImageView {
-
         public PlusButton(Context context) {
             super(context);
             init();

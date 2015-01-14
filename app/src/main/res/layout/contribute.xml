@@ -10,12 +10,26 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:paddingBottom="14dp"
+                android:text="Free Donation"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <bigshots.people_helping_people.views.BannerPopupSwitch
                 android:layout_width="fill_parent"
@@ -32,26 +46,6 @@
                 android:textColor="@color/dark_grey_text"
                 android:textSize="20sp" />
 
-            <bigshots.people_helping_people.views.MaterialSwitch
-                android:id="@+id/enable_reminders"
-                android:layout_width="fill_parent"
-                android:layout_height="54dp"
-                android:background="@drawable/white_button_selector"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/configure_scheduled_ads"
-                android:layout_width="fill_parent"
-                android:layout_height="54dp"
-                android:background="@drawable/white_button_selector"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:text="Configure scheduled ads"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/full_screen"
@@ -83,8 +77,60 @@
                 android:maxLines="1"
                 android:padding="10dp"
                 android:text="Share"
+                android:textColor="@color/current_charity_color"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:paddingBottom="14dp"
+                android:text="Preferences"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/configure_scheduled_ads"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:text="Configure scheduled ads"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="20sp" />
+
+            <bigshots.people_helping_people.views.MaterialSwitch
+                android:id="@+id/enable_reminders"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/white_button_selector"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp" />
+
+            <bigshots.people_helping_people.views.MaterialSwitch
+                android:id="@+id/auto_start_boot"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp" />
+
+            <bigshots.people_helping_people.views.MaterialSwitch
+                android:id="@+id/toast_before"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp" />
+
+            <bigshots.people_helping_people.views.MaterialSwitch
+                android:id="@+id/scheduled_ads_at_boot"
+                android:layout_width="fill_parent"
+                android:layout_height="54dp" />
 
         </LinearLayout>
     </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>

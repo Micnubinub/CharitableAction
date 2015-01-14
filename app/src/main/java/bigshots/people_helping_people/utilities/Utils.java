@@ -187,7 +187,9 @@ public class Utils {
         final StatisticsFragment.Mode mode = getScope(context);
         String lengend = "";
         long steps = 0;
-        //Todo use scope to detemine legend and points y ** lots of work to be done
+        //Todo make change the switch color
+        //Todo fix rotation
+        //Todo tabstrip colors
         switch (mode) {
             case DAY:
                 lengend = "hour";

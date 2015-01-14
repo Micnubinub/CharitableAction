@@ -13,19 +13,5 @@
         android:orientation="vertical">
 
 
-        <bigshots.people_helping_people.views.MaterialSwitch
-            android:id="@+id/auto_start_boot"
-            android:layout_width="fill_parent"
-            android:layout_height="54dp" />
-
-        <bigshots.people_helping_people.views.MaterialSwitch
-            android:id="@+id/toast_before"
-            android:layout_width="fill_parent"
-            android:layout_height="54dp" />
-
-        <bigshots.people_helping_people.views.MaterialSwitch
-            android:id="@+id/scheduled_ads_at_boot"
-            android:layout_width="fill_parent"
-            android:layout_height="54dp" />
     </LinearLayout>
 </ScrollView>

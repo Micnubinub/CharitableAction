@@ -223,7 +223,7 @@ public class BannerPopupSwitch extends ViewGroup {
         setWillNotDraw(false);
 
         setOffColor(getResources().getColor(R.color.lite_grey));
-        setOnColor(getResources().getColor(R.color.material_green_light));
+        setOnColor(getResources().getColor(R.color.current_charity_color));
         setHoleColor(getResources().getColor(R.color.white));
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeCap(Paint.Cap.ROUND);

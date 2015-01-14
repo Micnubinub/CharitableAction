@@ -19,7 +19,6 @@ import bigshots.people_helping_people.fragments.ContributeFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.FeedbackFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
-import bigshots.people_helping_people.fragments.PreferencesFragment;
 import bigshots.people_helping_people.fragments.StatisticsFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
 
@@ -28,7 +27,7 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  */
 public class ParallaxViewLayout implements ScrollListener {
 
-    private static final Fragment[] fragments = new Fragment[8];
+    private static final Fragment[] fragments = new Fragment[7];
     //    private static final ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
 //    private static final DecelerateInterpolator decel = new DecelerateInterpolator();
     private static int w, h;
@@ -120,8 +119,7 @@ public class ParallaxViewLayout implements ScrollListener {
         fragments[3] = new StatisticsFragment();
         fragments[4] = new LeaderboardFragment();
         fragments[5] = new FeedbackFragment();
-        fragments[6] = new PreferencesFragment();
-        fragments[7] = new AboutFragment();
+        fragments[6] = new AboutFragment();
         Log.e("setUpFrags tic-toc", String.valueOf(System.currentTimeMillis() - tic));
         setUpPagerAndAdapter();
     }
@@ -226,8 +224,8 @@ public class ParallaxViewLayout implements ScrollListener {
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
-        private final String[] TITLES = {"Free Donation", "Vote", "Current Charity",
-                "Statistics", "Leaderboard", "Feedback", "Preferences", "About"};
+        private final String[] TITLES = {"Main", "Vote", "Current Charity",
+                "Statistics", "Leaderboard", "Feedback", "About"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
