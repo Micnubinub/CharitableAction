@@ -258,10 +258,9 @@ public class MaterialCheckBox extends ViewGroup {
         public CheckBox(Context context) {
             super(context);
             invalidate();
-            on = getResources().getColor(R.color.material_blue);
+            on = getResources().getColor(R.color.current_charity_color);
             off = getResources().getColor(R.color.material_red);
         }
-
 
         @Override
         protected void onDraw(Canvas canvas) {

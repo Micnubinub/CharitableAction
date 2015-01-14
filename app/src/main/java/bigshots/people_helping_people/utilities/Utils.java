@@ -187,25 +187,25 @@ public class Utils {
         final StatisticsFragment.Mode mode = getScope(context);
         String lengend = "";
         long steps = 0;
-//Todo use scope to detemine legend and points y ** lots of work to be done
+        //Todo use scope to detemine legend and points y ** lots of work to be done
         switch (mode) {
             case DAY:
                 lengend = "hour";
-                steps = 3600000l;
+                steps = 3600000L;
                 break;
             case WEEK:
                 lengend = "day";
-                steps = 86400000l;
+                steps = 86400000L;
                 break;
 
             case MONTH:
                 lengend = "week";
-                steps = 6048000000l;
+                steps = 604800000L;
                 break;
 
             case YEAR:
                 lengend = "month";
-                steps = 24192000000l;
+                steps = 2419200000L;
                 break;
 
         }

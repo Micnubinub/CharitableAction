@@ -130,11 +130,9 @@ public class LeaderboardFragment extends BaseFragment {
         listView.post(new Runnable() {
             @Override
             public void run() {
-                if (listView != null) {
-                    listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    listView.invalidateViews();
-                }
+                listView.removeAllViews();
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
             }
         });
 
@@ -143,6 +141,7 @@ public class LeaderboardFragment extends BaseFragment {
 
         if (myRank != null)
             myRank.setText(String.format("%d. Me", rank));
+
 
         getView().invalidate();
     }

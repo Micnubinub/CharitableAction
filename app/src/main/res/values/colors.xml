@@ -9,7 +9,7 @@
     <color name="grey_text">#6a6a6a</color>
     <color name="dark_grey">#272727</color>
     <color name="dark_dark_grey">#222222</color>
-    <color name="material_blue">#738ffe</color>
+    <!--<color name="material_blue">#738ffe</color>-->
     <color name="material_green_light">#42bd41</color>
     <color name="material_red">#e84e40</color>
     <color name="current_charity_color">#fffd6eb1</color>

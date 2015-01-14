@@ -138,8 +138,8 @@ public class ParallaxViewLayout implements ScrollListener {
     public void setUpPager() {
         pager = (ParallaxViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(9);
-        pager.setScrollListener(this);
+        pager.setOffscreenPageLimit(6);
+        //  pager.setScrollListener(this);
         setUpPagerSlidingTabStrip();
     }
 
@@ -215,15 +215,14 @@ public class ParallaxViewLayout implements ScrollListener {
 //    }
 
     private void updatePages() {
-        int item = pager.getCurrentItem();
-        if (item - 1 >= 0) {
-            ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(item - 1)).update();
-        }
-
-        if (item + 1 < pager.getAdapter().getCount()) {
-            ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(item + 1)).update();
-        }
-
+        //   final int item = pager.getCurrentItem();
+        //    if (item - 1 >= 0) {
+        ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(pager.getCurrentItem())).update();
+//        }
+//
+//        if (item + 1 < pager.getAdapter().getCount()) {
+//            ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(item + 1)).update();
+//        }
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {

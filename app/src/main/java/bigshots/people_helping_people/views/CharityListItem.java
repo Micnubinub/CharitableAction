@@ -4,7 +4,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -13,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.Button;
+import android.widget.ImageView;
 
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.VoteManager;
@@ -286,45 +285,7 @@ public class CharityListItem extends ViewGroup {
         checkViewParams(view, layoutWidth, layoutHeight);
     }
 
-    public class PlusButton extends Button {
-
-//        private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-//        private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animator) {
-//                animateRipple = true;
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animator) {
-//
-//                animateRipple = false;
-//                invalidatePoster();
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animator) {
-//
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animator) {
-//
-//            }
-//        };
-//        private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-//            @Override
-//            public void onAnimationUpdate(ValueAnimator animation) {
-//                ripple_animated_value = (Float) (animation.getAnimatedValue());
-//                invalidatePoster();
-//            }
-//        };
-
-        private int cx, cy;
-        //        private boolean animateRipple;
-//        private float ripple_animated_value = 0;
-        private int rippleR;
+    public class PlusButton extends ImageView {
 
         public PlusButton(Context context) {
             super(context);
@@ -343,16 +304,10 @@ public class CharityListItem extends ViewGroup {
 
         private void init() {
             super.setOnClickListener(onClickListener);
-//            animator.setDuration((int) (duration * 0.75));
-//            animator.addUpdateListener(animatorUpdateListener);
-//            animator.addListener(animatorListener);
-//            animator.setInterpolator(interpolator);
-//            paint.setTextAlign(Paint.Align.CENTER);
             setWillNotDraw(false);
-            setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            setText(getString());
-            setTextColor(0xffffffff);
-            setBackgroundColor(0x00000000);
+            setScaleType(ScaleType.CENTER_INSIDE);
+            final int p = dpToPixels(12);
+            PlusButton.this.setPadding(p, p, p, p);
             invalidate();
         }
 
@@ -365,37 +320,10 @@ public class CharityListItem extends ViewGroup {
             });
         }
 
-        @Override
-        protected void onDraw(Canvas canvas) {
-//            if (animateRipple && animator.isRunning()) {
-//                paint.setColor(getColor(votedFor));
-//                canvas.drawCircle(cx, cy, rippleR, paint);
-//                paint.setColor(getColor(!votedFor));
-//                canvas.drawCircle(cx, cy, rippleR * (1 - ripple_animated_value), paint);
-//            } else {
-            paint.setColor(getColor(votedFor));
-            canvas.drawCircle(cx, cy, rippleR, paint);
-//            }
-            super.onDraw(canvas);
-        }
-
-
-        @Override
-        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-            super.onSizeChanged(w, h, oldw, oldh);
-            cx = w / 2;
-            cy = h / 2;
-            w = w - getPaddingLeft() - getPaddingRight();
-            h = h - getPaddingTop() - getPaddingBottom();
-
-            rippleR = Math.min(w, h) / 2;
-
-        }
-
 
         public void setIsVotedFor(boolean isVotedFor) {
             votedFor = isVotedFor;
-            setText(getString());
+            setImageResource(isVotedFor ? R.drawable.like : R.drawable.not_liked);
         }
 
         public void click() {
@@ -436,17 +364,9 @@ public class CharityListItem extends ViewGroup {
         }
 
 
-        private int getColor(boolean b) {
-            return b ? 0xffe51c23 : 0xff42bd41;
-        }
-
         @Override
         public void invalidate() {
             super.invalidate();
-        }
-
-        private String getString() {
-            return votedFor ? "-" : "+";
         }
 
     }

@@ -57,11 +57,14 @@ public class CurrentCharityFragment extends BaseFragment {
             return;
         }
         message.setVisibility(View.GONE);
-        description.setText(charity.getDescription());
+        if (description.getText().toString().length() < 10) {
+            description.setText(charity.getDescription());
+            description.setMaxLines(20);
+            description.setMinLines(3);
+        }
         raised.setText(String.format("$%d raised", charity.getWorth()));
         name.setText(charity.getName());
         link = charity.getUrl();
-        linkr.setText("More Info");
         linkr.setEnabled(true);
     }
 

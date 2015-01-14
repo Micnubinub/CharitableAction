@@ -48,7 +48,7 @@ public class ContributeFragment extends BaseFragment {
             super.onAdLoaded();
             if (fullScreenClicked) {
                 adManager.getFullscreenAd().show();
-                Utils.addScore(MainMenu.context, 15);
+                Utils.addScore(getActivity(), 15);
             }
         }
 
@@ -64,6 +64,7 @@ public class ContributeFragment extends BaseFragment {
     private Dialog dialog;
     private AdManager adManager;
     private String currentCharity;
+    //Todo share
     private final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCompleteSingle(Charity charity) {
@@ -98,7 +99,13 @@ public class ContributeFragment extends BaseFragment {
                     videoClicked = true;
                     adManager.getVideoAd().show();
                     break;
-
+                case R.id.share_app:
+                    //Todo
+                    final Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out People Helping People : https://play.google.com/store/apps/details?id=bigshots.people_helping_people");
+                    sendIntent.setType("text/plain");
+                    startActivity(sendIntent);
+                    break;
                 case R.id.configure_scheduled_ads:
                     dialog = getScheduledAds();
                     dialog.show();
@@ -116,19 +123,16 @@ public class ContributeFragment extends BaseFragment {
         @Override
         public void onAdOpened() {
             super.onAdOpened();
-            Toast.makeText(MainMenu.context, "Opened", Toast.LENGTH_SHORT).show();
             videoClicked = false;
         }
 
         @Override
         public void onAdLoaded() {
             super.onAdLoaded();
-            Toast.makeText(MainMenu.context, "loaded", Toast.LENGTH_SHORT).show();
             if (videoClicked) {
                 adManager.getVideoAd().show();
-                Utils.addScore(MainMenu.context, 20);
+                Utils.addScore(getActivity(), 20);
             }
-
         }
 
         @Override
@@ -157,6 +161,7 @@ public class ContributeFragment extends BaseFragment {
 
         view.findViewById(R.id.full_screen).setOnClickListener(listener);
         view.findViewById(R.id.video_ad).setOnClickListener(listener);
+        view.findViewById(R.id.share_app).setOnClickListener(listener);
         view.findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
 
         ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);

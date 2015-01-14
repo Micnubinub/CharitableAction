@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
@@ -64,12 +63,6 @@ public class ScheduledAdsManager extends Service {
                 }
 
                 @Override
-                public void onAdOpened() {
-                    super.onAdOpened();
-                    Log.e("schedules", "opened");
-                }
-
-                @Override
                 public void onAdFailedToLoad(int errorCode) {
                     super.onAdFailedToLoad(errorCode);
                     try {
@@ -86,7 +79,6 @@ public class ScheduledAdsManager extends Service {
         try {
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (load) {
-                Log.e("Scheduling", String.valueOf(loadAd));
                 int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
                 Intent i = new Intent(context, AdAlarmReceiver.class);
                 if (mins == 0) {
@@ -202,7 +194,6 @@ public class ScheduledAdsManager extends Service {
     }
 
     private static void showReminder(Context context) {
-
         final NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.notification_icon)

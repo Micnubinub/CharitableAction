@@ -23,7 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:background="@color/material_blue"
+        android:background="@color/current_charity_color"
         android:ellipsize="end"
         android:maxLines="3"
         android:minLines="2"

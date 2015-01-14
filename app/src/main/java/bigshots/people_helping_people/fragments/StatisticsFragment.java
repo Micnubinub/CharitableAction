@@ -17,11 +17,6 @@ import bigshots.people_helping_people.utilities.Utils;
 
 
 public class StatisticsFragment extends BaseFragment {
-    //Todo investigate quirky list behavior
-    //Todo refresh votes on swipe in, and click
-    //Todo redo vote button
-    //Todo share button
-    //Todo redesign vote button
 
     private static BarChart myStatsBarGraph;
     private static int color;

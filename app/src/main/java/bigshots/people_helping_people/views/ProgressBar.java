@@ -69,7 +69,7 @@ public class ProgressBar extends View {
         animator.addListener(listener);
         animator.setInterpolator(interpolator);
         max = 100;
-        progressColor = getResources().getColor(R.color.material_blue);
+        progressColor = getResources().getColor(R.color.current_charity_color);
         backgroundColor = getResources().getColor(R.color.light_grey);
         animator.start();
     }

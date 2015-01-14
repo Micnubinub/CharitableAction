@@ -133,16 +133,15 @@ public class VoteFragment extends BaseFragment {
         listView.post(new Runnable() {
             @Override
             public void run() {
-                if (listView != null) {
-                    listView.setAdapter(adapter);
 
-                    VoteCharityAdapter.setVotedFor(charity.getUrl());
-                    CharityListItem.setCurrentVote(charity.getUrl());
+                VoteCharityAdapter.setVotedFor(charity.getUrl());
+                CharityListItem.setCurrentVote(charity.getUrl());
 
-                    adapter.notifyDataSetChanged();
-                    listView.invalidateViews();
-                }
+                listView.removeAllViews();
+                listView.setAdapter(null);
+                listView.setAdapter(adapter);
             }
+
         });
 
     }

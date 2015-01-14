@@ -23,6 +23,6 @@
         android:minWidth="120dp"
         android:padding="8dp"
         android:text="Skip"
-        android:textColor="@color/material_blue"
+        android:textColor="@color/current_charity_color"
         android:textSize="22sp" />
 </RelativeLayout>
