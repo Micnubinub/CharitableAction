@@ -188,7 +188,6 @@ public class Utils {
         final StatisticsFragment.Mode mode = getScope(context);
         String lengend = "";
         long steps = 0;
-        //Todo fix rotation
         //Todo tabstrip colors
         switch (mode) {
             case DAY:

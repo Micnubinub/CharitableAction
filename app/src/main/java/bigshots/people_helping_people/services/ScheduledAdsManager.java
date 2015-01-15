@@ -34,6 +34,7 @@ public class ScheduledAdsManager extends Service {
     private static boolean loadAd;
     private static Context context;
     private static boolean serviceRunning = false;
+    private static boolean show;
 
     public static void loadFullScreenAd() {
         adManager.loadFullscreenAd();
@@ -59,7 +60,8 @@ public class ScheduledAdsManager extends Service {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    fullScreenAd.show();
+                    if (show)
+                        fullScreenAd.show();
                 }
 
                 @Override
@@ -70,6 +72,12 @@ public class ScheduledAdsManager extends Service {
                     } catch (Exception e) {
                     }
                 }
+
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                    show = false;
+                }
             });
         }
     }
@@ -77,26 +85,27 @@ public class ScheduledAdsManager extends Service {
     public static void scheduleNext(Context context, boolean load) {
         loadAd = load;
         try {
+            final Intent intent = new Intent(context, AdAlarmReceiver.class);
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (load) {
                 int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
-                Intent i = new Intent(context, AdAlarmReceiver.class);
                 if (mins == 0) {
                     cancelNotification(context);
                     return;
                 } else {
+                    final long when = (System.currentTimeMillis() + (mins * 60000)) - 10000;
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        alarmManager.setExact(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
+                        alarmManager.setExact(AlarmManager.RTC, when, PendingIntent.getBroadcast(context, 0, intent, 0));
                     } else
-                        alarmManager.set(AlarmManager.RTC, (System.currentTimeMillis() + (mins * 60000)) - 10000, PendingIntent.getBroadcast(context, 0, i, 0));
+                        alarmManager.set(AlarmManager.RTC, when, PendingIntent.getBroadcast(context, 0, intent, 0));
                 }
             } else {
-                final Intent intent = new Intent(context, AdAlarmReceiver.class);
+                final long when = System.currentTimeMillis() + 10000;
                 alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
                 if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    alarmManager.setExact(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
+                    alarmManager.setExact(AlarmManager.RTC, when, alarmIntent);
                 } else
-                    alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 10000, alarmIntent);
+                    alarmManager.set(AlarmManager.RTC, when, alarmIntent);
             }
 
 
@@ -263,12 +272,14 @@ public class ScheduledAdsManager extends Service {
             showNotification(context);
             try {
                 if (loadAd) {
+                    show = false;
                     loadFullScreenAd();
                     scheduleNext(context, false);
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
                         Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
                     return;
                 } else {
+                    show = true;
                     showFullScreenAd();
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
                         scheduleNext(context, true);

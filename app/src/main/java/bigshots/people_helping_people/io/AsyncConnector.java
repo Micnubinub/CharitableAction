@@ -51,6 +51,17 @@ public class AsyncConnector {
                         } catch (ClassCastException e) {
                             charity.setVotes(0);
                         }
+                        boolean trusted = false;
+                        int trustedInt = 0;
+                        try {
+                            trustedInt = Integer.valueOf(tmp[3]);
+                        } catch (ClassCastException e) {
+                            trustedInt = 0;
+                        }
+                        if (trustedInt == 1) {
+                            trusted = true;
+                        }
+                        charity.setTrusted(trusted);
                         charities.add(charity);
                     }
                 }
@@ -81,6 +92,7 @@ public class AsyncConnector {
                     } catch (ClassCastException e) {
                         charity.setDescription("No description");
                     }
+
                     if (listener != null)
                         listener.onCharityMonth(charity);
                 } else {
@@ -104,8 +116,6 @@ public class AsyncConnector {
                 } catch (Exception e) {
 
                 }
-                if (listener != null)
-                    listener.onCompleteCurrentScore(score);
                 //TODO: MICHAEL
             } else if (action.equals("GET_LEADER")) {
                 Log.e("Async", resp);

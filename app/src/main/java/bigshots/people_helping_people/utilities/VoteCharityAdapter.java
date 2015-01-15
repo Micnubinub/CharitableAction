@@ -22,12 +22,10 @@ public class VoteCharityAdapter extends BaseAdapter {
     private final Context context;
     private int height = 100;
 
-
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
         this.context = context;
         height = dpToPixels(68);
-
     }
 
     public static ArrayList<Charity> getCharities() {

@@ -14,6 +14,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
@@ -42,11 +43,11 @@ public class MainMenu extends FragmentActivity {
         @Override
         public void onCharityMonth(Charity charity) {
             MainMenu.charity = charity;
+            CurrentCharityFragment.refreshCharity();
         }
 
         @Override
         public void onCurrentCharity(Charity charity) {
-
             VoteCharityAdapter.setVotedFor(charity.getUrl());
             CharityListItem.setCurrentVote(charity.getUrl());
             VoteFragment.refreshList();
@@ -117,6 +118,7 @@ public class MainMenu extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getEmail();
         AsyncConnector.setListener(aSyncListener);
         init();
         setUpFragment();
@@ -127,7 +129,6 @@ public class MainMenu extends FragmentActivity {
         setContentView(R.layout.material_main_menu);
         charityManager = new CharityManager();
         context = this;
-        getEmail();
         fragmentActivity = this;
         userManager = new UserManager();
     }
@@ -141,7 +142,7 @@ public class MainMenu extends FragmentActivity {
     }
 
     public void getEmail() {
-        final AccountManager manager = AccountManager.get(MainMenu.context);
+        final AccountManager manager = AccountManager.get(this);
         for (Account account : manager.getAccounts()) {
             if (account.name.contains("@")) {
                 email = account.name;

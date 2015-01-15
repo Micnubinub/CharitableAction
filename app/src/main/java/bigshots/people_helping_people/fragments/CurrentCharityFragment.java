@@ -49,6 +49,10 @@ public class CurrentCharityFragment extends BaseFragment {
         });
     }
 
+    public static void refreshCharity() {
+        setCharityDescription();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

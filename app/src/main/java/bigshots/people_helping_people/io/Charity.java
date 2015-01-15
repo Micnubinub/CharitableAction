@@ -6,6 +6,7 @@ public class Charity {
     private String url;
     private int votes;
     private int worth;
+    private boolean trusted;
     private String description; // Amount of Money Generated: Only for Charity of the
     // Month']
 
@@ -45,6 +46,10 @@ public class Charity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setTrusted(boolean trusted) {
+        this.trusted = trusted;
     }
 
     public int getVotes() {

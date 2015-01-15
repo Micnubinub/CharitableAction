@@ -17,7 +17,7 @@ import bigshots.people_helping_people.utilities.Utils;
 
 
 public class StatisticsFragment extends BaseFragment {
-
+    //Todo check the saving
     private static BarChart myStatsBarGraph;
     private static int color;
 
@@ -35,7 +35,7 @@ public class StatisticsFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.statistics, container, false);
         myStatsBarGraph = (BarChart) view.findViewById(R.id.my_stats);
         // ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
-        plotMyStatsPoints();
+        update();
         return view;
     }
 
@@ -52,8 +52,8 @@ public class StatisticsFragment extends BaseFragment {
                 addMyStatsBar(point.getLegendTitle() + String.valueOf(i + 1), point.getY());
             else
                 addMyStatsBar(point.getLegendTitle(), point.getY());
-
         }
+        myStatsBarGraph.invalidate();
     }
 
     private void addMyStatsBar(String label, float value) {
@@ -65,7 +65,12 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        plotMyStatsPoints();
+        myStatsBarGraph.post(new Runnable() {
+            @Override
+            public void run() {
+                plotMyStatsPoints();
+            }
+        });
     }
 
     public enum Mode {

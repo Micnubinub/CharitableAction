@@ -44,6 +44,7 @@ public class LeaderBoardAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final View view = View.inflate(context, R.layout.leader_board_list_item, null);
+
         view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         final UserStats stat = stats.get(position);
 
@@ -52,7 +53,7 @@ public class LeaderBoardAdapter extends BaseAdapter {
 //        if (isRate)
 //            ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%.3fpts", stat.getRate()));
 //        else
-        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%dpts", stat.getScore()));
+        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%spts", Utils.formatNumber(stat.getScore())));
 
         return view;
     }

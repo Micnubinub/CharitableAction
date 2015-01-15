@@ -58,7 +58,7 @@ public class FeedbackFragment extends BaseFragment {
                     case R.id.send:
                         String message = editText.getText().toString();
                         if (message != null && message.length() > 1)
-                            connector.getMessageManager().sendMessage(message);
+                            connector.getMessageManager().sendMessage(message, MainMenu.email);
                         Toast.makeText(MainMenu.context, "Your message is being sent", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         break;

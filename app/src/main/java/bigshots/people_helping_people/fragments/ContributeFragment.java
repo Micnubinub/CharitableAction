@@ -33,23 +33,23 @@ public class ContributeFragment extends BaseFragment {
     private static final AdListener fullScreen = new AdListener() {
         @Override
         public void onAdOpened() {
-            super.onAdOpened();
             fullScreenClicked = false;
+            super.onAdOpened();
         }
 
         @Override
         public void onAdLoaded() {
-            super.onAdLoaded();
             if (fullScreenClicked) {
-                adManager.getFullscreenAd().show();
                 Utils.addScore(MainMenu.context, 15);
+                adManager.getFullscreenAd().show();
             }
+            super.onAdLoaded();
         }
 
         @Override
         public void onAdClosed() {
-            super.onAdClosed();
             adManager.loadFullscreenAd();
+            super.onAdClosed();
         }
     };
     private static String prefix;
@@ -92,23 +92,23 @@ public class ContributeFragment extends BaseFragment {
     private final AdListener video = new AdListener() {
         @Override
         public void onAdOpened() {
-            super.onAdOpened();
             videoClicked = false;
+            super.onAdOpened();
         }
 
         @Override
         public void onAdLoaded() {
-            super.onAdLoaded();
             if (videoClicked) {
+                Utils.addScore(MainMenu.context, 20);
                 adManager.getVideoAd().show();
-                Utils.addScore(getActivity(), 20);
             }
+            super.onAdLoaded();
         }
 
         @Override
         public void onAdClosed() {
-            super.onAdClosed();
             adManager.loadVideoAd();
+            super.onAdClosed();
         }
     };
     private static MaterialSwitch autoStart, toast, adsAtBoot;
