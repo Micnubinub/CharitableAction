@@ -11,17 +11,13 @@ import java.util.ArrayList;
 
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.views.CharityListItem;
-import bigshots.people_helping_people.views.ProgressBar;
 
 /**
  * Created by root on 19/11/14.
  */
 @SuppressWarnings("ALL")
 public class VoteCharityAdapter extends BaseAdapter {
-    private static int max;
     private static String votedFor;
-
-
     private static ArrayList<Charity> charities;
     private final Context context;
     private int height = 100;
@@ -29,7 +25,6 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
-        getMax();
         this.context = context;
         height = dpToPixels(68);
 
@@ -41,14 +36,6 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     public static void setVotedFor(String votedFor) {
         VoteCharityAdapter.votedFor = votedFor;
-    }
-
-
-    private void getMax() {
-        for (Charity charity : charities) {
-            max = Math.max(max, charity.getVotes());
-        }
-        ProgressBar.setMax(max);
     }
 
 
@@ -69,7 +56,6 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         final CharityListItem view = new CharityListItem(context, this);
         view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));
         view.setPos(position);
@@ -78,7 +64,6 @@ public class VoteCharityAdapter extends BaseAdapter {
         view.setVotes(charities.get(position).getVotes());
         view.setSecondaryText(charities.get(position).getVotes());
         view.setVotedFor((votedFor != null) && (charities.get(position).getUrl().equals(votedFor)));
-
         return view;
     }
 

@@ -3,7 +3,6 @@ package bigshots.people_helping_people.fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,18 +54,17 @@ public class AboutFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("Create view", "start");
         final View view = inflater.inflate(R.layout.about, container, false);
         view.findViewById(R.id.playstore_link).setOnClickListener(listener);
         view.findViewById(R.id.website_link).setOnClickListener(listener);
         view.findViewById(R.id.cred_burns).setOnClickListener(listener);
         view.findViewById(R.id.cred_strip).setOnClickListener(listener);
         ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
-        Log.e("Create view", "end");
 //
 //
 //        final View view = inflater.inflate(R.layout.simple_fragment_test, container, false);
@@ -85,6 +83,5 @@ public class AboutFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        Log.e("update() :", getClass().getName());
     }
 }

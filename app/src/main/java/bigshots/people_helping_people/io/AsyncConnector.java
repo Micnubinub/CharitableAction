@@ -81,9 +81,8 @@ public class AsyncConnector {
                     } catch (ClassCastException e) {
                         charity.setDescription("No description");
                     }
-
                     if (listener != null)
-                        listener.onCompleteSingle(charity);
+                        listener.onCharityMonth(charity);
                 } else {
                     Log.e("Async", "Charity of the month not selected yet");
                 }
@@ -92,11 +91,22 @@ public class AsyncConnector {
                 Charity charity = new Charity();
                 charity.setUrl(resp);
                 if (listener != null)
-                    listener.onCompleteSingle(charity);
+                    listener.onCurrentCharity(charity);
             } else if (action.equals("USER_INSERT")) {
                 Log.e("Async", resp);
             } else if (action.equals("USER_STATS")) {
                 Log.e("Async", resp);
+            } else if (action.equals("GET_SCORE")) {
+                Log.e("Async", "SCORE: " + resp);
+                int score = 0;
+                try {
+                    score = Integer.parseInt(resp);
+                } catch (Exception e) {
+
+                }
+                if (listener != null)
+                    listener.onCompleteCurrentScore(score);
+                //TODO: MICHAEL
             } else if (action.equals("GET_LEADER")) {
                 Log.e("Async", resp);
                 ArrayList<UserStats> users = new ArrayList<UserStats>();
@@ -180,7 +190,6 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
             Log.e("Async", "Failed to perform action: " + this.action);
             Log.e("Async", "Error:  " + e.toString());
         }
-
     }
 
     @Override

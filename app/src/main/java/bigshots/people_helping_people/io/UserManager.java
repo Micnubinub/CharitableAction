@@ -38,6 +38,12 @@ public class UserManager {
         AsyncConnector.makeConnection(nvp, "GET_SCORE_RANK.php", "GET_RANK");
     }
 
+    public void getScore(String useremail) {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+        nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
+        AsyncConnector.makeConnection(nvp, "GET_SCORE.php", "GET_SCORE");
+    }
+
     public void getRateRank(String useremail) {
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));

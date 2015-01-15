@@ -14,17 +14,20 @@ import bigshots.people_helping_people.io.UserStats;
 public class Interfaces {
 
     public interface ASyncListener {
-        void onCompleteSingle(Charity charity);
+        void onCharityMonth(Charity charity);
+
+        void onCurrentCharity(Charity charity);
 
         void onCompleteRank(int rank);
 
         void onCompleteArray(ArrayList<Charity> charities);
 
         void onCompleteLeaderBoardList(ArrayList<UserStats> stats);
+
+        void onCompleteCurrentScore(int score);
     }
 
     public interface suggestCharity {
-        //returns false if the string isn't a proper link
         boolean suggestCharity(String link);
     }
 }

@@ -9,14 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Charity;
-import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.utilities.Interfaces;
 
 
 public class CurrentCharityFragment extends BaseFragment {
@@ -24,28 +20,6 @@ public class CurrentCharityFragment extends BaseFragment {
     private static TextView description, raised, name, linkr;
     private static String link;
     private static Charity charity;
-    public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
-        @Override
-        public void onCompleteSingle(final Charity charity) {
-            CurrentCharityFragment.charity = charity;
-            setCharityDescription();
-        }
-
-        @Override
-        public void onCompleteArray(ArrayList<Charity> charities) {
-
-        }
-
-        @Override
-        public void onCompleteRank(int rank) {
-
-        }
-
-        @Override
-        public void onCompleteLeaderBoardList(ArrayList<UserStats> stats) {
-
-        }
-    };
     private static View message;
 
 
@@ -53,20 +27,26 @@ public class CurrentCharityFragment extends BaseFragment {
     }
 
     private static void setCharityDescription() {
+
         charity = MainMenu.charity;
-        if (charity == null) {
-            return;
-        }
-        message.setVisibility(View.GONE);
-        if (description.getText().toString().length() < 10) {
-            description.setText(charity.getDescription());
-            description.setMaxLines(20);
-            description.setMinLines(3);
-        }
-        raised.setText(String.format("$%d raised", charity.getWorth()));
-        name.setText(charity.getName());
-        link = charity.getUrl();
-        linkr.setEnabled(true);
+        description.post(new Runnable() {
+            @Override
+            public void run() {
+                if (charity == null) {
+                    return;
+                }
+                message.setVisibility(View.GONE);
+                if (description.getText().toString().length() < 10) {
+                    description.setText(charity.getDescription());
+                    description.setMaxLines(20);
+                    description.setMinLines(3);
+                }
+                raised.setText(String.format("$%d raised", charity.getWorth()));
+                name.setText(charity.getName());
+                link = charity.getUrl();
+                linkr.setEnabled(true);
+            }
+        });
     }
 
     @Override
@@ -102,7 +82,7 @@ public class CurrentCharityFragment extends BaseFragment {
     @Override
     protected void update() {
         if (charity == null) {
-            MainMenu.setUpCurrentCharity();
+            MainMenu.downloadData();
             return;
         }
         setCharityDescription();

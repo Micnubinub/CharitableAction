@@ -25,10 +25,18 @@ public class VoteFragment extends BaseFragment {
 
     public static void refreshList() {
         //Todo test
-        Toast.makeText(MainMenu.context, "refreshVF", Toast.LENGTH_LONG).show();
-        message.setVisibility(View.GONE);
-        adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
-        listView.setAdapter(adapter);
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    message.setVisibility(View.GONE);
+                    adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
+                    listView.setAdapter(adapter);
+                } catch (Exception e) {
+
+                }
+            }
+        });
     }
 
     @Override
@@ -78,7 +86,7 @@ public class VoteFragment extends BaseFragment {
     @Override
     protected void update() {
         if (adapter == null || MainMenu.charity == null) {
-            MainMenu.setUpCharities();
+            MainMenu.downloadData();
             return;
         }
 
@@ -98,5 +106,10 @@ public class VoteFragment extends BaseFragment {
 
         });
 
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 }

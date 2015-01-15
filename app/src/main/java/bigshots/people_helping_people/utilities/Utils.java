@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.fragments.StatisticsFragment;
 
 /**
@@ -115,7 +117,7 @@ public class Utils {
         return StatisticsFragment.Mode.DAY;
     }
 
-    public static String getTotalScore(Context context) {
+    public static int getTotalScore(Context context) {
         int total = 0;
         try {
             final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
@@ -134,7 +136,7 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return String.valueOf(total);
+        return total;
     }
 
     public static float getRate(Context context) {
@@ -180,7 +182,6 @@ public class Utils {
 
         statsDB.close();
     }
-
 
     public static ArrayList<Point> getPoints(Context context) {
         final ArrayList<Point> graphPoints = new ArrayList<Point>();
@@ -260,7 +261,6 @@ public class Utils {
 
             if (date < from)
                 continue;
-
             if (date > to)
                 break;
 
@@ -270,4 +270,17 @@ public class Utils {
         return total;
     }
 
+
+    public static int initScore(int external) {
+        final int local = getTotalScore(MainMenu.context);
+        final int max = Math.max(local, external);
+        MainMenu.userManager.postStats(MainMenu.email, max, Utils.getRate(MainMenu.context));
+        //Todo post max here
+        return max;
+    }
+
+    public static String formatNumber(int i) {
+        //Todo use
+        return NumberFormat.getIntegerInstance().format(i);
+    }
 }

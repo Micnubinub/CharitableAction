@@ -34,8 +34,8 @@ public class CharityListItem extends ViewGroup {
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v instanceof PlusButton) {
-                ((PlusButton) v).click();
+            if (v instanceof LikeButton) {
+                ((LikeButton) v).click();
             } else {
                 openLink();
             }
@@ -43,7 +43,7 @@ public class CharityListItem extends ViewGroup {
         }
     };
     private MaterialTwoLineText textView;
-    private PlusButton plusButton;
+    private LikeButton likeButton;
     // private ProgressBar progressBar;
     private int width;
     private int height;
@@ -83,7 +83,7 @@ public class CharityListItem extends ViewGroup {
     }
 
     public void setVotedFor(boolean votedFor) {
-        plusButton.setIsVotedFor(votedFor);
+        likeButton.setIsVotedFor(votedFor);
         invalidatePoster();
     }
 
@@ -107,17 +107,16 @@ public class CharityListItem extends ViewGroup {
 
     private void init() {
         final int padding = dpToPixels(12);
-        final int buttonWidth = dpToPixels(68);
+        final int buttonWidth = dpToPixels(52);
 
         textView = new MaterialTwoLineText(getContext());
         textView.setPrimaryTextColor(getResources().getColor(R.color.dark_grey_text));
-        textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, buttonWidth));
+        textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, dpToPixels(68)));
         //textView.setPrimaryTextSize(22);
         textView.setOnClickListener(onClickListener);
 
-        plusButton = new PlusButton(getContext());
-        plusButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
-        plusButton.setPadding(padding, padding, padding, padding);
+        likeButton = new LikeButton(getContext());
+        likeButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
 
 //        progressBar = new ProgressBar(getContext())   ;
 //        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 5));
@@ -126,8 +125,7 @@ public class CharityListItem extends ViewGroup {
         paint.setColor(0x25000000);
 //        addView(progressBar);
         addView(textView);
-        addView(plusButton);
-
+        addView(likeButton);
 
         manager = AccountManager.get(getContext());
         accounts = manager.getAccounts();
@@ -153,7 +151,7 @@ public class CharityListItem extends ViewGroup {
         this.post(new Runnable() {
             @Override
             public void run() {
-                plusButton.invalidatePoster();
+                likeButton.invalidatePoster();
                 invalidate();
             }
         });
@@ -192,9 +190,8 @@ public class CharityListItem extends ViewGroup {
     @Override
     protected void onLayout(boolean b, int i, int i2, int i3, int i4) {
         //progressBar.layout(0, getHeight() - progressBar.getMeasuredHeight(), getMeasuredWidth(), getMeasuredHeight());
-
-        final int imageViewPadding = (getMeasuredHeight() - plusButton.getMeasuredHeight()) / 2;
-        plusButton.layout(getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
+        final int imageViewPadding = (getMeasuredHeight() - likeButton.getMeasuredHeight()) / 2;
+        likeButton.layout(getMeasuredWidth() - getPaddingLeft() - likeButton.getMeasuredWidth(),
                 imageViewPadding,
                 getMeasuredWidth() - getPaddingLeft(),
                 getMeasuredHeight() - imageViewPadding
@@ -202,7 +199,7 @@ public class CharityListItem extends ViewGroup {
 
         final int textViewPadding = (getMeasuredHeight() - textView.getMeasuredHeight()) / 2;
         textView.layout(getPaddingLeft(), 0,
-                getMeasuredWidth() - getPaddingLeft() - plusButton.getMeasuredWidth(),
+                getMeasuredWidth() - getPaddingLeft() - likeButton.getMeasuredWidth(),
                 getMeasuredHeight());
 
         checkViewParams(textView);
@@ -285,18 +282,18 @@ public class CharityListItem extends ViewGroup {
         checkViewParams(view, layoutWidth, layoutHeight);
     }
 
-    public class PlusButton extends ImageView {
-        public PlusButton(Context context) {
+    public class LikeButton extends ImageView {
+        public LikeButton(Context context) {
             super(context);
             init();
         }
 
-        public PlusButton(Context context, AttributeSet attrs) {
+        public LikeButton(Context context, AttributeSet attrs) {
             super(context, attrs);
             init();
         }
 
-        public PlusButton(Context context, AttributeSet attrs, int defStyleAttr) {
+        public LikeButton(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
             init();
         }
@@ -305,8 +302,8 @@ public class CharityListItem extends ViewGroup {
             super.setOnClickListener(onClickListener);
             setWillNotDraw(false);
             setScaleType(ScaleType.CENTER_INSIDE);
-            final int p = dpToPixels(12);
-            PlusButton.this.setPadding(p, p, p, p);
+            final int p = dpToPixels(8);
+            LikeButton.this.setPadding(p, p, p, p);
             invalidate();
         }
 

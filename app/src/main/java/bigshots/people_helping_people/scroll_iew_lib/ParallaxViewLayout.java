@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -112,7 +111,6 @@ public class ParallaxViewLayout implements ScrollListener {
 
     public void setUpFragments() {
         BaseFragment.scrollListener = this;
-        long tic = System.currentTimeMillis();
         fragments[0] = new ContributeFragment();
         fragments[1] = new VoteFragment();
         fragments[2] = new CurrentCharityFragment();
@@ -120,7 +118,6 @@ public class ParallaxViewLayout implements ScrollListener {
         fragments[4] = new LeaderboardFragment();
         fragments[5] = new FeedbackFragment();
         fragments[6] = new AboutFragment();
-        Log.e("setUpFrags tic-toc", String.valueOf(System.currentTimeMillis() - tic));
         setUpPagerAndAdapter();
     }
 
