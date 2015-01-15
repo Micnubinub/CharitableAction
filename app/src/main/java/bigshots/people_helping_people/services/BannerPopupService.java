@@ -14,7 +14,7 @@ import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.WindowManager;
 
-import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.views.BannerPopup;
 
 /**
@@ -136,7 +136,7 @@ public class BannerPopupService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             try {
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.AUTO_START_BOOL, false)) {
+                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.AUTO_START_BOOL, false)) {
                     context.startService(new Intent(context, BannerPopupService.class));
                 }
 
@@ -146,7 +146,7 @@ public class BannerPopupService extends Service {
 
             try {
                 final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                if (prefs.getBoolean(Utils.ADS_AT_START_BOOL, true) && prefs.getBoolean(Utils.ENABLE_SCHEDULED_ADS, false) && prefs.getBoolean(Utils.LOOP_SCHEDULE, true)) {
+                if (prefs.getBoolean(Utility.ADS_AT_START_BOOL, true) && prefs.getBoolean(Utility.ENABLE_SCHEDULED_ADS, false) && prefs.getBoolean(Utility.LOOP_SCHEDULE, true)) {
                     if (!ScheduledAdsManager.isServiceRunning()) {
                         context.startService(new Intent(context, ScheduledAdsManager.class));
                     }

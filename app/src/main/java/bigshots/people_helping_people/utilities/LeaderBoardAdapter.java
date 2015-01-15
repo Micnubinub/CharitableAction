@@ -53,7 +53,7 @@ public class LeaderBoardAdapter extends BaseAdapter {
 //        if (isRate)
 //            ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%.3fpts", stat.getRate()));
 //        else
-        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%spts", Utils.formatNumber(stat.getScore())));
+        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%spts", Utility.formatNumber(stat.getScore())));
 
         return view;
     }

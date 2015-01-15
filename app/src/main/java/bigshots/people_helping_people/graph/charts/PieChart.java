@@ -25,7 +25,7 @@
  * Mainly it's the code which handles the touch and rotation/animation handling. I did not logically modified
  * the code, I only copied and used the bits I needed and renamed the variables.
  * Another function which I extracted from the code sample is the "vectorToScalarScroll(...)" - function.
- * This can be found in the "Utils" - class.
+ * This can be found in the "Utility" - class.
  *
  * That's why I include the Apache License part from the sample:
  *

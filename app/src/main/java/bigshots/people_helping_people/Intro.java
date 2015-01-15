@@ -47,7 +47,7 @@ public class Intro extends Activity {
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
-//        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utils.INTRO_SHOWN, false)) {
+//        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Utility.INTRO_SHOWN, false)) {
 //            finish();
 //            startActivity(new Intent(Intro.this, MainMenu.class));
 //        }
@@ -60,7 +60,7 @@ public class Intro extends Activity {
 //    }
 //
 //    private void save() {
-//        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Utils.INTRO_SHOWN, true).commit();
+//        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(Utility.INTRO_SHOWN, true).commit();
 //    }
 //
 //    class PagerAdapter extends FragmentPagerAdapter {

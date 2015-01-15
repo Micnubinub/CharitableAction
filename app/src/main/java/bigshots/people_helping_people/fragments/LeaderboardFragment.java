@@ -11,7 +11,7 @@ import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
-import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.Utility;
 
 public class LeaderboardFragment extends BaseFragment {
     private static ParallaxListView listView;
@@ -50,7 +50,7 @@ public class LeaderboardFragment extends BaseFragment {
         message = view.findViewById(R.id.message);
         listView = (ParallaxListView) view.findViewById(R.id.list);
         points = (TextView) view.findViewById(R.id.points_money);
-        points.setText(String.format("%spts", Utils.formatNumber(Utils.getTotalScore(MainMenu.context))));
+        points.setText(String.format("%spts", Utility.formatNumber(Utility.getTotalScore(MainMenu.context))));
         // listView.setScrollListener(scrollListener);
         return view;
     }
@@ -79,7 +79,7 @@ public class LeaderboardFragment extends BaseFragment {
         });
 
         if (points != null)
-            points.setText(String.format("%spts", Utils.formatNumber(Utils.getTotalScore(MainMenu.context))));
+            points.setText(String.format("%spts", Utility.formatNumber(Utility.getTotalScore(MainMenu.context))));
 
         if (myRank != null)
             myRank.setText(String.format("%d. Me", MainMenu.rank));

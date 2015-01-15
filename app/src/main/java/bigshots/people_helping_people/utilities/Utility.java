@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -18,7 +19,7 @@ import bigshots.people_helping_people.fragments.StatisticsFragment;
  * Created by root on 27/11/14.
  */
 @SuppressWarnings("ALL")
-public class Utils {
+public class Utility {
     public static final String FULLSCREEN_AD_FREQUENCY_MINUTES = "FULLSCREEN_AD_FREQUENCY_MINUTES";
     public static final String INTRO_SHOWN = "INTRO_SHOWN";
     public static final String LOAD_AD = "LOAD_AD";
@@ -170,6 +171,7 @@ public class Utils {
     }
 
     public static void addScore(Context context, int points) {
+        Log.e("addScoreStart", String.valueOf(points));
         final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
         final SQLiteDatabase statsDB = statsDBHelper.getWritableDatabase();
         final String time = String.valueOf(System.currentTimeMillis());
@@ -179,7 +181,7 @@ public class Utils {
         values.put(StatsDBHelper.POINTS_INT, pointsString);
         values.put(StatsDBHelper.TIME_LONG, time);
         statsDB.insert(StatsDBHelper.STATS_TABLE, "", values);
-
+        Log.e("addScoreFinish", String.valueOf(points));
         statsDB.close();
     }
 
@@ -198,12 +200,10 @@ public class Utils {
                 lengend = "day";
                 steps = 86400000L;
                 break;
-
             case MONTH:
                 lengend = "week";
                 steps = 604800000L;
                 break;
-
             case YEAR:
                 lengend = "month";
                 steps = 2419200000L;
@@ -273,7 +273,7 @@ public class Utils {
     public static int initScore(int external) {
         final int local = getTotalScore(MainMenu.context);
         final int max = Math.max(local, external);
-        MainMenu.userManager.postStats(MainMenu.email, max, Utils.getRate(MainMenu.context));
+        MainMenu.userManager.postStats(MainMenu.email, max, Utility.getRate(MainMenu.context));
         //Todo post max here
         return max;
     }

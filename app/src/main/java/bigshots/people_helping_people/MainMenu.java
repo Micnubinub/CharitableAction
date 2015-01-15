@@ -24,7 +24,7 @@ import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
 import bigshots.people_helping_people.utilities.Interfaces;
-import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 import bigshots.people_helping_people.views.CharityListItem;
 
@@ -73,7 +73,7 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onCompleteCurrentScore(int score) {
-            Utils.initScore(score);
+            Utility.initScore(score);
         }
     };
     public static String email;
@@ -87,7 +87,7 @@ public class MainMenu extends FragmentActivity {
             try {
                 final UserManager manager1 = new UserManager();
                 userManager.getScoreRank(email);
-                manager1.postStats(email, Utils.getTotalScore(MainMenu.context), Utils.getRate(MainMenu.context));
+                manager1.postStats(email, Utility.getTotalScore(MainMenu.context), Utility.getRate(MainMenu.context));
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -23,7 +23,7 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.services.BannerPopupService;
-import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.Utility;
 
 /**
  * Created by root on 18/11/14.
@@ -168,7 +168,7 @@ public class BannerPopup extends ViewGroup {
             @Override
             public void onAdLoaded() {
                 super.onAdLoaded();
-                Utils.addScore(getContext(), 1);
+                Utility.addScore(getContext(), 1);
             }
         });
         adView.setPivotX(0);

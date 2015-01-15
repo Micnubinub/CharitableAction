@@ -1,6 +1,7 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.utilities.Point;
-import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.Utility;
 
 
 public class StatisticsFragment extends BaseFragment {
@@ -40,12 +41,13 @@ public class StatisticsFragment extends BaseFragment {
     }
 
     private void plotMyStatsPoints() {
+        Log.e("redraw", "stats");
         myStatsBarGraph.clearChart();
-        final ArrayList<Point> points = Utils.getPoints(MainMenu.context);
+        final ArrayList<Point> points = Utility.getPoints(MainMenu.context);
         if (points.size() < 1) {
             return;
         }
-        final Mode mode = Utils.getScope(MainMenu.context);
+        final Mode mode = Utility.getScope(MainMenu.context);
         for (int i = 0; i < points.size(); i++) {
             final Point point = points.get(i);
             if (mode == Mode.MONTH)

@@ -19,7 +19,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
-import bigshots.people_helping_people.utilities.Utils;
+import bigshots.people_helping_people.utilities.Utility;
 
 /**
  * Created by root on 11/12/14.
@@ -46,7 +46,7 @@ public class ScheduledAdsManager extends Service {
 
         if (adManager.getFullscreenAd().isLoaded()) {
             adManager.getFullscreenAd().show();
-            Utils.addScore(context, 15);
+            Utility.addScore(context, 15);
         } else {
             loadFullScreenAd();
             fullScreenAd = adManager.getFullscreenAd();
@@ -56,7 +56,7 @@ public class ScheduledAdsManager extends Service {
                     super.onAdLoaded();
                     //Todo move to opened
                     try {
-                        Utils.addScore(context, 15);
+                        Utility.addScore(context, 15);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -88,7 +88,7 @@ public class ScheduledAdsManager extends Service {
             final Intent intent = new Intent(context, AdAlarmReceiver.class);
             alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             if (load) {
-                int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
+                int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utility.FULLSCREEN_AD_FREQUENCY_MINUTES, 0);
                 if (mins == 0) {
                     cancelNotification(context);
                     return;
@@ -161,15 +161,15 @@ public class ScheduledAdsManager extends Service {
     }
 
     public static void scheduleNextReminder(Context context) {
-        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.ENABLE_REMINDER, false))
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.ENABLE_REMINDER, false))
             return;
 
-        final int hr = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.REMINDER_TIME_HOURS_INT, 12);
-        final int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utils.REMINDER_TIME_MINS_INT, 30);
+        final int hr = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utility.REMINDER_TIME_HOURS_INT, 12);
+        final int mins = PreferenceManager.getDefaultSharedPreferences(context).getInt(Utility.REMINDER_TIME_MINS_INT, 30);
 
         final long now = System.currentTimeMillis();
-        final int nowHr = Utils.getHours(now);
-        final int nowMin = Utils.getMinutes(now);
+        final int nowHr = Utility.getHours(now);
+        final int nowMin = Utility.getMinutes(now);
 
         final boolean hrLessThan = (hr < nowHr);
         final boolean minLessThan = (mins <= nowMin);
@@ -189,7 +189,7 @@ public class ScheduledAdsManager extends Service {
             difMin = (mins - nowMin);
         }
 
-        final long time = System.currentTimeMillis() - Utils.getDif(now) + (difHr + difMin) * 60000;
+        final long time = System.currentTimeMillis() - Utility.getDif(now) + (difHr + difMin) * 60000;
 
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final Intent inten = new Intent(context, ReminderAlarmReceiver.class);
@@ -275,13 +275,13 @@ public class ScheduledAdsManager extends Service {
                     show = false;
                     loadFullScreenAd();
                     scheduleNext(context, false);
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.TOAST_BEFORE_BOOL, true))
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.TOAST_BEFORE_BOOL, true))
                         Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
                     return;
                 } else {
                     show = true;
                     showFullScreenAd();
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utils.LOOP_SCHEDULE, false))
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.LOOP_SCHEDULE, false))
                         scheduleNext(context, true);
                 }
 
