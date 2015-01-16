@@ -6,18 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
@@ -31,51 +27,23 @@ import bigshots.people_helping_people.views.MaterialSwitch;
 
 
 public class ContributeFragment extends BaseFragment {
-    private static final AdListener fullScreen = new AdListener() {
-        @Override
-        public void onAdOpened() {
-            fullScreenClicked = false;
-            super.onAdOpened();
-        }
 
-        @Override
-        public void onAdLoaded() {
-            reminderSwitch.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (fullScreenClicked) {
-                        Log.e("show", "fS");
-                        Utility.addScore(MainMenu.context, 15);
-                        adManager.getFullscreenAd().show();
-                    }
-                }
-            });
-            super.onAdLoaded();
-        }
-
-        @Override
-        public void onAdClosed() {
-            adManager.loadFullscreenAd();
-            super.onAdClosed();
-        }
-    };
     private static String prefix;
     private static int frequencyMinutes;
     private static MaterialSwitch reminderSwitch;
     private static Dialog dialog;
-    private static AdManager adManager;
-    private static boolean videoClicked, fullScreenClicked;
+
     private static final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.full_screen:
-                    fullScreenClicked = true;
-                    adManager.getFullscreenAd().show();
+                    MainMenu.fullScreenClicked = true;
+                    MainMenu.adManager.getFullscreenAd().show();
                     break;
                 case R.id.video_ad:
-                    videoClicked = true;
-                    adManager.getVideoAd().show();
+                    MainMenu.videoClicked = true;
+                    MainMenu.adManager.getVideoAd().show();
                     break;
                 case R.id.share_app:
                     final Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -96,29 +64,7 @@ public class ContributeFragment extends BaseFragment {
             }
         }
     };
-    private final AdListener video = new AdListener() {
-        @Override
-        public void onAdOpened() {
-            videoClicked = false;
-            super.onAdOpened();
-        }
 
-        @Override
-        public void onAdLoaded() {
-            if (videoClicked) {
-                Log.e("show", "vid");
-                Utility.addScore(MainMenu.context, 20);
-                adManager.getVideoAd().show();
-            }
-            super.onAdLoaded();
-        }
-
-        @Override
-        public void onAdClosed() {
-            adManager.loadVideoAd();
-            super.onAdClosed();
-        }
-    };
     private static MaterialSwitch autoStart, toast, adsAtBoot;
     private static SharedPreferences.Editor editor;
     private static SharedPreferences prefs;
@@ -265,12 +211,6 @@ public class ContributeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.contribute, container, false);
-
-        adManager = new AdManager(MainMenu.context);
-        adManager.loadFullscreenAd();
-        adManager.loadVideoAd();
-        adManager.getFullscreenAd().setAdListener(fullScreen);
-        adManager.getVideoAd().setAdListener(video);
 
         view.findViewById(R.id.full_screen).setOnClickListener(listener);
         view.findViewById(R.id.video_ad).setOnClickListener(listener);

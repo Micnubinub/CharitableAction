@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -171,7 +170,6 @@ public class Utility {
     }
 
     public static void addScore(Context context, int points) {
-        Log.e("addScoreStart", String.valueOf(points));
         final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
         final SQLiteDatabase statsDB = statsDBHelper.getWritableDatabase();
         final String time = String.valueOf(System.currentTimeMillis());
@@ -181,7 +179,6 @@ public class Utility {
         values.put(StatsDBHelper.POINTS_INT, pointsString);
         values.put(StatsDBHelper.TIME_LONG, time);
         statsDB.insert(StatsDBHelper.STATS_TABLE, "", values);
-        Log.e("addScoreFinish", String.valueOf(points));
         statsDB.close();
     }
 

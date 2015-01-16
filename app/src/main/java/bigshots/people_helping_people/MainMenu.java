@@ -10,7 +10,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
+
+import com.google.android.gms.ads.AdListener;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,7 @@ import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
+import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
@@ -34,6 +38,30 @@ import bigshots.people_helping_people.views.CharityListItem;
 @SuppressWarnings("ALL")
 public class MainMenu extends FragmentActivity {
     public static Context context;
+    private static final AdListener fullScreen = new AdListener() {
+        @Override
+        public void onAdOpened() {
+            fullScreenClicked = false;
+            super.onAdOpened();
+        }
+
+        @Override
+        public void onAdLoaded() {
+
+            if (fullScreenClicked) {
+                adManager.getFullscreenAd().show();
+            }
+            super.onAdLoaded();
+        }
+
+        @Override
+        public void onAdClosed() {
+            Log.e("show", "fS");
+            Utility.addScore(context, 15);
+            adManager.loadFullscreenAd();
+            super.onAdClosed();
+        }
+    };
     public static FragmentActivity fragmentActivity;
     public static int rank;
     public static ArrayList<Charity> charities;
@@ -94,6 +122,32 @@ public class MainMenu extends FragmentActivity {
             userManager.getLeaderboardListScore(25);
         }
     };
+    public static AdManager adManager;
+    public static boolean videoClicked, fullScreenClicked;
+    private final AdListener video = new AdListener() {
+        @Override
+        public void onAdOpened() {
+            videoClicked = false;
+            super.onAdOpened();
+        }
+
+        @Override
+        public void onAdLoaded() {
+            if (videoClicked) {
+
+                adManager.getVideoAd().show();
+            }
+            super.onAdLoaded();
+        }
+
+        @Override
+        public void onAdClosed() {
+            Log.e("show", "vid");
+            Utility.addScore(context, 20);
+            adManager.loadVideoAd();
+            super.onAdClosed();
+        }
+    };
     public static UserManager userManager;
     private static CharityManager charityManager;
     private static Fragment fragment;
@@ -131,6 +185,11 @@ public class MainMenu extends FragmentActivity {
         context = this;
         fragmentActivity = this;
         userManager = new UserManager();
+        adManager = new AdManager(context);
+        adManager.loadFullscreenAd();
+        adManager.loadVideoAd();
+        adManager.getFullscreenAd().setAdListener(fullScreen);
+        adManager.getVideoAd().setAdListener(video);
     }
 
     private void setUpFragment() {

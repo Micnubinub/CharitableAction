@@ -101,7 +101,8 @@ public class VoteFragment extends BaseFragment {
         listView.post(new Runnable() {
             @Override
             public void run() {
-                listView.setAdapter(adapter);
+                if (listView.getAdapter() == null || listView.getAdapter().getCount() != adapter.getCount())
+                    listView.setAdapter(adapter);
             }
 
         });

@@ -27,7 +27,6 @@ public class CurrentCharityFragment extends BaseFragment {
     }
 
     private static void setCharityDescription() {
-
         charity = MainMenu.charity;
         description.post(new Runnable() {
             @Override
@@ -43,8 +42,10 @@ public class CurrentCharityFragment extends BaseFragment {
                 }
                 raised.setText(String.format("$%d raised", charity.getWorth()));
                 name.setText(charity.getName());
-                link = charity.getUrl();
-                linkr.setEnabled(true);
+                if (!linkr.isEnabled()) {
+                    link = charity.getUrl();
+                    linkr.setEnabled(true);
+                }
             }
         });
     }

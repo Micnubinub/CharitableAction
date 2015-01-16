@@ -72,8 +72,7 @@ public class LeaderboardFragment extends BaseFragment {
         listView.post(new Runnable() {
             @Override
             public void run() {
-                listView.removeAllViews();
-                listView.setAdapter(null);
+                if (listView.getAdapter() == null || listView.getAdapter().getCount() != adapter.getCount())
                 listView.setAdapter(adapter);
             }
         });
@@ -84,6 +83,6 @@ public class LeaderboardFragment extends BaseFragment {
         if (myRank != null)
             myRank.setText(String.format("%d. Me", MainMenu.rank));
 
-        getView().invalidate();
+//        getView().invalidate();
     }
 }

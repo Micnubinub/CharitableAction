@@ -64,9 +64,9 @@ public class StatisticsFragment extends BaseFragment {
         myStatsBarGraph.addBar(new BarModel(label, value, color));
     }
 
-
     @Override
     protected void update() {
+        Log.e("should redraw", "stats");
         myStatsBarGraph.post(new Runnable() {
             @Override
             public void run() {
