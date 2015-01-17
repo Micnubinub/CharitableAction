@@ -28,24 +28,24 @@ public class CurrentCharityFragment extends BaseFragment {
 
     private static void setCharityDescription() {
         charity = MainMenu.charity;
-        description.post(new Runnable() {
+        raised.post(new Runnable() {
             @Override
             public void run() {
-                if (charity == null) {
-                    return;
-                }
-                message.setVisibility(View.GONE);
-                if (description.getText().toString().length() < 10) {
-                    description.setText(charity.getDescription());
-                    description.setMaxLines(20);
-                    description.setMinLines(3);
-                }
+//                if (charity == null) {
+//                    return;
+//                }
+//                message.setVisibility(View.GONE);
+//                if (description.getText().toString().length() < 10) {
+//                    description.setText(charity.getDescription());
+//                    description.setMaxLines(20);
+//                    description.setMinLines(3);
+//                }
                 raised.setText(String.format("$%d raised", charity.getWorth()));
-                name.setText(charity.getName());
-                if (!linkr.isEnabled()) {
-                    link = charity.getUrl();
-                    linkr.setEnabled(true);
-                }
+//                name.setText(charity.getName());
+//                if (!linkr.isEnabled()) {
+//                    link = charity.getUrl();
+//                    linkr.setEnabled(true);
+//                }
             }
         });
     }
@@ -67,13 +67,13 @@ public class CurrentCharityFragment extends BaseFragment {
         raised = (TextView) view.findViewById(R.id.raised);
         name = (TextView) view.findViewById(R.id.name);
         linkr = (TextView) view.findViewById(R.id.link);
-        message = view.findViewById(R.id.message);
-        linkr.setEnabled(false);
+        //message = view.findViewById(R.id.message);
+//        linkr.setEnabled(false);
         linkr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (link != null && link.length() > 1) {
-                    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.nbcf.org.au/"));
                     startActivity(intent);
                 } else {
                     Toast.makeText(MainMenu.context, "No link to display", Toast.LENGTH_SHORT).show();
@@ -92,7 +92,4 @@ public class CurrentCharityFragment extends BaseFragment {
         }
         setCharityDescription();
     }
-
 }
-
-

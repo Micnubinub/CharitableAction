@@ -26,6 +26,15 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_button_selector"
+                android:padding="12dp"
+                android:text="**Note that one of your email addresses is sent to the server to keep track of the leader board, so that those who contribute the most can be credited"
+                android:textColor="@color/current_charity_color"
+                android:textSize="20sp" />
+
+            <TextView
                 android:id="@+id/vote"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
