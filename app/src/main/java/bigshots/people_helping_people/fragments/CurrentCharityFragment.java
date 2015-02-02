@@ -80,7 +80,6 @@ public class CurrentCharityFragment extends BaseFragment {
                 }
             }
         });
-
         return view;
     }
 

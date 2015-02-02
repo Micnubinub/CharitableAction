@@ -4,12 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <bigshots.people_helping_people.scroll_iew_lib.KenBurnsSupportView
-        android:id="@+id/ken_burns"
-        android:layout_width="fill_parent"
-        android:layout_height="240dp"
-        android:foreground="#86000000" />
-
     <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="fill_parent"
@@ -29,34 +23,18 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl"
+    <bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip
+        android:id="@+id/tabs"
         android:layout_width="fill_parent"
-        android:layout_height="180dp"
-        android:layout_below="@+id/action_bar">
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" />
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_above="@+id/tabs"
-            android:padding="20dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/logo" />
-
-        <bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:layout_width="fill_parent"
-            android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp" />
-    </RelativeLayout>
-
-    <bigshots.people_helping_people.scroll_iew_lib.ParallaxViewPager
+    <android.support.v4.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/rl" />
+        android:layout_below="@+id/tabs" />
 </RelativeLayout>
