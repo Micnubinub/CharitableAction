@@ -22,6 +22,8 @@ public class Interfaces {
 
         void onCompleteArray(ArrayList<Charity> charities);
 
+        void onDonationsArray(ArrayList<Charity> charities);
+
         void onCompleteLeaderBoardList(ArrayList<UserStats> stats);
 
         void onCompleteCurrentScore(int score);

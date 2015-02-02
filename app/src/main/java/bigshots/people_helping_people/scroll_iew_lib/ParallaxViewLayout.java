@@ -21,14 +21,12 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  * Created by root on 10/01/15.
  */
 public class ParallaxViewLayout {
-
     private static final Fragment[] fragments = new Fragment[7];
     private static ViewPager pager;
     private static MyPagerAdapter fragmentPagerAdapter;
     private static PagerSlidingTabStrip pagerSlidingTabStrip;
     private static Context context;
     private static View main;
-
 
     public ParallaxViewLayout(Context context, View view) {
         main = view;
@@ -40,7 +38,6 @@ public class ParallaxViewLayout {
     public static Context getContext() {
         return context;
     }
-
 
 
     public void setUpFragments() {

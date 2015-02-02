@@ -44,7 +44,6 @@ import java.util.Locale;
 import bigshots.people_helping_people.R;
 
 public class PagerSlidingTabStrip extends HorizontalScrollView {
-    // @formatter:off
     private static final int[] ATTRS = new int[]{
             android.R.attr.textSize,
             android.R.attr.textColor
@@ -120,21 +119,10 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 
         // get custom attrs
 
-        a = context.obtainStyledAttributes(attrs, R.styleable.PagerSlidingTabStrip);
-
         indicatorColor = getResources().getColor(R.color.current_charity_color);
         underlineColor = indicatorColor;
         dividerColor = 0xffffffff;
-        indicatorHeight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsIndicatorHeight, indicatorHeight);
-        underlineHeight = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsUnderlineHeight, underlineHeight);
-        dividerPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsDividerPadding, dividerPadding);
-        tabPadding = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsTabPaddingLeftRight, tabPadding);
         tabBackgroundResId = 0x00000000;
-        shouldExpand = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsShouldExpand, shouldExpand);
-        scrollOffset = a.getDimensionPixelSize(R.styleable.PagerSlidingTabStrip_pstsScrollOffset, scrollOffset);
-        textAllCaps = a.getBoolean(R.styleable.PagerSlidingTabStrip_pstsTextAllCaps, textAllCaps);
-
-        a.recycle();
 
         rectPaint = new Paint();
         rectPaint.setAntiAlias(true);

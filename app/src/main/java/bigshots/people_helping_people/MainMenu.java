@@ -18,6 +18,7 @@ import com.google.android.gms.ads.AdListener;
 import java.util.ArrayList;
 
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
+import bigshots.people_helping_people.fragments.DonationsFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
@@ -79,6 +80,12 @@ public class MainMenu extends FragmentActivity {
             VoteCharityAdapter.setVotedFor(charity.getUrl());
             CharityListItem.setCurrentVote(charity.getUrl());
             VoteFragment.refreshList();
+        }
+
+        @Override
+        public void onDonationsArray(ArrayList<Charity> charities) {
+            DonationsFragment.charities = charities;
+            DonationsFragment.refreshList();
         }
 
         @Override
