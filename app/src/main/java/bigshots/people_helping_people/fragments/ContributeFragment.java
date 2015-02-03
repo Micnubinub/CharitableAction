@@ -19,7 +19,6 @@ import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
 import bigshots.people_helping_people.schedule_wheel.adapters.NumericWheelAdapter;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView;
 import bigshots.people_helping_people.services.ScheduledAdsManager;
 import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.views.MaterialCheckBox;
@@ -217,7 +216,6 @@ public class ContributeFragment extends BaseFragment {
         view.findViewById(R.id.share_app).setOnClickListener(listener);
         view.findViewById(R.id.configure_scheduled_ads).setOnClickListener(listener);
 
-        ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
 
         final MaterialSwitch scheduledAdsSwitch = (MaterialSwitch) view.findViewById(R.id.enable_scheduled_ads);
         scheduledAdsSwitch.setChecked(prefs.getBoolean(Utility.ENABLE_SCHEDULED_ADS, false));

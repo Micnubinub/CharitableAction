@@ -12,6 +12,7 @@ import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.AboutFragment;
 import bigshots.people_helping_people.fragments.ContributeFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
+import bigshots.people_helping_people.fragments.DonationsFragment;
 import bigshots.people_helping_people.fragments.FeedbackFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.StatisticsFragment;
@@ -21,7 +22,7 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  * Created by root on 10/01/15.
  */
 public class ParallaxViewLayout {
-    private static final Fragment[] fragments = new Fragment[7];
+    private static final Fragment[] fragments = new Fragment[8];
     private static ViewPager pager;
     private static MyPagerAdapter fragmentPagerAdapter;
     private static PagerSlidingTabStrip pagerSlidingTabStrip;
@@ -41,14 +42,14 @@ public class ParallaxViewLayout {
 
 
     public void setUpFragments() {
-        BaseFragment.scrollListener = this;
         fragments[0] = new ContributeFragment();
         fragments[1] = new VoteFragment();
         fragments[2] = new CurrentCharityFragment();
-        fragments[3] = new StatisticsFragment();
-        fragments[4] = new LeaderboardFragment();
-        fragments[5] = new FeedbackFragment();
-        fragments[6] = new AboutFragment();
+        fragments[3] = new DonationsFragment();
+        fragments[4] = new StatisticsFragment();
+        fragments[5] = new LeaderboardFragment();
+        fragments[6] = new FeedbackFragment();
+        fragments[7] = new AboutFragment();
         setUpPagerAndAdapter();
     }
 
@@ -60,7 +61,7 @@ public class ParallaxViewLayout {
     public void setUpPager() {
         pager = (ViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(6);
+        pager.setOffscreenPageLimit(3);
         setUpPagerSlidingTabStrip();
     }
 
@@ -81,7 +82,7 @@ public class ParallaxViewLayout {
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
-        private final String[] TITLES = {"Main", "Vote", "Current Charity",
+        private final String[] TITLES = {"Main", "Vote", "Current Charity", "Donations",
                 "Statistics", "Leaderboard", "Feedback", "About"};
 
         public MyPagerAdapter(FragmentManager fm) {

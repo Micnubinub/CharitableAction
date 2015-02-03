@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-    <bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView
+    <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -88,5 +88,5 @@
 
         </LinearLayout>
 
-    </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
+    </ScrollView>
 </LinearLayout>

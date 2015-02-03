@@ -6,17 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 
 public class VoteFragment extends BaseFragment {
-    private static ParallaxListView listView;
+    private static ListView listView;
     private static VoteCharityAdapter adapter;
     private static View message;
 
@@ -49,7 +49,7 @@ public class VoteFragment extends BaseFragment {
                 showSuggestionDialog();
             }
         });
-        listView = (ParallaxListView) view.findViewById(R.id.list);
+        listView = (ListView) view.findViewById(R.id.list);
         //listView.setScrollListener(scrollListener);
         return view;
     }
@@ -88,11 +88,13 @@ public class VoteFragment extends BaseFragment {
         if (adapter == null || MainMenu.charity == null) {
             MainMenu.downloadData();
             return;
+        } else {
+            message.setVisibility(View.GONE);
         }
 
         if (listView == null) {
             try {
-                listView = (ParallaxListView) getView().findViewById(R.id.list);
+                listView = (ListView) getView().findViewById(R.id.list);
             } catch (Exception e) {
                 e.printStackTrace();
                 return;

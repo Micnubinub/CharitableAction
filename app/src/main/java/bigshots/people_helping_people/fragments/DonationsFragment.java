@@ -43,7 +43,7 @@ public class DonationsFragment extends BaseFragment {
                 adapter = new Dapter();
             else
                 adapter.notifyDataSetChanged();
-            listView.setAdapter(new Dapter());
+            listView.setAdapter(adapter);
         }
     }
 
@@ -58,8 +58,7 @@ public class DonationsFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.donations, container, false);
         raised = (TextView) view.findViewById(R.id.raised);
         listView = (ListView) view.findViewById(R.id.list);
-
-
+        refreshList();
         return view;
     }
 
@@ -85,9 +84,11 @@ public class DonationsFragment extends BaseFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final View view = View.inflate(MainMenu.context, R.layout., null);
+            final View view = View.inflate(MainMenu.context, R.layout.donations_list_item, null);
             final Charity charity = charities.get(position);
             //Todo
+            ((TextView) view.findViewById(R.id.raised)).setText(String.format("$%d", charity.getWorth()));
+            ((TextView) view.findViewById(R.id.charity)).setText(charity.getName());
             return null;
         }
     }

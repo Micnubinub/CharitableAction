@@ -14,6 +14,7 @@ import bigshots.people_helping_people.scroll_iew_lib.ParallaxViewLayout;
  * Created by root on 12/01/15.
  */
 public class MainFragment extends Fragment {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

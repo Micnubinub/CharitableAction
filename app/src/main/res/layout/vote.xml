@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <bigshots.people_helping_people.scroll_iew_lib.ParallaxListView
+    <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

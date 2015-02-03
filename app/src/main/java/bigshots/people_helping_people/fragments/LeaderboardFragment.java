@@ -4,17 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
-import bigshots.people_helping_people.scroll_iew_lib.ParallaxListView;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
 import bigshots.people_helping_people.utilities.Utility;
 
 public class LeaderboardFragment extends BaseFragment {
-    private static ParallaxListView listView;
+    private static ListView listView;
     private static View message;
     private static TextView myRank, points;
     private static LeaderBoardAdapter adapter;
@@ -48,7 +48,7 @@ public class LeaderboardFragment extends BaseFragment {
         final View view = inflater.inflate(R.layout.leader_board, container, false);
         myRank = (TextView) view.findViewById(R.id.my_rank);
         message = view.findViewById(R.id.message);
-        listView = (ParallaxListView) view.findViewById(R.id.list);
+        listView = (ListView) view.findViewById(R.id.list);
         points = (TextView) view.findViewById(R.id.points_money);
         points.setText(String.format("%spts", Utility.formatNumber(Utility.getTotalScore(MainMenu.context))));
         // listView.setScrollListener(scrollListener);
@@ -60,10 +60,12 @@ public class LeaderboardFragment extends BaseFragment {
         if (adapter == null) {
             MainMenu.downloadData();
             return;
+        } else {
+            message.setVisibility(View.GONE);
         }
         if (listView == null) {
             try {
-                listView = (ParallaxListView) getView().findViewById(R.id.list);
+                listView = (ListView) getView().findViewById(R.id.list);
             } catch (Exception e) {
                 e.printStackTrace();
                 return;
@@ -73,7 +75,7 @@ public class LeaderboardFragment extends BaseFragment {
             @Override
             public void run() {
                 if (listView.getAdapter() == null || listView.getAdapter().getCount() != adapter.getCount())
-                listView.setAdapter(adapter);
+                    listView.setAdapter(adapter);
             }
         });
 

@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView
+    <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -103,22 +103,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/total_raised"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="2dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingBottom="14dp"
-                android:text="Total raised - coming soon"
-                android:textColor="@color/dark_grey_text"
-                android:textSize="18sp" />
-
-            <TextView
                 android:id="@+id/total_num_users"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -135,5 +119,5 @@
                 android:textSize="18sp" />
 
         </LinearLayout>
-    </bigshots.people_helping_people.scroll_iew_lib.ParallaxScrollView>
+    </ScrollView>
 </LinearLayout>
