@@ -24,9 +24,6 @@ public class AboutFragment extends BaseFragment {
                 case R.id.website_link:
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://thebigshots.net/charity/"));
                     break;
-                case R.id.cred_burns:
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/flavioarfaria/KenBurnsView"));
-                    break;
                 case R.id.cred_strip:
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/astuetz/PagerSlidingTabStrip"));
                     break;
@@ -40,17 +37,10 @@ public class AboutFragment extends BaseFragment {
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        setRetainInstance(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.about, container, false);
         view.findViewById(R.id.playstore_link).setOnClickListener(listener);
         view.findViewById(R.id.website_link).setOnClickListener(listener);
-        view.findViewById(R.id.cred_burns).setOnClickListener(listener);
         view.findViewById(R.id.cred_strip).setOnClickListener(listener);
         return view;
     }

@@ -119,6 +119,7 @@ public class MainMenu extends FragmentActivity {
             getVotedFor();
             charityManager.getCharities();
             charityManager.monthlyCharity();
+            charityManager.getHistory();
             try {
                 final UserManager manager1 = new UserManager();
                 userManager.getScoreRank(email);
@@ -126,7 +127,7 @@ public class MainMenu extends FragmentActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            userManager.getLeaderboardListScore(25);
+            userManager.getLeaderboardListScore(50);
         }
     };
     public static AdManager adManager;

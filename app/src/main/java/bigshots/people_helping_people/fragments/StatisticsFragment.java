@@ -1,7 +1,6 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ public class StatisticsFragment extends BaseFragment {
     }
 
     private void plotMyStatsPoints() {
-        Log.e("redraw", "stats");
         myStatsBarGraph.clearChart();
         final ArrayList<Point> points = Utility.getPoints(MainMenu.context);
         if (points.size() < 1) {
@@ -66,7 +64,6 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        Log.e("should redraw", "stats");
         myStatsBarGraph.post(new Runnable() {
             @Override
             public void run() {

@@ -61,24 +61,42 @@ public class ParallaxViewLayout {
     public void setUpPager() {
         pager = (ViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(3);
+        pager.setOffscreenPageLimit(8);
         setUpPagerSlidingTabStrip();
     }
 
     public void setUpPagerSlidingTabStrip() {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) main.findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(pager);
-        pagerSlidingTabStrip.setTextColor(0xffffffff);
-        updatePages();
+//        pagerSlidingTabStrip.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                for (int i = position - 1; i < position + 2; i++) {
+//                    if (i < 0 || i > pager.getAdapter().getCount())
+//                        return;
+//
+//                    try {
+//                        ((BaseFragment) fragments[i % fragments.length]).update();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
     }
 
     public void setUpTitle() {
 //        title = (TextView) main.findViewById(R.id.title);
-    }
-
-    private void updatePages() {
-        ((BaseFragment) ((MyPagerAdapter) pager.getAdapter()).getItem(pager.getCurrentItem())).update();
-
     }
 
     public class MyPagerAdapter extends FragmentPagerAdapter {

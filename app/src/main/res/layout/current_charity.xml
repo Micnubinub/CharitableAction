@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical">
 
 
@@ -22,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:padding="12dp"
-                android:text="National Breast Cancer Foundation (NBCF)"
+                android:text="World Wildlife Fund (WWF)"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -37,7 +36,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingTop="6dp"
-                android:text="$1261"
+                android:text="$1,010"
                 android:textColor="@color/dark_grey_text"
                 android:textSize="18sp" />
 
@@ -50,7 +49,7 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingTop="6dp"
-                android:text="The National Breast Cancer Foundation is the leading community-funded organisation in Australia raising money for research into the prevention and cure of breast cancer.\n\nWe are privileged to work with the public who both give and raise funds and the research community to whom we grant funds to change the health future. Since the National Breast Cancer Foundation was established in 1994, more than $105 million has been awarded to fund over 370 Australian-based research projects across every state and territory to improve the health and wellbeing of those affected by breast cancer."
+                android:text="WWF-Australia is part of the WWF International Network, the world’s leading, independent conservation organisation. Founded in 1961 we are active in over 100 countries and have close to five million supporters internationally.\n\nIn Australia and throughout the oceanic region, we work with governments, businesses and communities so that people and nature can thrive within their fair share of the planet’s natural resources.\n\nWWF-Australia is a not-for-profit organisation with nearly 70% of our annual income donated by our dedicated supporters."
                 android:textColor="@color/dark_grey_text"
                 android:textSize="18sp" />
 

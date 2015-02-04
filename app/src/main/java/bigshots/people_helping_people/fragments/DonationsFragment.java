@@ -1,6 +1,7 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.utilities.Utility;
 
 
 public class DonationsFragment extends BaseFragment {
@@ -27,24 +29,29 @@ public class DonationsFragment extends BaseFragment {
     }
 
     public static void refreshList() {
-        if (raised != null) {
-            int total = 2400;
-            if (charities != null) {
-                total = 0;
-                for (Charity charity : charities) {
-                    total += charity.getWorth();
+        listView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (raised != null) {
+                    int total = 2400;
+                    if (charities != null) {
+                        total = 0;
+                        for (Charity charity : charities) {
+                            total += charity.getWorth();
+                        }
+                    }
+                    raised.setText(String.format("Total raised : $%s", Utility.formatNumber(total)));
+                }
+
+                if (listView != null) {
+                    if (adapter == null)
+                        adapter = new Dapter();
+                    else
+                        adapter.notifyDataSetChanged();
+                    listView.setAdapter(adapter);
                 }
             }
-            raised.setText(String.format("Total raised : %d", total));
-        }
-
-        if (listView != null) {
-            if (adapter == null)
-                adapter = new Dapter();
-            else
-                adapter.notifyDataSetChanged();
-            listView.setAdapter(adapter);
-        }
+        });
     }
 
     @Override
@@ -74,7 +81,7 @@ public class DonationsFragment extends BaseFragment {
 
         @Override
         public Object getItem(int position) {
-            return charities.get(position);
+            return charities == null ? null : charities.get(position);
         }
 
         @Override
@@ -87,9 +94,10 @@ public class DonationsFragment extends BaseFragment {
             final View view = View.inflate(MainMenu.context, R.layout.donations_list_item, null);
             final Charity charity = charities.get(position);
             //Todo
+            Log.e("charity:", charity.getName() + " " + charity.getWorth());
             ((TextView) view.findViewById(R.id.raised)).setText(String.format("$%d", charity.getWorth()));
             ((TextView) view.findViewById(R.id.charity)).setText(charity.getName());
-            return null;
+            return view;
         }
     }
 }

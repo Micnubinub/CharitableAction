@@ -12,5 +12,5 @@
     <!--<color name="material_blue">#738ffe</color>-->
     <color name="material_green_light">#42bd41</color>
     <color name="material_red">#e84e40</color>
-    <color name="current_charity_color">#ff0b0b0b</color>
+    <color name="current_charity_color">#fffd6eb1</color>
 </resources>

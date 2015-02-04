@@ -2,6 +2,7 @@ package bigshots.people_helping_people.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,27 +89,9 @@ public class VoteFragment extends BaseFragment {
         if (adapter == null || MainMenu.charity == null) {
             MainMenu.downloadData();
             return;
-        } else {
-            message.setVisibility(View.GONE);
         }
-
-        if (listView == null) {
-            try {
-                listView = (ListView) getView().findViewById(R.id.list);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (listView.getAdapter() == null || listView.getAdapter().getCount() != adapter.getCount())
-                    listView.setAdapter(adapter);
-            }
-
-        });
-
+        refreshList();
+        Log.e("update", "vote");
     }
 
     @Override

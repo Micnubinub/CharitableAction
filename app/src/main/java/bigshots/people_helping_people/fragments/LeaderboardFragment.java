@@ -1,6 +1,7 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,34 +58,18 @@ public class LeaderboardFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        if (adapter == null) {
+        if (MainMenu.stats == null) {
             MainMenu.downloadData();
             return;
-        } else {
-            message.setVisibility(View.GONE);
         }
-        if (listView == null) {
-            try {
-                listView = (ListView) getView().findViewById(R.id.list);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
-        }
-        listView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (listView.getAdapter() == null || listView.getAdapter().getCount() != adapter.getCount())
-                    listView.setAdapter(adapter);
-            }
-        });
-
         if (points != null)
             points.setText(String.format("%spts", Utility.formatNumber(Utility.getTotalScore(MainMenu.context))));
 
         if (myRank != null)
             myRank.setText(String.format("%d. Me", MainMenu.rank));
 
+        refreshList();
+        Log.e("update", "lb");
 //        getView().invalidate();
     }
 }
