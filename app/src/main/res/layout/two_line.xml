@@ -21,8 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/primary"
         android:maxLines="1"
-        android:paddingRight="5dp"
-        android:paddingTop="4dp"
+        android:paddingRight="4dp"
         android:textColor="@color/dark_grey"
         android:textSize="18sp" />
 
@@ -33,8 +32,7 @@
         android:layout_below="@+id/primary"
         android:layout_toRightOf="@+id/secondary"
         android:maxLines="1"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="4dp"
         android:paddingTop="4dp"
         android:textColor="@color/current_charity_color"
         android:textSize="18sp"

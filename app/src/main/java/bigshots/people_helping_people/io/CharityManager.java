@@ -31,9 +31,11 @@ public class CharityManager {
                 .makeConnection(nvp, "GET_HISTORY.php", "GET_HISTORY");
     }
 
-    public void suggestCharity(String url) {
-        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+    public void suggestCharity(String name, String url, String desc) {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(3);
+        nvp.add(new BasicNameValuePair("NAME", name));
         nvp.add(new BasicNameValuePair("URL", url));
+        nvp.add(new BasicNameValuePair("DESC", desc));
         AsyncConnector.makeConnection(nvp, "CHARITY_SUGGEST.php",
                 "CHARITY_SUGGEST");
     }

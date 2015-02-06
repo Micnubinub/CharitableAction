@@ -2,6 +2,7 @@ package bigshots.people_helping_people.io;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -14,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 public class AsyncConnector {
@@ -107,6 +109,11 @@ public class AsyncConnector {
                 Log.e("Async", resp);
             } else if (action.equals("CHARITY_SUGGEST")) {
                 Log.e("Async", resp);
+                if (resp.contains("Failed")) {
+                    Toast.makeText(MainMenu.context, "Suggestion failed : " + resp, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MainMenu.context, "Thanks for your suggestion", Toast.LENGTH_LONG).show();
+                }
             } else if (action.equals("CHARITY_MONTH")) {
                 Log.e("Async", resp);
                 Charity charity = new Charity();

@@ -2,7 +2,8 @@ package bigshots.people_helping_people.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,23 +52,51 @@ public class VoteFragment extends BaseFragment {
             }
         });
         listView = (ListView) view.findViewById(R.id.list);
-        //listView.setScrollListener(scrollListener);
         return view;
     }
+
 
     private void showSuggestionDialog() {
         final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.suggest_charity);
-        final EditText charity = (EditText) dialog.findViewById(R.id.suggested_charity);
+        final EditText charity_name = (EditText) dialog.findViewById(R.id.suggested_charity_name);
+        final EditText charity_description = (EditText) dialog.findViewById(R.id.suggested_charity_description);
+        final EditText charity_url = (EditText) dialog.findViewById(R.id.suggested_charity_url);
+        final TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String name = charity_name.getText().toString();
+                String desc = charity_description.getText().toString();
+                dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setEnabled(!(name == null || name.length() < 2 || desc == null || desc.length() < 2));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        charity_description.addTextChangedListener(textWatcher);
+        charity_name.addTextChangedListener(textWatcher);
 
         final View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.submit:
-                        String charityName = charity.getText().toString();
+                        String charityName = charity_name.getText().toString();
+                        String charityDescription = charity_description.getText().toString();
+                        String charityUrl = charity_url.getText().toString();
+                        //Todo
                         if (charityName != null && charityName.length() > 3) {
-                            new CharityManager().suggestCharity(charityName);
+                            new CharityManager().suggestCharity(charityName, charityUrl, charityDescription);
+
                             Toast.makeText(MainMenu.context, "Thank you for your suggestion.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
@@ -81,6 +110,8 @@ public class VoteFragment extends BaseFragment {
         };
         dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setOnClickListener(onClickListener);
         dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
+        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setEnabled(false);
+
         dialog.show();
     }
 
@@ -91,7 +122,6 @@ public class VoteFragment extends BaseFragment {
             return;
         }
         refreshList();
-        Log.e("update", "vote");
     }
 
     @Override

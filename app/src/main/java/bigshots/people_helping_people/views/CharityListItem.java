@@ -11,7 +11,6 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 
 import bigshots.people_helping_people.R;
@@ -23,9 +22,7 @@ import bigshots.people_helping_people.utilities.VoteCharityAdapter;
  */
 @SuppressWarnings("ALL")
 public class CharityListItem extends ViewGroup {
-    private static final AccelerateInterpolator interpolator = new AccelerateInterpolator();
     private static final VoteManager voteManager = new VoteManager();
-    private static int duration = 800;
     private static AccountManager manager;
     private static Account[] accounts;
     private static String currentVote;
@@ -45,7 +42,6 @@ public class CharityListItem extends ViewGroup {
     private MaterialTwoLineText textView;
 
     private LikeButton likeButton;
-    // private ProgressBar progressBar;
     private int width;
     private int height;
     private int votes;
@@ -136,14 +132,12 @@ public class CharityListItem extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-
         return false;
-
     }
 
     public void setTrusted(boolean trusted) {
         this.trusted = trusted;
-        textView.setTrustedViewText(trusted ? "Trusted" : "");
+        textView.setTrustedViewText(trusted ? "Verified" : "");
     }
 
     private void invalidatePoster() {

@@ -32,6 +32,7 @@ public class Utility {
     public static final String ENABLE_REMINDER = "ENABLE_REMINDER";
     public static final String REMINDER_TIME_MINS_INT = "REMINDER_TIME_MINS_INT";
     public static final String REMINDER_TIME_HOURS_INT = "REMINDER_TIME_HOURS_INT";
+    public static final String SAVED_EMAIL = "SAVED_EMAIL";
 
     public static String getDay(long date) {
         final Calendar calendar = Calendar.getInstance();
@@ -110,7 +111,6 @@ public class Utility {
                 return StatisticsFragment.Mode.MONTH;
 
             return StatisticsFragment.Mode.YEAR;
-
         } catch (Exception e) {
             e.printStackTrace();
         }

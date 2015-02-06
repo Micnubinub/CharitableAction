@@ -2,15 +2,23 @@ package bigshots.people_helping_people;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 
@@ -160,6 +168,7 @@ public class MainMenu extends FragmentActivity {
         }
     };
     public static UserManager userManager;
+    private static SharedPreferences prefs;
     private static CharityManager charityManager;
     private static Fragment fragment;
     private static View view;
@@ -191,6 +200,8 @@ public class MainMenu extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        context = this;
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
         getEmail();
         AsyncConnector.setListener(aSyncListener);
         init();
@@ -201,7 +212,7 @@ public class MainMenu extends FragmentActivity {
     private void init() {
         setContentView(R.layout.material_main_menu);
         charityManager = new CharityManager();
-        context = this;
+
         fragmentActivity = this;
         userManager = new UserManager();
         adManager = new AdManager(context);
@@ -220,13 +231,68 @@ public class MainMenu extends FragmentActivity {
     }
 
     public void getEmail() {
-        final AccountManager manager = AccountManager.get(this);
-        for (Account account : manager.getAccounts()) {
-            if (account.name.contains("@")) {
-                email = account.name;
-                break;
+        email = prefs.getString(Utility.SAVED_EMAIL, "");
+        if (email.length() < 4) {
+            final AccountManager manager = AccountManager.get(this);
+            for (Account account : manager.getAccounts()) {
+                if (account.name.contains("@")) {
+                    email = account.name;
+                    break;
+                }
             }
+
+            final Dialog dialog = new Dialog(context, R.style.CustomDialog);
+            dialog.setContentView(R.layout.get_email);
+            final Button save = (Button) dialog.findViewById(R.id.save_cancel).findViewById(R.id.save);
+            final Button cancel = (Button) dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel);
+            final TextView msg = ((TextView) dialog.findViewById(R.id.email_text));
+            final EditText emailTextView = ((EditText) dialog.findViewById(R.id.email));
+            save.setText("Change");
+            cancel.setText("Keep");
+
+            emailTextView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String text = emailTextView.getText().toString();
+                    save.setEnabled(!(text == null || text.length() < 3 || !(text.contains("@"))));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            msg.setText(
+                    email.length() < 4 ?
+                            "Enter you email of preference below" :
+                            "The following email will be used in the database to keep track of your progress and to vote for charities : \n\n" + email + "\n\nTo change it enter one manually below");
+
+            final View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.save:
+                            email = emailTextView.getText().toString();
+                            prefs.edit().putString(Utility.SAVED_EMAIL, email).commit();
+                            break;
+                        case R.id.cancel:
+                            dialog.dismiss();
+                            break;
+                    }
+                }
+            };
+            dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(onClickListener);
+            dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
+
+            dialog.show();
         }
+        //Todo
     }
 
     @Override

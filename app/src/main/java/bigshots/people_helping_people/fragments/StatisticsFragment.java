@@ -1,7 +1,6 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,7 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        Log.e("update", "Stats");
+
         myStatsBarGraph.post(new Runnable() {
             @Override
             public void run() {

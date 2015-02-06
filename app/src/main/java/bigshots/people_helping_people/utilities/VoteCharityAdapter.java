@@ -34,7 +34,6 @@ public class VoteCharityAdapter extends BaseAdapter {
         VoteCharityAdapter.votedFor = votedFor;
     }
 
-
     @Override
     public int getCount() {
         return charities == null ? 0 : charities.size();
