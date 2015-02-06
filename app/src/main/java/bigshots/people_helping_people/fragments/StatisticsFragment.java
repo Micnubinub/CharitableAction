@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,11 +18,17 @@ import bigshots.people_helping_people.utilities.Utility;
 
 
 public class StatisticsFragment extends BaseFragment {
+    public static String raised;
     //Todo check the saving
     private static BarChart myStatsBarGraph;
     private static int color;
+    private static TextView textView;
 
     public StatisticsFragment() {
+    }
+
+    public static void invalidate() {
+        textView.setText((raised == null || raised.length() < 2) ? "Loading..." : raised);
     }
 
     @Override
@@ -34,6 +41,7 @@ public class StatisticsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.statistics, container, false);
         myStatsBarGraph = (BarChart) view.findViewById(R.id.my_stats);
+        textView = (TextView) view.findViewById(R.id.stat_description);
         update();
         return view;
     }
@@ -63,13 +71,14 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
-
+        textView.setText((raised == null || raised.length() < 2) ? "Loading..." : raised);
         myStatsBarGraph.post(new Runnable() {
             @Override
             public void run() {
                 plotMyStatsPoints();
             }
         });
+
     }
 
     public enum Mode {

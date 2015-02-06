@@ -232,6 +232,7 @@ public class MainMenu extends FragmentActivity {
 
     public void getEmail() {
         email = prefs.getString(Utility.SAVED_EMAIL, "");
+
         if (email.length() < 4) {
             final AccountManager manager = AccountManager.get(this);
             for (Account account : manager.getAccounts()) {
@@ -258,8 +259,9 @@ public class MainMenu extends FragmentActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String text = emailTextView.getText().toString();
+                    final String text = emailTextView.getText().toString();
                     save.setEnabled(!(text == null || text.length() < 3 || !(text.contains("@"))));
+                    save.setTextColor(save.isEnabled() ? getResources().getColor(R.color.current_charity_color) : getResources().getColor(R.color.light_grey));
                 }
 
                 @Override
@@ -279,17 +281,17 @@ public class MainMenu extends FragmentActivity {
                     switch (v.getId()) {
                         case R.id.save:
                             email = emailTextView.getText().toString();
-                            prefs.edit().putString(Utility.SAVED_EMAIL, email).commit();
-                            break;
                         case R.id.cancel:
+                            prefs.edit().putString(Utility.SAVED_EMAIL, email).commit();
                             dialog.dismiss();
                             break;
                     }
                 }
             };
-            dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(onClickListener);
+            save.setOnClickListener(onClickListener);
             dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
-
+            save.setEnabled(false);
+            save.setTextColor(getResources().getColor(R.color.light_grey));
             dialog.show();
         }
         //Todo

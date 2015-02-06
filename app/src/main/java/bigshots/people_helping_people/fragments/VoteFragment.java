@@ -7,9 +7,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
@@ -26,7 +26,6 @@ public class VoteFragment extends BaseFragment {
     }
 
     public static void refreshList() {
-        //Todo test
         listView.post(new Runnable() {
             @Override
             public void run() {
@@ -62,6 +61,7 @@ public class VoteFragment extends BaseFragment {
         final EditText charity_name = (EditText) dialog.findViewById(R.id.suggested_charity_name);
         final EditText charity_description = (EditText) dialog.findViewById(R.id.suggested_charity_description);
         final EditText charity_url = (EditText) dialog.findViewById(R.id.suggested_charity_url);
+        final Button save = (Button) dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit);
         final TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -70,10 +70,11 @@ public class VoteFragment extends BaseFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String name = charity_name.getText().toString();
-                String desc = charity_description.getText().toString();
-                dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setEnabled(!(name == null || name.length() < 2 || desc == null || desc.length() < 2));
+                final String name = charity_name.getText().toString();
+                final String desc = charity_description.getText().toString();
 
+                save.setEnabled(!(name == null || name.length() < 2 || desc == null || desc.length() < 2));
+                save.setTextColor(save.isEnabled() ? getResources().getColor(R.color.current_charity_color) : getResources().getColor(R.color.light_grey));
             }
 
             @Override
@@ -93,14 +94,9 @@ public class VoteFragment extends BaseFragment {
                         String charityName = charity_name.getText().toString();
                         String charityDescription = charity_description.getText().toString();
                         String charityUrl = charity_url.getText().toString();
-                        //Todo
-                        if (charityName != null && charityName.length() > 3) {
+                        if (charityName != null && charityName.length() > 2) {
                             new CharityManager().suggestCharity(charityName, charityUrl, charityDescription);
-
-                            Toast.makeText(MainMenu.context, "Thank you for your suggestion.", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
                         }
-
                         break;
                     case R.id.cancel:
                         dialog.dismiss();
@@ -108,9 +104,10 @@ public class VoteFragment extends BaseFragment {
                 }
             }
         };
-        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setOnClickListener(onClickListener);
+        save.setOnClickListener(onClickListener);
         dialog.findViewById(R.id.submit_cancel).findViewById(R.id.cancel).setOnClickListener(onClickListener);
-        dialog.findViewById(R.id.submit_cancel).findViewById(R.id.submit).setEnabled(false);
+        save.setEnabled(false);
+        save.setTextColor(getResources().getColor(R.color.light_grey));
 
         dialog.show();
     }

@@ -28,18 +28,61 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/white_button_selector"
                 android:padding="12dp"
                 android:text="**Note that one of your email addresses is sent to the server to keep track of the leader board, so that those who contribute the most can be credited"
                 android:textColor="@color/current_charity_color"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/vote"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:text="This app allows users to donate to a charity of their choosing without actually giving money.\n\nHow does it work?\n\nThe app works around the idea that every user watches a couple of advertisements through the app a couple of times a day, and the money generated from those advertisements will go to charity. The potential here is limitless.\n\nAll of the money generated from the viewing of the ads goes toward the charity of the month which is voted by the users. You will be presented with a couple of ad-solutions to ensure each user can choose how to. These options include watching a fullscreen Ad, a video Ad, using a floating Ad (similar to Facebook Chat Heads) and scheduling ads to show up every once in a while. A lot of charity companies take a large portion of the money you donate to them, but we give extra and send the money to the 'Current Charity' at the end of each month, which is picked by the users through the voting system. A new Charity is the selected based on those Votes. In some special cases, the money may be donated to specific causes due to Unexpected events such as natural disasters or otherwise. \n\nThank you for installing the app, your time and screen real estate will go a long way."
+                android:text="How does it Work?"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Through the Use of the several Ad Options found under the Main Tab, you can generate money for the charity listed under the Current Charity Tab. You may also suggest a new Charity or Vote for the one that you think deserves to be the next Charity of the Month. Every month a new Charity is selected as the current Charity. 100% of the money generated goes toward that Charity."
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="How much have I raised?"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="To see how much you personally have contributed, you can check out the Leaderboard tab. Note that the amounts raised that are displayed in the Leaderboards Tab may fluctuate over time based on the influx of users. You can also track your Statistics in the Statistics Tab."
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="Donations"
+                android:textColor="@color/dark_grey_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="A history of donations achieved through the app is listed in the Donations Tab. To ensure full transparency we will upload all receipts of the Donations to Our Facebook Page. Check the Feedback Sections for More Information on how to contact us as well.\n\nThe Potential of the App is Tremendous, and every second you spend on the app helps. We would like to sincerely thank you for using the App. Together we can make a Difference."
                 android:textColor="@color/dark_grey_text"
                 android:textSize="20sp" />
 
@@ -55,7 +98,6 @@
                 android:textStyle="bold" />
 
             <TextView
-
                 android:id="@+id/playstore_link"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
