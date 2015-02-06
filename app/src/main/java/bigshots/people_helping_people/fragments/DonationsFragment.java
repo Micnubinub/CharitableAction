@@ -33,14 +33,18 @@ public class DonationsFragment extends BaseFragment {
             @Override
             public void run() {
                 if (raised != null) {
-                    int total = 2400;
+                    int total = 0;
                     if (charities != null) {
-                        total = 0;
                         for (Charity charity : charities) {
                             total += charity.getWorth();
                         }
+                        MainMenu.totalCash = total;
+                        raised.setText(String.format("Total raised : $%s", Utility.formatNumber(total)));
+                    } else {
+
+                        raised.setText("Loading...");
                     }
-                    raised.setText(String.format("Total raised : $%s", Utility.formatNumber(total)));
+
                 }
 
                 if (listView != null) {
@@ -57,7 +61,6 @@ public class DonationsFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setRetainInstance(true);
     }
 
     @Override
@@ -71,6 +74,7 @@ public class DonationsFragment extends BaseFragment {
 
     @Override
     protected void update() {
+        Log.e("update", "donations");
     }
 
     static class Dapter extends BaseAdapter {

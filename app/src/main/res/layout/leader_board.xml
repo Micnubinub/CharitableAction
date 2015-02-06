@@ -27,7 +27,6 @@
             android:id="@+id/my_rank"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/points_money"
             android:ellipsize="end"
             android:maxLines="1"
             android:padding="8dp"
@@ -38,7 +37,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/points_money"
+            android:id="@+id/raised"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -48,6 +47,7 @@
             android:paddingBottom="14dp"
             android:textColor="@color/grey_text"
             android:textSize="18sp" />
+
     </RelativeLayout>
 
     <TextView

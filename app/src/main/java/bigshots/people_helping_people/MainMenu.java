@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.ads.AdListener;
@@ -57,22 +56,26 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onAdClosed() {
-            Log.e("show", "fS");
             Utility.addScore(context, 15);
             adManager.loadFullscreenAd();
             super.onAdClosed();
         }
     };
     public static FragmentActivity fragmentActivity;
-    public static int rank;
+    public static int rank, userScore, totalCash;
+    public static long totalScore;
     public static ArrayList<Charity> charities;
     public static ArrayList<UserStats> stats;
     public static Charity charity;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
-            MainMenu.charity = charity;
-            CurrentCharityFragment.refreshCharity();
+
+        }
+
+        @Override
+        public void onCompleteTotalScore(long score) {
+            totalScore = score;
         }
 
         @Override
@@ -85,6 +88,14 @@ public class MainMenu extends FragmentActivity {
         @Override
         public void onDonationsArray(ArrayList<Charity> charities) {
             DonationsFragment.charities = charities;
+            loop:
+            for (Charity charity : charities) {
+                if (charity.isCurrent()) {
+                    MainMenu.charity = charity;
+                    CurrentCharityFragment.refreshCharity();
+                    break loop;
+                }
+            }
             DonationsFragment.refreshList();
         }
 
@@ -116,18 +127,12 @@ public class MainMenu extends FragmentActivity {
     private static final Runnable downloadData = new Runnable() {
         @Override
         public void run() {
-            getVotedFor();
+            charityManager.currentCharity(email);
             charityManager.getCharities();
             charityManager.monthlyCharity();
             charityManager.getHistory();
-            try {
-                final UserManager manager1 = new UserManager();
-                userManager.getScoreRank(email);
-                manager1.postStats(email, Utility.getTotalScore(MainMenu.context), Utility.getRate(MainMenu.context));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            userManager.getLeaderboardListScore(50);
+            charityManager.getTotalScore();
+            refreshLeaderBoard();
         }
     };
     public static AdManager adManager;
@@ -142,7 +147,6 @@ public class MainMenu extends FragmentActivity {
         @Override
         public void onAdLoaded() {
             if (videoClicked) {
-
                 adManager.getVideoAd().show();
             }
             super.onAdLoaded();
@@ -150,7 +154,6 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onAdClosed() {
-            Log.e("show", "vid");
             Utility.addScore(context, 20);
             adManager.loadVideoAd();
             super.onAdClosed();
@@ -165,9 +168,6 @@ public class MainMenu extends FragmentActivity {
         return fragment.getChildFragmentManager();
     }
 
-    private static void getVotedFor() {
-        charityManager.currentCharity(email);
-    }
 
     public static void downloadData() {
         if (view != null)
@@ -175,6 +175,17 @@ public class MainMenu extends FragmentActivity {
         else new Thread(downloadData).start();
     }
 
+    public static void refreshLeaderBoard() {
+        try {
+            final UserManager manager1 = new UserManager();
+            userManager.getScoreRank(email);
+            userScore = Utility.getTotalScore(MainMenu.context);
+            manager1.postStats(email, userScore, Utility.getRate(MainMenu.context));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        userManager.getLeaderboardListScore(50);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

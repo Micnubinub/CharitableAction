@@ -1,6 +1,7 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ public class StatisticsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.statistics, container, false);
         myStatsBarGraph = (BarChart) view.findViewById(R.id.my_stats);
-        // ((ParallaxScrollView) view.findViewById(R.id.scroll_view)).setScrollListener(scrollListener);
         update();
         return view;
     }
@@ -64,6 +64,7 @@ public class StatisticsFragment extends BaseFragment {
 
     @Override
     protected void update() {
+        Log.e("update", "Stats");
         myStatsBarGraph.post(new Runnable() {
             @Override
             public void run() {

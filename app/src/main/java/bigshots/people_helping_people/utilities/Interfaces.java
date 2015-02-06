@@ -3,6 +3,7 @@ package bigshots.people_helping_people.utilities;
 
 import java.util.ArrayList;
 
+import bigshots.people_helping_people.feeds.Message;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.UserStats;
 
@@ -27,6 +28,14 @@ public class Interfaces {
         void onCompleteLeaderBoardList(ArrayList<UserStats> stats);
 
         void onCompleteCurrentScore(int score);
+
+        void onCompleteTotalScore(long score);
+    }
+
+    public interface FeedClient {
+        void onReceiveMessages(ArrayList<Message> messages);
+
+        void onReceiveMessages(Message... messages);
     }
 
     public interface suggestCharity {

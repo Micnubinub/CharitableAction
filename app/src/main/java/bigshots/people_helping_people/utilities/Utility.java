@@ -157,15 +157,11 @@ public class Utility {
 
             cursor.moveToLast();
             last = Long.parseLong(cursor.getString(1));
-
             statsDB.close();
-
             rate = total / (last - first);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         return rate;
     }
 

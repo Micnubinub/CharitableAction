@@ -37,10 +37,10 @@ public class AsyncConnector {
                 Log.e("Async", resp);
             } else if (action.equals("GET_CHARITIES")) {
                 Log.e("Async", resp);
-                ArrayList<Charity> charities = new ArrayList<Charity>();
+                final ArrayList<Charity> charities = new ArrayList<Charity>();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
-                    String[] tmp1 = resp.split("\\|");
+                    final String[] tmp1 = resp.split("\\|");
                     for (String s : tmp1) {
                         String[] tmp = s.split("\\^", -1);
                         Charity charity = new Charity();
@@ -51,11 +51,28 @@ public class AsyncConnector {
                         } catch (ClassCastException e) {
                             charity.setVotes(0);
                         }
+
+                        try {
+
+                            charity.setTrusted(Integer.valueOf(tmp[4]));
+                        } catch (ClassCastException e) {
+                            charity.setTrusted(0);
+                        }
                         charities.add(charity);
                     }
                 }
                 if (listener != null)
                     listener.onCompleteArray(charities);
+            } else if (action.equals("GET_SCORE_TOTAL")) {
+                Log.e("Async", resp);
+                long total = 0;
+                try {
+                    total = Long.parseLong(resp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (listener != null)
+                    listener.onCompleteTotalScore(total);
             } else if (action.equals("GET_HISTORY")) {
                 Log.e("Async", resp);
                 ArrayList<Charity> charities = new ArrayList<Charity>();
@@ -70,6 +87,12 @@ public class AsyncConnector {
                             charity.setWorth(Integer.parseInt(tmp[1]));
                         } catch (ClassCastException e) {
                             charity.setWorth(0);
+                        }
+
+                        try {
+                            charity.setCurrent(Integer.parseInt(tmp[2]) == 1);
+                        } catch (ClassCastException e) {
+                            charity.setCurrent(false);
                         }
 
                         charity.setUrl(tmp[3]);
@@ -98,12 +121,7 @@ public class AsyncConnector {
                     } catch (ClassCastException e) {
                         e.printStackTrace();
                     }
-                    try {
-                        // charity.setDescription(tmp[3]); // TO DO MICHAEL
-                    } catch (ClassCastException e) {
-                        // charity.setDescription("No description"); // TO DO
-                        // MICHAEL
-                    }
+
 
                     if (listener != null)
                         listener.onCharityMonth(charity);
@@ -122,7 +140,7 @@ public class AsyncConnector {
                 Log.e("Async", resp);
             } else if (action.equals("GET_LEADER")) {
                 Log.e("Async", resp);
-                ArrayList<UserStats> users = new ArrayList<UserStats>();
+                final ArrayList<UserStats> users = new ArrayList<UserStats>();
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
                     String[] tmp1 = resp.split("\\|");
@@ -146,10 +164,10 @@ public class AsyncConnector {
                         users.add(user);
                     }
                 }
-                System.out.println(users.get(0).getName() + " has Raised "
-                        + users.get(0).getRaised() + "$");
-                // if (listener != null)
-                // listener.onCompleteArray(users); // TO DO MICHAEL
+
+                if (listener != null) {
+                    listener.onCompleteLeaderBoardList(users);
+                }
             } else if (action.equals("GET_RANK")) {
                 Log.e("Async", resp);
                 System.out.println("TEST");
@@ -159,7 +177,8 @@ public class AsyncConnector {
                 } catch (ClassCastException e) {
                     rank = 0;
                 }
-                // listener.onCompleteRank(rank); // TO DO MICHAEL
+                if (listener != null)
+                    listener.onCompleteRank(rank);
             } else {
                 Log.e("Async", "Invalid Action specified!");
             }

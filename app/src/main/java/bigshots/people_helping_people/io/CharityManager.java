@@ -11,6 +11,12 @@ public class CharityManager {
 
     }
 
+    public void getTotalScore() {
+        ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
+        nvp.add(new BasicNameValuePair("DUMMY", "."));
+        AsyncConnector.makeConnection(nvp, "GET_SCORE_TOTAL.php", "GET_SCORE_TOTAL");
+    }
+
     public void getCharities() {
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("DUMMY", "X"));

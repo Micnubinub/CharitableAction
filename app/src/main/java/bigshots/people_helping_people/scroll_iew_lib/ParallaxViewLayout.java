@@ -68,31 +68,24 @@ public class ParallaxViewLayout {
     public void setUpPagerSlidingTabStrip() {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) main.findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(pager);
-//        pagerSlidingTabStrip.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                for (int i = position - 1; i < position + 2; i++) {
-//                    if (i < 0 || i > pager.getAdapter().getCount())
-//                        return;
-//
-//                    try {
-//                        ((BaseFragment) fragments[i % fragments.length]).update();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
+        pagerSlidingTabStrip.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                try {
+                    ((BaseFragment) fragments[position % fragments.length]).update();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
     }
 
     public void setUpTitle() {

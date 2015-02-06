@@ -43,6 +43,7 @@ public class CharityListItem extends ViewGroup {
         }
     };
     private MaterialTwoLineText textView;
+
     private LikeButton likeButton;
     // private ProgressBar progressBar;
     private int width;
@@ -50,7 +51,7 @@ public class CharityListItem extends ViewGroup {
     private int votes;
     private int clickedX, clickedY;
     private String link;
-    private boolean touchDown = false, votedFor;
+    private boolean touchDown = false, votedFor, trusted;
     private int pos;
     private String name;
 
@@ -111,20 +112,14 @@ public class CharityListItem extends ViewGroup {
 
         textView = new MaterialTwoLineText(getContext());
         textView.setPrimaryTextColor(getResources().getColor(R.color.dark_grey_text));
-        textView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, dpToPixels(68)));
-        //textView.setPrimaryTextSize(22);
-        textView.setOnClickListener(onClickListener);
+        textView.getView().setOnClickListener(onClickListener);
 
         likeButton = new LikeButton(getContext());
         likeButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
 
-//        progressBar = new ProgressBar(getContext())   ;
-//        progressBar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, padding / 5));
-
         setWillNotDraw(false);
         paint.setColor(0x25000000);
-//        addView(progressBar);
-        addView(textView);
+        addView(textView.getView());
         addView(likeButton);
 
         manager = AccountManager.get(getContext());
@@ -146,6 +141,10 @@ public class CharityListItem extends ViewGroup {
 
     }
 
+    public void setTrusted(boolean trusted) {
+        this.trusted = trusted;
+        textView.setTrustedViewText(trusted ? "Trusted" : "");
+    }
 
     private void invalidatePoster() {
         this.post(new Runnable() {
@@ -197,12 +196,13 @@ public class CharityListItem extends ViewGroup {
                 getMeasuredHeight() - imageViewPadding
         );
 
-        final int textViewPadding = (getMeasuredHeight() - textView.getMeasuredHeight()) / 2;
-        textView.layout(getPaddingLeft(), 0,
+        final int textViewPadding = (getMeasuredHeight() - textView.getView().getMeasuredHeight()) / 2;
+        textView.getView().layout(getPaddingLeft(), 0,
                 getMeasuredWidth() - getPaddingLeft() - likeButton.getMeasuredWidth(),
                 getMeasuredHeight());
 
-        checkViewParams(textView);
+
+        checkViewParams(textView.getView());
     }
 
     public void setSecondaryText(String text) {

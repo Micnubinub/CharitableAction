@@ -20,12 +20,10 @@ public class VoteCharityAdapter extends BaseAdapter {
     private static String votedFor;
     private static ArrayList<Charity> charities;
     private final Context context;
-    private int height = 100;
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
         this.context = context;
-        height = dpToPixels(68);
     }
 
     public static ArrayList<Charity> getCharities() {
@@ -55,16 +53,17 @@ public class VoteCharityAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final CharityListItem view = new CharityListItem(context, this);
-        view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height));
+        view.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         view.setPos(position);
-        view.setLink(charities.get(position).getUrl());
-        view.setPrimaryText(charities.get(position).getName());
-        view.setVotes(charities.get(position).getVotes());
-        view.setSecondaryText(charities.get(position).getVotes());
-        view.setVotedFor((votedFor != null) && (charities.get(position).getUrl().equals(votedFor)));
+        final Charity charity = charities.get(position);
+        view.setLink(charity.getUrl());
+        view.setPrimaryText(charity.getName());
+        view.setVotes(charity.getVotes());
+        view.setSecondaryText(charity.getVotes());
+        view.setTrusted(charity.isTrusted());
+        view.setVotedFor((votedFor != null) && (charity.getUrl().equals(votedFor)));
         return view;
     }
-
 
     int dpToPixels(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());

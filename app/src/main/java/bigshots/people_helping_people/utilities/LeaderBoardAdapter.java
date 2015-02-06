@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.UserStats;
 
@@ -44,17 +45,10 @@ public class LeaderBoardAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final View view = View.inflate(context, R.layout.leader_board_list_item, null);
-
         view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         final UserStats stat = stats.get(position);
-
         ((TextView) view.findViewById(R.id.name_pos)).setText(String.format("%d. %s", position + 1, stat.getName()));
-//
-//        if (isRate)
-//            ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%.3fpts", stat.getRate()));
-//        else
-        ((TextView) view.findViewById(R.id.points_money)).setText(String.format("%spts", Utility.formatNumber(stat.getScore())));
-
+        ((TextView) view.findViewById(R.id.raised)).setText(String.format("$%.2f", (stat.getScore() / (double) MainMenu.totalScore) * MainMenu.totalCash));
         return view;
     }
 }

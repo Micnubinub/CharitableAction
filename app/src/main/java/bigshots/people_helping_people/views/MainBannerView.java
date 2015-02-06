@@ -87,7 +87,7 @@ public class MainBannerView extends ImageView {
     }
 
     private void giving() {
-        setImageResource(R.drawable.icon_blue);
+        setImageResource(R.drawable.icon);
         invalidate();
     }
 

@@ -1,7 +1,6 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,7 @@ import bigshots.people_helping_people.utilities.Utility;
 public class LeaderboardFragment extends BaseFragment {
     private static ListView listView;
     private static View message;
-    private static TextView myRank, points;
+    private static TextView myRank, points, raised;
     private static LeaderBoardAdapter adapter;
 
     public LeaderboardFragment() {
@@ -30,6 +29,7 @@ public class LeaderboardFragment extends BaseFragment {
             public void run() {
                 try {
                     message.setVisibility(View.GONE);
+                    raised.setText(String.format("$%.2f", (MainMenu.userScore / (double) MainMenu.totalScore) * MainMenu.totalCash));
                     adapter = new LeaderBoardAdapter(MainMenu.context, MainMenu.stats, false);
                     listView.setAdapter(adapter);
                 } catch (Exception e) {
@@ -50,14 +50,14 @@ public class LeaderboardFragment extends BaseFragment {
         myRank = (TextView) view.findViewById(R.id.my_rank);
         message = view.findViewById(R.id.message);
         listView = (ListView) view.findViewById(R.id.list);
-        points = (TextView) view.findViewById(R.id.points_money);
-        points.setText(String.format("%spts", Utility.formatNumber(Utility.getTotalScore(MainMenu.context))));
-        // listView.setScrollListener(scrollListener);
+        raised = (TextView) view.findViewById(R.id.raised);
         return view;
     }
 
     @Override
     protected void update() {
+        MainMenu.refreshLeaderBoard();
+
         if (MainMenu.stats == null) {
             MainMenu.downloadData();
             return;
@@ -69,7 +69,5 @@ public class LeaderboardFragment extends BaseFragment {
             myRank.setText(String.format("%d. Me", MainMenu.rank));
 
         refreshList();
-        Log.e("update", "lb");
-//        getView().invalidate();
     }
 }
