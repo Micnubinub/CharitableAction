@@ -44,38 +44,38 @@ import bigshots.people_helping_people.graph.utils.Utils;
  */
 public abstract class BaseChart extends ViewGroup {
 
-    public static final float DEF_LEGEND_HEIGHT = 58.f;
-    public static final int DEF_LEGEND_COLOR = 0xFF898989;
-    // will be interpreted as sp value
-    public static final float DEF_LEGEND_TEXT_SIZE = 12.f;
-    public static final int DEF_ANIMATION_TIME = 2000;
-    public static final boolean DEF_SHOW_DECIMAL = false;
     protected final static NumberFormat mFormatter = NumberFormat.getInstance(Locale.getDefault());
-    protected final float mLegendTopPadding = Utils.dpToPx(4.f);
-    protected Graph mGraph;
-    protected GraphOverlay mGraphOverlay;
-    protected Legend mLegend;
-    protected int mHeight;
-    protected int mWidth;
-    protected int mGraphWidth;
-    protected int mGraphHeight;
-    protected float mLegendWidth;
-    protected float mLegendHeight;
-    protected float mLegendTextSize;
-    protected int mLegendColor;
-    protected int mLeftPadding;
-    protected int mTopPadding;
-    protected int mRightPadding;
-    protected int mBottomPadding;
-    protected float mMaxFontHeight;
+    static final int DEF_LEGEND_COLOR = 0xFF898989;
+    private static final float DEF_LEGEND_HEIGHT = 58.f;
+    // will be interpreted as sp value
+    private static final float DEF_LEGEND_TEXT_SIZE = 12.f;
+    private static final int DEF_ANIMATION_TIME = 2000;
+    private static final boolean DEF_SHOW_DECIMAL = false;
+    final float mLegendTopPadding = Utils.dpToPx(4.f);
+    Graph mGraph;
+    GraphOverlay mGraphOverlay;
+    Legend mLegend;
+    int mGraphWidth;
+    int mGraphHeight;
+    float mLegendWidth;
+    float mLegendHeight;
+    float mLegendTextSize;
+    int mLegendColor;
+    float mMaxFontHeight;
     // ---------------------------------------------------------------------------------------------
     //                          Override methods from view layers
     // ---------------------------------------------------------------------------------------------
-    protected boolean mShowDecimal;
-    protected ValueAnimator mRevealAnimator = null;
-    protected float mRevealValue = 1.0f;
-    protected int mAnimationTime = 1000;
-    protected boolean mStartedAnimation = false;
+    boolean mShowDecimal;
+    ValueAnimator mRevealAnimator = null;
+    float mRevealValue = 1.0f;
+    boolean mStartedAnimation = false;
+    private int mHeight;
+    private int mWidth;
+    private int mLeftPadding;
+    private int mTopPadding;
+    private int mRightPadding;
+    private int mBottomPadding;
+    private int mAnimationTime = 1000;
 
     /**
      * Simple constructor to use when creating a view from code.
@@ -83,7 +83,7 @@ public abstract class BaseChart extends ViewGroup {
      * @param context The Context the view is running in, through which it can
      *                access the current theme, resources, etc.
      */
-    protected BaseChart(Context context) {
+    BaseChart(Context context) {
         super(context);
 
         mLegendHeight = Utils.dpToPx(DEF_LEGEND_HEIGHT);
@@ -236,7 +236,7 @@ public abstract class BaseChart extends ViewGroup {
      * This is the main entry point after the graph has been inflated. Used to initialize the graph
      * and its corresponding members.
      */
-    protected void initializeGraph() {
+    void initializeGraph() {
         mGraph = new Graph(getContext());
         addView(mGraph);
 
@@ -251,7 +251,7 @@ public abstract class BaseChart extends ViewGroup {
      * Should be called after new data is inserted. Will be automatically called, when the view dimensions
      * has changed.
      */
-    protected void onDataChanged() {
+    void onDataChanged() {
         invalidate();
     }
 
@@ -260,7 +260,7 @@ public abstract class BaseChart extends ViewGroup {
      *
      * @return the datasets
      */
-    public abstract List<? extends BaseModel> getData();
+    protected abstract List<? extends BaseModel> getData();
 
     /**
      * Resets and clears the data object.
@@ -278,17 +278,17 @@ public abstract class BaseChart extends ViewGroup {
     /**
      * Invalidates graph and legend and forces them to be redrawn.
      */
-    protected final void invalidateGlobal() {
+    final void invalidateGlobal() {
         mGraph.invalidate();
         mGraphOverlay.invalidate();
         mLegend.invalidate();
     }
 
-    protected final void invalidateGraph() {
+    final void invalidateGraph() {
         mGraph.invalidate();
     }
 
-    protected final void invalidateGraphOverlay() {
+    final void invalidateGraphOverlay() {
         mGraphOverlay.invalidate();
     }
 
@@ -296,31 +296,31 @@ public abstract class BaseChart extends ViewGroup {
         mLegend.invalidate();
     }
 
-    protected void onGraphDraw(Canvas _Canvas) {
+    void onGraphDraw(Canvas _Canvas) {
 
     }
 
-    protected void onGraphOverlayDraw(Canvas _Canvas) {
+    void onGraphOverlayDraw(Canvas _Canvas) {
 
     }
 
-    protected void onLegendDraw(Canvas _Canvas) {
+    void onLegendDraw(Canvas _Canvas) {
 
     }
 
-    protected boolean onGraphOverlayTouchEvent(MotionEvent _Event) {
+    boolean onGraphOverlayTouchEvent(MotionEvent _Event) {
         return super.onTouchEvent(_Event);
     }
 
-    protected void onGraphSizeChanged(int w, int h, int oldw, int oldh) {
+    void onGraphSizeChanged(int w, int h, int oldw, int oldh) {
 
     }
 
-    protected void onGraphOverlaySizeChanged(int w, int h, int oldw, int oldh) {
+    void onGraphOverlaySizeChanged(int w, int h, int oldw, int oldh) {
 
     }
 
-    protected void onLegendSizeChanged(int w, int h, int oldw, int oldh) {
+    void onLegendSizeChanged(int w, int h, int oldw, int oldh) {
 
     }
 

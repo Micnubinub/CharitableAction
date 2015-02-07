@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class FeedbackFragment extends BaseFragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.send:
-                        String message = editText.getText().toString();
+                        final String message = editText.getText().toString();
                         if (message != null && message.length() > 1)
                             connector.getMessageManager().sendMessage(message, MainMenu.email);
                         Toast.makeText(MainMenu.context, "Your message is being sent", Toast.LENGTH_SHORT).show();
@@ -130,6 +129,5 @@ public class FeedbackFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        Log.e("update", "Feedback");
     }
 }

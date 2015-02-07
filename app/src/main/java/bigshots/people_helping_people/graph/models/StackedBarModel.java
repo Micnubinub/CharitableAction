@@ -28,7 +28,7 @@ public class StackedBarModel extends BaseModel {
     /**
      * Bars which are in the StackedBar.
      */
-    List<BarModel> mBars;
+    private List<BarModel> mBars;
 
     public StackedBarModel() {
         super("Unset");

@@ -17,8 +17,8 @@ import bigshots.people_helping_people.io.UserStats;
  * Created by root on 25/12/14.
  */
 public class LeaderBoardAdapter extends BaseAdapter {
-    final ArrayList<UserStats> stats;
-    final boolean isRate;
+    private final ArrayList<UserStats> stats;
+    private final boolean isRate;
     private final Context context;
 
     public LeaderBoardAdapter(Context context, ArrayList<UserStats> stats, boolean isRate) {

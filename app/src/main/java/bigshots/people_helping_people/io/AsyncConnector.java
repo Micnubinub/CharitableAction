@@ -19,7 +19,7 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 public class AsyncConnector {
-    static Interfaces.ASyncListener listener;
+    private static Interfaces.ASyncListener listener;
 
     public static void setListener(Interfaces.ASyncListener listener) {
         AsyncConnector.listener = listener;

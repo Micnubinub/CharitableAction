@@ -52,7 +52,7 @@ public class WheelVerticalView extends AbstractWheelView {
     /**
      * The height of the selection divider.
      */
-    protected int mSelectionDividerHeight;
+    private int mSelectionDividerHeight;
 
     // Cached item height
     private int mItemHeight = 0;

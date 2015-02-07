@@ -1,7 +1,7 @@
 package bigshots.people_helping_people.io;
 
 public class UserStats {
-    public int worldRank;
+    private int worldRank;
     private String email;
     private int score;
     private float rate;
@@ -46,7 +46,6 @@ public class UserStats {
     }
 
     public float getRaised() {
-        float r = (float) (score) * (0.0001875f);
-        return r;
+        return (float) (score) * (0.0001875f);
     }
 }

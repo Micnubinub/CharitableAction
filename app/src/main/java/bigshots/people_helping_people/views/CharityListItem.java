@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.VoteManager;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
@@ -218,32 +219,23 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void castVote() {
-        for (Account account : accounts) {
-            if (account.name.contains("@")) {
-                removeCurrentVote();
-                voteManager.castVote(link, account.name);
-                currentVote = link;
-                break;
-            }
+        if (MainMenu.email.length() > 3) {
+            removeCurrentVote();
+            voteManager.castVote(link, MainMenu.email);
+            currentVote = link;
         }
     }
 
     private void removeThisVote() {
-        for (Account account : accounts) {
-            if (account.name.contains("@")) {
-                voteManager.removeVote(link, account.name);
-                break;
-            }
-        }
+        if (MainMenu.email.length() > 3)
+            voteManager.removeVote(link, MainMenu.email);
+
     }
 
     private void removeCurrentVote() {
-        for (Account account : accounts) {
-            if (account.name.contains("@")) {
-                voteManager.removeVote(currentVote, account.name);
-                break;
-            }
-        }
+        if (MainMenu.email.length() > 3)
+            voteManager.removeVote(currentVote, MainMenu.email);
+
     }
 
     private void openLink() {

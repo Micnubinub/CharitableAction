@@ -4,11 +4,11 @@ package bigshots.people_helping_people.feeds;
  * Created by Michael on 2/6/2015.
  */
 public class Message {
-    public final String user;
-    public final String id;
-    public final String message;
-    public final String rank;
-    public final long when;
+    private final String user;
+    private final String id;
+    private final String message;
+    private final String rank;
+    private final long when;
 
     public Message(String id, String user, String message, String rank, long when) {
         this.id = id;

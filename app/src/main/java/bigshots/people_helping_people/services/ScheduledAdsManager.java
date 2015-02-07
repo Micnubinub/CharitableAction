@@ -36,11 +36,11 @@ public class ScheduledAdsManager extends Service {
     private static boolean serviceRunning = false;
     private static boolean show;
 
-    public static void loadFullScreenAd() {
+    private static void loadFullScreenAd() {
         adManager.loadFullscreenAd();
     }
 
-    public static void showFullScreenAd() {
+    private static void showFullScreenAd() {
         if (adManager == null)
             getAds();
 

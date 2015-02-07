@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * Recycle stored spinnerwheel items to reuse.
  */
-public class WheelRecycler {
+class WheelRecycler {
 
 
     @SuppressWarnings("unused")

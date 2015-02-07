@@ -25,8 +25,8 @@ import bigshots.people_helping_people.graph.utils.Utils;
  */
 public class StandardValue {
 
-    public static final float DEF_STANDARD_VALUE_INDICATOR_STROKE = 2f;
-    public static final int DEF_STANDARD_VALUE_COLOR = 0xFF00FF00;
+    private static final float DEF_STANDARD_VALUE_INDICATOR_STROKE = 2f;
+    private static final int DEF_STANDARD_VALUE_COLOR = 0xFF00FF00;
     private int mColor;
     private float mValue;
     private int mY;

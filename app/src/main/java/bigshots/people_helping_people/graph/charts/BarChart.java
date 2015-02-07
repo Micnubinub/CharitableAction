@@ -38,10 +38,10 @@ import bigshots.people_helping_people.graph.utils.Utils;
  */
 public class BarChart extends BaseBarChart {
 
-    public static final boolean DEF_SHOW_VALUES = true;
+    private static final boolean DEF_SHOW_VALUES = true;
     private static final String LOG_TAG = BarChart.class.getSimpleName();
     private final int mValueDistance = (int) Utils.dpToPx(3);
-    protected boolean mShowValues;
+    private boolean mShowValues;
     private List<BarModel> mData;
     private Paint mValuePaint;
 

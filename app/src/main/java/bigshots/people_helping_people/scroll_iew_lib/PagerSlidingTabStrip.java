@@ -54,8 +54,13 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private final LinearLayout tabsContainer;
     private final Paint rectPaint;
     private final Paint dividerPaint;
+    private final boolean shouldExpand = false;
+    private final boolean textAllCaps = true;
+    private final Typeface tabTypeface = null;
+    private final int tabTypefaceStyle = Typeface.BOLD;
+    private final int tabBackgroundResId;
     // @formatter:on
-    public OnPageChangeListener delegatePageListener;
+    private OnPageChangeListener delegatePageListener;
     private ViewPager pager;
     private int tabCount;
     private int currentPosition = 0;
@@ -63,8 +68,6 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int indicatorColor = 0xEEFFFFFF;
     private int underlineColor = 0x33FFFFFF;
     private int dividerColor = 0xAAFFFFFF;
-    private boolean shouldExpand = false;
-    private boolean textAllCaps = true;
     private int scrollOffset = 52;
     private int indicatorHeight = 4;
     private int underlineHeight = 2;
@@ -73,10 +76,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
     private int dividerWidth = 1;
     private int tabTextSize = 12;
     private int tabTextColor = 0xff555555;
-    private Typeface tabTypeface = null;
-    private int tabTypefaceStyle = Typeface.BOLD;
     private int lastScrollX = 0;
-    private int tabBackgroundResId;
     private Locale locale;
 
     public PagerSlidingTabStrip(Context context) {
@@ -152,7 +152,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         notifyDataSetChanged();
     }
 
-    public void notifyDataSetChanged() {
+    void notifyDataSetChanged() {
 
         tabsContainer.removeAllViews();
 

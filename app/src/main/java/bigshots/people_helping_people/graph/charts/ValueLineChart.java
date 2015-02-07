@@ -51,30 +51,30 @@ import bigshots.people_helping_people.graph.utils.Utils;
  */
 public class ValueLineChart extends BaseChart {
 
-    public static final boolean DEF_USE_CUBIC = false;
-    public static final boolean DEF_USE_OVERLAP_FILL = false;
-    public static final float DEF_LINE_STROKE = 5f;
-    public static final float DEF_FIRST_MULTIPLIER = 0.33f;
-    public static final boolean DEF_SHOW_INDICATOR = true;
-    public static final float DEF_INDICATOR_WIDTH = 2f;
-    public static final int DEF_INDICATOR_COLOR = 0xFF0000FF;
+    private static final boolean DEF_USE_CUBIC = false;
+    private static final boolean DEF_USE_OVERLAP_FILL = false;
+    private static final float DEF_LINE_STROKE = 5f;
+    private static final float DEF_FIRST_MULTIPLIER = 0.33f;
+    private static final boolean DEF_SHOW_INDICATOR = true;
+    private static final float DEF_INDICATOR_WIDTH = 2f;
+    private static final int DEF_INDICATOR_COLOR = 0xFF0000FF;
     // will be interpreted as sp value
-    public static final float DEF_INDICATOR_TEXT_SIZE = 15.f;
-    public static final float DEF_INDICATOR_LEFT_PADDING = 4.f;
-    public static final float DEF_INDICATOR_TOP_PADDING = 4.f;
-    public static final boolean DEF_SHOW_STANDARD_VALUE = true;
-    public static final float DEF_X_AXIS_STROKE = 2f;
-    public static final float DEF_LEGEND_STROKE = 2f;
-    public static final boolean DEF_ACTIVATE_INDICATOR_SHADOW = false;
+    private static final float DEF_INDICATOR_TEXT_SIZE = 15.f;
+    private static final float DEF_INDICATOR_LEFT_PADDING = 4.f;
+    private static final float DEF_INDICATOR_TOP_PADDING = 4.f;
+    private static final boolean DEF_SHOW_STANDARD_VALUE = true;
+    private static final float DEF_X_AXIS_STROKE = 2f;
+    private static final float DEF_LEGEND_STROKE = 2f;
+    private static final boolean DEF_ACTIVATE_INDICATOR_SHADOW = false;
     // dimension value
-    public static final float DEF_INDICATOR_SHADOW_STRENGTH = 0.7f;
-    public static final int DEF_INDICATOR_SHADOW_COLOR = 0xFF676767;
-    public static final String DEF_INDICATOR_TEXT_UNIT = "";
-    public static final boolean DEF_SHOW_LEGEND_BENEATH_INDICATOR = false;
-    public static final boolean DEF_USE_DYNAMIC_SCALING = false;
-    public static final float DEF_SCALING_FACTOR = 0.96f;
+    private static final float DEF_INDICATOR_SHADOW_STRENGTH = 0.7f;
+    private static final int DEF_INDICATOR_SHADOW_COLOR = 0xFF676767;
+    private static final String DEF_INDICATOR_TEXT_UNIT = "";
+    private static final boolean DEF_SHOW_LEGEND_BENEATH_INDICATOR = false;
+    private static final boolean DEF_USE_DYNAMIC_SCALING = false;
+    private static final float DEF_SCALING_FACTOR = 0.96f;
     private static final String LOG_TAG = ValueLineChart.class.getSimpleName();
-    protected final Matrix mScale = new Matrix();
+    private final Matrix mScale = new Matrix();
     private final List<StandardValue> mStandardValues = new ArrayList<StandardValue>();
     private Paint mLinePaint;
     private Paint mLegendPaint;
@@ -237,7 +237,7 @@ public class ValueLineChart extends BaseChart {
      *
      * @param _Series The series which should be added.
      */
-    public void addSeries(ValueLineSeries _Series) {
+    void addSeries(ValueLineSeries _Series) {
         mSeries.add(_Series);
         onDataChanged();
     }
@@ -971,7 +971,7 @@ public class ValueLineChart extends BaseChart {
     /**
      * Calculates the legend bounds for a custom list of legends.
      */
-    protected void onLegendDataChanged() {
+    void onLegendDataChanged() {
 
         int legendCount = mLegendList.size();
         float margin = (mLegendWidth / legendCount);

@@ -61,7 +61,7 @@ public abstract class AbstractWheelAdapter implements WheelViewAdapter {
     /**
      * Notifies observers about invalidating data
      */
-    protected void notifyDataInvalidatedEvent() {
+    void notifyDataInvalidatedEvent() {
         if (datasetObservers != null) {
             for (DataSetObserver observer : datasetObservers) {
                 observer.onInvalidated();

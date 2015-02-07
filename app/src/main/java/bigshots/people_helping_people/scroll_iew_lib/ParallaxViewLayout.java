@@ -41,7 +41,7 @@ public class ParallaxViewLayout {
     }
 
 
-    public void setUpFragments() {
+    void setUpFragments() {
         fragments[0] = new ContributeFragment();
         fragments[1] = new VoteFragment();
         fragments[2] = new CurrentCharityFragment();
@@ -53,19 +53,19 @@ public class ParallaxViewLayout {
         setUpPagerAndAdapter();
     }
 
-    public void setUpPagerAndAdapter() {
+    void setUpPagerAndAdapter() {
         fragmentPagerAdapter = new MyPagerAdapter(MainMenu.getFragManager());
         setUpPager();
     }
 
-    public void setUpPager() {
+    void setUpPager() {
         pager = (ViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
         pager.setOffscreenPageLimit(8);
         setUpPagerSlidingTabStrip();
     }
 
-    public void setUpPagerSlidingTabStrip() {
+    void setUpPagerSlidingTabStrip() {
         pagerSlidingTabStrip = (PagerSlidingTabStrip) main.findViewById(R.id.tabs);
         pagerSlidingTabStrip.setViewPager(pager);
         pagerSlidingTabStrip.setOnPageChangedListener(new ViewPager.OnPageChangeListener() {
@@ -88,7 +88,7 @@ public class ParallaxViewLayout {
         });
     }
 
-    public void setUpTitle() {
+    void setUpTitle() {
 //        title = (TextView) main.findViewById(R.id.title);
     }
 

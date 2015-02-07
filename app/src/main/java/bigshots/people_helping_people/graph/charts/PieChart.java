@@ -81,24 +81,24 @@ import bigshots.people_helping_people.graph.utils.Utils;
 public class PieChart extends BaseChart {
 
 
-    public static final float DEF_INNER_PADDING = 65.f;
-    public static final float DEF_INNER_PADDING_OUTLINE = 5.f;
-    public static final boolean DEF_USE_INNER_PADDING = true;
-    public static final float DEF_HIGHLIGHT_STRENGTH = 1.15f;
-    public static final boolean DEF_USE_PIE_ROTATION = true;
-    public static final boolean DEF_AUTO_CENTER = true;
-    public static final boolean DEF_DRAW_VALUE_IN_PIE = true;
-    public static final float DEF_VALUE_TEXT_SIZE = 14.f;
-    public static final int DEF_VALUE_TEXT_COLOR = 0xFF898989;
-    public static final boolean DEF_USE_CUSTOM_INNER_VALUE = false;
-    public static final boolean DEF_OPEN_CLOCKWISE = true;
-    public static final int DEF_INNER_PADDING_COLOR = 0xFFF3F3F3; // Holo light background
-    public static final String DEF_INNER_VALUE_UNIT = "";
+    private static final float DEF_INNER_PADDING = 65.f;
+    private static final float DEF_INNER_PADDING_OUTLINE = 5.f;
+    private static final boolean DEF_USE_INNER_PADDING = true;
+    private static final float DEF_HIGHLIGHT_STRENGTH = 1.15f;
+    private static final boolean DEF_USE_PIE_ROTATION = true;
+    private static final boolean DEF_AUTO_CENTER = true;
+    private static final boolean DEF_DRAW_VALUE_IN_PIE = true;
+    private static final float DEF_VALUE_TEXT_SIZE = 14.f;
+    private static final int DEF_VALUE_TEXT_COLOR = 0xFF898989;
+    private static final boolean DEF_USE_CUSTOM_INNER_VALUE = false;
+    private static final boolean DEF_OPEN_CLOCKWISE = true;
+    private static final int DEF_INNER_PADDING_COLOR = 0xFFF3F3F3; // Holo light background
+    private static final String DEF_INNER_VALUE_UNIT = "";
     /**
      * The initial fling velocity is divided by this amount.
      */
-    public static final int FLING_VELOCITY_DOWNSCALE = 4;
-    public static final int AUTOCENTER_ANIM_DURATION = 250;
+    private static final int FLING_VELOCITY_DOWNSCALE = 4;
+    private static final int AUTOCENTER_ANIM_DURATION = 250;
     private static final String LOG_TAG = PieChart.class.getSimpleName();
     // Inner Value stuff
     private final Rect mValueTextBounds = new Rect();
@@ -493,7 +493,7 @@ public class PieChart extends BaseChart {
      *
      * @return The zero-based index of the currently selected data item.
      */
-    public int getCurrentItem() {
+    int getCurrentItem() {
         return mCurrentItem;
     }
 
@@ -542,7 +542,7 @@ public class PieChart extends BaseChart {
      *
      * @param rotation The current pie rotation, in degrees.
      */
-    public void setPieRotation(int rotation) {
+    void setPieRotation(int rotation) {
         mPieRotation = (rotation % 360 + 360) % 360;
         mGraph.rotateTo(mPieRotation);
 
@@ -555,7 +555,7 @@ public class PieChart extends BaseChart {
      *
      * @param _Slice The newly added PieSlice.
      */
-    public void addPieSlice(PieModel _Slice) {
+    void addPieSlice(PieModel _Slice) {
         highlightSlice(_Slice);
         mPieData.add(_Slice);
         mTotalValue += _Slice.getValue();

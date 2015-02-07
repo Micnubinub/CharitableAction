@@ -7,14 +7,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by root on 25/12/14.
  */
-public class StatsDBHelper extends SQLiteOpenHelper {
+class StatsDBHelper extends SQLiteOpenHelper {
 
-    public static final String DB_NAME = "Stats.db";
-    public static final int DB_V = 1;
     public static final String STATS_TABLE = "Stats";
-    public static final String ID = "_id";
     public static final String TIME_LONG = "TIME_LONG";
     public static final String POINTS_INT = "POINTS_INT";
+    private static final String DB_NAME = "Stats.db";
+    private static final int DB_V = 1;
+    private static final String ID = "_id";
 
 
     public StatsDBHelper(Context context) {

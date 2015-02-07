@@ -33,7 +33,6 @@ public class CurrentCharityFragment extends BaseFragment {
                     return;
                 }
                 raised.setText(String.format("Total raised : $ %s raised", Utility.formatNumber(charity.getWorth())));
-
             }
         });
     }
@@ -57,7 +56,6 @@ public class CurrentCharityFragment extends BaseFragment {
             public void onClick(View v) {
                 final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.worldwildlife.org.au/"));
                 startActivity(intent);
-
             }
         });
         return view;

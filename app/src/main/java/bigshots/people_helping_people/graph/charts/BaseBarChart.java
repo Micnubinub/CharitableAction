@@ -43,11 +43,11 @@ import bigshots.people_helping_people.graph.utils.Utils;
 public abstract class BaseBarChart extends BaseChart {
 
     // All float values are dp values and will be converted into px values in the constructor
-    public static final float DEF_BAR_WIDTH = 32.f;
-    public static final boolean DEF_FIXED_BAR_WIDTH = false;
-    public static final float DEF_BAR_MARGIN = 12.f;
-    public static final boolean DEF_SCROLL_ENABLED = true;
-    public static final int DEF_VISIBLE_BARS = 6;
+    private static final float DEF_BAR_WIDTH = 32.f;
+    private static final boolean DEF_FIXED_BAR_WIDTH = false;
+    private static final float DEF_BAR_MARGIN = 12.f;
+    private static final boolean DEF_SCROLL_ENABLED = true;
+    private static final int DEF_VISIBLE_BARS = 6;
     private static final String LOG_TAG = BaseBarChart.class.getSimpleName();
     /**
      * The gesture listener, used for handling simple gestures such as double touches, scrolls,
@@ -85,6 +85,15 @@ public abstract class BaseBarChart extends BaseChart {
         }
     };
     /**
+     * The current destination rectangle (in pixel coordinates) into which the chart data should
+     * be drawn. Chart labels are drawn outside this area.
+     *
+     * @see #mCurrentViewport
+     */
+    Rect mContentRect = new Rect();
+    Paint mGraphPaint;
+    Paint mLegendPaint;
+    /**
      * The current viewport. This rectangle represents the currently visible chart domain
      * and range. The currently visible chart X values are from this rectangle's left to its right.
      * The currently visible chart Y values are from this rectangle's top to its bottom.
@@ -96,22 +105,13 @@ public abstract class BaseBarChart extends BaseChart {
      *
      * @see #mContentRect
      */
-    protected RectF mCurrentViewport = new RectF();
-    /**
-     * The current destination rectangle (in pixel coordinates) into which the chart data should
-     * be drawn. Chart labels are drawn outside this area.
-     *
-     * @see #mCurrentViewport
-     */
-    protected Rect mContentRect = new Rect();
-    protected IOnBarClickedListener mListener = null;
-    protected Paint mGraphPaint;
-    protected Paint mLegendPaint;
-    protected float mBarWidth;
-    protected boolean mFixedBarWidth;
-    protected float mBarMargin;
-    protected boolean mScrollEnabled;
-    protected int mVisibleBars;
+    private RectF mCurrentViewport = new RectF();
+    private IOnBarClickedListener mListener = null;
+    private float mBarWidth;
+    private boolean mFixedBarWidth;
+    private float mBarMargin;
+    private boolean mScrollEnabled;
+    private int mVisibleBars;
     private GestureDetector mGestureDetector;
     private Scroller mScroller;
     private ValueAnimator mScrollAnimator;
@@ -365,7 +365,7 @@ public abstract class BaseBarChart extends BaseChart {
      *
      * @param _DataSize Amount of data sets
      */
-    protected void calculateBarPositions(int _DataSize) {
+    void calculateBarPositions(int _DataSize) {
 
         int dataSize = mScrollEnabled ? mVisibleBars : _DataSize;
         float barWidth = mBarWidth;

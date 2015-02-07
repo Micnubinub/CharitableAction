@@ -41,7 +41,7 @@ public class StackedBarChart extends BaseBarChart {
         initializeGraph();
     }
 
-    public void addBar(StackedBarModel _Bar) {
+    void addBar(StackedBarModel _Bar) {
         mData.add(_Bar);
         onDataChanged();
     }

@@ -27,7 +27,7 @@ package bigshots.people_helping_people.schedule_wheel;
 /**
  * Wheel scrolled listener interface.
  */
-public interface OnWheelScrollListener {
+interface OnWheelScrollListener {
     /**
      * Callback method to be invoked when scrolling started.
      *

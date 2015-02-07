@@ -34,7 +34,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
     /**
      * The default min value
      */
-    public static final int DEFAULT_MAX_VALUE = 9;
+    private static final int DEFAULT_MAX_VALUE = 9;
 
     /**
      * The default max value
@@ -74,7 +74,7 @@ public class NumericWheelAdapter extends AbstractWheelTextAdapter {
      * @param maxValue the spinnerwheel max value
      * @param format   the format string
      */
-    public NumericWheelAdapter(Context context, int minValue, int maxValue, String format) {
+    private NumericWheelAdapter(Context context, int minValue, int maxValue, String format) {
         super(context);
 
         this.minValue = minValue;

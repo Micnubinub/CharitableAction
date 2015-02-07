@@ -45,6 +45,10 @@ import bigshots.people_helping_people.views.CharityListItem;
  */
 @SuppressWarnings("ALL")
 public class MainMenu extends FragmentActivity {
+    //Todo upadte statistics onScroll in
+    //Todo newsfeed with twitter integration (#...) allow users to use our account to post
+    //Todo consider adding a chunk of score to local device if you have a higher value on DB
+
     public static Context context;
     private static final AdListener fullScreen = new AdListener() {
         @Override
@@ -78,7 +82,6 @@ public class MainMenu extends FragmentActivity {
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
-
         }
 
         @Override
@@ -185,14 +188,21 @@ public class MainMenu extends FragmentActivity {
     }
 
     public static void refreshLeaderBoard() {
+
         try {
             final UserManager manager1 = new UserManager();
-            userManager.getScoreRank(email);
+
+            if (email.length() > 3)
+                userManager.getScoreRank(email);
+
             userScore = Utility.getTotalScore(MainMenu.context);
-            manager1.postStats(email, userScore, Utility.getRate(MainMenu.context));
+
+            if (email.length() > 3)
+                manager1.postStats(email, userScore, Utility.getRate(MainMenu.context));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         userManager.getLeaderboardListScore(50);
     }
 
@@ -269,7 +279,6 @@ public class MainMenu extends FragmentActivity {
 
                 }
             });
-
             msg.setText(
                     email.length() < 4 ?
                             "Enter you email of preference below" :

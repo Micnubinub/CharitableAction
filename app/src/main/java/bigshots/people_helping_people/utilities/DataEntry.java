@@ -3,7 +3,7 @@ package bigshots.people_helping_people.utilities;
 /**
  * Created by root on 25/12/14.
  */
-public class DataEntry {
+class DataEntry {
     private final int points;
     private final long date;
 

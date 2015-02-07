@@ -30,7 +30,7 @@ package bigshots.people_helping_people.schedule_wheel;
  * <li> New Wheel position is set
  * <li> Wheel view is scrolled
  */
-public interface OnWheelClickedListener {
+interface OnWheelClickedListener {
     /**
      * Callback method to be invoked when current item clicked
      *

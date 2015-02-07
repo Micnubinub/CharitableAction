@@ -11,12 +11,11 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
-import bigshots.people_helping_people.utilities.Utility;
 
 public class LeaderboardFragment extends BaseFragment {
     private static ListView listView;
     private static View message;
-    private static TextView myRank, points, raised;
+    private static TextView myRank, raised;
     private static LeaderBoardAdapter adapter;
 
     public LeaderboardFragment() {
@@ -65,10 +64,8 @@ public class LeaderboardFragment extends BaseFragment {
             MainMenu.downloadData();
             return;
         }
-        if (points != null)
-            points.setText(String.format("%spts", Utility.formatNumber(Utility.getTotalScore(MainMenu.context))));
 
-        if (myRank != null)
+        if ((myRank != null) && (MainMenu.email.length() > 3))
             myRank.setText(String.format("%d. Me", MainMenu.rank));
 
         refreshList();

@@ -29,11 +29,11 @@ public abstract class BaseModel {
     /**
      * Label value
      */
-    protected String mLegendLabel;
+    private String mLegendLabel;
     /**
      * Indicates whether the label should be shown or not.
      */
-    protected boolean mShowLabel;
+    private boolean mShowLabel;
     /**
      * X-coordinate of the label.
      */
@@ -51,11 +51,11 @@ public abstract class BaseModel {
      */
     private boolean mIgnore = false;
 
-    protected BaseModel(String _legendLabel) {
+    BaseModel(String _legendLabel) {
         mLegendLabel = _legendLabel;
     }
 
-    protected BaseModel() {
+    BaseModel() {
     }
 
     public String getLegendLabel() {

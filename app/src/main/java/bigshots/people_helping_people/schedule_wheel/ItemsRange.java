@@ -27,7 +27,7 @@ package bigshots.people_helping_people.schedule_wheel;
 /**
  * Range for visible items.
  */
-public class ItemsRange {
+class ItemsRange {
     // First item number
     private final int first;
 

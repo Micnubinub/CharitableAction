@@ -74,10 +74,9 @@ public class DonationsFragment extends BaseFragment {
 
     @Override
     protected void update() {
-        Log.e("update", "donations");
     }
 
-    static class Dapter extends BaseAdapter {
+    private static class Dapter extends BaseAdapter {
         @Override
         public int getCount() {
             return charities == null ? 0 : charities.size();
