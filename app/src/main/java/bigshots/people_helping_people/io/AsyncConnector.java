@@ -55,7 +55,6 @@ public class AsyncConnector {
                         }
 
                         try {
-
                             charity.setTrusted(Integer.valueOf(tmp[4]));
                         } catch (ClassCastException e) {
                             charity.setTrusted(0);
@@ -138,7 +137,11 @@ public class AsyncConnector {
             } else if (action.equals("CHARITY_CURRENT")) {
                 Log.e("resp : ", String.valueOf(resp));
                 Charity charity = new Charity();
-                charity.setUrl(resp);
+                if (resp != null && !resp.toLowerCase().contains("fail")) {
+                    charity.setUrl(resp);
+                } else {
+                    charity.setUrl("");
+                }
                 if (listener != null)
                     listener.onCurrentCharity(charity);
             } else if (action.equals("USER_INSERT")) {

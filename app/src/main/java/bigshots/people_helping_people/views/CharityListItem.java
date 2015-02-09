@@ -1,17 +1,18 @@
 package bigshots.people_helping_people.views;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
@@ -23,10 +24,9 @@ import bigshots.people_helping_people.utilities.VoteCharityAdapter;
  */
 @SuppressWarnings("ALL")
 public class CharityListItem extends ViewGroup {
-    private static final VoteManager voteManager = new VoteManager();
-    private static AccountManager manager;
-    private static Account[] accounts;
-    private static String currentVote;
+    public static final VoteManager voteManager = new VoteManager();
+    public static ArrayList<QueItem> queItems = new ArrayList<QueItem>();
+    public static String currentVote;
     private static VoteCharityAdapter voteCharityAdapter;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final OnClickListener onClickListener = new OnClickListener() {
@@ -37,11 +37,9 @@ public class CharityListItem extends ViewGroup {
             } else {
                 openLink();
             }
-
         }
     };
     private MaterialTwoLineText textView;
-
     private LikeButton likeButton;
     private int width;
     private int height;
@@ -60,7 +58,6 @@ public class CharityListItem extends ViewGroup {
 
     public CharityListItem(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         init();
     }
 
@@ -118,9 +115,6 @@ public class CharityListItem extends ViewGroup {
         paint.setColor(0x25000000);
         addView(textView.getView());
         addView(likeButton);
-
-        manager = AccountManager.get(getContext());
-        accounts = manager.getAccounts();
     }
 
     public void setPrimaryTextSize(int sp) {
@@ -150,7 +144,6 @@ public class CharityListItem extends ViewGroup {
             }
         });
     }
-
 
     @Override
     public void addView(View child, int index, LayoutParams params) {
@@ -204,37 +197,45 @@ public class CharityListItem extends ViewGroup {
         textView.setSecondaryText(text);
     }
 
-    public void setSecondaryText(int text) {
-        String append = text == 1 ? " vote" : " votes";
-        setSecondaryText(String.valueOf(text) + append);
-    }
-
 //    public void setProgress(int progress) {
 //        progressBar.setProgress(progress);
 //    }
 
+    public void setSecondaryText(int text) {
+        String append = text == 1 ? " vote" : " votes";
+        setSecondaryText(String.valueOf(text) + append);
+    }
 
     public void setLink(String link) {
         this.link = link;
     }
 
     private void castVote() {
-        if (MainMenu.email.length() > 3) {
-            removeCurrentVote();
-            voteManager.castVote(link, MainMenu.email);
-            currentVote = link;
-        }
+        queItems.add(new QueItem(QueItemType.CAST, link));
+        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        currentVote = link;
+        MainMenu.getCurrentCharity();
     }
 
     private void removeThisVote() {
-        if (MainMenu.email.length() > 3)
-            voteManager.removeVote(link, MainMenu.email);
-
+        currentVote = "";
+        queItems.add(new QueItem(QueItemType.REMOVE, ""));
+        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        MainMenu.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
-        if (MainMenu.email.length() > 3)
-            voteManager.removeVote(currentVote, MainMenu.email);
+        currentVote = "";
+        queItems.add(new QueItem(QueItemType.REMOVE, ""));
+        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        MainMenu.getCurrentCharity();
+//        if (currentVote == null) {
+//            MainMenu.getCurrentCharity();
+//            Toast.makeText(MainMenu.context, "failed to cast vote, try again later", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        if (MainMenu.email.length() > 3)
+//            voteManager.removeVote(currentVote, MainMenu.email);
 
     }
 
@@ -266,6 +267,25 @@ public class CharityListItem extends ViewGroup {
         final int layoutWidth = view.getRight() - view.getLeft();
         final int layoutHeight = view.getBottom() - view.getTop();
         checkViewParams(view, layoutWidth, layoutHeight);
+    }
+
+    public enum QueItemType {
+        REMOVE, CAST
+    }
+
+    public static class QueItem {
+        public final QueItemType type;
+        public final String link;
+
+        public QueItem(QueItemType type, String link) {
+            this.type = type;
+            this.link = link;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(type) + " : " + link;
+        }
     }
 
     public class LikeButton extends ImageView {
@@ -311,7 +331,6 @@ public class CharityListItem extends ViewGroup {
         public void click() {
             setIsVotedFor(!votedFor);
             if (link.equals(currentVote)) {
-
                 removeThisVote();
                 setVotedFor(false);
                 try {

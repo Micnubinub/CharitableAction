@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +50,18 @@ public class MainMenu extends FragmentActivity {
     //Todo newsfeed with twitter integration (#...) allow users to use our account to post
     //Todo consider adding a chunk of score to local device if you have a higher value on DB
 
+    //Todo consider making curent charity hard coded
+    private static final Runnable downloadData = new Runnable() {
+        @Override
+        public void run() {
+            getCurrentCharity();
+            charityManager.getCharities();
+            charityManager.monthlyCharity();
+            charityManager.getHistory();
+            charityManager.getTotalScore();
+            refreshLeaderBoard();
+        }
+    };
     public static Context context;
     private static final AdListener fullScreen = new AdListener() {
         @Override
@@ -79,9 +92,11 @@ public class MainMenu extends FragmentActivity {
     public static ArrayList<Charity> charities;
     public static ArrayList<UserStats> stats;
     public static Charity charity;
+    public static String email;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
+
         }
 
         @Override
@@ -91,9 +106,30 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onCurrentCharity(Charity charity) {
+
+            if (CharityListItem.queItems != null && CharityListItem.queItems.size() > 0) {
+                final CharityListItem.QueItem queItem = CharityListItem.queItems.get(0);
+
+                switch (queItem.type) {
+                    case CAST:
+                        CharityListItem.voteManager.removeVote(charity.getUrl(), email);
+                        CharityListItem.voteManager.castVote(queItem.link, email);
+                        Log.e("remove :" + charity.getUrl(), "add : " + queItem.link);
+                        break;
+                    case REMOVE:
+                        CharityListItem.voteManager.removeVote(charity.getUrl(), email);
+
+                        Log.e("remove :", charity.getUrl());
+                        break;
+                }
+
+                CharityListItem.queItems.remove(queItem);
+            }
+            Log.e("remove", CharityListItem.queItems.toString());
             VoteCharityAdapter.setVotedFor(charity.getUrl());
-            CharityListItem.setCurrentVote(charity.getUrl());
             VoteFragment.refreshList();
+            if (CharityListItem.queItems.size() > 0)
+                getCurrentCharity();
         }
 
         @Override
@@ -131,19 +167,6 @@ public class MainMenu extends FragmentActivity {
         @Override
         public void onCompleteCurrentScore(int score) {
             Utility.initScore(score);
-        }
-    };
-    public static String email;
-    //Todo consider making curent charity hard coded
-    private static final Runnable downloadData = new Runnable() {
-        @Override
-        public void run() {
-            charityManager.currentCharity(email);
-            charityManager.getCharities();
-            charityManager.monthlyCharity();
-            charityManager.getHistory();
-            charityManager.getTotalScore();
-            refreshLeaderBoard();
         }
     };
     public static AdManager adManager;
@@ -187,6 +210,10 @@ public class MainMenu extends FragmentActivity {
         else new Thread(downloadData).start();
     }
 
+    public static void getCurrentCharity() {
+        charityManager.currentCharity(email);
+    }
+
     public static void refreshLeaderBoard() {
 
         try {
@@ -222,9 +249,9 @@ public class MainMenu extends FragmentActivity {
     private void init() {
         setContentView(R.layout.material_main_menu);
         charityManager = new CharityManager();
-
         fragmentActivity = this;
         userManager = new UserManager();
+        userManager.insertUser(email);
         adManager = new AdManager(context);
         adManager.loadFullscreenAd();
         adManager.loadVideoAd();
