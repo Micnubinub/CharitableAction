@@ -46,22 +46,6 @@ import bigshots.people_helping_people.views.CharityListItem;
  */
 @SuppressWarnings("ALL")
 public class MainMenu extends FragmentActivity {
-    //Todo upadte statistics onScroll in
-    //Todo newsfeed with twitter integration (#...) allow users to use our account to post
-    //Todo consider adding a chunk of score to local device if you have a higher value on DB
-
-    //Todo consider making curent charity hard coded
-    private static final Runnable downloadData = new Runnable() {
-        @Override
-        public void run() {
-            getCurrentCharity();
-            charityManager.getCharities();
-            charityManager.monthlyCharity();
-            charityManager.getHistory();
-            charityManager.getTotalScore();
-            refreshLeaderBoard();
-        }
-    };
     public static Context context;
     private static final AdListener fullScreen = new AdListener() {
         @Override
@@ -93,6 +77,26 @@ public class MainMenu extends FragmentActivity {
     public static ArrayList<UserStats> stats;
     public static Charity charity;
     public static String email;
+    //TODO make a pedestle (always ontop and has bigger view than most
+    //TODO maybe add links to show receipts for the respective charity in the history
+    //TODO fix bug that doesn't allow people to suggest a charity
+    //TODO fix add failed to load >> (check if online, if not, toat saying you need the internet
+    //Todo upadte statistics onScroll in
+    //TODO get Userscore from database and update the db if need be
+    //Todo consider adding a chunk of score to local device if you have a higher value on DB
+    //Todo consider making curent charity hard coded
+    private static final Runnable downloadData = new Runnable() {
+        @Override
+        public void run() {
+            getCurrentCharity();
+            charityManager.getCharities();
+            charityManager.monthlyCharity();
+            charityManager.getHistory();
+            charityManager.getTotalScore();
+            userManager.getScore(email);
+            refreshLeaderBoard();
+        }
+    };
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
@@ -166,7 +170,7 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onCompleteCurrentScore(int score) {
-            Utility.initScore(score);
+            Utility.initScore(context, score);
         }
     };
     public static AdManager adManager;
@@ -231,6 +235,11 @@ public class MainMenu extends FragmentActivity {
         }
 
         userManager.getLeaderboardListScore(50);
+    }
+
+    public static void post(Runnable r) {
+        if (view != null)
+            view.post(r);
     }
 
     @Override

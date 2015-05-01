@@ -30,7 +30,7 @@ public class LeaderboardFragment extends BaseFragment {
                     message.setVisibility(View.GONE);
                     final double money = (MainMenu.userScore / (double) MainMenu.totalScore) * MainMenu.totalCash;
                     raised.setText(String.format("$%.2f", money));
-                    StatisticsFragment.raised = String.format("Your points equate to about $%.2f", money);
+                    StatisticsFragment.setRaised(money);
                     StatisticsFragment.invalidate();
                     adapter = new LeaderBoardAdapter(MainMenu.context, MainMenu.stats, false);
                     listView.setAdapter(adapter);

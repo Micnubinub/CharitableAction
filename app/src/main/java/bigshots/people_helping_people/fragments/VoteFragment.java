@@ -15,6 +15,7 @@ import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
+import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 
 public class VoteFragment extends BaseFragment {
@@ -48,6 +49,12 @@ public class VoteFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 showSuggestionDialog();
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utility.hasActiveInternetConnection(view.getContext());
+                    }
+                });
             }
         });
         listView = (ListView) view.findViewById(R.id.list);
@@ -58,6 +65,7 @@ public class VoteFragment extends BaseFragment {
     private void showSuggestionDialog() {
         final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.suggest_charity);
+
         final EditText charity_name = (EditText) dialog.findViewById(R.id.suggested_charity_name);
         final EditText charity_description = (EditText) dialog.findViewById(R.id.suggested_charity_description);
         final EditText charity_url = (EditText) dialog.findViewById(R.id.suggested_charity_url);
@@ -91,13 +99,12 @@ public class VoteFragment extends BaseFragment {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.submit:
-                        String charityName = charity_name.getText().toString();
-                        String charityDescription = charity_description.getText().toString();
-                        String charityUrl = charity_url.getText().toString();
+                        final String charityName = charity_name.getText().toString();
+                        final String charityDescription = charity_description.getText().toString();
+                        final String charityUrl = charity_url.getText().toString();
                         if (charityName != null && charityName.length() > 2) {
                             new CharityManager().suggestCharity(charityName, charityUrl, charityDescription);
                         }
-                        break;
                     case R.id.cancel:
                         dialog.dismiss();
                         break;

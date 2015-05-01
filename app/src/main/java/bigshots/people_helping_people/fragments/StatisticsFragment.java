@@ -18,7 +18,7 @@ import bigshots.people_helping_people.utilities.Utility;
 
 
 public class StatisticsFragment extends BaseFragment {
-    public static String raised;
+    private static String raised;
     //Todo check the saving
     private static BarChart myStatsBarGraph;
     private static int color;
@@ -29,6 +29,16 @@ public class StatisticsFragment extends BaseFragment {
 
     public static void invalidate() {
         textView.setText((raised == null || raised.length() < 2) ? "Loading..." : raised);
+    }
+
+    public static void setRaised(double moneyRaised) {
+        raised = String.format("Your points equate to about $%.2f", moneyRaised);
+        textView.post(new Runnable() {
+            @Override
+            public void run() {
+                textView.setText(raised);
+            }
+        });
     }
 
     @Override

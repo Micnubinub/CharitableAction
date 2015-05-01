@@ -4,7 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -33,6 +40,7 @@ public class Utility {
     public static final String REMINDER_TIME_MINS_INT = "REMINDER_TIME_MINS_INT";
     public static final String REMINDER_TIME_HOURS_INT = "REMINDER_TIME_HOURS_INT";
     public static final String SAVED_EMAIL = "SAVED_EMAIL";
+    public static final long MONTH_MILLIS = 2714400000l;
 
     public static String getDay(long date) {
         final Calendar calendar = Calendar.getInstance();
@@ -165,6 +173,19 @@ public class Utility {
         return rate;
     }
 
+    public static void addScore(Context context, long when, int points) {
+        final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
+        final SQLiteDatabase statsDB = statsDBHelper.getWritableDatabase();
+        final String time = String.valueOf(when);
+        final String pointsString = String.valueOf(points);
+
+        final ContentValues values = new ContentValues();
+        values.put(StatsDBHelper.POINTS_INT, pointsString);
+        values.put(StatsDBHelper.TIME_LONG, time);
+        statsDB.insert(StatsDBHelper.STATS_TABLE, "", values);
+        statsDB.close();
+    }
+
     public static void addScore(Context context, int points) {
         final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
         final SQLiteDatabase statsDB = statsDBHelper.getWritableDatabase();
@@ -263,11 +284,17 @@ public class Utility {
     }
 
 
-    public static int initScore(int external) {
+    public static int initScore(Context context, int external) {
         final int local = getTotalScore(MainMenu.context);
+
+        if (local < external) {
+            Utility.addScore(context, System.currentTimeMillis() - MONTH_MILLIS, external);
+            MainMenu.downloadData();
+        }
+
         final int max = Math.max(local, external);
-        MainMenu.userManager.postStats(MainMenu.email, max, Utility.getRate(MainMenu.context));
         //Todo post max here
+        MainMenu.userManager.postStats(MainMenu.email, max, Utility.getRate(MainMenu.context));
         return max;
     }
 
@@ -275,4 +302,40 @@ public class Utility {
         //Todo use
         return NumberFormat.getIntegerInstance().format(i);
     }
+
+
+    public static void hasActiveInternetConnection(final Context context) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+                if (activeNetworkInfo != null) {
+                    try {
+                        final HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+                        urlc.setRequestProperty("User-Agent", "Test");
+                        urlc.setRequestProperty("Connection", "close");
+                        urlc.setConnectTimeout(1500);
+                        urlc.connect();
+                        MainMenu.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Toast.makeText(context, (urlc.getResponseCode() == 200) ? "connected" : "not Connected", Toast.LENGTH_LONG).show();
+                                } catch (Exception e) {
+                                    Log.e("connected", e.toString());
+                                }
+                            }
+                        });
+                    } catch (IOException e) {
+                        Log.e("outterConnected", e.toString());
+                    }
+                } else {
+                }
+            }
+        }).run();
+
+    }
+
 }

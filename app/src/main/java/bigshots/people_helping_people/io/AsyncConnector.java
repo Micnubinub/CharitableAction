@@ -25,8 +25,7 @@ public class AsyncConnector {
         AsyncConnector.listener = listener;
     }
 
-    public static void makeConnection(ArrayList<NameValuePair> pairs,
-                                      String nm, String act) {
+    public static void makeConnection(ArrayList<NameValuePair> pairs, String nm, String act) {
         new ConnectorTask(act, pairs, nm).execute();
     }
 
@@ -62,6 +61,7 @@ public class AsyncConnector {
                         charities.add(charity);
                     }
                 }
+
                 if (listener != null)
                     listener.onCompleteArray(charities);
             } else if (action.equals("GET_SCORE_TOTAL")) {
@@ -74,6 +74,18 @@ public class AsyncConnector {
                 }
                 if (listener != null)
                     listener.onCompleteTotalScore(total);
+                Log.e("totalScore : ", resp);
+            } else if (action.equals("GET_SCORE")) {
+                Log.e("Async", resp);
+                int total = 0;
+                try {
+                    total = Integer.parseInt(resp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (listener != null)
+                    listener.onCompleteCurrentScore(total);
+                Log.e("score : ", resp);
             } else if (action.equals("GET_HISTORY")) {
                 Log.e("Async", resp);
                 ArrayList<Charity> charities = new ArrayList<Charity>();
@@ -108,10 +120,21 @@ public class AsyncConnector {
                 Log.e("Async", resp);
             } else if (action.equals("CHARITY_SUGGEST")) {
                 Log.e("Async", resp);
-                if (resp.contains("Failed")) {
-                    Toast.makeText(MainMenu.context, "Suggestion failed : " + resp, Toast.LENGTH_LONG).show();
+                if (resp.toLowerCase().contains("fail")) {
+                    MainMenu.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainMenu.context, "Suggestion failed, please  try again", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 } else {
-                    Toast.makeText(MainMenu.context, "Thanks for your suggestion", Toast.LENGTH_LONG).show();
+                    MainMenu.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainMenu.context, "Thanks for your suggestion", Toast.LENGTH_LONG).show();
+                        }
+
+                    });
                 }
             } else if (action.equals("CHARITY_MONTH")) {
                 Log.e("Async", resp);
