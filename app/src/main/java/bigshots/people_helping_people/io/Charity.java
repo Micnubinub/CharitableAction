@@ -1,21 +1,16 @@
 package bigshots.people_helping_people.io;
 
-import android.util.Log;
-
-import bigshots.people_helping_people.fragments.VoteFragment;
-
 public class Charity {
-
     private String name;
     private String url;
+    private String description;
     private int votes;
     private int worth;
     private boolean current, trusted;
 
-
     @Override
     public String toString() {
-        return name;
+        return name + " : " + description + "\n>> " + url;
     }
 
     public int getWorth() {
@@ -24,6 +19,14 @@ public class Charity {
 
     public void setWorth(int worth) {
         this.worth = worth;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {
@@ -63,8 +66,6 @@ public class Charity {
     }
 
     public void setTrusted(int trusted) {
-        Log.e(name, String.format("trusted : %d, %b", trusted, trusted == 1));
-        VoteFragment.refreshList();
         this.trusted = trusted == 1;
     }
 }

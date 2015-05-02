@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -308,6 +307,7 @@ public class Utility {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.e("test", "started");
                 final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
@@ -318,23 +318,15 @@ public class Utility {
                         urlc.setRequestProperty("Connection", "close");
                         urlc.setConnectTimeout(1500);
                         urlc.connect();
-                        MainMenu.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Toast.makeText(context, (urlc.getResponseCode() == 200) ? "connected" : "not Connected", Toast.LENGTH_LONG).show();
-                                } catch (Exception e) {
-                                    Log.e("connected", e.toString());
-                                }
-                            }
-                        });
+                        MainMenu.toast((urlc.getResponseCode() == 200) ? "connected" : "not Connected");
                     } catch (IOException e) {
                         Log.e("outterConnected", e.toString());
                     }
                 } else {
                 }
+                Log.e("test", "finished");
             }
-        }).run();
+        }).start();
 
     }
 

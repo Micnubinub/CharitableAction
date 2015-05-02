@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 
@@ -47,6 +48,14 @@ import bigshots.people_helping_people.views.CharityListItem;
 @SuppressWarnings("ALL")
 public class MainMenu extends FragmentActivity {
     public static Context context;
+    public static FragmentActivity fragmentActivity;
+    public static int rank, userScore, totalCash;
+    public static long totalScore;
+    public static ArrayList<Charity> charities;
+    public static ArrayList<UserStats> stats;
+    public static Charity charity, pedestal;
+    public static String email;
+    public static AdManager adManager;
     private static final AdListener fullScreen = new AdListener() {
         @Override
         public void onAdOpened() {
@@ -70,13 +79,11 @@ public class MainMenu extends FragmentActivity {
             super.onAdClosed();
         }
     };
-    public static FragmentActivity fragmentActivity;
-    public static int rank, userScore, totalCash;
-    public static long totalScore;
-    public static ArrayList<Charity> charities;
-    public static ArrayList<UserStats> stats;
-    public static Charity charity;
-    public static String email;
+    public static boolean videoClicked, fullScreenClicked;
+    public static UserManager userManager;
+    public static MainMenu mainMenu;
+    private static SharedPreferences prefs;
+    private static CharityManager charityManager;
     //TODO make a pedestle (always ontop and has bigger view than most
     //TODO maybe add links to show receipts for the respective charity in the history
     //TODO fix bug that doesn't allow people to suggest a charity
@@ -97,6 +104,8 @@ public class MainMenu extends FragmentActivity {
             refreshLeaderBoard();
         }
     };
+    private static Fragment fragment;
+    private static View view;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
@@ -122,7 +131,6 @@ public class MainMenu extends FragmentActivity {
                         break;
                     case REMOVE:
                         CharityListItem.voteManager.removeVote(charity.getUrl(), email);
-
                         Log.e("remove :", charity.getUrl());
                         break;
                 }
@@ -151,8 +159,9 @@ public class MainMenu extends FragmentActivity {
         }
 
         @Override
-        public void onCompleteArray(final ArrayList<Charity> charities) {
+        public void onCompleteArray(final ArrayList<Charity> charities, Charity pedestal) {
             MainMenu.charities = charities;
+            MainMenu.pedestal = pedestal;
             VoteFragment.refreshList();
         }
 
@@ -173,8 +182,6 @@ public class MainMenu extends FragmentActivity {
             Utility.initScore(context, score);
         }
     };
-    public static AdManager adManager;
-    public static boolean videoClicked, fullScreenClicked;
     private final AdListener video = new AdListener() {
         @Override
         public void onAdOpened() {
@@ -197,11 +204,6 @@ public class MainMenu extends FragmentActivity {
             super.onAdClosed();
         }
     };
-    public static UserManager userManager;
-    private static SharedPreferences prefs;
-    private static CharityManager charityManager;
-    private static Fragment fragment;
-    private static View view;
 
     public static FragmentManager getFragManager() {
         return fragment.getChildFragmentManager();
@@ -242,6 +244,34 @@ public class MainMenu extends FragmentActivity {
             view.post(r);
     }
 
+    public static void toast(final String msg) {
+        if (mainMenu != null) {
+            try {
+                mainMenu.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mainMenu, msg, Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mainMenu, msg, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        } else {
+            view.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(mainMenu, msg, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,6 +283,7 @@ public class MainMenu extends FragmentActivity {
         init();
         setUpFragment();
         downloadData();
+        mainMenu = this;
     }
 
     private void init() {

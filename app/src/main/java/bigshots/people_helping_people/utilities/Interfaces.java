@@ -21,7 +21,7 @@ public class Interfaces {
 
         void onCompleteRank(int rank);
 
-        void onCompleteArray(ArrayList<Charity> charities);
+        void onCompleteArray(ArrayList<Charity> charities, Charity pedestal);
 
         void onDonationsArray(ArrayList<Charity> charities);
 

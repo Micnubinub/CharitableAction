@@ -18,12 +18,10 @@ import bigshots.people_helping_people.io.UserStats;
  */
 public class LeaderBoardAdapter extends BaseAdapter {
     private final ArrayList<UserStats> stats;
-    private final boolean isRate;
     private final Context context;
 
     public LeaderBoardAdapter(Context context, ArrayList<UserStats> stats, boolean isRate) {
         this.stats = stats;
-        this.isRate = isRate;
         this.context = context;
     }
 

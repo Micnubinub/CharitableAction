@@ -2,7 +2,6 @@ package bigshots.people_helping_people.io;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -39,14 +38,16 @@ public class AsyncConnector {
             } else if (action.equals("GET_CHARITIES")) {
                 Log.e("Async", resp);
                 final ArrayList<Charity> charities = new ArrayList<Charity>();
+                Charity pedestal = null;
                 if (!resp.equals("")) {
                     resp = resp.substring(0, resp.length() - 1);
                     final String[] tmp1 = resp.split("\\|");
                     for (String s : tmp1) {
-                        String[] tmp = s.split("\\^", -1);
-                        Charity charity = new Charity();
+                        final String[] tmp = s.split("\\^", -1);
+                        final Charity charity = new Charity();
                         charity.setUrl(tmp[0]);
                         charity.setName(tmp[1]);
+                        charity.setDescription(tmp[5]);
                         try {
                             charity.setVotes(Integer.valueOf(tmp[2]));
                         } catch (ClassCastException e) {
@@ -58,12 +59,17 @@ public class AsyncConnector {
                         } catch (ClassCastException e) {
                             charity.setTrusted(0);
                         }
-                        charities.add(charity);
+
+                        if (tmp[3].equals("1")) {
+                            pedestal = charity;
+                        } else {
+                            charities.add(charity);
+                        }
                     }
                 }
 
                 if (listener != null)
-                    listener.onCompleteArray(charities);
+                    listener.onCompleteArray(charities, pedestal);
             } else if (action.equals("GET_SCORE_TOTAL")) {
                 Log.e("Async", resp);
                 long total = 0;
@@ -121,20 +127,9 @@ public class AsyncConnector {
             } else if (action.equals("CHARITY_SUGGEST")) {
                 Log.e("Async", resp);
                 if (resp.toLowerCase().contains("fail")) {
-                    MainMenu.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MainMenu.context, "Suggestion failed, please  try again", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    MainMenu.toast("Suggestion failed, please  try again");
                 } else {
-                    MainMenu.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MainMenu.context, "Thanks for your suggestion", Toast.LENGTH_LONG).show();
-                        }
-
-                    });
+                    MainMenu.toast("Thanks for your suggestion");
                 }
             } else if (action.equals("CHARITY_MONTH")) {
                 Log.e("Async", resp);
@@ -257,7 +252,6 @@ class ConnectorTask extends AsyncTask<Void, Void, Boolean> {
             Log.e("Async", "Failed to perform action: " + this.action);
             Log.e("Async", "Error:  " + e.toString());
         }
-
     }
 
     @Override

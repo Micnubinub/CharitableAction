@@ -17,11 +17,13 @@ import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
+import bigshots.people_helping_people.views.CharityListItemPedestal;
 
 public class VoteFragment extends BaseFragment {
     private static ListView listView;
     private static VoteCharityAdapter adapter;
     private static View message;
+    private static CharityListItemPedestal pedestal;
 
     public VoteFragment() {
     }
@@ -58,6 +60,9 @@ public class VoteFragment extends BaseFragment {
             }
         });
         listView = (ListView) view.findViewById(R.id.list);
+        pedestal = (CharityListItemPedestal) view.findViewById(R.id.pedestal);
+        pedestal.setCharity(MainMenu.charity);
+
         return view;
     }
 
@@ -125,6 +130,7 @@ public class VoteFragment extends BaseFragment {
             MainMenu.downloadData();
             return;
         }
+        pedestal.setCharity(MainMenu.charity);
         refreshList();
     }
 
