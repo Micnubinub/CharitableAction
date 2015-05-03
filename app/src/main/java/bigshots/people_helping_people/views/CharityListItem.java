@@ -221,7 +221,10 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void castVote() {
-        queItems.add(new QueItem(QueItemType.CAST, link));
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
+        voteManager.castVote(link, MainMenu.email);
+//        CharityListItem.queItems.add(new QueItem(QueItemType.REMOVE, voteCharityAdapter.getVotedFor()));
+//        queItems.add(new QueItem(QueItemType.CAST, link));
         Log.e("cast", String.format("queItemSize : %d", queItems.size()));
         currentVote = link;
         MainMenu.getCurrentCharity();
@@ -229,24 +232,15 @@ public class CharityListItem extends ViewGroup {
 
     private void removeThisVote() {
         currentVote = "";
-        queItems.add(new QueItem(QueItemType.REMOVE, ""));
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
         Log.e("remove", String.format("queItemSize : %d", queItems.size()));
         MainMenu.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
         currentVote = "";
-        queItems.add(new QueItem(QueItemType.REMOVE, ""));
-        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
         MainMenu.getCurrentCharity();
-//        if (currentVote == null) {
-//            MainMenu.getCurrentCharity();
-//            Toast.makeText(MainMenu.context, "failed to cast vote, try again later", Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        if (MainMenu.email.length() > 3)
-//            voteManager.removeVote(currentVote, MainMenu.email);
-
     }
 
     private void openLink() {

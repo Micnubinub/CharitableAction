@@ -15,11 +15,10 @@ import android.widget.TextView;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
+import bigshots.people_helping_people.fragments.VoteFragment;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.VoteManager;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
-import bigshots.people_helping_people.views.CharityListItem.QueItem;
-import bigshots.people_helping_people.views.CharityListItem.QueItemType;
 
 /**
  * Created by root on 19/11/14.
@@ -79,6 +78,7 @@ public class CharityListItemPedestal extends FrameLayout {
                 description.setText(charity.getDescription());
                 setVotes(charity.getVotes());
                 setVotedFor(charity.getUrl().equals(CharityListItem.currentVote));
+                likeButton.invalidatePoster();
                 invalidatePoster();
             }
         });
@@ -156,7 +156,8 @@ public class CharityListItemPedestal extends FrameLayout {
     }
 
     private void castVote() {
-        CharityListItem.queItems.add(new QueItem(QueItemType.CAST, charity.getUrl()));
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
+        voteManager.castVote(charity.getUrl(), MainMenu.email);
         Log.e("cast", String.format("this : %s, queItemSize : %d", charity.getUrl(), CharityListItem.queItems.size()));
         CharityListItem.currentVote = charity.getUrl();
         MainMenu.getCurrentCharity();
@@ -164,14 +165,15 @@ public class CharityListItemPedestal extends FrameLayout {
 
     private void removeThisVote() {
         CharityListItem.currentVote = "";
-        CharityListItem.queItems.add(new QueItem(QueItemType.REMOVE, ""));
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
         Log.e("remove", String.format("queItemSize : %d", CharityListItem.queItems.size()));
         MainMenu.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
         CharityListItem.currentVote = "";
-        CharityListItem.queItems.add(new CharityListItem.QueItem(CharityListItem.QueItemType.REMOVE, ""));
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
+//        CharityListItem.queItems.add(new CharityListItem.QueItem(CharityListItem.QueItemType.REMOVE, charity.getUrl()));
         Log.e("remove", String.format("queItemSize : %d", CharityListItem.queItems.size()));
         MainMenu.getCurrentCharity();
     }
@@ -265,6 +267,9 @@ public class CharityListItemPedestal extends FrameLayout {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            VoteFragment.notifyDataSetChanged();
+
         }
 
         @Override

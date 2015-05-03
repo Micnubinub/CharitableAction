@@ -22,8 +22,8 @@ import bigshots.people_helping_people.views.CharityListItemPedestal;
 
 public class VoteFragment extends BaseFragment {
     public static CharityListItemPedestal pedestal;
+    public static VoteCharityAdapter adapter;
     private static ListView listView;
-    private static VoteCharityAdapter adapter;
     private static View message;
 
     public VoteFragment() {
@@ -34,6 +34,7 @@ public class VoteFragment extends BaseFragment {
             @Override
             public void run() {
                 try {
+
                     message.setVisibility(View.GONE);
                     adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
                     listView.setAdapter(adapter);
@@ -44,6 +45,19 @@ public class VoteFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    public static void notifyDataSetChanged() {
+        try {
+            listView.post(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -67,7 +81,6 @@ public class VoteFragment extends BaseFragment {
         pedestal.setCharity(MainMenu.pedestal);
         return view;
     }
-
 
     private void showSuggestionDialog() {
         final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
@@ -135,7 +148,6 @@ public class VoteFragment extends BaseFragment {
         }
         refreshList();
         pedestal.setCharity(MainMenu.pedestal);
-
     }
 
     @Override

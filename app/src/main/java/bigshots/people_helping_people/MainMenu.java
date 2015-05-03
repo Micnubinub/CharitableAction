@@ -83,6 +83,15 @@ public class MainMenu extends FragmentActivity {
     public static MainMenu mainMenu;
     private static SharedPreferences prefs;
     private static CharityManager charityManager;
+    private static final Runnable refreshVoteList = new Runnable() {
+        @Override
+        public void run() {
+            charityManager.getCharities();
+            charityManager.currentCharity(email);
+        }
+    };
+    private static Fragment fragment;
+    private static View view;
     //TODO make a pedestle (always ontop and has bigger view than most
     //TODO maybe add links to show receipts for the respective charity in the history
     //TODO fix bug that doesn't allow people to suggest a charity
@@ -103,8 +112,6 @@ public class MainMenu extends FragmentActivity {
             refreshLeaderBoard();
         }
     };
-    private static Fragment fragment;
-    private static View view;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
@@ -194,7 +201,6 @@ public class MainMenu extends FragmentActivity {
         return fragment.getChildFragmentManager();
     }
 
-
     public static void downloadData() {
         if (view != null)
             view.post(downloadData);
@@ -202,7 +208,9 @@ public class MainMenu extends FragmentActivity {
     }
 
     public static void getCurrentCharity() {
-        charityManager.currentCharity(email);
+        if (view != null)
+            view.post(refreshVoteList);
+        else new Thread(refreshVoteList).start();
     }
 
     public static void refreshLeaderBoard() {
@@ -235,11 +243,10 @@ public class MainMenu extends FragmentActivity {
 
             switch (queItem.type) {
                 case CAST:
-                    CharityListItem.voteManager.removeVote(charity.getUrl(), email);
                     CharityListItem.voteManager.castVote(queItem.link, email);
                     break;
                 case REMOVE:
-                    CharityListItem.voteManager.removeVote(charity.getUrl(), email);
+                    CharityListItem.voteManager.removeVote(queItem.link, email);
                     break;
             }
             CharityListItem.queItems.remove(queItem);
