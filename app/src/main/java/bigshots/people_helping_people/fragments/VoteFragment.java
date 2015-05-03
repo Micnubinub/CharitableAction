@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,10 @@ import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 import bigshots.people_helping_people.views.CharityListItemPedestal;
 
 public class VoteFragment extends BaseFragment {
+    public static CharityListItemPedestal pedestal;
     private static ListView listView;
     private static VoteCharityAdapter adapter;
     private static View message;
-    private static CharityListItemPedestal pedestal;
 
     public VoteFragment() {
     }
@@ -36,8 +37,10 @@ public class VoteFragment extends BaseFragment {
                     message.setVisibility(View.GONE);
                     adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
                     listView.setAdapter(adapter);
+                    pedestal.setCharity(MainMenu.pedestal);
                 } catch (Exception e) {
-
+                    e.printStackTrace();
+                    Log.e("vote", "failed to make adapter");
                 }
             }
         });
@@ -61,8 +64,7 @@ public class VoteFragment extends BaseFragment {
         });
         listView = (ListView) view.findViewById(R.id.list);
         pedestal = (CharityListItemPedestal) view.findViewById(R.id.pedestal);
-        pedestal.setCharity(MainMenu.charity);
-
+        pedestal.setCharity(MainMenu.pedestal);
         return view;
     }
 
@@ -125,13 +127,15 @@ public class VoteFragment extends BaseFragment {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         if (adapter == null || MainMenu.charity == null) {
             MainMenu.downloadData();
+            Log.e("returned", "adapter or charity is null");
             return;
         }
-        pedestal.setCharity(MainMenu.charity);
         refreshList();
+        pedestal.setCharity(MainMenu.pedestal);
+
     }
 
     @Override

@@ -128,6 +128,7 @@ public class FeedbackFragment extends BaseFragment {
     }
 
     @Override
-    protected void update() {
+    public void update() {
+
     }
 }

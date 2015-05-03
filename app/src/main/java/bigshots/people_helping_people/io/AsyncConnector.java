@@ -32,6 +32,7 @@ public class AsyncConnector {
         if (resp.contains("Failed")) {
             Log.e("Async", "Failed to perform action: " + action);
             Log.e("Async", "Original Error Message: " + resp);
+            MainMenu.nextQueueItem();
         } else {
             if (action.equals("SEND_MESSAGE")) {
                 Log.e("Async", resp);
@@ -47,7 +48,10 @@ public class AsyncConnector {
                         final Charity charity = new Charity();
                         charity.setUrl(tmp[0]);
                         charity.setName(tmp[1]);
-                        charity.setDescription(tmp[5]);
+
+                        if (tmp[5] != null && tmp[5].length() > 5)
+                            charity.setDescription(tmp[5]);
+
                         try {
                             charity.setVotes(Integer.valueOf(tmp[2]));
                         } catch (ClassCastException e) {
@@ -153,15 +157,18 @@ public class AsyncConnector {
                     Log.e("Async", "Charity of the month not selected yet");
                 }
             } else if (action.equals("CHARITY_CURRENT")) {
-                Log.e("resp : ", String.valueOf(resp));
+                Log.e("resp : >> currentChar ", String.valueOf(resp));
                 Charity charity = new Charity();
                 if (resp != null && !resp.toLowerCase().contains("fail")) {
                     charity.setUrl(resp);
                 } else {
                     charity.setUrl("");
                 }
+
+                MainMenu.nextQueueItem();
                 if (listener != null)
                     listener.onCurrentCharity(charity);
+
             } else if (action.equals("USER_INSERT")) {
                 Log.e("Async", resp);
             } else if (action.equals("USER_STATS")) {

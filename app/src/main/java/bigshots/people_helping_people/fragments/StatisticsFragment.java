@@ -80,7 +80,7 @@ public class StatisticsFragment extends BaseFragment {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         textView.setText((raised == null || raised.length() < 2) ? "Loading..." : raised);
         myStatsBarGraph.post(new Runnable() {
             @Override

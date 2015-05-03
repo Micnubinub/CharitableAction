@@ -21,7 +21,8 @@
             android:padding="8dp"
             android:text="People Helping People"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <bigshots.people_helping_people.scroll_iew_lib.PagerSlidingTabStrip

@@ -16,10 +16,8 @@ import bigshots.people_helping_people.utilities.Utility;
 
 
 public class CurrentCharityFragment extends BaseFragment {
-
     private static TextView raised, linkr;
     private static Charity charity;
-
 
     public CurrentCharityFragment() {
     }
@@ -62,7 +60,7 @@ public class CurrentCharityFragment extends BaseFragment {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         if (charity == null) {
             MainMenu.downloadData();
             return;

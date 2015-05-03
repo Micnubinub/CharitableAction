@@ -31,7 +31,10 @@ public class ContributeFragment extends BaseFragment {
     private static int frequencyMinutes;
     private static MaterialSwitch reminderSwitch;
     private static Dialog dialog;
-
+    private static MaterialSwitch autoStart, toast, adsAtBoot;
+    private static SharedPreferences.Editor editor;
+    private static SharedPreferences prefs;
+    private static boolean loopBool = true, enable_schedule;
     private static final View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -63,11 +66,6 @@ public class ContributeFragment extends BaseFragment {
             }
         }
     };
-
-    private static MaterialSwitch autoStart, toast, adsAtBoot;
-    private static SharedPreferences.Editor editor;
-    private static SharedPreferences prefs;
-    private static boolean loopBool = true, enable_schedule;
 
     public ContributeFragment() {
 
@@ -339,7 +337,7 @@ public class ContributeFragment extends BaseFragment {
     }
 
     @Override
-    protected void update() {
+    public void update() {
         try {
             autoStart.setChecked(prefs.getBoolean(Utility.AUTO_START_BOOL, false));
             toast.setChecked(prefs.getBoolean(Utility.TOAST_BEFORE_BOOL, true));

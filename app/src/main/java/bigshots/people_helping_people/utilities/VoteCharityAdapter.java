@@ -26,12 +26,16 @@ public class VoteCharityAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public static ArrayList<Charity> getCharities() {
-        return charities;
+    public static String getVotedFor() {
+        return votedFor;
     }
 
     public static void setVotedFor(String votedFor) {
         VoteCharityAdapter.votedFor = votedFor;
+    }
+
+    public static ArrayList<Charity> getCharities() {
+        return charities;
     }
 
     @Override

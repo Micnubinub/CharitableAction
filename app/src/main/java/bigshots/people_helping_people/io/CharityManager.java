@@ -1,12 +1,14 @@
 package bigshots.people_helping_people.io;
 
+import android.util.Log;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 
 public class CharityManager {
-
+    //Todo
     public CharityManager() {
 
     }
@@ -41,6 +43,7 @@ public class CharityManager {
     }
 
     public void currentCharity(String useremail) {
+        Log.e("getCurrentCharity", useremail);
         ArrayList<NameValuePair> nvp = new ArrayList<NameValuePair>(1);
         nvp.add(new BasicNameValuePair("USER_EMAIL", useremail));
         AsyncConnector.makeConnection(nvp, "CHARITY_CURRENT.php",

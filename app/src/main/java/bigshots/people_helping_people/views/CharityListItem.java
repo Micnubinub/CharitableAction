@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
+import bigshots.people_helping_people.fragments.VoteFragment;
 import bigshots.people_helping_people.io.VoteManager;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 
@@ -27,8 +28,15 @@ public class CharityListItem extends ViewGroup {
     public static final VoteManager voteManager = new VoteManager();
     public static ArrayList<QueItem> queItems = new ArrayList<QueItem>();
     public static String currentVote;
-    private static VoteCharityAdapter voteCharityAdapter;
+    public static VoteCharityAdapter voteCharityAdapter;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private MaterialTwoLineText textView;
+    private LikeButton likeButton;
+    private int width;
+    private int height;
+    private int votes;
+    private int clickedX, clickedY;
+    private String link;
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -39,13 +47,6 @@ public class CharityListItem extends ViewGroup {
             }
         }
     };
-    private MaterialTwoLineText textView;
-    private LikeButton likeButton;
-    private int width;
-    private int height;
-    private int votes;
-    private int clickedX, clickedY;
-    private String link;
     private boolean touchDown = false, votedFor, trusted;
     private int pos;
     private String name;
@@ -79,6 +80,15 @@ public class CharityListItem extends ViewGroup {
 
     public void setVotedFor(boolean votedFor) {
         likeButton.setIsVotedFor(votedFor);
+        if (!votedFor) {
+            try {
+                if (VoteFragment.pedestal != null)
+                    VoteFragment.pedestal.setVotedFor(voteCharityAdapter.getVotedFor().equals(MainMenu.pedestal.getUrl()));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         invalidatePoster();
     }
 
@@ -212,7 +222,7 @@ public class CharityListItem extends ViewGroup {
 
     private void castVote() {
         queItems.add(new QueItem(QueItemType.CAST, link));
-        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        Log.e("cast", String.format("queItemSize : %d", queItems.size()));
         currentVote = link;
         MainMenu.getCurrentCharity();
     }
@@ -242,7 +252,7 @@ public class CharityListItem extends ViewGroup {
     private void openLink() {
         try {
             if (link != null && link.length() > 3) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));//currentCharity));
+                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));//currentCharity));
                 getContext().startActivity(browserIntent);
             }
         } catch (Exception e) {
@@ -363,7 +373,6 @@ public class CharityListItem extends ViewGroup {
                 voteCharityAdapter.notifyDataSetChanged();
             }
         }
-
 
         @Override
         public void invalidate() {

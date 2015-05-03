@@ -20,5 +20,4 @@ public class VoteManager {
         nvp.add(new BasicNameValuePair("URL", url));
         AsyncConnector.makeConnection(nvp, "VOTE_REMOVE.php", "VOTE_REMOVE");
     }
-
 }

@@ -22,7 +22,7 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  * Created by root on 10/01/15.
  */
 public class ParallaxViewLayout {
-    private static final Fragment[] fragments = new Fragment[8];
+    public static final Fragment[] fragments = new Fragment[8];
     private static ViewPager pager;
     private static MyPagerAdapter fragmentPagerAdapter;
     private static PagerSlidingTabStrip pagerSlidingTabStrip;
@@ -61,7 +61,7 @@ public class ParallaxViewLayout {
     void setUpPager() {
         pager = (ViewPager) main.findViewById(R.id.pager);
         pager.setAdapter(fragmentPagerAdapter);
-        pager.setOffscreenPageLimit(8);
+        pager.setOffscreenPageLimit(4);
         setUpPagerSlidingTabStrip();
     }
 

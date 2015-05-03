@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,7 +17,6 @@ public class LeaderboardFragment extends BaseFragment {
     private static View message;
     private static TextView myRank, raised;
     private static LeaderBoardAdapter adapter;
-    private static int index, top;
 
     public LeaderboardFragment() {
     }
@@ -54,25 +52,13 @@ public class LeaderboardFragment extends BaseFragment {
         myRank = (TextView) view.findViewById(R.id.my_rank);
         message = view.findViewById(R.id.message);
         listView = (ListView) view.findViewById(R.id.list);
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int i) {
 
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
-                index = listView.getFirstVisiblePosition();
-                final View v = listView.getChildAt(0);
-                top = (v == null) ? 0 : v.getTop();
-            }
-        });
         raised = (TextView) view.findViewById(R.id.raised);
         return view;
     }
 
     @Override
-    protected void update() {
+    public void update() {
         MainMenu.refreshLeaderBoard();
 
         if (MainMenu.stats == null) {
@@ -84,6 +70,5 @@ public class LeaderboardFragment extends BaseFragment {
             myRank.setText(String.format("%d. Me", MainMenu.rank));
 
         refreshList();
-        listView.setSelectionFromTop(index, top);
     }
 }

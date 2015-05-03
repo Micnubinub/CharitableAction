@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +36,7 @@ import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.io.UserManager;
 import bigshots.people_helping_people.io.UserStats;
+import bigshots.people_helping_people.scroll_iew_lib.ParallaxViewLayout;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
@@ -65,7 +65,6 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onAdLoaded() {
-
             if (fullScreenClicked) {
                 adManager.getFullscreenAd().show();
             }
@@ -119,25 +118,6 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onCurrentCharity(Charity charity) {
-
-            if (CharityListItem.queItems != null && CharityListItem.queItems.size() > 0) {
-                final CharityListItem.QueItem queItem = CharityListItem.queItems.get(0);
-
-                switch (queItem.type) {
-                    case CAST:
-                        CharityListItem.voteManager.removeVote(charity.getUrl(), email);
-                        CharityListItem.voteManager.castVote(queItem.link, email);
-                        Log.e("remove :" + charity.getUrl(), "add : " + queItem.link);
-                        break;
-                    case REMOVE:
-                        CharityListItem.voteManager.removeVote(charity.getUrl(), email);
-                        Log.e("remove :", charity.getUrl());
-                        break;
-                }
-
-                CharityListItem.queItems.remove(queItem);
-            }
-            Log.e("remove", CharityListItem.queItems.toString());
             VoteCharityAdapter.setVotedFor(charity.getUrl());
             VoteFragment.refreshList();
             if (CharityListItem.queItems.size() > 0)
@@ -163,6 +143,11 @@ public class MainMenu extends FragmentActivity {
             MainMenu.charities = charities;
             MainMenu.pedestal = pedestal;
             VoteFragment.refreshList();
+            for (Fragment fragment : ParallaxViewLayout.fragments) {
+                if (fragment instanceof VoteFragment) {
+                    ((VoteFragment) fragment).update();
+                }
+            }
         }
 
         @Override
@@ -242,6 +227,23 @@ public class MainMenu extends FragmentActivity {
     public static void post(Runnable r) {
         if (view != null)
             view.post(r);
+    }
+
+    public static void nextQueueItem() {
+        if (CharityListItem.queItems != null && CharityListItem.queItems.size() > 0) {
+            final CharityListItem.QueItem queItem = CharityListItem.queItems.get(0);
+
+            switch (queItem.type) {
+                case CAST:
+                    CharityListItem.voteManager.removeVote(charity.getUrl(), email);
+                    CharityListItem.voteManager.castVote(queItem.link, email);
+                    break;
+                case REMOVE:
+                    CharityListItem.voteManager.removeVote(charity.getUrl(), email);
+                    break;
+            }
+            CharityListItem.queItems.remove(queItem);
+        }
     }
 
     public static void toast(final String msg) {
@@ -371,6 +373,8 @@ public class MainMenu extends FragmentActivity {
             dialog.show();
         }
         //Todo
+
+
     }
 
     @Override

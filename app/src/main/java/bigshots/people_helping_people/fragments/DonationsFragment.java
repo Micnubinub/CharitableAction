@@ -73,7 +73,8 @@ public class DonationsFragment extends BaseFragment {
     }
 
     @Override
-    protected void update() {
+    public void update() {
+
     }
 
     private static class Dapter extends BaseAdapter {

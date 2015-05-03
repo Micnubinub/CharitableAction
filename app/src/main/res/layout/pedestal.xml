@@ -12,9 +12,9 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:padding="8dp"
-        android:text="test"
+        android:text="Loading..."
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <TextView
@@ -25,20 +25,11 @@
         android:layout_toLeftOf="@+id/like_button_container"
         android:ellipsize="end"
         android:maxLines="3"
-        android:padding="8dp"
-        android:text="test"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:textColor="@color/white"
         android:textSize="19sp" />
-
-    <FrameLayout
-        android:id="@+id/like_button_container"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/fab" />
 
     <TextView
         android:id="@+id/votes"
@@ -46,12 +37,24 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/charity_description"
         android:maxLines="1"
-        android:paddingBottom="4dp"
+        android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:paddingTop="4dp"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
+    <FrameLayout
+        android:id="@+id/like_button_container"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/fa_default_background_default"
+        android:paddingBottom="16dp"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:paddingTop="13dp" />
 
 </RelativeLayout>

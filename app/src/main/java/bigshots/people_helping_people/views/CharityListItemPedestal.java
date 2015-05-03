@@ -13,8 +13,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Charity;
@@ -30,8 +28,6 @@ import bigshots.people_helping_people.views.CharityListItem.QueItemType;
 public class CharityListItemPedestal extends FrameLayout {
     public static final VoteManager voteManager = new VoteManager();
     private static final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    public static ArrayList<CharityListItem.QueItem> queItems;
-    public static String currentVote;
     private static VoteCharityAdapter voteCharityAdapter;
     private static TextView charityName, description, votesText;
     private static FrameLayout likeButtoncontainer;
@@ -39,10 +35,8 @@ public class CharityListItemPedestal extends FrameLayout {
     private static Charity charity;
     private static int votes;
     private static int clickedX, clickedY;
-    private static String link;
     private static boolean touchDown = false, votedFor, trusted;
     private static int pos;
-    private static String name;
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -65,14 +59,6 @@ public class CharityListItemPedestal extends FrameLayout {
         init();
     }
 
-    public static String getCurrentVote() {
-        return currentVote;
-    }
-
-    public static void setCurrentVote(String currentVote) {
-        CharityListItemPedestal.currentVote = currentVote;
-    }
-
     public static boolean isVotedFor() {
         return votedFor;
     }
@@ -82,20 +68,25 @@ public class CharityListItemPedestal extends FrameLayout {
         invalidatePoster();
     }
 
-    public void setCharity(Charity charity) {
+    public void setCharity(final Charity charity) {
         if (charity == null)
             return;
-        //Todo
-        CharityListItemPedestal.charity = charity;
-        charityName.setText(charity.getName());
-        description.setText(charity.getDescription());
-        setVotes(charity.getVotes());
-        Log.e("setChaity", charity.toString());
-
+        post(new Runnable() {
+            @Override
+            public void run() {
+                CharityListItemPedestal.charity = charity;
+                charityName.setText(charity.getName());
+                description.setText(charity.getDescription());
+                setVotes(charity.getVotes());
+                setVotedFor(charity.getUrl().equals(CharityListItem.currentVote));
+                invalidatePoster();
+            }
+        });
     }
 
     public void setVotes(int votes) {
         this.votes = votes;
+        setVotesText(votes);
     }
 
     public int getPos() {
@@ -107,7 +98,6 @@ public class CharityListItemPedestal extends FrameLayout {
     }
 
     public void setCharityName(String text) {
-        name = text;
         charityName.setText(text);
         invalidatePoster();
     }
@@ -129,7 +119,7 @@ public class CharityListItemPedestal extends FrameLayout {
         votesText = (TextView) v.findViewById(R.id.votes);
 
         likeButton = new LikeButton(getContext());
-        likeButton.setLayoutParams(new LayoutParams(buttonWidth, buttonWidth));
+        likeButton.setLayoutParams(new LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT));
         likeButtoncontainer.addView(likeButton);
 
         setWillNotDraw(false);
@@ -141,7 +131,6 @@ public class CharityListItemPedestal extends FrameLayout {
         }
         addView(v);
         setCharity(charity);
-        queItems = CharityListItem.queItems;
     }
 
 
@@ -166,43 +155,31 @@ public class CharityListItemPedestal extends FrameLayout {
         votesText.setText(String.valueOf(text) + append);
     }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
-
     private void castVote() {
-        queItems.add(new QueItem(QueItemType.CAST, link));
-        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
-        currentVote = link;
+        CharityListItem.queItems.add(new QueItem(QueItemType.CAST, charity.getUrl()));
+        Log.e("cast", String.format("this : %s, queItemSize : %d", charity.getUrl(), CharityListItem.queItems.size()));
+        CharityListItem.currentVote = charity.getUrl();
         MainMenu.getCurrentCharity();
     }
 
     private void removeThisVote() {
-        currentVote = "";
-        queItems.add(new QueItem(QueItemType.REMOVE, ""));
-        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        CharityListItem.currentVote = "";
+        CharityListItem.queItems.add(new QueItem(QueItemType.REMOVE, ""));
+        Log.e("remove", String.format("queItemSize : %d", CharityListItem.queItems.size()));
         MainMenu.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
-        currentVote = "";
-        queItems.add(new CharityListItem.QueItem(CharityListItem.QueItemType.REMOVE, ""));
-        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
+        CharityListItem.currentVote = "";
+        CharityListItem.queItems.add(new CharityListItem.QueItem(CharityListItem.QueItemType.REMOVE, ""));
+        Log.e("remove", String.format("queItemSize : %d", CharityListItem.queItems.size()));
         MainMenu.getCurrentCharity();
-//        if (currentVote == null) {
-//            MainMenu.getCurrentCharity();
-//            Toast.makeText(MainMenu.context, "failed to cast vote, try again later", Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        if (MainMenu.email.length() > 3)
-//            voteManager.removeVote(currentVote, MainMenu.email);
-
     }
 
     private void openLink() {
         try {
-            if (link != null && link.length() > 3) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));//currentCharity));
+            if (charity.getUrl() != null && charity.getUrl().length() > 3) {
+                final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(charity.getUrl()));//currentCharity));
                 getContext().startActivity(browserIntent);
             }
         } catch (Exception e) {
@@ -231,7 +208,7 @@ public class CharityListItemPedestal extends FrameLayout {
             super.setOnClickListener(onClickListener);
             setWillNotDraw(false);
             setScaleType(ScaleType.CENTER_INSIDE);
-            final int p = dpToPixels(8);
+            final int p = dpToPixels(7);
             LikeButton.this.setPadding(p, p, p, p);
             invalidate();
         }
@@ -252,38 +229,41 @@ public class CharityListItemPedestal extends FrameLayout {
         }
 
         public void click() {
-            setIsVotedFor(!votedFor);
-            if (link.equals(currentVote)) {
-                removeThisVote();
-                setVotedFor(false);
-                try {
-                    votes--;
-                    setVotes(votes);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            try {
+                if (charity.getUrl().equals(CharityListItem.currentVote)) {
+                    removeThisVote();
+                    setVotedFor(false);
+                    try {
+                        votes--;
+                        setVotes(votes);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
+                    if (voteCharityAdapter != null) {
+                        voteCharityAdapter.setVotedFor("");
+                        voteCharityAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    try {
+                        votes++;
+                        setVotes(votes);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    castVote();
+                    setVotedFor(true);
+                    if (voteCharityAdapter != null) {
+                        voteCharityAdapter.setVotedFor(charity.getUrl());
+                        voteCharityAdapter.notifyDataSetChanged();
+                    }
+                }
+                CharityListItemPedestal.this.invalidatePoster();
                 if (voteCharityAdapter != null) {
-                    voteCharityAdapter.setVotedFor("");
                     voteCharityAdapter.notifyDataSetChanged();
                 }
-            } else {
-                try {
-                    votes++;
-                    setVotes(votes);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                castVote();
-                setVotedFor(true);
-                if (voteCharityAdapter != null) {
-                    voteCharityAdapter.setVotedFor(link);
-                    voteCharityAdapter.notifyDataSetChanged();
-                }
-            }
-            CharityListItemPedestal.this.invalidatePoster();
-            if (voteCharityAdapter != null) {
-                voteCharityAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

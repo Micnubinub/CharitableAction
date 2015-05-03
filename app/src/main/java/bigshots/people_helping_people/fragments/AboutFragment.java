@@ -47,6 +47,7 @@ public class AboutFragment extends BaseFragment {
 
 
     @Override
-    protected void update() {
+    public void update() {
+
     }
 }
