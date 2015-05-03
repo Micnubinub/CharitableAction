@@ -1,6 +1,7 @@
 package bigshots.people_helping_people.utilities;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class VoteCharityAdapter extends BaseAdapter {
 
     public VoteCharityAdapter(Context context, ArrayList<Charity> charities) {
         this.charities = charities;
+        Log.e("charities ", charities.toString());
         this.context = context;
     }
 

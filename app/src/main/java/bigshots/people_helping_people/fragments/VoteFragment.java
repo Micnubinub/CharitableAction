@@ -18,6 +18,7 @@ import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
+import bigshots.people_helping_people.views.CharityListItem;
 import bigshots.people_helping_people.views.CharityListItemPedestal;
 
 public class VoteFragment extends BaseFragment {
@@ -34,7 +35,6 @@ public class VoteFragment extends BaseFragment {
             @Override
             public void run() {
                 try {
-
                     message.setVisibility(View.GONE);
                     adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
                     listView.setAdapter(adapter);
@@ -143,11 +143,28 @@ public class VoteFragment extends BaseFragment {
     public void update() {
         if (adapter == null || MainMenu.charity == null) {
             MainMenu.downloadData();
-            Log.e("returned", "adapter or charity is null");
+            if (adapter == null) {
+                refreshList();
+                Log.e("returned", "adapter is null");
+            }
+            if (MainMenu.charity == null)
+                Log.e("returned", "charity is null");
             return;
         }
         refreshList();
         pedestal.setCharity(MainMenu.pedestal);
+        pedestal.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("update()", "voteFrag");
+                try {
+                    final CharityListItem charityListItem = ((CharityListItem) (adapter).getView(adapter.getCount() - 1, null, null));
+                    charityListItem.setVotedFor(charityListItem.link.equals(VoteCharityAdapter.getVotedFor()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override

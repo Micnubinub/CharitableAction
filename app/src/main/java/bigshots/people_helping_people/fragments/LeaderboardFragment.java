@@ -32,6 +32,7 @@ public class LeaderboardFragment extends BaseFragment {
                     raised.setText(String.format("$%.2f", money));
                     StatisticsFragment.setRaised(money);
                     StatisticsFragment.invalidate();
+
                     adapter = new LeaderBoardAdapter(MainMenu.context, MainMenu.stats, false);
                     listView.setAdapter(adapter);
                 } catch (Exception e) {

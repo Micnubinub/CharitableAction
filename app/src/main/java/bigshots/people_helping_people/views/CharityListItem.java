@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
-
 import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.VoteFragment;
@@ -26,17 +24,14 @@ import bigshots.people_helping_people.utilities.VoteCharityAdapter;
 @SuppressWarnings("ALL")
 public class CharityListItem extends ViewGroup {
     public static final VoteManager voteManager = new VoteManager();
-    public static ArrayList<QueItem> queItems = new ArrayList<QueItem>();
-    public static String currentVote;
     public static VoteCharityAdapter voteCharityAdapter;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    public String link;
     private MaterialTwoLineText textView;
     private LikeButton likeButton;
     private int width;
     private int height;
     private int votes;
-    private int clickedX, clickedY;
-    private String link;
     private final OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -47,6 +42,7 @@ public class CharityListItem extends ViewGroup {
             }
         }
     };
+    private int clickedX, clickedY;
     private boolean touchDown = false, votedFor, trusted;
     private int pos;
     private String name;
@@ -63,11 +59,11 @@ public class CharityListItem extends ViewGroup {
     }
 
     public static String getCurrentVote() {
-        return currentVote;
+        return voteCharityAdapter.getVotedFor();
     }
 
     public static void setCurrentVote(String currentVote) {
-        CharityListItem.currentVote = currentVote;
+        voteCharityAdapter.setVotedFor(currentVote);
     }
 
     public void setVotes(int votes) {
@@ -223,22 +219,18 @@ public class CharityListItem extends ViewGroup {
     private void castVote() {
         voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
         voteManager.castVote(link, MainMenu.email);
-//        CharityListItem.queItems.add(new QueItem(QueItemType.REMOVE, voteCharityAdapter.getVotedFor()));
-//        queItems.add(new QueItem(QueItemType.CAST, link));
-        Log.e("cast", String.format("queItemSize : %d", queItems.size()));
-        currentVote = link;
+        voteCharityAdapter.setVotedFor(link);
         MainMenu.getCurrentCharity();
     }
 
     private void removeThisVote() {
-        currentVote = "";
+        voteCharityAdapter.setVotedFor("");
         voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        Log.e("remove", String.format("queItemSize : %d", queItems.size()));
         MainMenu.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
-        currentVote = "";
+        voteCharityAdapter.setVotedFor("");
         voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
         MainMenu.getCurrentCharity();
     }
@@ -328,13 +320,14 @@ public class CharityListItem extends ViewGroup {
 
 
         public void setIsVotedFor(boolean isVotedFor) {
+            Log.e("setVotedFor CLI ", String.valueOf(votedFor));
             votedFor = isVotedFor;
             setImageResource(isVotedFor ? R.drawable.like : R.drawable.not_liked);
         }
 
         public void click() {
             setIsVotedFor(!votedFor);
-            if (link.equals(currentVote)) {
+            if (link.equals(voteCharityAdapter.getVotedFor())) {
                 removeThisVote();
                 setVotedFor(false);
                 try {
@@ -346,7 +339,6 @@ public class CharityListItem extends ViewGroup {
 
                 if (voteCharityAdapter != null) {
                     voteCharityAdapter.setVotedFor("");
-                    voteCharityAdapter.notifyDataSetChanged();
                 }
             } else {
                 try {
@@ -359,13 +351,13 @@ public class CharityListItem extends ViewGroup {
                 setVotedFor(true);
                 if (voteCharityAdapter != null) {
                     voteCharityAdapter.setVotedFor(link);
-                    voteCharityAdapter.notifyDataSetChanged();
                 }
             }
-            CharityListItem.this.invalidatePoster();
+
             if (voteCharityAdapter != null) {
                 voteCharityAdapter.notifyDataSetChanged();
             }
+            CharityListItem.this.invalidatePoster();
         }
 
         @Override

@@ -40,7 +40,6 @@ import bigshots.people_helping_people.scroll_iew_lib.ParallaxViewLayout;
 import bigshots.people_helping_people.utilities.Interfaces;
 import bigshots.people_helping_people.utilities.Utility;
 import bigshots.people_helping_people.utilities.VoteCharityAdapter;
-import bigshots.people_helping_people.views.CharityListItem;
 
 /**
  * Created by root on 18/11/14.
@@ -90,8 +89,6 @@ public class MainMenu extends FragmentActivity {
             charityManager.currentCharity(email);
         }
     };
-    private static Fragment fragment;
-    private static View view;
     //TODO make a pedestle (always ontop and has bigger view than most
     //TODO maybe add links to show receipts for the respective charity in the history
     //TODO fix bug that doesn't allow people to suggest a charity
@@ -103,15 +100,17 @@ public class MainMenu extends FragmentActivity {
     private static final Runnable downloadData = new Runnable() {
         @Override
         public void run() {
-            getCurrentCharity();
-            charityManager.getCharities();
             charityManager.monthlyCharity();
             charityManager.getHistory();
             charityManager.getTotalScore();
             userManager.getScore(email);
+            charityManager.getCharities();
+            charityManager.currentCharity(email);
             refreshLeaderBoard();
         }
     };
+    private static Fragment fragment;
+    private static View view;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
@@ -127,8 +126,13 @@ public class MainMenu extends FragmentActivity {
         public void onCurrentCharity(Charity charity) {
             VoteCharityAdapter.setVotedFor(charity.getUrl());
             VoteFragment.refreshList();
-            if (CharityListItem.queItems.size() > 0)
-                getCurrentCharity();
+            for (Fragment fragment : ParallaxViewLayout.fragments) {
+                if (fragment instanceof VoteFragment) {
+
+                    ((VoteFragment) fragment).update();
+                    return;
+                }
+            }
         }
 
         @Override
@@ -208,9 +212,7 @@ public class MainMenu extends FragmentActivity {
     }
 
     public static void getCurrentCharity() {
-        if (view != null)
-            view.post(refreshVoteList);
-        else new Thread(refreshVoteList).start();
+        new Thread(refreshVoteList).start();
     }
 
     public static void refreshLeaderBoard() {
@@ -233,25 +235,9 @@ public class MainMenu extends FragmentActivity {
     }
 
     public static void post(Runnable r) {
-        if (view != null)
-            view.post(r);
+        new Thread(r).start();
     }
 
-    public static void nextQueueItem() {
-        if (CharityListItem.queItems != null && CharityListItem.queItems.size() > 0) {
-            final CharityListItem.QueItem queItem = CharityListItem.queItems.get(0);
-
-            switch (queItem.type) {
-                case CAST:
-                    CharityListItem.voteManager.castVote(queItem.link, email);
-                    break;
-                case REMOVE:
-                    CharityListItem.voteManager.removeVote(queItem.link, email);
-                    break;
-            }
-            CharityListItem.queItems.remove(queItem);
-        }
-    }
 
     public static void toast(final String msg) {
         if (mainMenu != null) {

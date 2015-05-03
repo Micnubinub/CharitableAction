@@ -32,7 +32,6 @@ public class AsyncConnector {
         if (resp.contains("Failed")) {
             Log.e("Async", "Failed to perform action: " + action);
             Log.e("Async", "Original Error Message: " + resp);
-            MainMenu.nextQueueItem();
         } else {
             if (action.equals("SEND_MESSAGE")) {
                 Log.e("Async", resp);
@@ -165,7 +164,6 @@ public class AsyncConnector {
                     charity.setUrl("");
                 }
 
-                MainMenu.nextQueueItem();
                 if (listener != null)
                     listener.onCurrentCharity(charity);
 

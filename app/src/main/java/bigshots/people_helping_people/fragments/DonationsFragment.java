@@ -1,7 +1,6 @@
 package bigshots.people_helping_people.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,8 +96,6 @@ public class DonationsFragment extends BaseFragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             final View view = View.inflate(MainMenu.context, R.layout.donations_list_item, null);
             final Charity charity = charities.get(position);
-            //Todo
-            Log.e("charity:", charity.getName() + " " + charity.getWorth());
             ((TextView) view.findViewById(R.id.raised)).setText(String.format("$%d", charity.getWorth()));
             ((TextView) view.findViewById(R.id.charity)).setText(charity.getName());
             return view;
