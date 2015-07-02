@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,12 +38,6 @@ public class BannerPopup extends ViewGroup {
     private static InterstitialAd fullScreenAd;
     private static Runnable runnable;
     private final Intent service = new Intent(getContext(), BannerPopupService.class);
-    private final OnClickListener clickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            click(v);
-        }
-    };
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
     private final WindowManager windowManager;
     private final float adDistance = 0.625f;
@@ -56,6 +49,61 @@ public class BannerPopup extends ViewGroup {
     private long downTime;
     private int viewTouchX;
     private int[] screenPos = new int[2];
+    // private BannerPopup popup;
+    private Direction direction = Direction.LEFT;
+    private AdManager adManager;//, fullScreenAdmanager;
+    private boolean animationFinished;
+    private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
+    private View adView;
+    private int lastMenuItemDistance, menuItemWidth;
+    private float animated_value, unit, x, y;
+    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
+    //implement x,t
+    private int toX, fromX, padding, adH, adW, w, h, screenHeight, screenWidth;
+    private CurrentAnimation[] currentAnimations;
+    private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animation) {
+            animationFinished = false;
+            if (state == State.SHOWING_MENU) {
+                addMenuItems();
+            } else if (state == State.SHOWING_AD) {
+                adAdView();
+            }
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animation) {
+            if (!animationFinished)
+                finishAnimation();
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animation) {
+            if (!animationFinished)
+                finishAnimation();
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animation) {
+
+        }
+    };
+    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            animated_value = (Float) (animation.getAnimatedValue());
+            runAnimations();
+            invalidatePoster();
+        }
+    };
+    private int maxX, minX;
+    private final OnClickListener clickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            click(v);
+        }
+    };
     private final OnTouchListener mainViewOnTouchListener = new OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -92,55 +140,6 @@ public class BannerPopup extends ViewGroup {
             return true;
         }
     };
-    // private BannerPopup popup;
-    private Direction direction = Direction.LEFT;
-    private AdManager adManager;//, fullScreenAdmanager;
-    private boolean animationFinished;
-    private final ValueAnimator.AnimatorListener animatorListener = new Animator.AnimatorListener() {
-        @Override
-        public void onAnimationStart(Animator animation) {
-            animationFinished = false;
-            if (state == State.SHOWING_MENU) {
-                addMenuItems();
-            } else if (state == State.SHOWING_AD) {
-                adAdView();
-            }
-        }
-
-        @Override
-        public void onAnimationEnd(Animator animation) {
-            if (!animationFinished)
-                finishAnimation();
-        }
-
-        @Override
-        public void onAnimationCancel(Animator animation) {
-            if (!animationFinished)
-                finishAnimation();
-        }
-
-        @Override
-        public void onAnimationRepeat(Animator animation) {
-
-        }
-    };
-    private CurrentAnimation currentAnimation = CurrentAnimation.NONE;
-    private View adView;
-    private int lastMenuItemDistance, menuItemWidth;
-    private float animated_value, unit, x, y;
-    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            animated_value = (Float) (animation.getAnimatedValue());
-            runAnimations();
-            invalidatePoster();
-        }
-    };
-    private int spacing, initialX, initialY, initialTouchX, initialTouchY;
-    //implement x,t
-    private int toX, fromX, padding, adH, adW, w, h, screenHeight, screenWidth;
-    private CurrentAnimation[] currentAnimations;
-    private int maxX, minX;
 
     public BannerPopup(Context context, WindowManager windowManager, WindowManager.LayoutParams params) {
         super(context);
@@ -647,7 +646,6 @@ public class BannerPopup extends ViewGroup {
 
     private void snap(float progress) {
         setPosition(fromX + Math.round((toX - fromX) * progress), params.y);
-        Log.e("snapto", String.format("prog,val : %f, %d", progress, fromX + Math.round((toX - fromX) * progress)));
     }
 
     private void updateMenuItemDistance(float distance) {

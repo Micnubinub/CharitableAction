@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import bigshots.people_helping_people.MainMenu;
 import bigshots.people_helping_people.utilities.Interfaces;
 
 public class AsyncConnector {
@@ -83,7 +82,6 @@ public class AsyncConnector {
                 }
                 if (listener != null)
                     listener.onCompleteTotalScore(total);
-                Log.e("totalScore : ", resp);
             } else if (action.equals("GET_SCORE")) {
                 Log.e("Async", resp);
                 int total = 0;
@@ -94,7 +92,6 @@ public class AsyncConnector {
                 }
                 if (listener != null)
                     listener.onCompleteCurrentScore(total);
-                Log.e("score : ", resp);
             } else if (action.equals("GET_HISTORY")) {
                 Log.e("Async", resp);
                 ArrayList<Charity> charities = new ArrayList<Charity>();
@@ -129,11 +126,7 @@ public class AsyncConnector {
                 Log.e("Async", resp);
             } else if (action.equals("CHARITY_SUGGEST")) {
                 Log.e("Async", resp);
-                if (resp.toLowerCase().contains("fail")) {
-                    MainMenu.toast("Suggestion failed, please  try again");
-                } else {
-                    MainMenu.toast("Thanks for your suggestion");
-                }
+
             } else if (action.equals("CHARITY_MONTH")) {
                 Log.e("Async", resp);
                 Charity charity = new Charity();
@@ -156,7 +149,6 @@ public class AsyncConnector {
                     Log.e("Async", "Charity of the month not selected yet");
                 }
             } else if (action.equals("CHARITY_CURRENT")) {
-                Log.e("resp : >> currentChar ", String.valueOf(resp));
                 Charity charity = new Charity();
                 if (resp != null && !resp.toLowerCase().contains("fail")) {
                     charity.setUrl(resp);

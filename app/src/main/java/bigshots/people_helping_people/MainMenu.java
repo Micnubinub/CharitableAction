@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.tapjoy.Tapjoy;
 
 import java.util.ArrayList;
 
@@ -57,6 +60,22 @@ public class MainMenu extends FragmentActivity {
     public static AdManager adManager;
     private static final AdListener fullScreen = new AdListener() {
         @Override
+        public void onAdFailedToLoad(int errorCode) {
+            String out = "";
+            if (errorCode == AdRequest.ERROR_CODE_INTERNAL_ERROR) {
+                out = "internal error";
+            } else if (errorCode == AdRequest.ERROR_CODE_INVALID_REQUEST) {
+                out = "invalid request";
+            } else if (errorCode == AdRequest.ERROR_CODE_NETWORK_ERROR) {
+                out = "network error";
+            } else if (errorCode == AdRequest.ERROR_CODE_NO_FILL) {
+                out = "no fill";
+            }
+            Log.e("fialed to load fScreen ad with error code ", out);
+            super.onAdFailedToLoad(errorCode);
+        }
+
+        @Override
         public void onAdOpened() {
             fullScreenClicked = false;
             super.onAdOpened();
@@ -89,14 +108,7 @@ public class MainMenu extends FragmentActivity {
             charityManager.currentCharity(email);
         }
     };
-    //TODO make a pedestle (always ontop and has bigger view than most
     //TODO maybe add links to show receipts for the respective charity in the history
-    //TODO fix bug that doesn't allow people to suggest a charity
-    //TODO fix add failed to load >> (check if online, if not, toat saying you need the internet
-    //Todo upadte statistics onScroll in
-    //TODO get Userscore from database and update the db if need be
-    //Todo consider adding a chunk of score to local device if you have a higher value on DB
-    //Todo consider making curent charity hard coded
     private static final Runnable downloadData = new Runnable() {
         @Override
         public void run() {
@@ -180,6 +192,23 @@ public class MainMenu extends FragmentActivity {
     };
     private final AdListener video = new AdListener() {
         @Override
+        public void onAdFailedToLoad(int errorCode) {
+            String out = "";
+
+            if (errorCode == com.google.android.gms.ads.AdRequest.ERROR_CODE_INTERNAL_ERROR) {
+                out = "internal error";
+            } else if (errorCode == AdRequest.ERROR_CODE_INVALID_REQUEST) {
+                out = "invalid request";
+            } else if (errorCode == AdRequest.ERROR_CODE_NETWORK_ERROR) {
+                out = "network error";
+            } else if (errorCode == AdRequest.ERROR_CODE_NO_FILL) {
+                out = "no fill";
+            }
+            Log.e("fialed to load video ad with error code ", out);
+            super.onAdFailedToLoad(errorCode);
+        }
+
+        @Override
         public void onAdOpened() {
             videoClicked = false;
             super.onAdOpened();
@@ -216,7 +245,6 @@ public class MainMenu extends FragmentActivity {
     }
 
     public static void refreshLeaderBoard() {
-
         try {
             final UserManager manager1 = new UserManager();
 
@@ -368,6 +396,18 @@ public class MainMenu extends FragmentActivity {
         //Todo
 
 
+    }
+
+    @Override
+    protected void onStop() {
+        Tapjoy.onActivityStop(this);
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Tapjoy.onActivityStart(this);
     }
 
     @Override

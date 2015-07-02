@@ -23,10 +23,7 @@ public class UserStats {
     }
 
     public String getName() {
-        String nm = email;
-        String[] tokens = nm.split("@");
-        nm = tokens[0];
-        return nm;
+        return email.split("@")[0];
     }
 
     public int getScore() {

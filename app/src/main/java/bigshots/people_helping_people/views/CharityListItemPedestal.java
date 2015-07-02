@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -79,7 +78,6 @@ public class CharityListItemPedestal extends FrameLayout {
                 description.setText(charity.getDescription());
                 setVotes(charity.getVotes());
                 setVotedFor(charity.getUrl().equals(voteCharityAdapter.getVotedFor()));
-                Log.e("setVotedFor Ped ", String.valueOf(charity.getUrl().equals(voteCharityAdapter.getVotedFor())));
                 likeButton.invalidatePoster();
                 invalidatePoster();
             }

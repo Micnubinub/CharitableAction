@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,6 @@ public class VoteFragment extends BaseFragment {
                     pedestal.setCharity(MainMenu.pedestal);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e("vote", "failed to make adapter");
                 }
             }
         });
@@ -145,10 +143,8 @@ public class VoteFragment extends BaseFragment {
             MainMenu.downloadData();
             if (adapter == null) {
                 refreshList();
-                Log.e("returned", "adapter is null");
             }
             if (MainMenu.charity == null)
-                Log.e("returned", "charity is null");
             return;
         }
         refreshList();
@@ -156,7 +152,6 @@ public class VoteFragment extends BaseFragment {
         pedestal.post(new Runnable() {
             @Override
             public void run() {
-                Log.e("update()", "voteFrag");
                 try {
                     final CharityListItem charityListItem = ((CharityListItem) (adapter).getView(adapter.getCount() - 1, null, null));
                     charityListItem.setVotedFor(charityListItem.link.equals(VoteCharityAdapter.getVotedFor()));

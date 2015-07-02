@@ -307,7 +307,6 @@ public class Utility {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e("test", "started");
                 final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
@@ -318,13 +317,12 @@ public class Utility {
                         urlc.setRequestProperty("Connection", "close");
                         urlc.setConnectTimeout(1500);
                         urlc.connect();
-                        MainMenu.toast((urlc.getResponseCode() == 200) ? "connected" : "not Connected");
+                        MainMenu.toast((urlc.getResponseCode() == 200) ? "Ad failed to load" : "Please connect to the internet");
                     } catch (IOException e) {
                         Log.e("outterConnected", e.toString());
                     }
                 } else {
                 }
-                Log.e("test", "finished");
             }
         }).start();
 
