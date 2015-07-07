@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.CharityManager;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
@@ -35,9 +35,9 @@ public class VoteFragment extends BaseFragment {
             public void run() {
                 try {
                     message.setVisibility(View.GONE);
-                    adapter = new VoteCharityAdapter(MainMenu.context, MainMenu.charities);
+                    adapter = new VoteCharityAdapter(MainActivity.context, MainActivity.charities);
                     listView.setAdapter(adapter);
-                    pedestal.setCharity(MainMenu.pedestal);
+                    pedestal.setCharity(MainActivity.pedestal);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -76,12 +76,12 @@ public class VoteFragment extends BaseFragment {
         });
         listView = (ListView) view.findViewById(R.id.list);
         pedestal = (CharityListItemPedestal) view.findViewById(R.id.pedestal);
-        pedestal.setCharity(MainMenu.pedestal);
+        pedestal.setCharity(MainActivity.pedestal);
         return view;
     }
 
     private void showSuggestionDialog() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+        final Dialog dialog = new Dialog(MainActivity.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.suggest_charity);
 
         final EditText charity_name = (EditText) dialog.findViewById(R.id.suggested_charity_name);
@@ -139,16 +139,16 @@ public class VoteFragment extends BaseFragment {
 
     @Override
     public void update() {
-        if (adapter == null || MainMenu.charity == null) {
-            MainMenu.downloadData();
+        if (adapter == null || MainActivity.charity == null) {
+            MainActivity.downloadData();
             if (adapter == null) {
                 refreshList();
             }
-            if (MainMenu.charity == null)
+            if (MainActivity.charity == null)
             return;
         }
         refreshList();
-        pedestal.setCharity(MainMenu.pedestal);
+        pedestal.setCharity(MainActivity.pedestal);
         pedestal.post(new Runnable() {
             @Override
             public void run() {

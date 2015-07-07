@@ -7,10 +7,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.AboutFragment;
 import bigshots.people_helping_people.fragments.ContributeFragment;
+import bigshots.people_helping_people.fragments.CreditFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.DonationsFragment;
 import bigshots.people_helping_people.fragments.FeedbackFragment;
@@ -22,7 +23,7 @@ import bigshots.people_helping_people.fragments.VoteFragment;
  * Created by root on 10/01/15.
  */
 public class ParallaxViewLayout {
-    public static final Fragment[] fragments = new Fragment[8];
+    public static final Fragment[] fragments = new Fragment[9];
     private static ViewPager pager;
     private static MyPagerAdapter fragmentPagerAdapter;
     private static PagerSlidingTabStrip pagerSlidingTabStrip;
@@ -49,12 +50,13 @@ public class ParallaxViewLayout {
         fragments[4] = new StatisticsFragment();
         fragments[5] = new LeaderboardFragment();
         fragments[6] = new FeedbackFragment();
-        fragments[7] = new AboutFragment();
+        fragments[7] = new CreditFragment();
+        fragments[8] = new AboutFragment();
         setUpPagerAndAdapter();
     }
 
     void setUpPagerAndAdapter() {
-        fragmentPagerAdapter = new MyPagerAdapter(MainMenu.getFragManager());
+        fragmentPagerAdapter = new MyPagerAdapter(MainActivity.fragment.getChildFragmentManager());
         setUpPager();
     }
 
@@ -94,7 +96,7 @@ public class ParallaxViewLayout {
 
     public class MyPagerAdapter extends FragmentPagerAdapter {
         private final String[] TITLES = {"Main", "Vote", "Current Charity", "Donations",
-                "Statistics", "Leaderboard", "Feedback", "About"};
+                "Statistics", "Leaderboard", "Feedback", "Credits", "About"};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);

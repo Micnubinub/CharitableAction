@@ -19,7 +19,6 @@ public class MainBannerView extends ImageView {
     private static final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
     private static final int duration = 710;
     private final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-    private BannerPopup.State state;
     private float animated_value = 0;
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
@@ -64,35 +63,9 @@ public class MainBannerView extends ImageView {
         paint.setColor(rippleColor);
     }
 
-    public void setState(BannerPopup.State state) {
-        if (this.state != state) {
-            this.state = state;
-            switch (state) {
-                case MINIMISED:
-                    give();
-                    break;
-                case SHOWING_AD:
-                    giving();
-                    break;
-                case SHOWING_MENU:
-                    menu();
-                    break;
-            }
-        }
-    }
-
-    private void give() {
-        setImageResource(R.drawable.give);
-        invalidate();
-    }
 
     private void giving() {
         setImageResource(R.drawable.icon);
-        invalidate();
-    }
-
-    private void menu() {
-        setImageResource(R.drawable.back);
         invalidate();
     }
 

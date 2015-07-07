@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.graph.charts.BarChart;
 import bigshots.people_helping_people.graph.models.BarModel;
@@ -58,11 +58,11 @@ public class StatisticsFragment extends BaseFragment {
 
     private void plotMyStatsPoints() {
         myStatsBarGraph.clearChart();
-        final ArrayList<Point> points = Utility.getPoints(MainMenu.context);
+        final ArrayList<Point> points = Utility.getPoints(MainActivity.context);
         if (points.size() < 1) {
             return;
         }
-        final Mode mode = Utility.getScope(MainMenu.context);
+        final Mode mode = Utility.getScope(MainActivity.context);
         for (int i = 0; i < points.size(); i++) {
             final Point point = points.get(i);
             if (mode == Mode.MONTH)

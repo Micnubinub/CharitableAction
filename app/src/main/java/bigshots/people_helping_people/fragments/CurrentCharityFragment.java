@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
@@ -23,7 +23,7 @@ public class CurrentCharityFragment extends BaseFragment {
     }
 
     private static void setCharityDescription() {
-        charity = MainMenu.charity;
+        charity = MainActivity.charity;
         raised.post(new Runnable() {
             @Override
             public void run() {
@@ -62,7 +62,7 @@ public class CurrentCharityFragment extends BaseFragment {
     @Override
     public void update() {
         if (charity == null) {
-            MainMenu.downloadData();
+            MainActivity.downloadData();
             return;
         }
         setCharityDescription();

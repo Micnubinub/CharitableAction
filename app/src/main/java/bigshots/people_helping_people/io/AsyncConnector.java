@@ -193,6 +193,14 @@ public class AsyncConnector {
                 if (listener != null) {
                     listener.onCompleteLeaderBoardList(users);
                 }
+            } else if (action.equals("GET_CREDITS")) {
+                Log.e("Async", resp);
+                if (!resp.equals("")) {
+                    resp = resp.substring(0, resp.length() - 1);
+                    final String[] users = resp.split("\\|");
+                    if (listener != null)
+                        listener.onCompleteCredits(users);
+                }
             } else if (action.equals("GET_RANK")) {
                 Log.e("Async", resp);
                 System.out.println("TEST");

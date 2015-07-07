@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
@@ -47,7 +47,7 @@ public class FeedbackFragment extends BaseFragment {
     }
 
     private void showDirectMessageDialog() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+        final Dialog dialog = new Dialog(MainActivity.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.direct_message);
         final EditText editText = (EditText) dialog.findViewById(R.id.message);
 
@@ -58,8 +58,8 @@ public class FeedbackFragment extends BaseFragment {
                     case R.id.send:
                         final String message = editText.getText().toString();
                         if (message != null && message.length() > 1)
-                            connector.getMessageManager().sendMessage(message, MainMenu.email);
-                        Toast.makeText(MainMenu.context, "Your message is being sent", Toast.LENGTH_SHORT).show();
+                            connector.getMessageManager().sendMessage(message, MainActivity.email);
+                        Toast.makeText(MainActivity.context, "Your message is being sent", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         break;
                     case R.id.cancel:
@@ -75,7 +75,7 @@ public class FeedbackFragment extends BaseFragment {
     }
 
     private void showEmailDialog() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+        final Dialog dialog = new Dialog(MainActivity.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.email);
         final EditText subject = (EditText) dialog.findViewById(R.id.subject);
         final EditText body = (EditText) dialog.findViewById(R.id.body);

@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.VoteFragment;
 import bigshots.people_helping_people.io.Charity;
@@ -156,22 +156,22 @@ public class CharityListItemPedestal extends FrameLayout {
     }
 
     private void castVote() {
-        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        voteManager.castVote(charity.getUrl(), MainMenu.email);
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainActivity.email);
+        voteManager.castVote(charity.getUrl(), MainActivity.email);
         voteCharityAdapter.setVotedFor(charity.getUrl());
-        MainMenu.getCurrentCharity();
+        MainActivity.getCurrentCharity();
     }
 
     private void removeThisVote() {
         voteCharityAdapter.setVotedFor("");
-        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        MainMenu.getCurrentCharity();
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainActivity.email);
+        MainActivity.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
         voteCharityAdapter.setVotedFor("");
-        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        MainMenu.getCurrentCharity();
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainActivity.email);
+        MainActivity.getCurrentCharity();
     }
 
     private void openLink() {

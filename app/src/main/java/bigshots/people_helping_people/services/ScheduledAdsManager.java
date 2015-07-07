@@ -13,10 +13,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.InterstitialAd;
+import java.util.Random;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.utilities.Utility;
@@ -29,57 +28,26 @@ public class ScheduledAdsManager extends Service {
     private static final int REMINDER_NOTIFICATION_ID = 455129854;
     private static PendingIntent alarmIntent;
     private static AlarmManager alarmManager;
-    private static InterstitialAd fullScreenAd;
     private static AdManager adManager;
     private static boolean loadAd;
     private static Context context;
     private static boolean serviceRunning = false;
-    private static boolean show;
 
     private static void loadFullScreenAd() {
-        adManager.loadFullscreenAd();
+        adManager.loadFullscreenAd(false);
+    }
+
+    private static void loadVideoAd() {
+        //TODO load and show
+        adManager.loadVideoAd(false);
     }
 
     private static void showFullScreenAd() {
-        if (adManager == null)
-            getAds();
+        adManager.showFullscreenAd();
+    }
 
-        if (adManager.getFullscreenAd().isLoaded()) {
-            adManager.getFullscreenAd().show();
-            Utility.addScore(context, 15);
-        } else {
-            loadFullScreenAd();
-            fullScreenAd = adManager.getFullscreenAd();
-            fullScreenAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    super.onAdLoaded();
-                    //Todo move to opened
-                    try {
-                        Utility.addScore(context, 15);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (show)
-                        fullScreenAd.show();
-                }
-
-                @Override
-                public void onAdFailedToLoad(int errorCode) {
-                    super.onAdFailedToLoad(errorCode);
-                    try {
-                        Toast.makeText(context, "Failed to load ad", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                    }
-                }
-
-                @Override
-                public void onAdClosed() {
-                    super.onAdClosed();
-                    show = false;
-                }
-            });
-        }
+    private static void showVideoAd() {
+        adManager.showVideoAd();
     }
 
     public static void scheduleNext(Context context, boolean load) {
@@ -126,7 +94,7 @@ public class ScheduledAdsManager extends Service {
                             .setContentText("Click to manage")
                             .setOngoing(true);
 
-            final Intent intent = new Intent(context, MainMenu.class);
+            final Intent intent = new Intent(context, MainActivity.class);
             builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(SCHEDULED_ADS_NOTIFICATION_ID, builder.build());
         } catch (Exception e) {
@@ -149,8 +117,8 @@ public class ScheduledAdsManager extends Service {
     private static void getAds() {
         try {
             adManager = new AdManager(context);
-            adManager.loadFullscreenAd();
-            fullScreenAd = adManager.getFullscreenAd();
+            loadFullScreenAd();
+            loadVideoAd();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,8 +166,6 @@ public class ScheduledAdsManager extends Service {
             alarmManager.setExact(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, inten, 0));
         } else
             alarmManager.set(AlarmManager.RTC, time, PendingIntent.getBroadcast(context, 0, inten, 0));
-
-
     }
 
     private static void showReminder(Context context) {
@@ -210,7 +176,7 @@ public class ScheduledAdsManager extends Service {
                         .setContentText("Donation reminder")
                         .setOngoing(false);
 
-        final Intent intent = new Intent(context, MainMenu.class);
+        final Intent intent = new Intent(context, MainActivity.class);
         builder.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0));
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(REMINDER_NOTIFICATION_ID, builder.build());
     }
@@ -272,15 +238,19 @@ public class ScheduledAdsManager extends Service {
             showNotification(context);
             try {
                 if (loadAd) {
-                    show = false;
+//                    show = false;
                     loadFullScreenAd();
                     scheduleNext(context, false);
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.TOAST_BEFORE_BOOL, true))
                         Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
                     return;
                 } else {
-                    show = true;
-                    showFullScreenAd();
+//                    show = true;
+                    if (random.nextInt(4) < 1) {
+                        showVideoAd();
+                    } else {
+                        showFullScreenAd();
+                    }
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.LOOP_SCHEDULE, false))
                         scheduleNext(context, true);
                 }
@@ -291,4 +261,36 @@ public class ScheduledAdsManager extends Service {
 
         }
     }
+
+    public static class AdAlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            showNotification(context);
+            try {
+                if (loadAd) {
+//                    show = false;
+                    loadFullScreenAd();
+                    scheduleNext(context, false);
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.TOAST_BEFORE_BOOL, true))
+                        Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+//                    show = true;
+                    if (random.nextInt(4) < 1) {
+                        showVideoAd();
+                    } else {
+                        showFullScreenAd();
+                    }
+                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.LOOP_SCHEDULE, false))
+                        scheduleNext(context, true);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private static final Random random = new Random();
 }

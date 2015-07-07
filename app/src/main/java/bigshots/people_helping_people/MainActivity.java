@@ -2,8 +2,8 @@ package bigshots.people_helping_people;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -22,12 +22,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.tapjoy.Tapjoy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import bigshots.people_helping_people.fragments.CreditFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.DonationsFragment;
 import bigshots.people_helping_people.fragments.LeaderboardFragment;
@@ -48,8 +48,8 @@ import bigshots.people_helping_people.utilities.VoteCharityAdapter;
  * Created by root on 18/11/14.
  */
 @SuppressWarnings("ALL")
-public class MainMenu extends FragmentActivity {
-    public static Context context;
+public class MainActivity extends FragmentActivity {
+    public static Activity context;
     public static FragmentActivity fragmentActivity;
     public static int rank, userScore, totalCash;
     public static long totalScore;
@@ -58,47 +58,10 @@ public class MainMenu extends FragmentActivity {
     public static Charity charity, pedestal;
     public static String email;
     public static AdManager adManager;
-    private static final AdListener fullScreen = new AdListener() {
-        @Override
-        public void onAdFailedToLoad(int errorCode) {
-            String out = "";
-            if (errorCode == AdRequest.ERROR_CODE_INTERNAL_ERROR) {
-                out = "internal error";
-            } else if (errorCode == AdRequest.ERROR_CODE_INVALID_REQUEST) {
-                out = "invalid request";
-            } else if (errorCode == AdRequest.ERROR_CODE_NETWORK_ERROR) {
-                out = "network error";
-            } else if (errorCode == AdRequest.ERROR_CODE_NO_FILL) {
-                out = "no fill";
-            }
-            Log.e("fialed to load fScreen ad with error code ", out);
-            super.onAdFailedToLoad(errorCode);
-        }
-
-        @Override
-        public void onAdOpened() {
-            fullScreenClicked = false;
-            super.onAdOpened();
-        }
-
-        @Override
-        public void onAdLoaded() {
-            if (fullScreenClicked) {
-                adManager.getFullscreenAd().show();
-            }
-            super.onAdLoaded();
-        }
-
-        @Override
-        public void onAdClosed() {
-            Utility.addScore(context, 15);
-            adManager.loadFullscreenAd();
-            super.onAdClosed();
-        }
-    };
     public static boolean videoClicked, fullScreenClicked;
     public static UserManager userManager;
-    public static MainMenu mainMenu;
+    public static MainActivity mainActivity;
+    public static Fragment fragment;
     private static SharedPreferences prefs;
     private static CharityManager charityManager;
     private static final Runnable refreshVoteList = new Runnable() {
@@ -114,6 +77,7 @@ public class MainMenu extends FragmentActivity {
         public void run() {
             charityManager.monthlyCharity();
             charityManager.getHistory();
+            charityManager.getCredits();
             charityManager.getTotalScore();
             userManager.getScore(email);
             charityManager.getCharities();
@@ -121,12 +85,22 @@ public class MainMenu extends FragmentActivity {
             refreshLeaderBoard();
         }
     };
-    private static Fragment fragment;
     private static View view;
     public static final Interfaces.ASyncListener aSyncListener = new Interfaces.ASyncListener() {
         @Override
         public void onCharityMonth(Charity charity) {
 
+        }
+
+        @Override
+        public void onCompleteCredits(String[] credits) {
+            Log.e("credits > ", Arrays.toString(credits));
+            for (Fragment fragment : ParallaxViewLayout.fragments) {
+                if (fragment instanceof CreditFragment) {
+                    ((CreditFragment) fragment).setCredits(credits);
+                    return;
+                }
+            }
         }
 
         @Override
@@ -140,7 +114,6 @@ public class MainMenu extends FragmentActivity {
             VoteFragment.refreshList();
             for (Fragment fragment : ParallaxViewLayout.fragments) {
                 if (fragment instanceof VoteFragment) {
-
                     ((VoteFragment) fragment).update();
                     return;
                 }
@@ -153,7 +126,7 @@ public class MainMenu extends FragmentActivity {
             loop:
             for (Charity charity : charities) {
                 if (charity.isCurrent()) {
-                    MainMenu.charity = charity;
+                    MainActivity.charity = charity;
                     CurrentCharityFragment.refreshCharity();
                     break loop;
                 }
@@ -163,8 +136,8 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onCompleteArray(final ArrayList<Charity> charities, Charity pedestal) {
-            MainMenu.charities = charities;
-            MainMenu.pedestal = pedestal;
+            MainActivity.charities = charities;
+            MainActivity.pedestal = pedestal;
             VoteFragment.refreshList();
             for (Fragment fragment : ParallaxViewLayout.fragments) {
                 if (fragment instanceof VoteFragment) {
@@ -175,58 +148,19 @@ public class MainMenu extends FragmentActivity {
 
         @Override
         public void onCompleteRank(final int rank) {
-            MainMenu.rank = rank + 1;
+            MainActivity.rank = rank + 1;
             LeaderboardFragment.refreshList();
         }
 
         @Override
         public void onCompleteLeaderBoardList(final ArrayList<UserStats> stats) {
-            MainMenu.stats = stats;
+            MainActivity.stats = stats;
             LeaderboardFragment.refreshList();
         }
 
         @Override
         public void onCompleteCurrentScore(int score) {
             Utility.initScore(context, score);
-        }
-    };
-    private final AdListener video = new AdListener() {
-        @Override
-        public void onAdFailedToLoad(int errorCode) {
-            String out = "";
-
-            if (errorCode == com.google.android.gms.ads.AdRequest.ERROR_CODE_INTERNAL_ERROR) {
-                out = "internal error";
-            } else if (errorCode == AdRequest.ERROR_CODE_INVALID_REQUEST) {
-                out = "invalid request";
-            } else if (errorCode == AdRequest.ERROR_CODE_NETWORK_ERROR) {
-                out = "network error";
-            } else if (errorCode == AdRequest.ERROR_CODE_NO_FILL) {
-                out = "no fill";
-            }
-            Log.e("fialed to load video ad with error code ", out);
-            super.onAdFailedToLoad(errorCode);
-        }
-
-        @Override
-        public void onAdOpened() {
-            videoClicked = false;
-            super.onAdOpened();
-        }
-
-        @Override
-        public void onAdLoaded() {
-            if (videoClicked) {
-                adManager.getVideoAd().show();
-            }
-            super.onAdLoaded();
-        }
-
-        @Override
-        public void onAdClosed() {
-            Utility.addScore(context, 20);
-            adManager.loadVideoAd();
-            super.onAdClosed();
         }
     };
 
@@ -251,10 +185,10 @@ public class MainMenu extends FragmentActivity {
             if (email.length() > 3)
                 userManager.getScoreRank(email);
 
-            userScore = Utility.getTotalScore(MainMenu.context);
+            userScore = Utility.getTotalScore(MainActivity.context);
 
             if (email.length() > 3)
-                manager1.postStats(email, userScore, Utility.getRate(MainMenu.context));
+                manager1.postStats(email, userScore, Utility.getRate(MainActivity.context));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -268,12 +202,12 @@ public class MainMenu extends FragmentActivity {
 
 
     public static void toast(final String msg) {
-        if (mainMenu != null) {
+        if (mainActivity != null) {
             try {
-                mainMenu.runOnUiThread(new Runnable() {
+                mainActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(mainMenu, msg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mainActivity, msg, Toast.LENGTH_LONG).show();
                     }
                 });
             } catch (Exception e) {
@@ -281,7 +215,7 @@ public class MainMenu extends FragmentActivity {
                 view.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(mainMenu, msg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mainActivity, msg, Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -289,10 +223,58 @@ public class MainMenu extends FragmentActivity {
             view.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mainMenu, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mainActivity, msg, Toast.LENGTH_LONG).show();
                 }
             });
         }
+    }
+
+    public static void dosome() {
+        //Todo move these methods into admamnger and add the Utility.addScore(x);
+//        Tapjoy.setTapjoyViewListener(new TJViewListener() {
+//            @Override
+//            public void onViewWillOpen(int viewType) {
+//                TapjoyLog.i(TAG, getViewName(viewType) + " is about to open");
+//            }
+//
+//            @Override
+//            public void onViewWillClose(int viewType) {
+//                TapjoyLog.i(TAG, getViewName(viewType) + " is about to close");
+//            }
+//
+//            @Override
+//            public void onViewDidOpen(int viewType) {
+//                TapjoyLog.i(TAG, getViewName(viewType) + " did open");
+//            }
+//
+//            @Override
+//            public void onViewDidClose(int viewType) {
+//                TapjoyLog.i(TAG, getViewName(viewType) + " did close");
+//
+//                // Best Practice: We recommend calling getCurrencyBalance as often as possible so the user?s balance is always up-to-date.
+//                Tapjoy.getCurrencyBalance(TapjoyEasyApp.this);
+//            }
+//        });
+//
+//        Tapjoy.setVideoListener(new TJVideoListener() {
+//            @Override
+//            public void onVideoStart() {
+//                Log.i(TAG, "video has started");
+//            }
+//
+//            @Override
+//            public void onVideoError(int statusCode) {
+//                Log.i(TAG, "there was an error with the video: " + statusCode);
+//            }
+//
+//            @Override
+//            public void onVideoComplete() {
+//                Log.i(TAG, "video has completed");
+//
+//                // Best Practice: We recommend calling getCurrencyBalance as often as possible so the user?s balance is always up-to-date.
+//                Tapjoy.getCurrencyBalance(TapjoyEasyApp.this);
+//            }
+//        });
     }
 
     @Override
@@ -306,7 +288,7 @@ public class MainMenu extends FragmentActivity {
         init();
         setUpFragment();
         downloadData();
-        mainMenu = this;
+        mainActivity = this;
     }
 
     private void init() {
@@ -316,17 +298,15 @@ public class MainMenu extends FragmentActivity {
         userManager = new UserManager();
         userManager.insertUser(email);
         adManager = new AdManager(context);
-        adManager.loadFullscreenAd();
-        adManager.loadVideoAd();
-        adManager.getFullscreenAd().setAdListener(fullScreen);
-        adManager.getVideoAd().setAdListener(video);
+        adManager.loadFullscreenAd(false);
+        adManager.loadVideoAd(false);
     }
 
     private void setUpFragment() {
         fragment = new MainFragment();
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main, fragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
         view = fragment.getView();
     }
 
@@ -394,20 +374,26 @@ public class MainMenu extends FragmentActivity {
             dialog.show();
         }
         //Todo
-
-
     }
 
     @Override
     protected void onStop() {
-        Tapjoy.onActivityStop(this);
-        super.onStop();
+        try {
+            Tapjoy.onActivityStop(this);
+            super.onStop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     protected void onStart() {
-        super.onStart();
-        Tapjoy.onActivityStart(this);
+        try {
+            super.onStart();
+            Tapjoy.onActivityStart(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

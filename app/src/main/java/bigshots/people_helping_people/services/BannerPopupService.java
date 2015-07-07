@@ -23,23 +23,22 @@ import bigshots.people_helping_people.views.BannerPopup;
 @SuppressWarnings("ALL")
 public class BannerPopupService extends Service {
     private static final String ROTATION_BROADCAST = "android.intent.action.CONFIGURATION_CHANGED";
+    public static boolean isServiceRunning;
+    private static BannerPopup bannerPopup;
+    private static WindowManager windowManager;
+    private static WindowManager.LayoutParams params;
     public BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent myIntent) {
             try {
                 if (myIntent.getAction().equals(ROTATION_BROADCAST)) {
-                    bannerPopup.rotate(getResources().getConfiguration().orientation);
+                    bannerPopup.refresh();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     };
-    public static boolean isServiceRunning;
-    private static BannerPopup bannerPopup;
-    private static WindowManager windowManager;
-    private static WindowManager.LayoutParams params;
-
 
     public static BannerPopup getBannerPopup() {
         return bannerPopup;

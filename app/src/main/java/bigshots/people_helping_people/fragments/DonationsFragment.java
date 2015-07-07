@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.io.Charity;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
@@ -37,7 +37,7 @@ public class DonationsFragment extends BaseFragment {
                         for (Charity charity : charities) {
                             total += charity.getWorth();
                         }
-                        MainMenu.totalCash = total;
+                        MainActivity.totalCash = total;
                         raised.setText(String.format("Total raised : $%s", Utility.formatNumber(total)));
                     } else {
 
@@ -94,7 +94,7 @@ public class DonationsFragment extends BaseFragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final View view = View.inflate(MainMenu.context, R.layout.donations_list_item, null);
+            final View view = View.inflate(MainActivity.context, R.layout.donations_list_item, null);
             final Charity charity = charities.get(position);
             ((TextView) view.findViewById(R.id.raised)).setText(String.format("$%d", charity.getWorth()));
             ((TextView) view.findViewById(R.id.charity)).setText(charity.getName());

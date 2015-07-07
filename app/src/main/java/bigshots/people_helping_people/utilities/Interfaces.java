@@ -28,6 +28,8 @@ public class Interfaces {
 
         void onCompleteCurrentScore(int score);
 
+        void onCompleteCredits(String[] vals);
+
         void onCompleteTotalScore(long score);
     }
 

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 import bigshots.people_helping_people.utilities.LeaderBoardAdapter;
@@ -28,12 +28,12 @@ public class LeaderboardFragment extends BaseFragment {
             public void run() {
                 try {
                     message.setVisibility(View.GONE);
-                    final double money = (MainMenu.userScore / (double) MainMenu.totalScore) * MainMenu.totalCash;
+                    final double money = (MainActivity.userScore / (double) MainActivity.totalScore) * MainActivity.totalCash;
                     raised.setText(String.format("$%.2f", money));
                     StatisticsFragment.setRaised(money);
                     StatisticsFragment.invalidate();
 
-                    adapter = new LeaderBoardAdapter(MainMenu.context, MainMenu.stats, false);
+                    adapter = new LeaderBoardAdapter(MainActivity.context, MainActivity.stats, false);
                     listView.setAdapter(adapter);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -60,15 +60,15 @@ public class LeaderboardFragment extends BaseFragment {
 
     @Override
     public void update() {
-        MainMenu.refreshLeaderBoard();
+        MainActivity.refreshLeaderBoard();
 
-        if (MainMenu.stats == null) {
-            MainMenu.downloadData();
+        if (MainActivity.stats == null) {
+            MainActivity.downloadData();
             return;
         }
 
-        if ((myRank != null) && (MainMenu.email.length() > 3))
-            myRank.setText(String.format("%d. Me", MainMenu.rank));
+        if ((myRank != null) && (MainActivity.email.length() > 3))
+            myRank.setText(String.format("%d. Me", MainActivity.rank));
 
         refreshList();
     }

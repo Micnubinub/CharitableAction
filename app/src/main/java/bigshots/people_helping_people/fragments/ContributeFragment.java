@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
+import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.io.Connector;
 import bigshots.people_helping_people.schedule_wheel.AbstractWheel;
 import bigshots.people_helping_people.schedule_wheel.OnWheelChangedListener;
@@ -26,7 +27,6 @@ import bigshots.people_helping_people.views.MaterialSwitch;
 
 
 public class ContributeFragment extends BaseFragment {
-
     private static String prefix;
     private static int frequencyMinutes;
     private static MaterialSwitch reminderSwitch;
@@ -40,18 +40,20 @@ public class ContributeFragment extends BaseFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.full_screen:
-                    MainMenu.fullScreenClicked = true;
-                    MainMenu.adManager.getFullscreenAd().show();
+                    MainActivity.fullScreenClicked = true;
+                    //TODO
+                    AdManager.showFullscreenAd();
                     break;
                 case R.id.video_ad:
-                    MainMenu.videoClicked = true;
-                    MainMenu.adManager.getVideoAd().show();
+                    MainActivity.videoClicked = true;
+                    //TODO
+                    AdManager.showVideoAd();
                     break;
                 case R.id.share_app:
                     final Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out People Helping People : https://play.google.com/store/apps/details?id=bigshots.people_helping_people");
                     sendIntent.setType("text/plain");
-                    MainMenu.context.startActivity(sendIntent);
+                    MainActivity.context.startActivity(sendIntent);
                     break;
                 case R.id.configure_scheduled_ads:
                     dialog = getScheduledAds();
@@ -72,7 +74,7 @@ public class ContributeFragment extends BaseFragment {
     }
 
     private static Dialog getScheduledAds() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+        final Dialog dialog = new Dialog(MainActivity.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.scheduled_dialog);
         prefix = prefs.getBoolean(Utility.LOOP_SCHEDULE, true) ? "A full screen Ad will be shown every : " : "A full screen Ad will be shown in : ";
         final TextView frequency = (TextView) dialog.findViewById(R.id.frequency);
@@ -83,10 +85,10 @@ public class ContributeFragment extends BaseFragment {
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.save).setOnClickListener(listener);
         dialog.findViewById(R.id.save_cancel).findViewById(R.id.cancel).setOnClickListener(listener);
 
-        hours.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 23));
+        hours.setViewAdapter(new NumericWheelAdapter(MainActivity.context, 0, 23));
         hours.setCyclic(true);
 
-        minutes.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 59));
+        minutes.setViewAdapter(new NumericWheelAdapter(MainActivity.context, 0, 59));
         minutes.setCyclic(true);
 
         // set current time
@@ -187,11 +189,11 @@ public class ContributeFragment extends BaseFragment {
     private static void save() {
         if (frequencyMinutes > 0)
             if (frequencyMinutes == 1)
-                Toast.makeText(MainMenu.context, "Scheduled for 1 minute", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.context, "Scheduled for 1 minute", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(MainMenu.context, String.format("Scheduled for %d minutes", frequencyMinutes), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.context, String.format("Scheduled for %d minutes", frequencyMinutes), Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(MainMenu.context, "Schedule cleared", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.context, "Schedule cleared", Toast.LENGTH_SHORT).show();
 
         final SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Utility.FULLSCREEN_AD_FREQUENCY_MINUTES, frequencyMinutes).apply();
@@ -199,9 +201,9 @@ public class ContributeFragment extends BaseFragment {
 
         if (prefs.getBoolean(Utility.ENABLE_SCHEDULED_ADS, false)) {
             if (!ScheduledAdsManager.isServiceRunning()) {
-                MainMenu.context.startService(new Intent(MainMenu.context, ScheduledAdsManager.class));
+                MainActivity.context.startService(new Intent(MainActivity.context, ScheduledAdsManager.class));
             }
-            ScheduledAdsManager.scheduleNext(MainMenu.context, true);
+            ScheduledAdsManager.scheduleNext(MainActivity.context, true);
         }
     }
 
@@ -224,12 +226,12 @@ public class ContributeFragment extends BaseFragment {
                 editor.putBoolean(Utility.ENABLE_SCHEDULED_ADS, isChecked).apply();
                 if (isChecked) {
                     if (!ScheduledAdsManager.isServiceRunning()) {
-                        MainMenu.context.startService(new Intent(MainMenu.context, ScheduledAdsManager.class));
+                        MainActivity.context.startService(new Intent(MainActivity.context, ScheduledAdsManager.class));
                     }
-                    ScheduledAdsManager.showNotification(MainMenu.context);
-                    ScheduledAdsManager.scheduleNext(MainMenu.context, true);
+                    ScheduledAdsManager.showNotification(MainActivity.context);
+                    ScheduledAdsManager.scheduleNext(MainActivity.context, true);
                 } else
-                    ScheduledAdsManager.cancelNotification(MainMenu.context);
+                    ScheduledAdsManager.cancelNotification(MainActivity.context);
             }
         });
 
@@ -243,7 +245,7 @@ public class ContributeFragment extends BaseFragment {
                 if (isChecked) {
                     getReminderDialog().show();
                 } else
-                    ScheduledAdsManager.cancelReminder(MainMenu.context);
+                    ScheduledAdsManager.cancelReminder(MainActivity.context);
             }
         });
 
@@ -283,20 +285,20 @@ public class ContributeFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new Connector().getCharityManager().monthlyCharity();
-        prefs = PreferenceManager.getDefaultSharedPreferences(MainMenu.context);
+        prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.context);
         editor = prefs.edit();
     }
 
     private Dialog getReminderDialog() {
-        final Dialog dialog = new Dialog(MainMenu.context, R.style.CustomDialog);
+        final Dialog dialog = new Dialog(MainActivity.context, R.style.CustomDialog);
         dialog.setContentView(R.layout.reminder);
         final AbstractWheel hours = (AbstractWheel) dialog.findViewById(R.id.hours);
         final AbstractWheel minutes = (AbstractWheel) dialog.findViewById(R.id.minutes);
 
-        hours.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 23));
+        hours.setViewAdapter(new NumericWheelAdapter(MainActivity.context, 0, 23));
         hours.setCyclic(true);
 
-        minutes.setViewAdapter(new NumericWheelAdapter(MainMenu.context, 0, 59));
+        minutes.setViewAdapter(new NumericWheelAdapter(MainActivity.context, 0, 59));
         minutes.setCyclic(true);
 
         hours.setCurrentItem(prefs.getInt(Utility.REMINDER_TIME_HOURS_INT, 12));
@@ -306,14 +308,14 @@ public class ContributeFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 try {
-                    ScheduledAdsManager.cancelReminder(MainMenu.context);
+                    ScheduledAdsManager.cancelReminder(MainActivity.context);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 editor.putInt(Utility.REMINDER_TIME_MINS_INT, minutes.getCurrentItem()).commit();
                 editor.putInt(Utility.REMINDER_TIME_HOURS_INT, hours.getCurrentItem()).commit();
-                ScheduledAdsManager.scheduleNextReminder(MainMenu.context);
-                Toast.makeText(MainMenu.context, String.format("Scheduled for : %d:%d", hours.getCurrentItem(), minutes.getCurrentItem()), Toast.LENGTH_LONG).show();
+                ScheduledAdsManager.scheduleNextReminder(MainActivity.context);
+                Toast.makeText(MainActivity.context, String.format("Scheduled for : %d:%d", hours.getCurrentItem(), minutes.getCurrentItem()), Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             }
         });

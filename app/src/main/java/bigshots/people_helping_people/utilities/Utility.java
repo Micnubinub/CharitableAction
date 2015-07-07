@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.fragments.StatisticsFragment;
 
 /**
@@ -284,16 +284,16 @@ public class Utility {
 
 
     public static int initScore(Context context, int external) {
-        final int local = getTotalScore(MainMenu.context);
+        final int local = getTotalScore(MainActivity.context);
 
         if (local < external) {
             Utility.addScore(context, System.currentTimeMillis() - MONTH_MILLIS, external);
-            MainMenu.downloadData();
+            MainActivity.downloadData();
         }
 
         final int max = Math.max(local, external);
         //Todo post max here
-        MainMenu.userManager.postStats(MainMenu.email, max, Utility.getRate(MainMenu.context));
+        MainActivity.userManager.postStats(MainActivity.email, max, Utility.getRate(MainActivity.context));
         return max;
     }
 
@@ -317,7 +317,7 @@ public class Utility {
                         urlc.setRequestProperty("Connection", "close");
                         urlc.setConnectTimeout(1500);
                         urlc.connect();
-                        MainMenu.toast((urlc.getResponseCode() == 200) ? "Ad failed to load" : "Please connect to the internet");
+                        MainActivity.toast((urlc.getResponseCode() == 200) ? "Ad failed to load" : "Please connect to the internet");
                     } catch (IOException e) {
                         Log.e("outterConnected", e.toString());
                     }

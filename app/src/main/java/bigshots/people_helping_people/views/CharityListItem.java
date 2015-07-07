@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import bigshots.people_helping_people.MainMenu;
+import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.fragments.VoteFragment;
 import bigshots.people_helping_people.io.VoteManager;
@@ -78,7 +78,7 @@ public class CharityListItem extends ViewGroup {
         if (!votedFor) {
             try {
                 if (VoteFragment.pedestal != null)
-                    VoteFragment.pedestal.setVotedFor(voteCharityAdapter.getVotedFor().equals(MainMenu.pedestal.getUrl()));
+                    VoteFragment.pedestal.setVotedFor(voteCharityAdapter.getVotedFor().equals(MainActivity.pedestal.getUrl()));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -216,22 +216,22 @@ public class CharityListItem extends ViewGroup {
     }
 
     private void castVote() {
-        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        voteManager.castVote(link, MainMenu.email);
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainActivity.email);
+        voteManager.castVote(link, MainActivity.email);
         voteCharityAdapter.setVotedFor(link);
-        MainMenu.getCurrentCharity();
+        MainActivity.getCurrentCharity();
     }
 
     private void removeThisVote() {
         voteCharityAdapter.setVotedFor("");
-        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        MainMenu.getCurrentCharity();
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainActivity.email);
+        MainActivity.getCurrentCharity();
     }
 
     private void removeCurrentVote() {
         voteCharityAdapter.setVotedFor("");
-        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainMenu.email);
-        MainMenu.getCurrentCharity();
+        voteManager.removeVote(voteCharityAdapter.getVotedFor(), MainActivity.email);
+        MainActivity.getCurrentCharity();
     }
 
     private void openLink() {
