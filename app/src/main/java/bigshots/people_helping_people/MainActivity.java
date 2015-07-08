@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import com.tapjoy.Tapjoy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import bigshots.people_helping_people.fragments.CreditFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
@@ -94,7 +92,7 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onCompleteCredits(String[] credits) {
-            Log.e("credits > ", Arrays.toString(credits));
+
             for (Fragment fragment : ParallaxViewLayout.fragments) {
                 if (fragment instanceof CreditFragment) {
                     ((CreditFragment) fragment).setCredits(credits);
@@ -180,26 +178,18 @@ public class MainActivity extends FragmentActivity {
 
     public static void refreshLeaderBoard() {
         try {
-            final UserManager manager1 = new UserManager();
-
-            if (email.length() > 3)
+            if (email.length() > 3) {
+                final UserManager manager1 = new UserManager();
                 userManager.getScoreRank(email);
-
-            userScore = Utility.getTotalScore(MainActivity.context);
-
-            if (email.length() > 3)
+                userScore = Utility.getTotalScore(MainActivity.context);
                 manager1.postStats(email, userScore, Utility.getRate(MainActivity.context));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         userManager.getLeaderboardListScore(50);
     }
-
-    public static void post(Runnable r) {
-        new Thread(r).start();
-    }
-
 
     public static void toast(final String msg) {
         if (mainActivity != null) {
@@ -227,54 +217,6 @@ public class MainActivity extends FragmentActivity {
                 }
             });
         }
-    }
-
-    public static void dosome() {
-        //Todo move these methods into admamnger and add the Utility.addScore(x);
-//        Tapjoy.setTapjoyViewListener(new TJViewListener() {
-//            @Override
-//            public void onViewWillOpen(int viewType) {
-//                TapjoyLog.i(TAG, getViewName(viewType) + " is about to open");
-//            }
-//
-//            @Override
-//            public void onViewWillClose(int viewType) {
-//                TapjoyLog.i(TAG, getViewName(viewType) + " is about to close");
-//            }
-//
-//            @Override
-//            public void onViewDidOpen(int viewType) {
-//                TapjoyLog.i(TAG, getViewName(viewType) + " did open");
-//            }
-//
-//            @Override
-//            public void onViewDidClose(int viewType) {
-//                TapjoyLog.i(TAG, getViewName(viewType) + " did close");
-//
-//                // Best Practice: We recommend calling getCurrencyBalance as often as possible so the user?s balance is always up-to-date.
-//                Tapjoy.getCurrencyBalance(TapjoyEasyApp.this);
-//            }
-//        });
-//
-//        Tapjoy.setVideoListener(new TJVideoListener() {
-//            @Override
-//            public void onVideoStart() {
-//                Log.i(TAG, "video has started");
-//            }
-//
-//            @Override
-//            public void onVideoError(int statusCode) {
-//                Log.i(TAG, "there was an error with the video: " + statusCode);
-//            }
-//
-//            @Override
-//            public void onVideoComplete() {
-//                Log.i(TAG, "video has completed");
-//
-//                // Best Practice: We recommend calling getCurrencyBalance as often as possible so the user?s balance is always up-to-date.
-//                Tapjoy.getCurrencyBalance(TapjoyEasyApp.this);
-//            }
-//        });
     }
 
     @Override

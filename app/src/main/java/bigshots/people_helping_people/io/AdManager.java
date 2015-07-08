@@ -19,13 +19,95 @@ public class AdManager {
     private static final ArrayList<Runnable> onConnectedRunnables = new ArrayList<>();
     //    private static TJPlacement autoFullscreenAd, autoVideoAd;
     private static boolean shouldOpenFullScreen, shouldOpenVid;
-//    private static boolean shouldOpenAutoFullScreen, shouldOpenAutoVid;
+    //    private static boolean shouldOpenAutoFullScreen, shouldOpenAutoVid;
     private static TJPlacement fullscreenAd, videoAd;
     private static Context context;
+    private static final TJPlacementListener fullScreenListener = new TJPlacementListener() {
+        @Override
+        public void onRequestSuccess(TJPlacement placement) {
+            logAndToast("fs request success");
+        }
+
+        @Override
+        public void onRequestFailure(TJPlacement placement, TJError tjError) {
+            logAndToast("fs request failed");
+            loadFullscreenAd(shouldOpenFullScreen);
+        }
+
+        @Override
+        public void onContentReady(TJPlacement placement) {
+            logAndToast("fs content ready");
+            if (shouldOpenFullScreen)
+                placement.showContent();
+        }
+
+        @Override
+        public void onContentShow(TJPlacement placement) {
+            logAndToast("fs content showing");
+        }
+
+        @Override
+        public void onContentDismiss(TJPlacement placement) {
+            Utility.addScore(context, 15);
+            loadFullscreenAd(false);
+            logAndToast("fs content dismissed");
+        }
+
+        @Override
+        public void onPurchaseRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s) {
+
+        }
+
+        @Override
+        public void onRewardRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s, int i) {
+
+        }
+    };
+    private static final TJPlacementListener videoListener = new TJPlacementListener() {
+        @Override
+        public void onRequestSuccess(TJPlacement placement) {
+            logAndToast("vid request success");
+        }
+
+        @Override
+        public void onRequestFailure(TJPlacement placement, TJError tjError) {
+            logAndToast("vid request failed");
+            loadVideoAd(shouldOpenVid);
+        }
+
+        @Override
+        public void onContentReady(TJPlacement placement) {
+            logAndToast("vid content ready");
+            if (shouldOpenVid)
+                placement.showContent();
+        }
+
+        @Override
+        public void onContentShow(TJPlacement placement) {
+            logAndToast("vid content showing");
+        }
+
+        @Override
+        public void onContentDismiss(TJPlacement placement) {
+            Utility.addScore(context, 20);
+            loadVideoAd(false);
+            logAndToast("vid content dismissed");
+        }
+
+        @Override
+        public void onPurchaseRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s) {
+        }
+
+        @Override
+        public void onRewardRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s, int i) {
+        }
+    };
+    private static int connectionRetries;
     private static final TJConnectListener connectionListener = new TJConnectListener() {
         @Override
         public void onConnectSuccess() {
-            toast("Connected");
+            connectionRetries = 0;
+            logAndToast("Connected");
             for (Runnable runnable : onConnectedRunnables) {
                 try {
                     runnable.run();
@@ -39,124 +121,45 @@ public class AdManager {
 
         @Override
         public void onConnectFailure() {
-            toast("Failed to connect");
-            //Todo count the number of retries and cut them off at like 20
-            connect();
+            if (connectionRetries < 20) {
+                connectionRetries++;
+                logAndToast("Failed to connect... retrying");
+                connect();
+            } else {
+                logAndToast("Failed to connect");
+            }
         }
     };
 
-    private static final TJPlacementListener fullScreenListener = new TJPlacementListener() {
-        @Override
-        public void onRequestSuccess(TJPlacement placement) {
-            toast("fs request success");
-        }
-
-        @Override
-        public void onRequestFailure(TJPlacement placement, TJError tjError) {
-            toast("fs request failed");
-            loadFullscreenAd(shouldOpenFullScreen);
-        }
-
-        @Override
-        public void onContentReady(TJPlacement placement) {
-            toast("fs content ready");
-            if (shouldOpenFullScreen)
-                placement.showContent();
-        }
-
-        @Override
-        public void onContentShow(TJPlacement placement) {
-            toast("fs content showing");
-        }
-
-        @Override
-        public void onContentDismiss(TJPlacement placement) {
-            Utility.addScore(context, 15);
-            loadFullscreenAd(false);
-            toast("fs content dismissed");
-        }
-
-        @Override
-        public void onPurchaseRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s) {
-
-        }
-
-        @Override
-        public void onRewardRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s, int i) {
-
-        }
-    };
-
-    private static final TJPlacementListener videoListener = new TJPlacementListener() {
-        @Override
-        public void onRequestSuccess(TJPlacement placement) {
-            toast("vid request success");
-        }
-
-        @Override
-        public void onRequestFailure(TJPlacement placement, TJError tjError) {
-            toast("vid request failed");
-            loadVideoAd(shouldOpenVid);
-        }
-
-        @Override
-        public void onContentReady(TJPlacement placement) {
-            toast("vid content ready");
-            if (shouldOpenVid)
-                placement.showContent();
-        }
-
-        @Override
-        public void onContentShow(TJPlacement placement) {
-            toast("vid content showing");
-        }
-
-        @Override
-        public void onContentDismiss(TJPlacement placement) {
-            Utility.addScore(context, 20);
-            loadVideoAd(false);
-            toast("vid content dismissed");
-        }
-
-        @Override
-        public void onPurchaseRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s) {
-
-        }
-
-        @Override
-        public void onRewardRequest(TJPlacement placement, TJActionRequest tjActionRequest, String s, int i) {
-
-        }
-    };
 /*    private static final TJPlacementListener autoFullScreenListener = new TJPlacementListener() {
         @Override
         public void onRequestSuccess(TJPlacement placement) {
-            toast("autoFS request success");
+            logAndToast("autoFS request success");
         }
 
         @Override
         public void onRequestFailure(TJPlacement placement, TJError tjError) {
-            toast("autoFS request failed");
+            logAndToast("autoFS request failed");
             loadAutoFullscreenAd(shouldOpenAutoFullScreen);
         }
 
         @Override
         public void onContentReady(TJPlacement placement) {
-            toast("autoFS content ready");
+            logAndToast("autoFS content ready");
             if (shouldOpenAutoFullScreen)
                 placement.showContent();
         }
 
         @Override
         public void onContentShow(TJPlacement placement) {
-            toast("autoFS content showing");
+            logAndToast("autoFS content showing");
         }
 
         @Override
         public void onContentDismiss(TJPlacement placement) {
             Utility.addScore(context, 15);
             loadAutoFullscreenAd(false);
-            toast("autoFS content dismissed");
+            logAndToast("autoFS content dismissed");
         }
 
         @Override
@@ -173,33 +176,33 @@ public class AdManager {
     private static final TJPlacementListener autoVideoListener = new TJPlacementListener() {
         @Override
         public void onRequestSuccess(TJPlacement placement) {
-            toast("autoVid request success");
+            logAndToast("autoVid request success");
         }
 
         @Override
         public void onRequestFailure(TJPlacement placement, TJError tjError) {
-            toast("autoVid request failed");
+            logAndToast("autoVid request failed");
 
             loadAutoVideoAd(shouldOpenAutoVid);
         }
 
         @Override
         public void onContentReady(TJPlacement placement) {
-            toast("autoVid content ready");
+            logAndToast("autoVid content ready");
             if (shouldOpenAutoVid)
                 placement.showContent();
         }
 
         @Override
         public void onContentShow(TJPlacement placement) {
-            toast("autoVid content showing");
+            logAndToast("autoVid content showing");
         }
 
         @Override
         public void onContentDismiss(TJPlacement placement) {
             Utility.addScore(context, 20);
             loadAutoVideoAd(false);
-            toast("autoVid content dismissed");
+            logAndToast("autoVid content dismissed");
         }
 
         @Override
@@ -215,40 +218,41 @@ public class AdManager {
     */
 
     public AdManager(Context context) {
-        this.context = context;
-        connect();
+        if (!Tapjoy.isConnected()) {
+            this.context = context;
+            connect();
+        }
     }
 
-    public static void toast(final String msg) {
+    public static void logAndToast(final String msg) {
         Log.e("AdManager > ", msg);
-        if (context == null)
+/*        if (context == null)
             return;
 
-//        MainActivity.context.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-//            }
-//        });
+        MainActivity.context.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+            }
+        });*/
     }
 
     public static void connect() {
         Tapjoy.connect(context, sdkKey, null, connectionListener);
-        //TODO remove this value
-        Tapjoy.setDebugEnabled(true);
+//        Tapjoy.setDebugEnabled(true);
     }
 
-//    private static TJPlacement getAutoFullscreenAd() {
-//        if (autoFullscreenAd == null)
-//            autoFullscreenAd = new TJPlacement(context, "AUTOMATIC_FULLSCREEN", autoFullScreenListener);
-//        return autoFullscreenAd;
-//    }
-//
-//    private static TJPlacement getAutoVideoAd() {
-//        if (autoVideoAd == null)
-//            autoVideoAd = new TJPlacement(context, "AUTOMATIC_VIDEO", autoVideoListener);
-//        return autoVideoAd;
-//    }
+/*    private static TJPlacement getAutoFullscreenAd() {
+        if (autoFullscreenAd == null)
+            autoFullscreenAd = new TJPlacement(context, "AUTOMATIC_FULLSCREEN", autoFullScreenListener);
+        return autoFullscreenAd;
+    }
+
+    private static TJPlacement getAutoVideoAd() {
+        if (autoVideoAd == null)
+            autoVideoAd = new TJPlacement(context, "AUTOMATIC_VIDEO", autoVideoListener);
+        return autoVideoAd;
+    }*/
 
     private static TJPlacement getFullscreenAd() {
         if (fullscreenAd == null)
@@ -268,7 +272,7 @@ public class AdManager {
         if (Tapjoy.isConnected()) {
             getFullscreenAd().requestContent();
         } else {
-            toast("TapJoy not connected yet, please wait. Request will be run once connected");
+            logAndToast("TapJoy not connected yet, please wait. Request will be run once connected");
             onConnectedRunnables.add(new Runnable() {
                 @Override
                 public void run() {
@@ -283,7 +287,7 @@ public class AdManager {
         if (Tapjoy.isConnected()) {
             getVideoAd().requestContent();
         } else {
-            toast("TapJoy not connected yet, please wait. Request will be run once connected");
+            logAndToast("TapJoy not connected yet, please wait. Request will be run once connected");
             onConnectedRunnables.add(new Runnable() {
                 @Override
                 public void run() {
@@ -293,79 +297,78 @@ public class AdManager {
         }
     }
 
-//    public static void loadAutoFullscreenAd(final boolean openImmediatelyAfter) { // Get And Load Fullscreen Ad
-//        shouldOpenAutoFullScreen = openImmediatelyAfter;
-//        if (Tapjoy.isConnected()) {
-//            getAutoFullscreenAd().requestContent();
-//        } else {
-//            toast("TapJoy not connected yet, please wait. Request will be run once connected");
-//            onConnectedRunnables.add(new Runnable() {
-//                @Override
-//                public void run() {
-//                    loadAutoFullscreenAd(openImmediatelyAfter);
-//                }
-//            });
-//        }
-//    }
-//
-//    public static void loadAutoVideoAd(final boolean openImmediatelyAfter) { // Get And Load Video Ad
-//        shouldOpenAutoFullScreen = openImmediatelyAfter;
-//        if (Tapjoy.isConnected()) {
-//            getAutoVideoAd().requestContent();
-//        } else {
-//            toast("TapJoy not connected yet, please wait. Request will be run once connected");
-//            onConnectedRunnables.add(new Runnable() {
-//                @Override
-//                public void run() {
-//                    loadAutoVideoAd(openImmediatelyAfter);
-//                }
-//            });
-//        }
-//    }
+/*    public static void loadAutoFullscreenAd(final boolean openImmediatelyAfter) { // Get And Load Fullscreen Ad
+        shouldOpenAutoFullScreen = openImmediatelyAfter;
+        if (Tapjoy.isConnected()) {
+            getAutoFullscreenAd().requestContent();
+        } else {
+            logAndToast("TapJoy not connected yet, please wait. Request will be run once connected");
+            onConnectedRunnables.add(new Runnable() {
+                @Override
+                public void run() {
+                    loadAutoFullscreenAd(openImmediatelyAfter);
+                }
+            });
+        }
+    }
+
+    public static void loadAutoVideoAd(final boolean openImmediatelyAfter) { // Get And Load Video Ad
+        shouldOpenAutoFullScreen = openImmediatelyAfter;
+        if (Tapjoy.isConnected()) {
+            getAutoVideoAd().requestContent();
+        } else {
+            logAndToast("TapJoy not connected yet, please wait. Request will be run once connected");
+            onConnectedRunnables.add(new Runnable() {
+                @Override
+                public void run() {
+                    loadAutoVideoAd(openImmediatelyAfter);
+                }
+            });
+        }
+    }*/
 
     public static void showFullscreenAd() { // Get And show Fullscreen Ad
-        toast("show FS");
+        logAndToast("show FS");
         if (getFullscreenAd().isContentReady()) {
             getFullscreenAd().showContent();
         } else {
             loadFullscreenAd(true);
-            toast("Content not ready yet, please wait. Request will be run once connected");
+            logAndToast("Content not ready yet, please wait. Request will be run once connected");
             //Todo
         }
     }
 
     public static void showVideoAd() { // Get And show Video Ad
-        toast("show Vid");
+        logAndToast("show Vid");
         if (getVideoAd().isContentReady()) {
             getVideoAd().showContent();
         } else {
             loadVideoAd(true);
-            toast("Content not ready yet, please wait. Request will be run once connected");
+            logAndToast("Content not ready yet, please wait. Request will be run once connected");
             //Todo
         }
     }
 
-//    public static void showAutoFullscreenAd() { // Get And show Fullscreen Ad
-//        toast("show AutoFS");
-//        if (getAutoFullscreenAd().isContentReady()) {
-//            getAutoFullscreenAd().showContent();
-//        } else {
-//            loadAutoFullscreenAd(true);
-//            toast("Content not ready yet, please wait. Request will be run once connected");
-//            //Todo
-//        }
-//    }
-//
-//    public static void showAutoVideoAd() { // Get And show Video Ad
-//        toast("show AutoVid");
-//        if (getAutoVideoAd().isContentReady()) {
-//            getAutoVideoAd().showContent();
-//        } else {
-//            loadAutoVideoAd(true);
-//            toast("Content not ready yet, please wait. Request will be run once connected");
-//            //Todo
-//        }
-//    }
+/*    public static void showAutoFullscreenAd() { // Get And show Fullscreen Ad
+        logAndToast("show AutoFS");
+        if (getAutoFullscreenAd().isContentReady()) {
+            getAutoFullscreenAd().showContent();
+        } else {
+            loadAutoFullscreenAd(true);
+            logAndToast("Content not ready yet, please wait. Request will be run once connected");
+            //Todo
+        }
+    }
 
+    public static void showAutoVideoAd() { // Get And show Video Ad
+        logAndToast("show AutoVid");
+        if (getAutoVideoAd().isContentReady()) {
+            getAutoVideoAd().showContent();
+        } else {
+            loadAutoVideoAd(true);
+            logAndToast("Content not ready yet, please wait. Request will be run once connected");
+            //Todo
+        }
+    }*/
 
 }

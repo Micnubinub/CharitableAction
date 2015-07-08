@@ -24,18 +24,18 @@ public class BannerPopup extends FrameLayout {
 
     private static final int mainViewHeight = 64, adHeight = 50, adWidth = 350;
     private static final int duration = 1100;
+    private static final int[] screenPos = new int[2];
     private static int touchSlop;
     private static Runnable runnable;
+    private static View fullScreenAd, videoAd;
+    private static View mainView;
     private final Intent service = new Intent(getContext(), BannerPopupService.class);
     private final WindowManager windowManager;
     private final float adDistance = 0.625f;
     private final WindowManager.LayoutParams params;
-    private View fullScreenAd, videoAd;
-    private View mainView;
     private boolean settingUp = true;
     private long downTime;
     private int viewTouchX;
-    private int[] screenPos = new int[2];
     // private BannerPopup popup;
     private Direction direction = Direction.LEFT;
     private AdManager adManager;//, fullScreenAdmanager;
@@ -100,8 +100,6 @@ public class BannerPopup extends FrameLayout {
         setLayoutParams(new LayoutParams(viewW, viewH));
 
         adManager = new AdManager(getContext());
-        adManager = new AdManager(getContext());
-
         adManager.loadFullscreenAd(false);
         adManager.loadVideoAd(false);
 
@@ -112,12 +110,9 @@ public class BannerPopup extends FrameLayout {
         fullScreenAd = container.findViewById(R.id.full_screen);
 
         mainView.setOnTouchListener(mainViewOnTouchListener);
-
         videoAd.setOnClickListener(clickListener);
         fullScreenAd.setOnClickListener(clickListener);
 
-
-        resolveAdSize();
         settingUp = false;
         addView(container, new LayoutParams(viewW, viewH));
         resize(viewW, viewH);
@@ -130,7 +125,6 @@ public class BannerPopup extends FrameLayout {
         update();
     }
 
-
     public int getW() {
         return w;
     }
@@ -138,16 +132,6 @@ public class BannerPopup extends FrameLayout {
     public int getH() {
         return h;
     }
-
-    private void resolveAdSize() {
-        refresh();
-        params.width = w;
-        params.height = h;
-
-        refresh();
-        update();
-    }
-
 
     private void click(View v) {
         switch (v.getId()) {
@@ -163,7 +147,6 @@ public class BannerPopup extends FrameLayout {
                 break;
         }
     }
-
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
@@ -197,6 +180,7 @@ public class BannerPopup extends FrameLayout {
 
     private void update() {
         try {
+            setXY();
             windowManager.updateViewLayout(this, params);
         } catch (Exception e) {
             e.printStackTrace();
@@ -218,7 +202,6 @@ public class BannerPopup extends FrameLayout {
         adManager.showFullscreenAd();
     }
 
-
     public void loadVideoAd() {
         adManager.loadVideoAd(false);
     }
@@ -228,6 +211,7 @@ public class BannerPopup extends FrameLayout {
     }
 
     public void refresh() {
+        setXY();
         final DisplayMetrics metrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(metrics);
         screenWidth = metrics.widthPixels;

@@ -2,6 +2,7 @@ package bigshots.people_helping_people.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 import bigshots.people_helping_people.R;
 import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
@@ -18,15 +19,32 @@ import bigshots.people_helping_people.scroll_iew_lib.BaseFragment;
 
 public class CreditFragment extends BaseFragment {
 
-    private static ArrayList<String> credits = new ArrayList<>();
+    private static final ArrayList<String> credits = new ArrayList<>();
     private static Activity context;
     private static ListView listView;
     private static CreditAdapter adapter;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getActivity();
+    public static void setCredits(final String[] vals) {
+        Log.e("setting credits", Arrays.toString(vals));
+        credits.clear();
+        credits.ensureCapacity(vals.length);
+        for (String val : vals) {
+            credits.add(val);
+        }
+
+
+        if (listView != null)
+            listView.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        adapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    listView.invalidate();
+                }
+            });
     }
 
     @Override
@@ -44,36 +62,15 @@ public class CreditFragment extends BaseFragment {
         return view;
     }
 
-    public static void setCredits(final String[] vals) {
-        context.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (credits == null) {
-                    credits = new ArrayList<String>(vals.length);
-                } else {
-                    credits.clear();
-                    credits.ensureCapacity(vals.length);
-                }
-
-                Collections.addAll(credits, vals);
-
-                try {
-                    adapter.notifyDataSetChanged();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                listView.invalidate();
-            }
-        });
-    }
-
     @Override
     public void update() {
+        Log.e("credits update", credits.toString());
         listView.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     listView.setAdapter(adapter);
+                    listView.setSelected(true);
                     listView.invalidate();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -105,6 +102,11 @@ public class CreditFragment extends BaseFragment {
             }
             ((TextView) view.findViewById(R.id.text)).setText(credits.get(position));
             return view;
+        }
+
+        @Override
+        public void notifyDataSetChanged() {
+            super.notifyDataSetChanged();
         }
     }
 }

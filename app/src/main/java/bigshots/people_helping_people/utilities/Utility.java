@@ -186,6 +186,8 @@ public class Utility {
     }
 
     public static void addScore(Context context, int points) {
+        if (context == null)
+            return;
         final StatsDBHelper statsDBHelper = new StatsDBHelper(context);
         final SQLiteDatabase statsDB = statsDBHelper.getWritableDatabase();
         final String time = String.valueOf(System.currentTimeMillis());

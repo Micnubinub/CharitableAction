@@ -26,6 +26,7 @@ import bigshots.people_helping_people.utilities.Utility;
 public class ScheduledAdsManager extends Service {
     private static final int SCHEDULED_ADS_NOTIFICATION_ID = 455129802;
     private static final int REMINDER_NOTIFICATION_ID = 455129854;
+    private static final Random random = new Random();
     private static PendingIntent alarmIntent;
     private static AlarmManager alarmManager;
     private static AdManager adManager;
@@ -261,36 +262,4 @@ public class ScheduledAdsManager extends Service {
 
         }
     }
-
-    public static class AdAlarmReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            showNotification(context);
-            try {
-                if (loadAd) {
-//                    show = false;
-                    loadFullScreenAd();
-                    scheduleNext(context, false);
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.TOAST_BEFORE_BOOL, true))
-                        Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();
-                    return;
-                } else {
-//                    show = true;
-                    if (random.nextInt(4) < 1) {
-                        showVideoAd();
-                    } else {
-                        showFullScreenAd();
-                    }
-                    if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.LOOP_SCHEDULE, false))
-                        scheduleNext(context, true);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    private static final Random random = new Random();
 }
