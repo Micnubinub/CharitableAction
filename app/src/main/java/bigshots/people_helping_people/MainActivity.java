@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -21,16 +20,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tapjoy.Tapjoy;
-
 import java.util.ArrayList;
 
 import bigshots.people_helping_people.fragments.CreditFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.DonationsFragment;
-import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
+import bigshots.people_helping_people.graph.LeaderBoardFragment;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
@@ -92,7 +89,6 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onCompleteCredits(String[] credits) {
-
             for (Fragment fragment : ParallaxViewLayout.fragments) {
                 if (fragment instanceof CreditFragment) {
                     ((CreditFragment) fragment).setCredits(credits);
@@ -147,13 +143,13 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onCompleteRank(final int rank) {
             MainActivity.rank = rank + 1;
-            LeaderboardFragment.refreshList();
+            LeaderBoardFragment.refreshList();
         }
 
         @Override
         public void onCompleteLeaderBoardList(final ArrayList<UserStats> stats) {
             MainActivity.stats = stats;
-            LeaderboardFragment.refreshList();
+            LeaderBoardFragment.refreshList();
         }
 
         @Override
@@ -161,6 +157,7 @@ public class MainActivity extends FragmentActivity {
             Utility.initScore(context, score);
         }
     };
+    private static boolean closeActivity;
 
     public static FragmentManager getFragManager() {
         return fragment.getChildFragmentManager();
@@ -187,7 +184,6 @@ public class MainActivity extends FragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         userManager.getLeaderboardListScore(50);
     }
 
@@ -224,6 +220,9 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         context = this;
+        adManager = AdManager.getAdManager(context);
+        adManager.loadFullscreenAd();
+        adManager.loadVideoAd();
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         getEmail();
         AsyncConnector.setListener(aSyncListener);
@@ -239,16 +238,12 @@ public class MainActivity extends FragmentActivity {
         fragmentActivity = this;
         userManager = new UserManager();
         userManager.insertUser(email);
-        adManager = new AdManager(context);
-        adManager.loadFullscreenAd(false);
-        adManager.loadVideoAd(false);
+
     }
 
     private void setUpFragment() {
-        fragment = new MainFragment();
-        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main, fragment);
-        transaction.commitAllowingStateLoss();
+        fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+        MainFragment.parallaxViewLayout.setUpPagerAndAdapter();
         view = fragment.getView();
     }
 
@@ -316,26 +311,6 @@ public class MainActivity extends FragmentActivity {
             dialog.show();
         }
         //Todo
-    }
-
-    @Override
-    protected void onStop() {
-        try {
-            Tapjoy.onActivityStop(this);
-            super.onStop();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        try {
-            super.onStart();
-            Tapjoy.onActivityStart(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

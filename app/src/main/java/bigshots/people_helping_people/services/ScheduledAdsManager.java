@@ -34,21 +34,13 @@ public class ScheduledAdsManager extends Service {
     private static Context context;
     private static boolean serviceRunning = false;
 
-    private static void loadFullScreenAd() {
-        adManager.loadFullscreenAd(false);
-    }
-
-    private static void loadVideoAd() {
-        //TODO load and show
-        adManager.loadVideoAd(false);
-    }
 
     private static void showFullScreenAd() {
-        adManager.showFullscreenAd();
+        getAdManager().showFullScreenAd();
     }
 
     private static void showVideoAd() {
-        adManager.showVideoAd();
+        getAdManager().showVideoAd();
     }
 
     public static void scheduleNext(Context context, boolean load) {
@@ -76,7 +68,6 @@ public class ScheduledAdsManager extends Service {
                 } else
                     alarmManager.set(AlarmManager.RTC, when, alarmIntent);
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,14 +106,20 @@ public class ScheduledAdsManager extends Service {
         }
     }
 
-    private static void getAds() {
+    private static void getAds(Context context) {
         try {
-            adManager = new AdManager(context);
-            loadFullScreenAd();
-            loadVideoAd();
+            if (getAdManager() == null) {
+                final Intent i = new Intent(context, MainActivity.class);
+                context.startActivity(i);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static AdManager getAdManager() {
+        if (adManager == null) adManager = AdManager.getAdManager();
+        return adManager;
     }
 
     public static boolean isServiceRunning() {
@@ -198,7 +195,8 @@ public class ScheduledAdsManager extends Service {
         super.onCreate();
         serviceRunning = true;
         context = this;
-        getAds();
+
+        getAds(getApplication());
         showNotification(this);
     }
 
@@ -240,7 +238,6 @@ public class ScheduledAdsManager extends Service {
             try {
                 if (loadAd) {
 //                    show = false;
-                    loadFullScreenAd();
                     scheduleNext(context, false);
                     if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Utility.TOAST_BEFORE_BOOL, true))
                         Toast.makeText(context, "Showing Ad in 10 secs", Toast.LENGTH_LONG).show();

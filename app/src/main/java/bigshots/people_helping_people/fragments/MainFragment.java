@@ -14,18 +14,18 @@ import bigshots.people_helping_people.scroll_iew_lib.ParallaxViewLayout;
  * Created by root on 12/01/15.
  */
 public class MainFragment extends Fragment {
+    public static ParallaxViewLayout parallaxViewLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.material_main, null);
         view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
-        new ParallaxViewLayout(inflater.getContext(), view);
+        parallaxViewLayout = new ParallaxViewLayout(inflater.getContext(), view);
         return view;
     }
 }

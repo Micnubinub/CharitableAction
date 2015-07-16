@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import bigshots.people_helping_people.MainActivity;
 import bigshots.people_helping_people.R;
-import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.services.BannerPopupService;
+import bigshots.people_helping_people.services.ScheduledAdsManager;
 
 /**
  * Created by root on 18/11/14.
@@ -33,18 +32,17 @@ public class BannerPopup extends FrameLayout {
     private final WindowManager windowManager;
     private final float adDistance = 0.625f;
     private final WindowManager.LayoutParams params;
-    private boolean settingUp = true;
-    private long downTime;
-    private int viewTouchX;
-    // private BannerPopup popup;
-    private Direction direction = Direction.LEFT;
-    private AdManager adManager;//, fullScreenAdmanager;
     private final OnClickListener clickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             click(v);
         }
     };
+    private boolean settingUp = true;
+    private long downTime;
+    private int viewTouchX;
+    // private BannerPopup popup;
+    private Direction direction = Direction.LEFT;
     private boolean animationFinished;
     private int lastMenuItemDistance, menuItemWidth;
     private int x, y;
@@ -99,10 +97,6 @@ public class BannerPopup extends FrameLayout {
         final int viewH = dpToPixels(70);
         setLayoutParams(new LayoutParams(viewW, viewH));
 
-        adManager = new AdManager(getContext());
-        adManager.loadFullscreenAd(false);
-        adManager.loadVideoAd(false);
-
         final View container = View.inflate(getContext(), R.layout.banner_popup, null);
 
         mainView = container.findViewById(R.id.main_view);
@@ -135,10 +129,6 @@ public class BannerPopup extends FrameLayout {
 
     private void click(View v) {
         switch (v.getId()) {
-            case R.id.open_app:
-                final Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
             case R.id.video_ad:
                 showVideoAd();
                 break;
@@ -194,20 +184,13 @@ public class BannerPopup extends FrameLayout {
         update();
     }
 
-    public void loadFullScreenAd() {
-        adManager.loadFullscreenAd(false);
-    }
-
     public void showFullScreenAd() {
-        adManager.showFullscreenAd();
+        ScheduledAdsManager.getAdManager().showFullScreenAd();
     }
 
-    public void loadVideoAd() {
-        adManager.loadVideoAd(false);
-    }
 
     public void showVideoAd() {
-        adManager.showVideoAd();
+        ScheduledAdsManager.getAdManager().showVideoAd();
     }
 
     public void refresh() {

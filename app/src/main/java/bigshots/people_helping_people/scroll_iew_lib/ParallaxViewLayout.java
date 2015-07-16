@@ -15,9 +15,9 @@ import bigshots.people_helping_people.fragments.CreditFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.DonationsFragment;
 import bigshots.people_helping_people.fragments.FeedbackFragment;
-import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.StatisticsFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
+import bigshots.people_helping_people.graph.LeaderBoardFragment;
 
 /**
  * Created by root on 10/01/15.
@@ -48,14 +48,13 @@ public class ParallaxViewLayout {
         fragments[2] = new CurrentCharityFragment();
         fragments[3] = new DonationsFragment();
         fragments[4] = new StatisticsFragment();
-        fragments[5] = new LeaderboardFragment();
+        fragments[5] = new LeaderBoardFragment();
         fragments[6] = new FeedbackFragment();
         fragments[7] = new CreditFragment();
         fragments[8] = new AboutFragment();
-        setUpPagerAndAdapter();
     }
 
-    void setUpPagerAndAdapter() {
+    public void setUpPagerAndAdapter() {
         fragmentPagerAdapter = new MyPagerAdapter(MainActivity.fragment.getChildFragmentManager());
         setUpPager();
     }

@@ -63,8 +63,6 @@ public class BannerPopupService extends Service {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ROTATION_BROADCAST);
         registerReceiver(broadcastReceiver, filter);
-
-
     }
 
     @Override

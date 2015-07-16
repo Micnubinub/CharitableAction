@@ -42,7 +42,7 @@ public class ContributeFragment extends BaseFragment {
                 case R.id.full_screen:
                     MainActivity.fullScreenClicked = true;
                     //TODO
-                    AdManager.showFullscreenAd();
+                    AdManager.showFullScreenAd();
                     break;
                 case R.id.video_ad:
                     MainActivity.videoClicked = true;
