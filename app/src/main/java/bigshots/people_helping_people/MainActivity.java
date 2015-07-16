@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import bigshots.people_helping_people.fragments.CreditFragment;
 import bigshots.people_helping_people.fragments.CurrentCharityFragment;
 import bigshots.people_helping_people.fragments.DonationsFragment;
+import bigshots.people_helping_people.fragments.LeaderboardFragment;
 import bigshots.people_helping_people.fragments.MainFragment;
 import bigshots.people_helping_people.fragments.VoteFragment;
-import bigshots.people_helping_people.graph.LeaderBoardFragment;
 import bigshots.people_helping_people.io.AdManager;
 import bigshots.people_helping_people.io.AsyncConnector;
 import bigshots.people_helping_people.io.Charity;
@@ -143,13 +143,13 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onCompleteRank(final int rank) {
             MainActivity.rank = rank + 1;
-            LeaderBoardFragment.refreshList();
+            LeaderboardFragment.refreshList();
         }
 
         @Override
         public void onCompleteLeaderBoardList(final ArrayList<UserStats> stats) {
             MainActivity.stats = stats;
-            LeaderBoardFragment.refreshList();
+            LeaderboardFragment.refreshList();
         }
 
         @Override

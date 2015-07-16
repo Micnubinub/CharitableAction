@@ -53,7 +53,6 @@ public class LeaderboardFragment extends BaseFragment {
         myRank = (TextView) view.findViewById(R.id.my_rank);
         message = view.findViewById(R.id.message);
         listView = (ListView) view.findViewById(R.id.list);
-
         raised = (TextView) view.findViewById(R.id.raised);
         return view;
     }
